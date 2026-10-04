@@ -1,0 +1,626 @@
+{
+  "skill_name": "affiliate-recruitment-outreach",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We're launching the affiliate program for Tessellate, our B2B analytics SaaS, and I've finally got the prospect sheet done: 210 names. 88 are US bloggers and comparison sites, 54 are UK - mostly one-person newsletter and review operations, plus maybe eight proper Ltd media companies - 41 are German B2B tech media sites, and 27 are Canadian independent consultants. Commission is locked at 30% recurring for 12 months, 90-day cookie, net-30. Tier this list and tell me who we can actually cold email and what goes out to each group.",
+      "expected_output": "A jurisdiction-segmented plan that splits the list by recipient location before any drafting, treats German prospects as opt-in-required rather than standard EU, forces a per-prospect legal-form check on the UK segment instead of a country-level rule, routes no-consent prospects to passive recruitment, and tiers the survivors 1/2/3.",
+      "files": [],
+      "expectations": [
+        "Segments the list by recipient jurisdiction before drafting any message, and states the regime attaches to where the prospect is, not where the program is",
+        "States that German prospects require prior opt-in and must be handled like the Canadian prospects, not under a general EU legitimate-interest basis",
+        "Names UWG (or German unfair-competition law) as the regime behind that opt-in requirement",
+        "Does not treat all 54 UK prospects as cold-emailable under a single country-level rule",
+        "Instructs checking each UK prospect's legal form, identifying limited companies, LLPs, Scottish partnerships and public bodies as corporate subscribers that may be cold-emailed",
+        "Identifies UK sole traders and non-Scottish unincorporated partnerships as individual subscribers needing a consent basis, referencing PECR (or the corporate/individual subscriber distinction) explicitly",
+        "States a personal or freemail address counts as an individual subscriber regardless of the employer behind it",
+        "Notes that one-person newsletter and review operations will mostly land on the individual-subscriber side, so a country-level 'UK is fine' rule misclassifies most of this segment",
+        "Gives a cheap concrete check for UK legal form (Companies House lookup, or an explicit 'Ltd'/'Limited'/'LLP' in the trading name) and defaults to individual-subscriber treatment when the form is unknown",
+        "States the 27 Canadian prospects need express or implied consent under CASL, gives an implied-consent example such as an existing business relationship or a conspicuously published role-relevant address, and requires the basis be documented per contact",
+        "Routes prospects with no documented consent basis to passive recruitment (program page, directories) rather than prescribing a shorter or softer email sequence for them",
+        "States US prospects are cold-emailable under CAN-SPAM without prior consent, and that there is no B2B exemption",
+        "Lists the CAN-SPAM must-carry items for the US segment: accurate from/reply-to and routing, non-deceptive subject, physical postal address, and a working opt-out"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I ran a backlink report on our two biggest competitors and found 63 sites that link to both of them with affiliate tracking parameters in the outbound links. My CMO saw the list and said going after people who already promote a competitor is poaching, it makes us look desperate, and we should build a clean list instead. We sell Kettleback, a $79/month B2B scheduling tool - 25% recurring for 12 months, 60-day cookie. What do I actually do with this list?",
+      "expected_output": "A rebuttal of the CMO's framing that treats competitor promotion as the strongest qualification signal available, plus a pre-outreach brand-safety screen, an exclusivity/non-solicitation check, and the correct qualification order.",
+      "files": [],
+      "expectations": [
+        "Treats 'already promotes a competitor' as a positive qualification signal, not a conflict or a reason to drop the prospect",
+        "Explains the signal proves category fit and existing monetization intent at the same time",
+        "Places competitors' current affiliates at or near the top of the sourcing efficiency order for a B2B SaaS program",
+        "States a manual brand-safety screen runs before any outreach, not after a prospect joins the program",
+        "Names at least three screen failure patterns drawn from: trademark bidding on brand terms, coupon injection or adware/parasiteware, cookie stuffing or forced clicks, thin AI-generated or scraped content with no real audience",
+        "Flags that a prospect may sit under an exclusivity clause, or that approaching a network-managed roster can breach that network's non-solicitation terms, and says to check before the first send",
+        "States never to ask a prospect to break an existing agreement",
+        "Orders qualification with audience fit checked first, ahead of traffic/authority and ahead of monetization evidence",
+        "States a high-authority site with the wrong audience is a worse prospect than a smaller site with the right one",
+        "Recommends checking outbound links for affiliate-network redirect parameters as monetization evidence",
+        "Produces no message that disparages the competitor or asks the prospect to drop them"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Our recruitment emails are getting nothing - 240 sent, 2 replies. Here's exactly what we send, fix it:\n\nSubject: Partnership Proposal from Northvale Supply Co.\n\nHi there,\n\nHope this finds you well! Big fan of your content for a long time.\n\nNorthvale is the leading all-in-one outdoor gear brand with 400+ SKUs, free returns, a mobile app and award-winning customer service.\n\nOur top affiliates make $9,000+ a month and with your traffic you'd probably do even better!\n\nWe offer industry-leading commissions.\n\nSign up here, book a call with me here, and follow us on Instagram!\n\nTalk soon,\nThe Northvale Team\n\nContext: we're B2C DTC outdoor gear, AOV is $180, we pay 12% per order, 30-day cookie, monthly payouts, list is all US.",
+      "expected_output": "A rewritten first touch under 120 words with a short prospect-referencing subject, one verifiable specific, plain economics, one CTA, named sender and CAN-SPAM items - plus the follow-up sequence, with each original failure mode named.",
+      "files": [],
+      "expectations": [
+        "Replaces the subject line and states that 'Partnership Proposal from [Company]' style subjects are a documented delete-on-sight pattern",
+        "New subject line is roughly 3-5 words and references the prospect's own work rather than the sender's company",
+        "Replaces 'Hi there' with the prospect's name",
+        "Removes the unverifiable familiarity claim ('big fan of your content') and substitutes one specific verifiable reference to the prospect's work, or an honest statement of how they were found",
+        "Removes the product feature dump (SKU count, app, returns, awards) as mispositioned data where the audience-fit reason belongs",
+        "Removes the '$9,000+ a month / you'd do even better' projection and identifies it as hypothetical earnings math that must never appear",
+        "Notes the earnings claim also creates regulatory exposure for income representations",
+        "Replaces 'industry-leading commissions' with the exact stated terms: 12% per order, 30-day cookie, monthly payouts",
+        "Cuts the three asks down to exactly one CTA",
+        "Replaces 'The Northvale Team' with a named human sender",
+        "Adds a physical postal address and a working opt-out, citing CAN-SPAM",
+        "Rewritten first touch is under 120 words",
+        "Leads with one audience-fit sentence before the economics, rather than with the product or the company",
+        "Delivers a follow-up sequence alongside the rewritten first touch rather than the first touch alone"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "I'm the only person on this. Maybe four hours a week for affiliate recruitment, and a list of 180 content sites for our B2B SaaS program. I read a post recommending twelve attempts over about three months - rotating email, LinkedIn DM and site contact form on each prospect until they answer. That sounds a lot more thorough than a short sequence. Should I run that?",
+      "expected_output": "A recommendation of the 5-touch / ~4-week cadence for this list on manager-hours grounds, with the 12-attempt cadence's real cost quantified and the specific condition that would promote it named.",
+      "files": [],
+      "expectations": [
+        "Recommends the 5-touch cadence over roughly 4 weeks as the default for this list, not the 12-attempt cadence",
+        "Justifies the choice on manager hours rather than on which approach sounds more thorough",
+        "States the 12-attempt cadence costs roughly two and a half times the sends",
+        "Names the per-attempt channel hunt (finding a DM handle or contact form for each attempt) as an additional cost of the 12-attempt cadence",
+        "Characterizes the 12-attempt cadence as a standing job rather than a campaign",
+        "Acknowledges the 12-attempt cadence wins on value (share of the list eventually reached) while also topping the effort line, and explains that is why it loses every efficiency round",
+        "Names the condition that would promote the 12-attempt cadence anyway: tier-1 prospects the manager specifically names and has standing weekly hours for, or a retained agency absorbing the per-attempt hours",
+        "Specifies the 5-touch spacing as approximately day 0, 3, 7, 14 and 21-28",
+        "States the fifth touch is a mandatory breakup message, and that it is what pushes the window past three weeks",
+        "States a single unanswered touch means the prospect is busy, not uninterested",
+        "For any prospect with no documented consent basis, states no touch count is lawful and passive recruitment is the route, rather than prescribing a shortened version of either cadence"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Quick sanity check before I send. Our head of marketing wants the commission rate kept out of the first email entirely - her line is 'never lead with money, sell the brand, make them ask.' We're Fernwick, B2B SaaS for contract review. The board signed off on 30% recurring for 12 months, 90-day cookie, net-45 payouts. First touch goes to 40 comparison-site editors. Who's right here?",
+      "expected_output": "A disagreement with withholding the economics, resolved as 'one fit sentence first, then the economics stated plainly', with all four decided terms carried through into a sub-120-word draft with one CTA.",
+      "files": [],
+      "expectations": [
+        "Disagrees with keeping the commission out of the first message",
+        "States that affiliates evaluate economics early, so the commission must be findable in the first message",
+        "Resolves the tension explicitly: do not lead with commission alone, but do state it plainly right after the fit reason",
+        "Specifies that exactly one audience-fit sentence comes first, framed as why the program fits the prospect's own audience",
+        "States the commission facts must match the decided terms exactly - never rounded, never embellished",
+        "Carries all four stated terms into the draft: 30% recurring, 12 months, 90-day cookie, net-45",
+        "For this B2B SaaS program, names the recurring rate and duration plus the cookie/attribution window as the economics to state, and adds one proof the product converts",
+        "Does not invent a conversion rate, customer count, or review score as that proof point - asks the user for one or flags it as missing",
+        "States this skill communicates the already-decided commission and does not redesign or adjust it",
+        "Keeps the first touch under 120 words",
+        "Uses exactly one CTA, defaulting to reply-for-info on this cold first touch rather than a booked call or apply link"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Two things before we launch. First, add a line to the email showing the prospect what they'd make - the site does about 80,000 visits a month and our AOV is $140, so we can just do the math for them. Second, my VP wants numbers in the plan doc: I've seen that the top 10% of affiliates drive 90% of revenue, that a good manager recruits 15-25 affiliates a month, and that programs see 42% faster activation with a structured sequence. What reply rate should I commit to?",
+      "expected_output": "A refusal to add the earnings projection, a refusal to quote the three circulating figures as fact, and a reply-rate expectation set against the verified general cold-outreach band with reliability flags attached.",
+      "files": [],
+      "expectations": [
+        "Refuses to add the earnings projection to the email",
+        "Identifies hypothetical earnings math as a documented pitch failure ('calculations of unearned riches') that kills replies",
+        "Notes the unverifiable earnings claim also creates income-representation regulatory exposure",
+        "Declines to quote 'top 10% drive 90%' as fact, flagging it as untraceable",
+        "Declines to quote '15-25 recruits per month' as fact, flagging it as untraceable",
+        "Declines to quote '42% faster activation' as fact, flagging it as untraceable",
+        "Gives a first-touch reply-rate expectation in roughly the 3-9% range",
+        "Attributes that range to general cold-outreach measurement rather than to affiliate-specific data",
+        "Attaches a reliability flag to every figure it does quote, distinguishing verified study measurement from practitioner self-report",
+        "If it cites the ~5% first-email or 30-40% full-sequence figures, marks them practitioner self-reported and notes the source carries a commercial incentive",
+        "Does not present '~10% of recruits ever become active' as an established benchmark"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Prepping my quarterly review. Last quarter we contacted 640 prospects, got 140 applications in and approved 120 of them. That's an 87% approval rate and it looks great on a slide. Our affiliate platform dashboard gives me approvals and payouts, so that's what I've been pulling from. What should I actually be reporting, and how do I track this going forward?",
+      "expected_output": "A reframing that calls applications and approvals vanity metrics, names sales-active share as the KPI that matters with its flagged benchmark, and specifies a separate outreach pipeline tracked outside the program dashboard.",
+      "files": [],
+      "expectations": [
+        "States that applications and approvals alone are vanity metrics",
+        "Explains that a recruit who never promotes cost the outreach and returned nothing",
+        "Names the share of recruited affiliates that become sales-active as the program-side KPI that matters, using 'activity index' or an equivalent explicit definition",
+        "Gives the roughly 20% of affiliates producing at least one click per week benchmark for a mature program",
+        "Flags that benchmark as practitioner self-reported rather than independently measured",
+        "Names reply rate and application rate broken out per tier and per angle as the outreach-side KPIs",
+        "States the affiliate platform dashboard shows approvals and payouts but not the outreach pipeline",
+        "Recommends tracking the outreach pipeline in a CRM or spreadsheet separate from the program dashboard",
+        "Names the pipeline stages contacted, replied, applied, activated",
+        "Sets a weekly review cadence during an active campaign"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "For our B2C skincare program I want every first email to open with 'your affiliate account is already approved and waiting' - it converts way better than a plain link. Realistically our team takes about two weeks to review an application right now, and nobody has set anything up in the platform yet. Also stick my Calendly in there as a backup ask in case they'd rather talk it through.",
+      "expected_output": "A refusal of the unbacked pre-approved-account claim and of the second ask, with the dropped CTA named, an honorable replacement chosen, and the two-week review turnaround flagged as a blocker to fix before launch.",
+      "files": [],
+      "expectations": [
+        "Refuses the pre-approved-account CTA while no account has actually been set up per prospect",
+        "States a pre-approved-account claim with no pre-approval behind it burns the prospect permanently",
+        "States that a CTA the manager cannot honor is deleted rather than demoted, and says explicitly which CTA was dropped and why",
+        "Rejects adding the calendar link as a second ask, holding the message to exactly one CTA",
+        "Notes a booked-call CTA is wrong for a cold first touch of this type, belonging to B2B tier 1 from touch 3 onward if used at all",
+        "Recommends reply-for-info or the apply link as the honorable CTA for this cold first touch",
+        "Flags the two-week application review as a documented failure mode that sours the pitch",
+        "Commits to a 24-48 hour application review turnaround before outreach launches",
+        "States pre-approved accounts require real per-prospect setup work before sending, and scopes them to B2C tier 1 if used at all",
+        "Does not keep the pre-approved-account line as an aspirational, hedged, or 'coming soon' claim"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Here's my Q4 plan for the affiliate program on Loomwright, our B2B workflow automation SaaS - $49/seat/month, 20% recurring. Three moves: (1) sign up the three big coupon and cashback networks, (2) post the program in about six Slack and Discord communities where our buyers hang out, (3) buy a 5,000-contact list of marketing bloggers from a data vendor and blast it. Rank these three for me and tell me what I'm missing.",
+      "expected_output": "A plan that deletes all three proposed moves for named reasons rather than ranking them, states the B2B SaaS sourcing efficiency order explicitly, names what that order starves, and gives the discovery method to rebuild the list.",
+      "files": [],
+      "expectations": [
+        "Removes coupon/cashback/loyalty from the plan for this B2B SaaS program rather than ranking it last",
+        "Explains the removal on value grounds: discounting erodes recurring revenue and the signups are largely non-incremental",
+        "Notes coupon/cashback remains a legitimate category for B2C ecommerce programs",
+        "Removes cold-pitching in Slack and Discord communities rather than ranking it, because anti-solicitation rules make the pitch itself the violation",
+        "Recommends keeping community presence as passive recruitment - participate and be findable - and treating any recruit from one as inbound",
+        "Declines the purchased 5,000-contact list, stating purchased or scraped contact dumps of unknown provenance are not a workable basis, and says why to the user",
+        "Warns that one large blast underperforms small batches, and recommends batches of 50 or fewer",
+        "Names competitors' current affiliates and content/review/comparison sites as the default opening rungs for a B2B SaaS program",
+        "States the sourcing efficiency ordering explicitly rather than leaving it implied by row order",
+        "Names complementary non-competing vendors and consultants/agencies/integration partners as high-value categories that the efficiency ordering starves",
+        "Gives the condition that promotes those two categories anyway: an existing base of affiliates already producing clicks, or a compounding mandate rather than a dated launch",
+        "Recommends a competitor-affiliate search or link-intersect/backlink analysis as the discovery method to rebuild the list, and notes the ranking shifts with what the manager already owns (licensed backlink tool, existing roster, retained agency)"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "First emails went out Monday to 90 prospects for our B2B SaaS program. Write touches 2 through 5 for me. I've got a LinkedIn automation tool that fires connection requests and DMs on a schedule - 25 a day is supposed to be the safe limit - so plan touch 3 through that. Touch 4 can just be a check-in bump, and if nobody answers by touch 5 I'll keep hitting them monthly after that.",
+      "expected_output": "Four follow-up touches with rotating angles, manual low-volume DMs replacing the automation tool, no check-in touch, a real breakup at touch 5 that is honored, and re-engagement scoped as a separate later campaign.",
+      "files": [],
+      "expectations": [
+        "Refuses to plan any touch through automated connection or DM tooling",
+        "States platform terms prohibit scraping and automation, and that the breach is enforceable as a contract claim and account ban even where it is not computer fraud",
+        "Identifies the '25 a day safe limit' as community anecdote rather than platform policy",
+        "Replaces the automation with manual, personalized DMs at low volume",
+        "Rejects the 'check-in bump' for touch 4, stating no touch may be a 'just checking in' message",
+        "Assigns each touch a distinct rotating angle, following fit then proof then ease then close across the sequence",
+        "Makes touch 2 a short resurface on the same email thread, 1-2 sentences, restating no part of the pitch",
+        "Keeps every follow-up under 50 words",
+        "Keeps the DM touch under roughly 300 characters and includes no link in a first DM",
+        "Makes touch 5 an explicit breakup that says it is the last email and leaves the door open",
+        "Refuses the monthly continuation after touch 5, stating a sent breakup is honored and there is no touch 6",
+        "States sending stops immediately on reply, opt-out or hard bounce, and that continuing past an opt-out is a per-message violation rather than persistence"
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "Need a recruitment email for our new affiliate program by end of day. We haven't locked the commission yet - finance is still arguing between 20% recurring and a $200 flat bounty - so just write something compelling and we'll drop the number in later. Company is Hollowpine, we do B2B contract management software for mid-market legal teams.",
+      "expected_output": "A refusal to draft until the commission is confirmed, the commission decision routed out of scope, the remaining interview questions asked one at a time, and 2-3 candidate pitch angles offered with a recommendation before any message is written.",
+      "files": [],
+      "expectations": [
+        "Does not deliver a finished recruitment email with the commission left blank, hedged, or invented",
+        "States the email may carry only confirmed terms, and gates the draft on the commission being decided",
+        "Routes the commission decision itself out of scope, pointing at commission-structure design rather than choosing between 20% recurring and a $200 flat bounty",
+        "Names 'terms surfacing after the pitch that contradict the email' as a documented failure mode driving that gate",
+        "Asks the remaining interview questions one at a time rather than as a single block",
+        "Asks by what date recruited affiliates must be producing",
+        "Asks whether this is a one-off launch push or a compounding channel that will still run next year",
+        "Asks the effort ceiling: manager hours per week, and what is already owned",
+        "Explains those three answers re-rank sourcing categories, cadence and CTA, so they must be answered before drafting rather than at the moment of choosing",
+        "Proposes 2-3 candidate pitch angles with trade-offs and a recommendation, and writes no message until the user picks one"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "Write the first-touch email and follow-up sequence for 40 comparison-site editors we want in our B2B SaaS affiliate program",
+      "should_trigger": true
+    },
+    { "query": "How do I recruit affiliates for a brand new program?", "should_trigger": true },
+    {
+      "query": "Our affiliate recruitment emails get no replies - here are the last three, rewrite them and fix the cadence",
+      "should_trigger": true
+    },
+    {
+      "query": "We have a list of 200 prospects mixing UK sole traders, US bloggers and German media sites. Tier the list and tell me who we can cold-email",
+      "should_trigger": true
+    },
+    {
+      "query": "Draft a pitch to get review sites to join our commission program",
+      "should_trigger": true
+    },
+    {
+      "query": "I pulled the backlinks of our two biggest competitors and found the sites promoting them - what do I send those people?",
+      "should_trigger": true
+    },
+    {
+      "query": "How many follow-ups before I give up on an affiliate prospect?",
+      "should_trigger": true
+    },
+    {
+      "query": "Need a breakup email for partners who never answered our program invite",
+      "should_trigger": true
+    },
+    {
+      "query": "Best subject line for an email asking a blogger to promote our product for commission",
+      "should_trigger": true
+    },
+    {
+      "query": "We want coupon and cashback partners in our DTC program - how do we approach them?",
+      "should_trigger": true
+    },
+    {
+      "query": "Cold outreach plan to get newsletter operators promoting our tool for a cut of revenue",
+      "should_trigger": true
+    },
+    {
+      "query": "how do i find people to promote my product for a percentage of sales and actually get them to say yes",
+      "should_trigger": true
+    },
+    {
+      "query": "Should I lead with the commission rate when emailing potential affiliates?",
+      "should_trigger": true
+    },
+    {
+      "query": "Plan for signing up 50 new partners to our revenue-share program this quarter",
+      "should_trigger": true
+    },
+    { "query": "Can I email Canadian bloggers about joining our program?", "should_trigger": true },
+    {
+      "query": "What's a realistic reply rate on partner recruitment emails?",
+      "should_trigger": true
+    },
+    {
+      "query": "We want to go after the affiliates working with our competitor. Is that a bad idea?",
+      "should_trigger": true
+    },
+    {
+      "query": "Write an outreach sequence for podcast hosts we want promoting our SaaS on commission",
+      "should_trigger": true
+    },
+    {
+      "query": "How should I tier a list of 300 potential publishers before I start emailing?",
+      "should_trigger": true
+    },
+    {
+      "query": "our affiliate program has four people in it after six months. how do we get more?",
+      "should_trigger": true
+    },
+    {
+      "query": "Draft the email that goes to agencies we want reselling us on a referral commission",
+      "should_trigger": true
+    },
+    {
+      "query": "What goes in the very first message to someone we want in our partner program?",
+      "should_trigger": true
+    },
+    {
+      "query": "My VP wants a recruitment funnel for the affiliate channel - stages and KPIs",
+      "should_trigger": true
+    },
+    {
+      "query": "Message to send a YouTuber to get them onto our affiliate program",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I qualify affiliate prospects before I waste time emailing all of them?",
+      "should_trigger": true
+    },
+    {
+      "query": "Sequence plan for recruiting content partners into our ecommerce program",
+      "should_trigger": true
+    },
+    {
+      "query": "I have four hours a week and a list of 180 sites. What cadence is realistic?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we buy a list of bloggers to pitch our program to?",
+      "should_trigger": true
+    },
+    {
+      "query": "What do I say to someone who already promotes a competing product?",
+      "should_trigger": true
+    },
+    {
+      "query": "Affiliate sourcing strategy for a B2B SaaS launching next quarter",
+      "should_trigger": true
+    },
+    {
+      "query": "Write a LinkedIn DM to a partner prospect who has ignored two emails from us",
+      "should_trigger": true
+    },
+    {
+      "query": "How do we get more publishers into the program without a bigger budget?",
+      "should_trigger": true
+    },
+    {
+      "query": "outreach copy for recruiting brand ambassadors who earn commission on sales",
+      "should_trigger": true
+    },
+    {
+      "query": "We need the people writing 'best X software' lists to include us and earn a cut - how do we reach them?",
+      "should_trigger": true
+    },
+    { "query": "Cold email template for partner program recruitment", "should_trigger": true },
+    {
+      "query": "How many emails a week can I send to potential partners without getting us flagged?",
+      "should_trigger": true
+    },
+    {
+      "query": "Need a plan to grow the partner side of our revenue-share channel from zero",
+      "should_trigger": true
+    },
+    {
+      "query": "Which affiliate categories should we go after first for a B2B product?",
+      "should_trigger": true
+    },
+    {
+      "query": "Draft a message to cashback network business development",
+      "should_trigger": true
+    },
+    { "query": "Recruit affiliates for our Q4 seasonal push", "should_trigger": true },
+    {
+      "query": "Our program page gets no signups. Should we start reaching out to people directly?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I personalize 200 partner pitch emails without it taking me a month?",
+      "should_trigger": true
+    },
+    { "query": "What KPIs prove our affiliate recruiting is working?", "should_trigger": true },
+    {
+      "query": "Write touch 2 through touch 5 for our publisher recruitment sequence",
+      "should_trigger": true
+    },
+    {
+      "query": "Do I need a physical address in an email inviting bloggers to my program?",
+      "should_trigger": true
+    },
+    {
+      "query": "Pitch angle options for getting finance bloggers into our commission program",
+      "should_trigger": true
+    },
+    {
+      "query": "how to convince a big review site to sign up as a partner and send us traffic",
+      "should_trigger": true
+    },
+    {
+      "query": "Recruiting plan for affiliates across the US, UK and Germany",
+      "should_trigger": true
+    },
+    {
+      "query": "We're offering 30% recurring - how do I get that in front of the right publishers?",
+      "should_trigger": true
+    },
+    {
+      "query": "Email plan for turning our happiest customers into commissioned promoters",
+      "should_trigger": true
+    },
+    { "query": "What makes an affiliate recruiting email get deleted?", "should_trigger": true },
+    { "query": "Build the outreach side of our new partner program", "should_trigger": true },
+    {
+      "query": "I want to pay people to promote us. How do I actually go get those people?",
+      "should_trigger": true
+    },
+    {
+      "query": "Follow-up strategy for partner prospects who haven't replied in two weeks",
+      "should_trigger": true
+    },
+    {
+      "query": "What's the right ask in a first email to a potential affiliate - apply link or just reply?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our affiliate manager wants a repeatable prospecting and outreach process written down",
+      "should_trigger": true
+    },
+    {
+      "query": "Design the commission rate and payout tiers for our new affiliate program",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we pay revenue share or a flat CPA on our affiliate program?",
+      "should_trigger": false
+    },
+    {
+      "query": "Draft the terms and conditions affiliates accept when they join",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the prohibited-tactics clauses for our affiliate agreement",
+      "should_trigger": false
+    },
+    {
+      "query": "What should our affiliate welcome email say after we approve someone?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the onboarding sequence for newly approved affiliates",
+      "should_trigger": false
+    },
+    {
+      "query": "One of our affiliates is sending fake leads - how do I detect and prove it?",
+      "should_trigger": false
+    },
+    { "query": "Build cookie-stuffing detection rules for our program", "should_trigger": false },
+    {
+      "query": "Audit this month's affiliate payout run before we send the money out",
+      "should_trigger": false
+    },
+    {
+      "query": "Which metrics belong on our affiliate performance dashboard?",
+      "should_trigger": false
+    },
+    {
+      "query": "Check this Instagram caption against FTC affiliate disclosure rules",
+      "should_trigger": false
+    },
+    {
+      "query": "Does this YouTube script disclose the affiliate relationship properly?",
+      "should_trigger": false
+    },
+    {
+      "query": "Pitch this one creator we've already vetted - she has 80k followers and we want her for the spring campaign",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the DM to send Marina about a paid collab on her channel",
+      "should_trigger": false
+    },
+    {
+      "query": "Define the criteria for shortlisting creators for our spring campaign",
+      "should_trigger": false
+    },
+    {
+      "query": "Draft the creative brief for the influencer we just signed",
+      "should_trigger": false
+    },
+    {
+      "query": "Prepare me to negotiate usage rights and rates with a creator",
+      "should_trigger": false
+    },
+    {
+      "query": "Set KPIs and attribution for our influencer campaign before it launches",
+      "should_trigger": false
+    },
+    {
+      "query": "How much should we reward customers for referring a friend?",
+      "should_trigger": false
+    },
+    { "query": "Stop people from gaming our refer-a-friend rewards", "should_trigger": false },
+    {
+      "query": "Design our B2B channel partner program structure from scratch",
+      "should_trigger": false
+    },
+    {
+      "query": "Set the qualification criteria for silver, gold and platinum partner tiers",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan the certification track for our reseller partners",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we list on AWS Marketplace or focus spend on our own site?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the deal registration policy for our co-sell motion",
+      "should_trigger": false
+    },
+    {
+      "query": "Our direct reps and a channel partner are fighting over the same account",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan the joint launch campaign with our integration partner Datafold",
+      "should_trigger": false
+    },
+    {
+      "query": "Rank these five candidate strategic alliances by expected value",
+      "should_trigger": false
+    },
+    { "query": "Model the unit economics of our biggest reseller", "should_trigger": false },
+    {
+      "query": "Build the QBR scorecard for reviewing individual partners",
+      "should_trigger": false
+    },
+    {
+      "query": "Map every partner type in our ecosystem and find the coverage gaps",
+      "should_trigger": false
+    },
+    {
+      "query": "Which partner category should we add next, and when?",
+      "should_trigger": false
+    },
+    {
+      "query": "We need to hire a partner marketing manager - write the job description",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the interview loop for a channel manager role",
+      "should_trigger": false
+    },
+    { "query": "How do I break into partnerships from a sales role?", "should_trigger": false },
+    {
+      "query": "Recruit two senior engineers for the integrations team",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a recruiting pipeline to track candidates through our hiring stages",
+      "should_trigger": false
+    },
+    {
+      "query": "Write a cold email sequence to 300 SaaS CTOs to book product demos",
+      "should_trigger": false
+    },
+    {
+      "query": "Draft outreach to journalists to cover our funding announcement",
+      "should_trigger": false
+    },
+    { "query": "Write the investor outreach email for our seed round", "should_trigger": false },
+    {
+      "query": "Cold email sequence for our SDR team targeting mid-market ops leaders",
+      "should_trigger": false
+    },
+    {
+      "query": "Help me write a guest post pitch to get a backlink from a tech blog",
+      "should_trigger": false
+    },
+    {
+      "query": "Outreach plan to get our product reviewed by the tech press",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up our Shopify Partner account and list our app in the store",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the sponsorship pitch for a conference we want to sponsor next year",
+      "should_trigger": false
+    },
+    { "query": "Email sequence to win back churned customers", "should_trigger": false },
+    {
+      "query": "Which skill in this collection should I use for our partner work?",
+      "should_trigger": false
+    },
+    { "query": "Route my partnerships task to the right playbook", "should_trigger": false },
+    {
+      "query": "How long should we hold commission payments during the clawback window?",
+      "should_trigger": false
+    },
+    {
+      "query": "Set the cookie window and attribution rules for the program",
+      "should_trigger": false
+    },
+    {
+      "query": "Our top affiliate wants a custom rate - how do I evaluate whether to give it?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the email telling an affiliate we're terminating them for trademark bidding",
+      "should_trigger": false
+    },
+    {
+      "query": "Build the activation nudge for affiliates who joined but never posted a link",
+      "should_trigger": false
+    },
+    {
+      "query": "Score our shortlisted creators on engagement quality and brand safety",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan the co-marketing webinar with our integration partner",
+      "should_trigger": false
+    },
+    {
+      "query": "Separate real fraud from legitimate low-incrementality coupon partners in our traffic data",
+      "should_trigger": false
+    }
+  ]
+}

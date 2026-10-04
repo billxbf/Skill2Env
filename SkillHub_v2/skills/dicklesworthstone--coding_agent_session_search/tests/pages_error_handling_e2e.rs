@@ -1,0 +1,1951 @@
+//! Error Handling E2E Tests (P6.8)
+//!
+//! Comprehensive test suite for error handling in the pages export system.
+//! Tests verify that:
+//! - All error types have user-friendly messages
+//! - Error messages don't leak sensitive information
+//! - All error paths are tested
+//! - Recovery suggestions are provided
+//! - Timing attacks are prevented
+//!
+//! # Running
+//!
+//! ```bash
+//! cargo test --test pages_error_handling_e2e
+//! ```
+
+use coding_agent_search::pages::encrypt::{DecryptionEngine, EncryptionEngine, load_config};
+use coding_agent_search::pages::errors::{
+    BrowserError, DbError, DecryptError, ErrorCode, ExportError, NetworkError,
+};
+use std::fs;
+use std::path::Path;
+use std::process::{Command, Output};
+use std::time::{Duration, Instant};
+use tempfile::TempDir;
+
+// =============================================================================
+// Test Configuration
+// =============================================================================
+
+const TEST_PASSWORD: &str = "test-password-for-error-handling";
+const TEST_RECOVERY_SECRET: &[u8] = b"test-recovery-secret-32-bytes!!";
+
+// =============================================================================
+// Helper Functions
+// =============================================================================
+
+fn run_node_module_assertions(script: &str) -> std::io::Result<Output> {
+    // `--experimental-detect-module` loads the ES-module assets as modules on
+    // Node 20.10+ and is a no-op where detection is the default (22.7+).
+    // Node 24 removed `--experimental-default-type` and rejects it.
+    Command::new("node")
+        .args([
+            "--experimental-detect-module",
+            "--input-type=module",
+            "--eval",
+            script,
+        ])
+        .current_dir(env!("CARGO_MANIFEST_DIR"))
+        .output()
+}
+
+/// Create a test archive with password encryption.
+fn create_test_archive(temp_dir: &Path, password: &str) -> std::path::PathBuf {
+    let input_path = temp_dir.join("input.db");
+    fs::write(
+        &input_path,
+        b"Test database content for error handling tests",
+    )
+    .unwrap();
+
+    let encrypt_dir = temp_dir.join("encrypted");
+    let mut engine = EncryptionEngine::new(1024).expect("valid chunk size");
+    engine.add_password_slot(password).unwrap();
+
+    engine
+        .encrypt_file(&input_path, &encrypt_dir, |_, _| {})
+        .unwrap();
+
+    encrypt_dir
+}
+
+/// Create a test archive with both password and recovery slots.
+fn create_test_archive_with_recovery(
+    temp_dir: &Path,
+    password: &str,
+    recovery: &[u8],
+) -> std::path::PathBuf {
+    let input_path = temp_dir.join("input.db");
+    fs::write(&input_path, b"Test database content").unwrap();
+
+    let encrypt_dir = temp_dir.join("encrypted");
+    let mut engine = EncryptionEngine::new(1024).expect("valid chunk size");
+    engine.add_password_slot(password).unwrap();
+    engine.add_recovery_slot(recovery).unwrap();
+
+    engine
+        .encrypt_file(&input_path, &encrypt_dir, |_, _| {})
+        .unwrap();
+
+    encrypt_dir
+}
+
+// =============================================================================
+// Authentication Error Tests
+// =============================================================================
+
+#[test]
+fn test_wrong_password_error() {
+    let temp_dir = TempDir::new().unwrap();
+    let archive_dir = create_test_archive(temp_dir.path(), "correct-password");
+
+    let config = load_config(&archive_dir).expect("Should load config");
+    let result = DecryptionEngine::unlock_with_password(config, "wrong-password");
+
+    assert!(result.is_err(), "Should fail with wrong password");
+
+    // Verify error message is user-friendly
+    match result {
+        Ok(_) => panic!("Should have failed"),
+        Err(e) => {
+            let err_msg = e.to_string();
+            assert!(
+                err_msg.contains("password")
+                    || err_msg.contains("Invalid")
+                    || err_msg.contains("key slot"),
+                "Error should mention password issue: {}",
+                err_msg
+            );
+        }
+    }
+}
+
+#[test]
+fn test_empty_password_validation() {
+    // Test that empty passwords are handled appropriately
+    // DecryptError should have a specific variant for empty passwords
+    let error = DecryptError::EmptyPassword;
+    let message = error.to_string();
+
+    assert!(
+        message.to_lowercase().contains("enter") || message.to_lowercase().contains("password"),
+        "Empty password error should be clear: {}",
+        message
+    );
+
+    let suggestion = error.suggestion();
+    assert!(!suggestion.is_empty(), "Should have a suggestion");
+}
+
+#[test]
+fn test_password_error_no_timing_leak() {
+    // Verify that wrong password attempts take similar time
+    // This helps prevent timing attacks that could reveal password length
+    let temp_dir = TempDir::new().unwrap();
+    let archive_dir = create_test_archive(temp_dir.path(), "correctpassword123");
+
+    let config = load_config(&archive_dir).expect("Should load config");
+
+    // Measure time for different wrong passwords
+    let attempts = [
+        "a",
+        "ab",
+        "abc",
+        "wrongpassword",
+        "wrongpassword123",
+        "wrongpassword12345678901234567890",
+    ];
+
+    let mut times = Vec::new();
+
+    for password in &attempts {
+        let config_copy = config.clone();
+        let start = Instant::now();
+        let _ = DecryptionEngine::unlock_with_password(config_copy, password);
+        times.push(start.elapsed());
+    }
+
+    // Calculate mean and variance
+    let mean_ns: u128 = times.iter().map(|t| t.as_nanos()).sum::<u128>() / times.len() as u128;
+    let variance: f64 = times
+        .iter()
+        .map(|t| (t.as_nanos() as f64 - mean_ns as f64).powi(2))
+        .sum::<f64>()
+        / times.len() as f64;
+
+    let std_dev = variance.sqrt();
+    let coefficient_of_variation = std_dev / mean_ns as f64;
+
+    // The coefficient of variation should be reasonably low
+    // (high variance would indicate timing leak)
+    // Note: This is a heuristic; actual timing attack prevention
+    // requires constant-time comparison in crypto code
+    println!(
+        "Timing test: mean={:.2}ms, std_dev={:.2}ms, cv={:.4}",
+        mean_ns as f64 / 1_000_000.0,
+        std_dev / 1_000_000.0,
+        coefficient_of_variation
+    );
+
+    // CV above 0.5 would be suspicious for constant-time operations
+    // but Argon2 time varies with system load, so we use a lenient threshold
+    assert!(
+        coefficient_of_variation < 1.0,
+        "Timing variance is suspiciously high (CV={:.4}), may indicate timing leak",
+        coefficient_of_variation
+    );
+}
+
+#[test]
+fn test_wrong_recovery_key_error() {
+    let temp_dir = TempDir::new().unwrap();
+    let archive_dir =
+        create_test_archive_with_recovery(temp_dir.path(), TEST_PASSWORD, TEST_RECOVERY_SECRET);
+
+    let config = load_config(&archive_dir).expect("Should load config");
+    let result = DecryptionEngine::unlock_with_recovery(config, &[0xEE; 32]);
+
+    assert!(result.is_err(), "Should fail with wrong recovery key");
+}
+
+// =============================================================================
+// Archive Format Error Tests
+// =============================================================================
+
+#[test]
+fn test_corrupted_config_header() {
+    let temp_dir = TempDir::new().unwrap();
+    let archive_dir = create_test_archive(temp_dir.path(), TEST_PASSWORD);
+
+    // Corrupt the config.json
+    let config_path = archive_dir.join("config.json");
+    fs::write(&config_path, b"{ invalid json }").unwrap();
+
+    let result = load_config(&archive_dir);
+    assert!(result.is_err(), "Should fail with corrupted config");
+}
+
+#[test]
+fn test_corrupted_ciphertext() {
+    let temp_dir = TempDir::new().unwrap();
+    let archive_dir = create_test_archive(temp_dir.path(), TEST_PASSWORD);
+
+    // Find and corrupt a payload chunk
+    let payload_dir = archive_dir.join("payload");
+    let chunk_path = fs::read_dir(&payload_dir)
+        .unwrap()
+        .filter_map(|e| e.ok())
+        .map(|e| e.path())
+        .find(|p| p.extension().map(|e| e == "bin").unwrap_or(false))
+        .expect("Should find a chunk");
+
+    let mut chunk_data = fs::read(&chunk_path).unwrap();
+    if !chunk_data.is_empty() {
+        // Flip bits in middle of chunk
+        let mid = chunk_data.len() / 2;
+        chunk_data[mid] ^= 0xFF;
+        fs::write(&chunk_path, &chunk_data).unwrap();
+    }
+
+    // Loading config should work
+    let config = load_config(&archive_dir).expect("Config should load");
+
+    // But decryption should fail due to tampered ciphertext
+    let decryptor = DecryptionEngine::unlock_with_password(config, TEST_PASSWORD)
+        .expect("Password should still work");
+
+    let decrypted_path = temp_dir.path().join("decrypted.db");
+    let result = decryptor.decrypt_to_file(&archive_dir, &decrypted_path, |_, _| {});
+
+    assert!(result.is_err(), "Should fail on corrupted ciphertext");
+}
+
+#[test]
+fn test_truncated_archive() {
+    let temp_dir = TempDir::new().unwrap();
+    let archive_dir = create_test_archive(temp_dir.path(), TEST_PASSWORD);
+
+    // Truncate a payload chunk
+    let payload_dir = archive_dir.join("payload");
+    let chunk_path = fs::read_dir(&payload_dir)
+        .unwrap()
+        .filter_map(|e| e.ok())
+        .map(|e| e.path())
+        .find(|p| p.extension().map(|e| e == "bin").unwrap_or(false))
+        .expect("Should find a chunk");
+
+    let chunk_data = fs::read(&chunk_path).unwrap();
+    if chunk_data.len() > 10 {
+        fs::write(&chunk_path, &chunk_data[..chunk_data.len() / 2]).unwrap();
+    }
+
+    let config = load_config(&archive_dir).expect("Config should load");
+    let decryptor = DecryptionEngine::unlock_with_password(config, TEST_PASSWORD)
+        .expect("Password should work");
+
+    let decrypted_path = temp_dir.path().join("decrypted.db");
+    let result = decryptor.decrypt_to_file(&archive_dir, &decrypted_path, |_, _| {});
+
+    assert!(result.is_err(), "Should fail on truncated archive");
+}
+
+#[test]
+fn test_missing_chunk_file() {
+    let temp_dir = TempDir::new().unwrap();
+    let archive_dir = create_test_archive(temp_dir.path(), TEST_PASSWORD);
+
+    // Remove a payload chunk
+    let payload_dir = archive_dir.join("payload");
+    let chunk_path = fs::read_dir(&payload_dir)
+        .unwrap()
+        .filter_map(|e| e.ok())
+        .map(|e| e.path())
+        .find(|p| p.extension().map(|e| e == "bin").unwrap_or(false))
+        .expect("Should find a chunk");
+
+    fs::remove_file(&chunk_path).unwrap();
+
+    let config = load_config(&archive_dir).expect("Config should load");
+    let decryptor = DecryptionEngine::unlock_with_password(config, TEST_PASSWORD)
+        .expect("Password should work");
+
+    let decrypted_path = temp_dir.path().join("decrypted.db");
+    let result = decryptor.decrypt_to_file(&archive_dir, &decrypted_path, |_, _| {});
+
+    assert!(result.is_err(), "Should fail on missing chunk");
+}
+
+#[test]
+fn test_version_mismatch() {
+    // Test handling of unsupported version
+    let error = DecryptError::UnsupportedVersion(99);
+    let message = error.to_string();
+
+    assert!(
+        message.contains("99") || message.contains("version") || message.contains("newer"),
+        "Version error should mention the version: {}",
+        message
+    );
+
+    let suggestion = error.suggestion();
+    assert!(
+        suggestion.to_lowercase().contains("update"),
+        "Suggestion should mention updating: {}",
+        suggestion
+    );
+}
+
+#[test]
+fn test_invalid_format_error() {
+    let error = DecryptError::InvalidFormat("Magic bytes mismatch".into());
+    let message = error.to_string();
+
+    // User-facing message should be friendly
+    assert!(
+        message.to_lowercase().contains("not a valid")
+            || message.to_lowercase().contains("archive"),
+        "Format error should be user-friendly: {}",
+        message
+    );
+
+    // Should not expose internal details
+    assert!(
+        !message.contains("Magic bytes"),
+        "Should not expose internal details in display: {}",
+        message
+    );
+}
+
+// =============================================================================
+// Database Error Tests
+// =============================================================================
+
+#[test]
+fn test_corrupt_database_error() {
+    let error = DbError::CorruptDatabase("file is not a database".into());
+    let message = error.to_string();
+
+    assert!(
+        message.to_lowercase().contains("corrupt"),
+        "Should mention corruption: {}",
+        message
+    );
+
+    // Should not expose SQLite internals
+    assert!(
+        !message.contains("not a database"),
+        "Should not expose internal error: {}",
+        message
+    );
+}
+
+#[test]
+fn test_missing_table_error() {
+    let error = DbError::MissingTable("messages_fts".into());
+    let message = error.to_string();
+
+    assert!(
+        message.to_lowercase().contains("missing"),
+        "Should mention missing data: {}",
+        message
+    );
+
+    // Should not expose table names to users
+    assert!(
+        !message.contains("messages_fts"),
+        "Should not expose table name: {}",
+        message
+    );
+}
+
+#[test]
+fn test_invalid_query_error() {
+    // Simulate a user entering a malformed FTS query
+    let error = DbError::InvalidQuery("fts5: syntax error near 'MATCH'".into());
+    let message = error.to_string();
+
+    // User message should be friendly
+    assert!(
+        message.to_lowercase().contains("search") || message.to_lowercase().contains("processed"),
+        "Should give user-friendly message: {}",
+        message
+    );
+
+    // Should not expose FTS/SQL internals
+    assert!(
+        !message.contains("fts5"),
+        "Should not expose FTS details: {}",
+        message
+    );
+    assert!(
+        !message.contains("MATCH"),
+        "Should not expose SQL keywords: {}",
+        message
+    );
+}
+
+// =============================================================================
+// Error Message Quality Tests
+// =============================================================================
+
+#[test]
+fn test_error_messages_are_user_friendly() {
+    let test_cases: Vec<(Box<dyn std::fmt::Display>, &str)> = vec![
+        (Box::new(DecryptError::AuthenticationFailed), "password"),
+        (
+            Box::new(DecryptError::InvalidFormat("test".into())),
+            "archive",
+        ),
+        (Box::new(DecryptError::IntegrityCheckFailed), "corrupt"),
+        (
+            Box::new(DecryptError::CorruptPayload("chunk authentication".into())),
+            "corrupt",
+        ),
+        (Box::new(DecryptError::UnsupportedVersion(1)), "version"),
+        (
+            Box::new(DecryptError::UnsupportedMetadata("compression".into())),
+            "unsupported",
+        ),
+        (Box::new(DbError::CorruptDatabase("test".into())), "corrupt"),
+        (Box::new(DbError::InvalidQuery("test".into())), "search"),
+    ];
+
+    for (error, expected_substring) in test_cases {
+        let message = error.to_string().to_lowercase();
+        assert!(
+            message.contains(expected_substring),
+            "Error should mention '{}', got: {}",
+            expected_substring,
+            message
+        );
+    }
+}
+
+#[test]
+fn test_error_messages_no_technical_jargon() {
+    let errors: Vec<Box<dyn std::fmt::Display>> = vec![
+        Box::new(DecryptError::AuthenticationFailed),
+        Box::new(DecryptError::EmptyPassword),
+        Box::new(DecryptError::InvalidFormat("header".into())),
+        Box::new(DecryptError::IntegrityCheckFailed),
+        Box::new(DecryptError::CorruptPayload("cipher authentication".into())),
+        Box::new(DecryptError::UnsupportedVersion(2)),
+        Box::new(DecryptError::UnsupportedMetadata("compression".into())),
+        Box::new(DecryptError::CryptoError("GCM tag mismatch".into())),
+        Box::new(DbError::CorruptDatabase("sqlite error".into())),
+        Box::new(DbError::InvalidQuery("FTS5 syntax".into())),
+    ];
+
+    let jargon = [
+        "GCM",
+        "AES",
+        "AEAD",
+        "nonce",
+        "cipher",
+        "tag",
+        "MAC",
+        "sqlite",
+        "FTS",
+        "FTS5",
+        "SQL",
+        "query syntax",
+    ];
+
+    for error in errors {
+        let display = error.to_string();
+        for word in jargon {
+            assert!(
+                !display.to_uppercase().contains(&word.to_uppercase()),
+                "Error should not contain '{}' in display: {}",
+                word,
+                display
+            );
+        }
+    }
+}
+
+#[test]
+fn test_error_messages_dont_leak_secrets() {
+    let password = "secret-password-123";
+    let error = DecryptError::AuthenticationFailed;
+
+    let display = error.to_string();
+    let debug = format!("{:?}", error);
+    let log_msg = error.log_message();
+
+    assert!(
+        !display.contains(password),
+        "Display should not contain password"
+    );
+    assert!(
+        !debug.contains(password),
+        "Debug should not contain password"
+    );
+    assert!(
+        !log_msg.contains(password),
+        "Log message should not contain password"
+    );
+
+    // Also check that "wrong" attempt isn't leaked
+    assert!(
+        !display.contains("wrong"),
+        "Should not reveal what was attempted"
+    );
+}
+
+#[test]
+fn test_all_errors_have_suggestions() {
+    let decrypt_errors: Vec<DecryptError> = vec![
+        DecryptError::AuthenticationFailed,
+        DecryptError::EmptyPassword,
+        DecryptError::InvalidFormat("test".into()),
+        DecryptError::IntegrityCheckFailed,
+        DecryptError::CorruptPayload("chunk authentication".into()),
+        DecryptError::UnsupportedVersion(2),
+        DecryptError::UnsupportedMetadata("compression".into()),
+        DecryptError::NoMatchingKeySlot,
+        DecryptError::CryptoError("test".into()),
+    ];
+
+    for error in decrypt_errors {
+        let suggestion = error.suggestion();
+        assert!(!suggestion.is_empty(), "{:?} has no suggestion", error);
+        assert!(
+            suggestion.ends_with('.') || suggestion.ends_with('!'),
+            "{:?} suggestion should end with punctuation: {}",
+            error,
+            suggestion
+        );
+    }
+
+    let db_errors: Vec<DbError> = vec![
+        DbError::CorruptDatabase("test".into()),
+        DbError::MissingTable("test".into()),
+        DbError::InvalidQuery("test".into()),
+        DbError::DatabaseLocked,
+        DbError::NoResults,
+    ];
+
+    for error in db_errors {
+        let suggestion = error.suggestion();
+        assert!(!suggestion.is_empty(), "{:?} has no suggestion", error);
+    }
+}
+
+#[test]
+fn test_error_codes_exist_and_unique() {
+    let mut codes = std::collections::HashSet::new();
+
+    let decrypt_errors: Vec<Box<dyn ErrorCode>> = vec![
+        Box::new(DecryptError::AuthenticationFailed),
+        Box::new(DecryptError::EmptyPassword),
+        Box::new(DecryptError::InvalidFormat("".into())),
+        Box::new(DecryptError::IntegrityCheckFailed),
+        Box::new(DecryptError::CorruptPayload("".into())),
+        Box::new(DecryptError::UnsupportedVersion(0)),
+        Box::new(DecryptError::UnsupportedMetadata("compression".into())),
+        Box::new(DecryptError::NoMatchingKeySlot),
+        Box::new(DecryptError::CryptoError("".into())),
+    ];
+
+    for error in decrypt_errors {
+        let code = error.error_code();
+        assert!(
+            code.starts_with("E"),
+            "Error code should start with 'E': {}",
+            code
+        );
+        assert!(
+            codes.insert(code.to_string()),
+            "Duplicate error code: {}",
+            code
+        );
+    }
+
+    let db_errors: Vec<Box<dyn ErrorCode>> = vec![
+        Box::new(DbError::CorruptDatabase("".into())),
+        Box::new(DbError::MissingTable("".into())),
+        Box::new(DbError::InvalidQuery("".into())),
+        Box::new(DbError::DatabaseLocked),
+        Box::new(DbError::NoResults),
+    ];
+
+    for error in db_errors {
+        let code = error.error_code();
+        assert!(
+            code.starts_with("E"),
+            "Error code should start with 'E': {}",
+            code
+        );
+        assert!(
+            codes.insert(code.to_string()),
+            "Duplicate error code: {}",
+            code
+        );
+    }
+}
+
+// =============================================================================
+// Browser Error Tests (Unit Tests for Error Types)
+// =============================================================================
+
+#[test]
+fn test_browser_error_messages() {
+    let errors = vec![
+        (
+            BrowserError::UnsupportedBrowser("IndexedDB".into()),
+            "browser",
+        ),
+        (BrowserError::WasmNotSupported, "webassembly"),
+        (BrowserError::CryptoNotSupported, "cryptography"),
+        (BrowserError::StorageQuotaExceeded, "storage"),
+        (BrowserError::SharedArrayBufferNotAvailable, "cross-origin"),
+    ];
+
+    for (error, expected) in errors {
+        let message = error.to_string().to_lowercase();
+        assert!(
+            message.contains(expected),
+            "Browser error should mention '{}': {}",
+            expected,
+            message
+        );
+    }
+}
+
+#[test]
+fn test_browser_error_suggestions_actionable() {
+    let errors = vec![
+        BrowserError::UnsupportedBrowser("test".into()),
+        BrowserError::WasmNotSupported,
+        BrowserError::CryptoNotSupported,
+        BrowserError::StorageQuotaExceeded,
+        BrowserError::SharedArrayBufferNotAvailable,
+    ];
+
+    for error in errors {
+        let suggestion = error.suggestion();
+
+        // Suggestions should be actionable (contain verbs like "use", "update", "clear")
+        let actionable_words = ["use", "update", "clear", "close", "served"];
+        let is_actionable = actionable_words
+            .iter()
+            .any(|word| suggestion.to_lowercase().contains(word));
+
+        assert!(
+            is_actionable,
+            "Browser error suggestion should be actionable: {}",
+            suggestion
+        );
+    }
+}
+
+// =============================================================================
+// Network Error Tests (Unit Tests for Error Types)
+// =============================================================================
+
+#[test]
+fn test_network_error_messages() {
+    let errors = vec![
+        (
+            NetworkError::FetchFailed("connection refused".into()),
+            "download",
+        ),
+        (
+            NetworkError::IncompleteDownload {
+                expected: 1000,
+                received: 500,
+            },
+            "incomplete",
+        ),
+        (NetworkError::Timeout, "timed out"),
+        (NetworkError::ServerError(500), "error"),
+    ];
+
+    for (error, expected) in errors {
+        let message = error.to_string().to_lowercase();
+        assert!(
+            message.contains(expected),
+            "Network error should mention '{}': {}",
+            expected,
+            message
+        );
+    }
+}
+
+#[test]
+fn test_network_error_no_internal_details() {
+    let error = NetworkError::FetchFailed("ECONNREFUSED 127.0.0.1:3000".into());
+    let message = error.to_string();
+
+    assert!(
+        !message.contains("ECONNREFUSED"),
+        "Should not expose internal error: {}",
+        message
+    );
+    assert!(
+        !message.contains("127.0.0.1"),
+        "Should not expose IP address: {}",
+        message
+    );
+}
+
+// =============================================================================
+// Export Error Tests
+// =============================================================================
+
+#[test]
+fn test_export_error_messages() {
+    let errors = vec![
+        (ExportError::NoConversations, "no conversations"),
+        (
+            ExportError::SourceDatabaseError("file not found".into()),
+            "database",
+        ),
+        (
+            ExportError::OutputError("permission denied".into()),
+            "output",
+        ),
+        (ExportError::FilterMatchedNothing, "filter"),
+    ];
+
+    for (error, expected) in errors {
+        let message = error.to_string().to_lowercase();
+        assert!(
+            message.contains(expected),
+            "Export error should mention '{}': {}",
+            expected,
+            message
+        );
+    }
+}
+
+#[test]
+fn test_export_error_suggestions() {
+    let errors = vec![
+        ExportError::NoConversations,
+        ExportError::SourceDatabaseError("test".into()),
+        ExportError::OutputError("test".into()),
+        ExportError::FilterMatchedNothing,
+    ];
+
+    for error in errors {
+        let suggestion = error.suggestion();
+        assert!(
+            !suggestion.is_empty(),
+            "{:?} should have a suggestion",
+            error
+        );
+    }
+}
+
+// =============================================================================
+// Integration: Full Error Flow Tests
+// =============================================================================
+
+#[test]
+fn test_error_chain_authentication_to_recovery() {
+    // Simulate: user enters wrong password, gets error, uses recovery key
+    let temp_dir = TempDir::new().unwrap();
+    let archive_dir =
+        create_test_archive_with_recovery(temp_dir.path(), TEST_PASSWORD, TEST_RECOVERY_SECRET);
+
+    // Step 1: Wrong password
+    let config = load_config(&archive_dir).unwrap();
+    let wrong_result = DecryptionEngine::unlock_with_password(config, "wrong-password");
+    assert!(wrong_result.is_err());
+
+    // Step 2: User sees helpful error message
+    match wrong_result {
+        Ok(_) => panic!("Should have failed"),
+        Err(e) => {
+            let err_msg = e.to_string();
+            assert!(!err_msg.is_empty(), "Error message should not be empty");
+        }
+    }
+
+    // Step 3: User uses recovery key instead
+    let config = load_config(&archive_dir).unwrap();
+    let recovery_result = DecryptionEngine::unlock_with_recovery(config, TEST_RECOVERY_SECRET);
+    assert!(recovery_result.is_ok(), "Recovery key should work");
+}
+
+#[test]
+fn test_graceful_degradation_corrupted_archive() {
+    // Test that corruption is rejected gracefully with a useful error.
+    let temp_dir = TempDir::new().unwrap();
+    let archive_dir = create_test_archive(temp_dir.path(), TEST_PASSWORD);
+
+    // Partially corrupt the archive
+    let config_path = archive_dir.join("config.json");
+    let config_content = fs::read_to_string(&config_path).unwrap();
+
+    // Insert garbage but keep JSON valid
+    let modified = config_content.replace("\"version\"", "\"garbage_field\": true, \"version\"");
+    fs::write(&config_path, modified).unwrap();
+
+    let err = load_config(&archive_dir).expect_err("corrupted config should be rejected");
+    let msg = err.to_string();
+    assert!(
+        msg.contains("unknown field") && msg.contains("garbage_field"),
+        "Should surface the offending unexpected field cleanly: {msg}"
+    );
+}
+
+#[test]
+fn browser_lock_terminates_in_flight_crypto_before_reinitializing() {
+    let auth_js = include_str!("../src/pages_assets/auth.js");
+    let terminate_body = auth_js
+        .split_once("function terminateCryptoWorker()")
+        .expect("auth.js should define the crypto-worker termination boundary")
+        .1
+        .split_once("function resetCryptoWorker()")
+        .expect("worker termination should remain a bounded helper")
+        .0;
+    assert!(
+        terminate_body.contains("previousWorker.terminate();"),
+        "worker termination must cancel in-flight cryptographic work"
+    );
+
+    let reset_body = auth_js
+        .split_once("function resetCryptoWorker()")
+        .expect("auth.js should define the crypto-worker reset boundary")
+        .1
+        .split_once("function beginAppInitAttempt()")
+        .expect("worker reset should remain a bounded helper")
+        .0;
+    let terminate_offset = reset_body
+        .find("terminateCryptoWorker();")
+        .expect("worker reset must use the hard termination boundary");
+    let reinitialize_offset = reset_body
+        .find("initializeCryptoWorker();")
+        .expect("worker reset must create a clean replacement");
+    assert!(
+        terminate_offset < reinitialize_offset,
+        "the old worker must be terminated before its replacement is started"
+    );
+
+    let lock_body = auth_js
+        .split_once("async function lockArchive(options = {})")
+        .expect("auth.js should define lockArchive")
+        .1
+        .split_once("async function loadQrScannerLibrary()")
+        .expect("lockArchive should remain a bounded helper")
+        .0;
+    let reset_offset = lock_body
+        .find("const workerReady = resetCryptoWorker();")
+        .expect("locking must reset the crypto worker");
+    let clear_session_offset = lock_body
+        .find("window.cassSession = null;")
+        .expect("locking must clear the in-memory session key");
+    let first_await_offset = lock_body
+        .find("await closeQrScanner();")
+        .expect("locking should still close the QR scanner");
+    assert!(
+        reset_offset < first_await_offset,
+        "worker termination must happen synchronously before lockArchive yields"
+    );
+    assert!(
+        clear_session_offset < first_await_offset,
+        "the in-memory session key must be cleared before lockArchive yields"
+    );
+    assert!(
+        !auth_js.contains("postMessage({ type: 'CLEAR_KEYS' })"),
+        "a queued CLEAR_KEYS message is not a cancellation boundary"
+    );
+
+    let unlock_success_body = auth_js
+        .split_once("function handleUnlockSuccess(data)")
+        .expect("auth.js should define the successful-unlock transition")
+        .1
+        .split_once("function handleUnlockFailed(data)")
+        .expect("successful unlock should remain a bounded helper")
+        .0;
+    let clear_password_offset = unlock_success_body
+        .find("elements.passwordInput.value = \"\";")
+        .expect("a successful unlock must erase the password input");
+    let persist_session_offset = unlock_success_body
+        .find("persistSession(data.dek);")
+        .expect("successful unlock should still establish the configured session");
+    assert!(
+        clear_password_offset < persist_session_offset,
+        "the plaintext password must not remain in the DOM for the unlocked session"
+    );
+}
+
+#[test]
+fn browser_storage_clear_reports_partial_failures_and_continues_cleanup() {
+    let script = r#"
+        class StorageMock {
+            constructor() {
+                this.data = new Map();
+                this.failedKeys = new Set();
+                this.removeAttempts = [];
+            }
+
+            get length() {
+                return this.data.size;
+            }
+
+            key(index) {
+                return Array.from(this.data.keys())[index] ?? null;
+            }
+
+            getItem(key) {
+                return this.data.has(key) ? this.data.get(key) : null;
+            }
+
+            setItem(key, value) {
+                this.data.set(key, String(value));
+            }
+
+            removeItem(key) {
+                this.removeAttempts.push(key);
+                if (this.failedKeys.has(key)) {
+                    throw new Error(`injected remove failure for ${key}`);
+                }
+                this.data.delete(key);
+            }
+        }
+
+        const originalWindow = globalThis.window;
+        const originalLocalStorage = globalThis.localStorage;
+        const originalSessionStorage = globalThis.sessionStorage;
+        const originalNavigatorDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'navigator');
+
+        globalThis.window = { location: { href: 'https://example.com/archive/index.html#/' } };
+        globalThis.localStorage = new StorageMock();
+        globalThis.sessionStorage = new StorageMock();
+        Object.defineProperty(globalThis, 'navigator', {
+            value: { storage: {} },
+            configurable: true,
+            writable: true,
+        });
+
+        try {
+            const { clearAllStorage, getArchiveScopeId } = await import('./src/pages_assets/storage.js');
+            const scopeId = getArchiveScopeId();
+            const otherScopeId = scopeId === 'deadbeef' ? 'feedface' : 'deadbeef';
+            const failedSessionKey = `cass_session_dek_${scopeId}`;
+            const laterSessionKey = `cass_session_expiry_${scopeId}`;
+            const currentLocalKey = `cass-archive-${scopeId}-pref-storage-mode`;
+            const otherSessionKey = `cass_session_dek_${otherScopeId}`;
+            const otherLocalKey = `cass-archive-${otherScopeId}-pref-storage-mode`;
+
+            sessionStorage.setItem(failedSessionKey, 'secret');
+            sessionStorage.setItem(laterSessionKey, 'expiry');
+            sessionStorage.setItem(otherSessionKey, 'other');
+            localStorage.setItem(currentLocalKey, 'local');
+            localStorage.setItem(otherLocalKey, 'other');
+            sessionStorage.failedKeys.add(failedSessionKey);
+
+            const partialResult = await clearAllStorage();
+            if (partialResult !== false) {
+                throw new Error('clearAllStorage must report a failed browser-storage deletion');
+            }
+            if (sessionStorage.getItem(failedSessionKey) !== 'secret') {
+                throw new Error('the injected failed key should demonstrate that data can remain');
+            }
+            if (sessionStorage.getItem(laterSessionKey) !== null) {
+                throw new Error('cleanup must continue to later sessionStorage keys after one failure');
+            }
+            if (localStorage.getItem(currentLocalKey) !== null) {
+                throw new Error('cleanup must still attempt localStorage after a sessionStorage failure');
+            }
+            if (
+                sessionStorage.getItem(otherSessionKey) !== 'other'
+                || localStorage.getItem(otherLocalKey) !== 'other'
+            ) {
+                throw new Error('archive-scoped cleanup must preserve other archives');
+            }
+
+            sessionStorage.failedKeys.clear();
+            const retryResult = await clearAllStorage();
+            if (retryResult !== true || sessionStorage.getItem(failedSessionKey) !== null) {
+                throw new Error('a successful retry must remove the previously retained key');
+            }
+        } finally {
+            globalThis.window = originalWindow;
+            globalThis.localStorage = originalLocalStorage;
+            globalThis.sessionStorage = originalSessionStorage;
+            if (originalNavigatorDescriptor) {
+                Object.defineProperty(globalThis, 'navigator', originalNavigatorDescriptor);
+            } else {
+                delete globalThis.navigator;
+            }
+        }
+    "#;
+
+    let output =
+        run_node_module_assertions(script).expect("run browser storage clear assertions with node");
+
+    assert!(
+        output.status.success(),
+        "browser storage clear assertions failed\nstdout:\n{}\nstderr:\n{}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+}
+
+#[test]
+fn browser_storage_fallback_and_migration_preserve_logical_write_order() {
+    let script = r#"
+        class StorageMock {
+            constructor() {
+                this.data = new Map();
+                this.failedSetKeys = new Set();
+                this.failedRemoveKeys = new Set();
+            }
+
+            get length() {
+                return this.data.size;
+            }
+
+            key(index) {
+                return Array.from(this.data.keys())[index] ?? null;
+            }
+
+            getItem(key) {
+                return this.data.has(key) ? this.data.get(key) : null;
+            }
+
+            setItem(key, value) {
+                if (this.failedSetKeys.has(key)) {
+                    throw new Error(`injected set failure for ${key}`);
+                }
+                this.data.set(key, String(value));
+            }
+
+            removeItem(key) {
+                if (this.failedRemoveKeys.has(key)) {
+                    throw new Error(`injected remove failure for ${key}`);
+                }
+                this.data.delete(key);
+            }
+        }
+
+        const originalWindow = globalThis.window;
+        const originalLocalStorage = globalThis.localStorage;
+        const originalSessionStorage = globalThis.sessionStorage;
+        const originalNavigatorDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'navigator');
+
+        globalThis.window = { location: { href: 'https://example.com/archive/index.html#/' } };
+        globalThis.localStorage = new StorageMock();
+        globalThis.sessionStorage = new StorageMock();
+        Object.defineProperty(globalThis, 'navigator', {
+            value: { storage: {} },
+            configurable: true,
+            writable: true,
+        });
+
+        try {
+            const {
+                StorageMode,
+                getArchiveScopeId,
+                getItem,
+                getStorageMode,
+                removeItem,
+                setItem,
+                setStorageMode,
+            } = await import('./src/pages_assets/storage.js');
+            const prefix = `cass-archive-${getArchiveScopeId()}-data-`;
+
+            for (const [mode, backend] of [
+                [StorageMode.SESSION, sessionStorage],
+                [StorageMode.LOCAL, localStorage],
+            ]) {
+                await setStorageMode(mode);
+                const key = `coherent-${mode}`;
+                const fullKey = `${prefix}${key}`;
+                backend.setItem(fullKey, JSON.stringify('old-persistent'));
+                backend.failedSetKeys.add(fullKey);
+
+                if (await setItem(key, 'new-fallback') !== false) {
+                    throw new Error(`${mode} failed overwrite must report fallback-only durability`);
+                }
+                if (await getItem(key) !== 'new-fallback') {
+                    throw new Error(`${mode} reads must prefer the newest failed-write fallback`);
+                }
+                if (backend.getItem(fullKey) !== JSON.stringify('old-persistent')) {
+                    throw new Error('the test must retain stale persistent bytes after the injected failure');
+                }
+
+                backend.failedSetKeys.delete(fullKey);
+                if (await setItem(key, 'persisted') !== true) {
+                    throw new Error(`${mode} retry must report persistent success`);
+                }
+                backend.setItem(fullKey, JSON.stringify('backend-after-success'));
+                if (await getItem(key) !== 'backend-after-success') {
+                    throw new Error(`${mode} successful writes must retire the memory fallback`);
+                }
+
+                backend.failedRemoveKeys.add(fullKey);
+                if (await removeItem(key) !== false) {
+                    throw new Error(`${mode} failed deletion must be reported to the caller`);
+                }
+                if (await getItem(key, 'missing') !== 'missing') {
+                    throw new Error(`${mode} failed deletion must hide stale physical bytes logically`);
+                }
+
+                backend.failedRemoveKeys.delete(fullKey);
+                if (await setItem(key, 'revived') !== true || await getItem(key) !== 'revived') {
+                    throw new Error(`${mode} successful write must retire a deletion tombstone`);
+                }
+            }
+
+            await setStorageMode(StorageMode.SESSION);
+            const overlayKey = 'migration-overlay';
+            const overlayFullKey = `${prefix}${overlayKey}`;
+            const staleTargetKey = `${prefix}stale-target-only`;
+            sessionStorage.setItem(overlayFullKey, JSON.stringify('stale-source'));
+            localStorage.setItem(overlayFullKey, JSON.stringify('stale-target'));
+            localStorage.setItem(staleTargetKey, JSON.stringify('must-disappear'));
+            sessionStorage.failedSetKeys.add(overlayFullKey);
+            if (await setItem(overlayKey, 'newest-logical') !== false) {
+                throw new Error('the migration fixture must create a memory fallback overlay');
+            }
+            sessionStorage.failedSetKeys.delete(overlayFullKey);
+
+            await setStorageMode(StorageMode.LOCAL, true);
+            if (
+                getStorageMode() !== StorageMode.LOCAL
+                || await getItem(overlayKey) !== 'newest-logical'
+                || localStorage.getItem(overlayFullKey) !== JSON.stringify('newest-logical')
+            ) {
+                throw new Error('migration must commit the newest logical overlay, not stale source bytes');
+            }
+            if (localStorage.getItem(staleTargetKey) !== null) {
+                throw new Error('migration must not expose destination-only stale data');
+            }
+
+            await setStorageMode(StorageMode.SESSION);
+            const deletedKey = 'migration-tombstone';
+            const deletedFullKey = `${prefix}${deletedKey}`;
+            sessionStorage.setItem(deletedFullKey, JSON.stringify('source-secret'));
+            localStorage.setItem(deletedFullKey, JSON.stringify('target-secret'));
+            sessionStorage.failedRemoveKeys.add(deletedFullKey);
+            if (await removeItem(deletedKey) !== false) {
+                throw new Error('the migration fixture must create a deletion tombstone');
+            }
+            sessionStorage.failedRemoveKeys.delete(deletedFullKey);
+            await setStorageMode(StorageMode.LOCAL, true);
+            if (localStorage.getItem(deletedFullKey) !== null || await getItem(deletedKey) !== null) {
+                throw new Error('migration must preserve a newer logical deletion');
+            }
+
+            await setStorageMode(StorageMode.SESSION);
+            const rejectedKey = 'migration-rejected';
+            const rejectedFullKey = `${prefix}${rejectedKey}`;
+            sessionStorage.setItem(rejectedFullKey, JSON.stringify('source-remains-authoritative'));
+            localStorage.removeItem(rejectedFullKey);
+            localStorage.failedSetKeys.add(rejectedFullKey);
+            let migrationRejected = false;
+            try {
+                await setStorageMode(StorageMode.LOCAL, true);
+            } catch {
+                migrationRejected = true;
+            }
+            if (!migrationRejected || getStorageMode() !== StorageMode.SESSION) {
+                throw new Error('an unverifiable destination write must not commit the new storage mode');
+            }
+            if (await getItem(rejectedKey) !== 'source-remains-authoritative') {
+                throw new Error('a rejected migration must leave the source logical state readable');
+            }
+        } finally {
+            globalThis.window = originalWindow;
+            globalThis.localStorage = originalLocalStorage;
+            globalThis.sessionStorage = originalSessionStorage;
+            if (originalNavigatorDescriptor) {
+                Object.defineProperty(globalThis, 'navigator', originalNavigatorDescriptor);
+            } else {
+                delete globalThis.navigator;
+            }
+        }
+    "#;
+
+    let output = run_node_module_assertions(script)
+        .expect("run browser storage fallback and migration assertions with node");
+
+    assert!(
+        output.status.success(),
+        "browser storage fallback and migration assertions failed\nstdout:\n{}\nstderr:\n{}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+}
+
+#[test]
+fn browser_opfs_cleanup_is_scope_bound_and_truthful() {
+    let script = r#"
+        class StorageMock {
+            constructor() {
+                this.data = new Map();
+            }
+
+            get length() {
+                return this.data.size;
+            }
+
+            key(index) {
+                return Array.from(this.data.keys())[index] ?? null;
+            }
+
+            getItem(key) {
+                return this.data.has(key) ? this.data.get(key) : null;
+            }
+
+            setItem(key, value) {
+                this.data.set(key, String(value));
+            }
+
+            removeItem(key) {
+                this.data.delete(key);
+            }
+        }
+
+        class OpfsRootMock {
+            constructor(entries) {
+                this.entries = new Set(entries);
+                this.failedEntries = new Set();
+                this.removeAttempts = [];
+            }
+
+            async *keys() {
+                for (const entry of [...this.entries]) {
+                    yield entry;
+                }
+            }
+
+            async removeEntry(entry) {
+                this.removeAttempts.push(entry);
+                if (this.failedEntries.has(entry)) {
+                    throw new Error(`injected OPFS remove failure for ${entry}`);
+                }
+                this.entries.delete(entry);
+            }
+        }
+
+        const originalWindow = globalThis.window;
+        const originalLocalStorage = globalThis.localStorage;
+        const originalNavigatorDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'navigator');
+
+        globalThis.window = { location: { href: 'https://example.com/archive/index.html#/' } };
+        globalThis.localStorage = new StorageMock();
+
+        try {
+            const { clearOPFS, getArchiveScopeId, getStorageStats } = await import('./src/pages_assets/storage.js');
+            const scopeId = getArchiveScopeId();
+            const otherScopeId = scopeId === 'deadbeef' ? 'feedface' : 'deadbeef';
+            const currentDb = `cass-archive-${scopeId}.sqlite3`;
+            const currentData = `cass-archive-${scopeId}-data-state`;
+            const otherDb = `cass-archive-${otherScopeId}.sqlite3`;
+            const otherData = `cass-archive-${otherScopeId}-data-state`;
+            const legacyDb = 'cass-archive.sqlite3';
+            const unrelated = 'unrelated-app.db';
+            const root = new OpfsRootMock([
+                currentDb,
+                currentData,
+                otherDb,
+                otherData,
+                legacyDb,
+                unrelated,
+            ]);
+            Object.defineProperty(globalThis, 'navigator', {
+                value: { storage: { getDirectory: async () => root } },
+                configurable: true,
+                writable: true,
+            });
+
+            const currentPreference = `cass-archive-${scopeId}-pref-opfs-enabled`;
+            const otherPreference = `cass-archive-${otherScopeId}-pref-opfs-enabled`;
+            localStorage.setItem(currentPreference, 'true');
+            localStorage.setItem(otherPreference, 'true');
+            localStorage.setItem('cass-archive-opfs-enabled', 'true');
+            root.failedEntries.add(currentDb);
+
+            const partialResult = await clearOPFS();
+            if (partialResult !== false || !root.entries.has(currentDb)) {
+                throw new Error('scoped OPFS cleanup must report the injected deletion failure');
+            }
+            if (root.entries.has(currentData) || root.entries.has(legacyDb)) {
+                throw new Error('OPFS cleanup must continue after one entry deletion fails');
+            }
+            if (!root.entries.has(otherDb) || !root.entries.has(otherData) || !root.entries.has(unrelated)) {
+                throw new Error('scoped OPFS cleanup must preserve other archives and unrelated data');
+            }
+            if (localStorage.getItem(currentPreference) !== null || localStorage.getItem('cass-archive-opfs-enabled') !== null) {
+                throw new Error('scoped OPFS cleanup must retire current and legacy opt-in preferences');
+            }
+            if (localStorage.getItem(otherPreference) !== 'true') {
+                throw new Error('scoped OPFS cleanup must preserve another archive preference');
+            }
+            const partialStats = await getStorageStats();
+            if (!partialStats.opfs.dbFiles.includes(currentDb)) {
+                throw new Error('OPFS stats must report detected residue even when file metadata is inaccessible');
+            }
+
+            root.failedEntries.clear();
+            if (!await clearOPFS() || root.entries.has(currentDb)) {
+                throw new Error('a successful retry must remove the retained current-archive file');
+            }
+
+            if (!await clearOPFS({ allArchives: true })) {
+                throw new Error('all-archive OPFS cleanup should succeed after failures are removed');
+            }
+            if (root.entries.has(otherDb) || root.entries.has(otherData)) {
+                throw new Error('all-archive OPFS cleanup must remove other cass archive data');
+            }
+            if (!root.entries.has(unrelated) || localStorage.getItem(otherPreference) !== null) {
+                throw new Error('all-archive cleanup must remove cass state without touching unrelated OPFS data');
+            }
+        } finally {
+            globalThis.window = originalWindow;
+            globalThis.localStorage = originalLocalStorage;
+            if (originalNavigatorDescriptor) {
+                Object.defineProperty(globalThis, 'navigator', originalNavigatorDescriptor);
+            } else {
+                delete globalThis.navigator;
+            }
+        }
+    "#;
+
+    let output =
+        run_node_module_assertions(script).expect("run scoped OPFS cleanup assertions with node");
+
+    assert!(
+        output.status.success(),
+        "scoped OPFS cleanup assertions failed\nstdout:\n{}\nstderr:\n{}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+}
+
+#[test]
+fn browser_cache_and_registration_cleanup_are_scope_bound() {
+    let script = r#"
+        const originalWindow = globalThis.window;
+        const originalCaches = globalThis.caches;
+        const originalNavigatorDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'navigator');
+
+        try {
+            const cacheNames = new Set();
+            const failedCacheNames = new Set();
+            const cacheApi = {
+                async keys() {
+                    return [...cacheNames];
+                },
+                async delete(name) {
+                    if (failedCacheNames.has(name)) {
+                        throw new Error(`injected cache delete failure for ${name}`);
+                    }
+                    return cacheNames.delete(name);
+                },
+            };
+            globalThis.window = {
+                location: { href: 'https://example.com/archive/index.html#/' },
+                caches: cacheApi,
+            };
+            globalThis.caches = cacheApi;
+
+            const registrations = [];
+            Object.defineProperty(globalThis, 'navigator', {
+                value: {
+                    serviceWorker: {
+                        async getRegistrations() {
+                            return [...registrations];
+                        },
+                    },
+                },
+                configurable: true,
+                writable: true,
+            });
+
+            const {
+                clearServiceWorkerCache,
+                getArchiveScopeId,
+                getArchiveScopeUrl,
+                unregisterServiceWorker,
+            } = await import('./src/pages_assets/storage.js');
+            const scopeId = getArchiveScopeId();
+            const otherScopeId = scopeId === 'deadbeef' ? 'feedface' : 'deadbeef';
+            const currentCacheV1 = `cass-archive-${scopeId}-v1`;
+            const currentCacheV2 = `cass-archive-${scopeId}-v2`;
+            const otherCache = `cass-archive-${otherScopeId}-v1`;
+            const unrelatedCache = 'unrelated-app-cache';
+            cacheNames.add(currentCacheV1);
+            cacheNames.add(currentCacheV2);
+            cacheNames.add(otherCache);
+            cacheNames.add(unrelatedCache);
+            failedCacheNames.add(currentCacheV1);
+
+            if (await clearServiceWorkerCache() !== false) {
+                throw new Error('cache cleanup must report a retained current-archive cache');
+            }
+            if (!cacheNames.has(currentCacheV1) || cacheNames.has(currentCacheV2)) {
+                throw new Error('cache cleanup must continue after one deletion rejects');
+            }
+            if (!cacheNames.has(otherCache) || !cacheNames.has(unrelatedCache)) {
+                throw new Error('scoped cache cleanup must preserve other archive and unrelated caches');
+            }
+
+            failedCacheNames.clear();
+            if (!await clearServiceWorkerCache() || cacheNames.has(currentCacheV1)) {
+                throw new Error('cache cleanup retry must remove the retained current cache');
+            }
+            if (!await clearServiceWorkerCache({ allArchives: true })) {
+                throw new Error('all-archive cache cleanup should remove remaining cass caches');
+            }
+            if (cacheNames.has(otherCache) || !cacheNames.has(unrelatedCache)) {
+                throw new Error('all-archive cache cleanup must preserve unrelated cache namespaces');
+            }
+
+            const currentScope = getArchiveScopeUrl();
+            let failCurrentUnregister = true;
+            let currentUnregisterAttempts = 0;
+            let unrelatedUnregisterAttempts = 0;
+            const currentRegistration = {
+                scope: currentScope,
+                async unregister() {
+                    currentUnregisterAttempts++;
+                    if (failCurrentUnregister) {
+                        throw new Error('injected unregister failure');
+                    }
+                    registrations.splice(registrations.indexOf(currentRegistration), 1);
+                    return true;
+                },
+            };
+            const unrelatedRegistration = {
+                scope: 'https://example.com/unrelated/',
+                async unregister() {
+                    unrelatedUnregisterAttempts++;
+                    registrations.splice(registrations.indexOf(unrelatedRegistration), 1);
+                    return true;
+                },
+            };
+            registrations.push(currentRegistration, unrelatedRegistration);
+
+            if (await unregisterServiceWorker() !== false || currentUnregisterAttempts !== 1) {
+                throw new Error('unregister must report an exact-scope registration that remains');
+            }
+            if (unrelatedUnregisterAttempts !== 0 || !registrations.includes(unrelatedRegistration)) {
+                throw new Error('unregister must never target an unrelated same-origin scope');
+            }
+
+            failCurrentUnregister = false;
+            if (!await unregisterServiceWorker() || registrations.includes(currentRegistration)) {
+                throw new Error('unregister retry must remove the exact archive registration');
+            }
+            if (unrelatedUnregisterAttempts !== 0 || !registrations.includes(unrelatedRegistration)) {
+                throw new Error('successful exact-scope unregister must preserve unrelated registrations');
+            }
+        } finally {
+            globalThis.window = originalWindow;
+            globalThis.caches = originalCaches;
+            if (originalNavigatorDescriptor) {
+                Object.defineProperty(globalThis, 'navigator', originalNavigatorDescriptor);
+            } else {
+                delete globalThis.navigator;
+            }
+        }
+    "#;
+
+    let output = run_node_module_assertions(script)
+        .expect("run scoped browser cache cleanup assertions with node");
+
+    assert!(
+        output.status.success(),
+        "scoped browser cache cleanup assertions failed\nstdout:\n{}\nstderr:\n{}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+}
+
+#[test]
+fn browser_session_teardown_survives_partial_storage_failures() {
+    let script = r#"
+        class StorageMock {
+            constructor() {
+                this.data = new Map();
+                this.failedKeys = new Set();
+                this.failedSetKeys = new Set();
+                this.removeAttempts = [];
+            }
+
+            getItem(key) {
+                return this.data.has(key) ? this.data.get(key) : null;
+            }
+
+            setItem(key, value) {
+                if (this.failedSetKeys.has(key)) {
+                    throw new Error(`injected set failure for ${key}`);
+                }
+                this.data.set(key, String(value));
+            }
+
+            removeItem(key) {
+                this.removeAttempts.push(key);
+                if (this.failedKeys.has(key)) {
+                    throw new Error(`injected remove failure for ${key}`);
+                }
+                this.data.delete(key);
+            }
+        }
+
+        const originalWindow = globalThis.window;
+        const originalDocument = globalThis.document;
+        const originalLocalStorage = globalThis.localStorage;
+        const originalSessionStorage = globalThis.sessionStorage;
+        const removedListeners = [];
+
+        globalThis.window = {
+            location: { href: 'https://example.com/archive/index.html#/' },
+            addEventListener() {},
+            removeEventListener(type) { removedListeners.push(`window:${type}`); },
+        };
+        globalThis.document = {
+            addEventListener() {},
+            removeEventListener(type) { removedListeners.push(`document:${type}`); },
+        };
+        globalThis.localStorage = new StorageMock();
+        globalThis.sessionStorage = new StorageMock();
+
+        try {
+            const { SessionManager, SESSION_CONFIG } = await import('./src/pages_assets/session.js');
+            const { getArchiveScopeId } = await import('./src/pages_assets/storage.js');
+            const scopeId = getArchiveScopeId();
+            const tokenKey = `${SESSION_CONFIG.KEY_SESSION_TOKEN}_${scopeId}`;
+            const expiryKey = `${SESSION_CONFIG.KEY_EXPIRY}_${scopeId}`;
+
+            sessionStorage.setItem(tokenKey, 'session-secret');
+            sessionStorage.setItem(expiryKey, '123');
+            localStorage.setItem(tokenKey, 'local-secret');
+            localStorage.setItem(expiryKey, '456');
+            localStorage.setItem(SESSION_CONFIG.KEY_SESSION_TOKEN, 'legacy-secret');
+            sessionStorage.failedKeys.add(tokenKey);
+
+            const manager = new SessionManager();
+            const dek = new Uint8Array([1, 2, 3, 4]);
+            manager.dek = dek;
+            manager.expiryTs = Date.now() + 60_000;
+            manager.persistent = true;
+            manager.setupCleanupHandlers();
+
+            const partialResult = manager.endSession();
+            if (partialResult !== false) {
+                throw new Error('endSession must report a persisted-key deletion failure');
+            }
+            if (manager.dek !== null || dek.some((byte) => byte !== 0)) {
+                throw new Error('endSession must zeroize and release the in-memory DEK');
+            }
+            if (manager.expiryTs !== 0 || manager.persistent || manager.cleanupHandlersInstalled) {
+                throw new Error('endSession must finish in-memory state and listener teardown');
+            }
+            if (
+                !removedListeners.includes('document:visibilitychange')
+                || !removedListeners.includes('window:beforeunload')
+            ) {
+                throw new Error('endSession must remove both cleanup listeners');
+            }
+            if (sessionStorage.getItem(tokenKey) !== 'session-secret') {
+                throw new Error('the injected failure must demonstrate that a secret can remain');
+            }
+            if (
+                sessionStorage.getItem(expiryKey) !== null
+                || localStorage.getItem(tokenKey) !== null
+                || localStorage.getItem(expiryKey) !== null
+                || localStorage.getItem(SESSION_CONFIG.KEY_SESSION_TOKEN) !== null
+            ) {
+                throw new Error('cleanup must continue across later keys and storage backends');
+            }
+
+            sessionStorage.failedKeys.clear();
+            if (!manager.clearStorage() || sessionStorage.getItem(tokenKey) !== null) {
+                throw new Error('a successful retry must remove the retained session secret');
+            }
+
+            const failedStartManager = new SessionManager({
+                storage: SESSION_CONFIG.STORAGE_SESSION,
+            });
+            sessionStorage.failedSetKeys.add(expiryKey);
+            let startRejected = false;
+            try {
+                await failedStartManager.startSession(new Uint8Array(32).fill(9), true);
+            } catch {
+                startRejected = true;
+            }
+            if (!startRejected || failedStartManager.isActive()) {
+                throw new Error('a partial persistent write must not publish an active session');
+            }
+            if (sessionStorage.getItem(tokenKey) !== null || sessionStorage.getItem(expiryKey) !== null) {
+                throw new Error('a failed session start must roll back partially persisted keys');
+            }
+        } finally {
+            globalThis.window = originalWindow;
+            globalThis.document = originalDocument;
+            globalThis.localStorage = originalLocalStorage;
+            globalThis.sessionStorage = originalSessionStorage;
+        }
+    "#;
+
+    let output = run_node_module_assertions(script)
+        .expect("run browser session teardown assertions with node");
+
+    assert!(
+        output.status.success(),
+        "browser session teardown assertions failed\nstdout:\n{}\nstderr:\n{}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+}
+
+#[test]
+fn browser_session_rejects_invalid_or_uncommitted_state() {
+    let script = r#"
+        class StorageMock {
+            constructor() {
+                this.data = new Map();
+                this.ignoredSetKeys = new Set();
+            }
+
+            getItem(key) {
+                return this.data.has(key) ? this.data.get(key) : null;
+            }
+
+            setItem(key, value) {
+                if (!this.ignoredSetKeys.has(key)) {
+                    this.data.set(key, String(value));
+                }
+            }
+
+            removeItem(key) {
+                this.data.delete(key);
+            }
+        }
+
+        const originalWindow = globalThis.window;
+        const originalDocument = globalThis.document;
+        const originalLocalStorage = globalThis.localStorage;
+        const originalSessionStorage = globalThis.sessionStorage;
+
+        globalThis.window = {
+            location: { href: 'https://example.com/archive/index.html#/' },
+            addEventListener() {},
+            removeEventListener() {},
+        };
+        globalThis.document = {
+            hidden: false,
+            addEventListener() {},
+            removeEventListener() {},
+        };
+        globalThis.localStorage = new StorageMock();
+        globalThis.sessionStorage = new StorageMock();
+
+        const bytes = (value) => new Uint8Array(32).fill(value);
+        const encode = (value) => btoa(String.fromCharCode(...value));
+        const expectConstructorFailure = (options, label, SessionManager) => {
+            let rejected = false;
+            try {
+                new SessionManager(options);
+            } catch {
+                rejected = true;
+            }
+            if (!rejected) {
+                throw new Error(`${label} must be rejected by the constructor`);
+            }
+        };
+
+        try {
+            const { SessionManager, SESSION_CONFIG, createSessionManager } =
+                await import('./src/pages_assets/session.js');
+            const { getArchiveScopeId } = await import('./src/pages_assets/storage.js');
+            const scopeId = getArchiveScopeId();
+            const tokenKey = `${SESSION_CONFIG.KEY_SESSION_TOKEN}_${scopeId}`;
+            const expiryKey = `${SESSION_CONFIG.KEY_EXPIRY}_${scopeId}`;
+
+            for (const duration of [0, -1, NaN, Infinity, 2_147_483_648]) {
+                expectConstructorFailure({ duration }, `duration ${duration}`, SessionManager);
+            }
+            for (const storage of ['', 'unknown', 'persistent']) {
+                expectConstructorFailure({ storage }, `storage ${storage}`, SessionManager);
+            }
+            let factoryRejected = false;
+            try {
+                createSessionManager({ duration: 0 });
+            } catch {
+                factoryRejected = true;
+            }
+            if (!factoryRejected) {
+                throw new Error('the session factory must not replace an explicit invalid duration');
+            }
+
+            const invalidDekManager = new SessionManager({
+                storage: SESSION_CONFIG.STORAGE_MEMORY,
+                duration: 60_000,
+            });
+            let invalidDekRejected = false;
+            try {
+                await invalidDekManager.startSession(new Uint8Array(31));
+            } catch {
+                invalidDekRejected = true;
+            }
+            if (!invalidDekRejected || invalidDekManager.isActive()) {
+                throw new Error('startSession must reject every non-32-byte DEK');
+            }
+
+            const replacementManager = new SessionManager({
+                storage: SESSION_CONFIG.STORAGE_MEMORY,
+                duration: 60_000,
+            });
+            const originalDek = bytes(3);
+            await replacementManager.startSession(originalDek);
+            const priorManagedDek = replacementManager.getDek();
+            await replacementManager.startSession(priorManagedDek);
+            if (priorManagedDek.some((byte) => byte !== 0)) {
+                throw new Error('restarting with the active DEK object must zeroize the prior key');
+            }
+            if (
+                replacementManager.getDek() === priorManagedDek
+                || replacementManager.getDek().some((byte) => byte !== 3)
+            ) {
+                throw new Error('same-object restart must publish a preserved copy, not the zeroized old key');
+            }
+            replacementManager.endSession();
+
+            const unverifiedStartManager = new SessionManager({
+                storage: SESSION_CONFIG.STORAGE_SESSION,
+                duration: 60_000,
+            });
+            sessionStorage.ignoredSetKeys.add(expiryKey);
+            let unverifiedStartRejected = false;
+            try {
+                await unverifiedStartManager.startSession(bytes(4), true);
+            } catch {
+                unverifiedStartRejected = true;
+            }
+            sessionStorage.ignoredSetKeys.delete(expiryKey);
+            if (!unverifiedStartRejected || unverifiedStartManager.isActive()) {
+                throw new Error('a no-op persistent write must not publish a session');
+            }
+            if (sessionStorage.getItem(tokenKey) !== null || sessionStorage.getItem(expiryKey) !== null) {
+                throw new Error('an unverified session start must remove partial durable state');
+            }
+
+            const restoreManager = new SessionManager({
+                storage: SESSION_CONFIG.STORAGE_SESSION,
+                duration: 60_000,
+            });
+            const validToken = encode(bytes(5));
+            const invalidExpiries = [
+                'NaN',
+                '0',
+                '-1',
+                '1.5',
+                String(Date.now() - 1),
+                String(Date.now() + 2_147_483_647 + 10_000),
+                String(Number.MAX_SAFE_INTEGER + 1),
+            ];
+            for (const invalidExpiry of invalidExpiries) {
+                sessionStorage.setItem(tokenKey, validToken);
+                sessionStorage.setItem(expiryKey, invalidExpiry);
+                if (await restoreManager.restoreSession() !== null || restoreManager.isActive()) {
+                    throw new Error(`restoreSession must reject invalid expiry ${invalidExpiry}`);
+                }
+                if (sessionStorage.getItem(tokenKey) !== null || sessionStorage.getItem(expiryKey) !== null) {
+                    throw new Error('rejected restore state must be cleared');
+                }
+            }
+
+            for (const length of [0, 31, 33]) {
+                sessionStorage.setItem(tokenKey, encode(new Uint8Array(length)));
+                sessionStorage.setItem(expiryKey, String(Date.now() + 60_000));
+                if (await restoreManager.restoreSession() !== null || restoreManager.isActive()) {
+                    throw new Error(`restoreSession must reject a ${length}-byte DEK`);
+                }
+            }
+
+            const restoreReplacementManager = new SessionManager({
+                storage: SESSION_CONFIG.STORAGE_SESSION,
+                duration: 60_000,
+            });
+            await restoreReplacementManager.startSession(bytes(6), false);
+            const replacedDek = restoreReplacementManager.getDek();
+            sessionStorage.setItem(tokenKey, encode(bytes(7)));
+            sessionStorage.setItem(expiryKey, String(Date.now() + 60_000));
+            const restoredDek = await restoreReplacementManager.restoreSession();
+            if (replacedDek.some((byte) => byte !== 0)) {
+                throw new Error('restoreSession must zeroize the previous active DEK');
+            }
+            if (!restoredDek || restoredDek.length !== 32 || restoredDek.some((byte) => byte !== 7)) {
+                throw new Error('restoreSession must publish only the validated replacement DEK');
+            }
+            restoreReplacementManager.endSession();
+
+            const extensionManager = new SessionManager({
+                storage: SESSION_CONFIG.STORAGE_MEMORY,
+                duration: 60_000,
+            });
+            await extensionManager.startSession(bytes(8));
+            const originalExpiry = extensionManager.expiryTs;
+            for (const extension of [0, -1, NaN, Infinity, 2_147_483_648, 2_147_483_647]) {
+                if (extensionManager.extendSession(extension) !== false) {
+                    throw new Error(`invalid or overflowing extension ${extension} must be rejected`);
+                }
+                if (!extensionManager.isActive() || extensionManager.expiryTs !== originalExpiry) {
+                    throw new Error('a rejected extension must preserve the previously committed session');
+                }
+            }
+            extensionManager.endSession();
+
+            const failedExtensionManager = new SessionManager({
+                storage: SESSION_CONFIG.STORAGE_SESSION,
+                duration: 60_000,
+            });
+            await failedExtensionManager.startSession(bytes(9), true);
+            const failedExtensionDek = failedExtensionManager.getDek();
+            sessionStorage.ignoredSetKeys.add(expiryKey);
+            if (failedExtensionManager.extendSession(1_000) !== false) {
+                throw new Error('an unverified persistent expiry extension must fail');
+            }
+            sessionStorage.ignoredSetKeys.delete(expiryKey);
+            if (failedExtensionManager.isActive() || failedExtensionDek.some((byte) => byte !== 0)) {
+                throw new Error('ambiguous persistent extension failure must fail closed and zeroize');
+            }
+            if (sessionStorage.getItem(tokenKey) !== null || sessionStorage.getItem(expiryKey) !== null) {
+                throw new Error('ambiguous persistent extension state must be removed');
+            }
+
+            const unloadMemoryManager = new SessionManager({
+                storage: SESSION_CONFIG.STORAGE_SESSION,
+                duration: 60_000,
+            });
+            await unloadMemoryManager.startSession(bytes(10), false);
+            const unloadMemoryDek = unloadMemoryManager.getDek();
+            unloadMemoryManager.handleBeforeUnload();
+            if (unloadMemoryManager.isActive() || unloadMemoryDek.some((byte) => byte !== 0)) {
+                throw new Error('unload must wipe an actually non-persistent session');
+            }
+
+            const unloadPersistentManager = new SessionManager({
+                storage: SESSION_CONFIG.STORAGE_SESSION,
+                duration: 60_000,
+            });
+            await unloadPersistentManager.startSession(bytes(11), true);
+            const unloadPersistentDek = unloadPersistentManager.getDek();
+            unloadPersistentManager.handleBeforeUnload();
+            if (!unloadPersistentManager.isActive() || unloadPersistentDek.some((byte) => byte !== 11)) {
+                throw new Error('unload must preserve a session that was actually persisted');
+            }
+            unloadPersistentManager.endSession();
+        } finally {
+            globalThis.window = originalWindow;
+            globalThis.document = originalDocument;
+            globalThis.localStorage = originalLocalStorage;
+            globalThis.sessionStorage = originalSessionStorage;
+        }
+    "#;
+
+    let output = run_node_module_assertions(script)
+        .expect("run invalid browser session assertions with node");
+
+    assert!(
+        output.status.success(),
+        "invalid browser session assertions failed\nstdout:\n{}\nstderr:\n{}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+}
+
+// =============================================================================
+// Performance: Error Path Performance
+// =============================================================================
+
+#[test]
+fn test_error_creation_is_fast() {
+    let start = Instant::now();
+
+    for _ in 0..10_000 {
+        let _ = DecryptError::AuthenticationFailed;
+        let _ = DecryptError::InvalidFormat("test".into());
+        let _ = DbError::CorruptDatabase("test".into());
+        let _ = BrowserError::WasmNotSupported;
+        let _ = NetworkError::Timeout;
+    }
+
+    let duration = start.elapsed();
+
+    // 10k error creations should be well under 100ms
+    assert!(
+        duration < Duration::from_millis(100),
+        "Error creation took too long: {:?}",
+        duration
+    );
+}
+
+#[test]
+fn test_error_display_is_fast() {
+    let errors: Vec<Box<dyn std::fmt::Display>> = vec![
+        Box::new(DecryptError::AuthenticationFailed),
+        Box::new(DecryptError::InvalidFormat("detailed info".into())),
+        Box::new(DbError::CorruptDatabase("sqlite error".into())),
+        Box::new(BrowserError::UnsupportedBrowser("IndexedDB".into())),
+        Box::new(NetworkError::FetchFailed("connection refused".into())),
+    ];
+
+    let start = Instant::now();
+
+    for _ in 0..10_000 {
+        for error in &errors {
+            let _ = error.to_string();
+        }
+    }
+
+    let duration = start.elapsed();
+
+    // 50k error displays should be well under 500ms
+    assert!(
+        duration < Duration::from_millis(500),
+        "Error display took too long: {:?}",
+        duration
+    );
+}

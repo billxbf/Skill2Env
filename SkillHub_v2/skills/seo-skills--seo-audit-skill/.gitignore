@@ -1,0 +1,57 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-electron/
+
+# Electron packaged app
+release/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test coverage
+coverage/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# SEOmator local data
+.seomator/
+
+# Generated reports & screenshots
+seo-report-*.html
+*.png
+# ...but the app icon is a build resource, not a screenshot: electron-builder
+# stamps the bundle from it, so a clone without it packages with the default
+# Electron icon. Regenerate with `npm run gen:icons`.
+!electron/resources/icon.png
+
+# Playwright MCP data
+.playwright-mcp/
+
+# Local scratch and research folders (never published)
+*-poc/
+.gstack/
+
+# Design QA output (screenshots, probes, reports)
+.qa-design/

@@ -1,0 +1,49 @@
+Helmor
+Copyright 2026 Caspian Zhao, Nathan Lian
+
+This product is licensed under the Apache License, Version 2.0 (the "License");
+you may not use this product except in compliance with the License. A copy of
+the License is distributed with this product in the LICENSE file, and is also
+available at https://www.apache.org/licenses/LICENSE-2.0.
+
+================================================================================
+Attribution
+================================================================================
+
+Per Section 4(d) of the Apache License 2.0, any redistribution or derivative
+work must include a readable copy of this NOTICE file, and must retain the
+copyright and attribution statements above.
+
+Per Section 4(b), any modified source files must carry prominent notices
+stating that the files have been changed, so downstream users can trace
+modifications back to their origin.
+
+================================================================================
+Trademark Notice
+================================================================================
+
+"Helmor" and the Helmor logo are trademarks of Caspian Zhao and Nathan Lian.
+
+The Apache License 2.0 grants you rights to use, modify, and redistribute the
+software source code. It does NOT grant you the right to use the "Helmor"
+name, logo, brand assets, or any confusingly similar mark to identify your
+own product, fork, or service. Forks must ship under a distinct name.
+
+For commercial use of the "Helmor" name or logo, contact the authors.
+
+================================================================================
+Third-Party Components
+================================================================================
+
+This product bundles or depends on the following third-party components,
+each licensed under its own terms. See the respective project pages for
+license text:
+
+- Tauri (tauri-apps/tauri) — MIT / Apache-2.0
+- React (facebook/react) — MIT
+- Bun (oven-sh/bun) — MIT
+- Claude Agent SDK (@anthropic-ai/claude-agent-sdk) — Anthropic's terms
+- Codex CLI (@openai/codex) — OpenAI's terms
+
+Inclusion of these components does not imply endorsement by their respective
+owners.

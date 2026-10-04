@@ -1,0 +1,62 @@
+{
+  "name": "Qwen-Audio-ASR-Flash-Filetrans",
+  "description": "Qwen-Audio-ASR-Flash-Filetrans是新一代端到端离线语音识别大模型，面向会议转写、内容生产与通话分析等场景，支持多语种与多地区中文方言识别。模型具备高精度转写、热词及上下文增强、说话人分离、标点预测和文本规范化能力，在复杂噪声环境下仍能保持稳定表现，是用户进行长音频转写的优选。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Audio"
+        ]
+      },
+      "description": "qwen-audio-3.0-asr-flash-filetrans是专为非实时、整段音视频文件设计的高性能转写模型。它不仅集成了 Context（上下文增强）能力，还强化了垂直行业热词的识别精度，非常适合短视频字幕、客服质检和金融双录场景。",
+      "features": [
+        "model-experience"
+      ],
+      "provider": "qwen",
+      "model": "qwen-audio-3.0-asr-flash-filetrans",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.00022",
+          "ntmAmountType": "duration",
+          "type": "content_duration",
+          "priceName": "音频时长"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 10,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 10,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "ASR"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-07-30T07:18:33.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "qwen-audio-3.0-asr-flash-filetrans",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide",
+      "category": "Audio",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription' \\\n     --header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n     --header \"Content-Type: application/json\" \\\n     --header \"X-DashScope-Async: enable\" \\\n     --data '{\n    \"model\": \"qwen-audio-3.0-asr-flash-filetrans\",\n    \"input\": {\n        \"file_urls\": [\n            \"{YOUR_AUDIO_URL}\"\n        ]\n    },\n    \"parameters\": {\n        \"channel_id\": [0]\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide"
+          }
+        }
+      }
+    }
+  ]
+}

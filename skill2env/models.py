@@ -5,29 +5,12 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
+import re
+from dataclasses import asdict, dataclass, field, replace
 from pathlib import Path, PurePosixPath
 from typing import Any, Dict, List, Optional
 
-from .axes import validate_axis_values
 
-
-CREATOR_STATUSES = {"created", "skipped"}
-NETWORK_MODES = {"no-network"}
-SKIP_REASON_CODES = {
-    "external_account",
-    "live_network",
-    "physical_hardware",
-    "gui_only",
-    "proprietary_infra",
-    "privileged_host",
-    "human_approval",
-    "non_terminal",
-    "unsafe",
-    "insufficient_instruction",
-    "pure_knowledge",
-    "unknown",
-}
 class ContractError(ValueError):
     """Raised when generated data violates a skill2env contract."""
 
@@ -67,168 +50,160 @@ class SkillBundle:
 
 
 @dataclass(frozen=True)
-class AssetSource:
-    """One public or Skill-bundled source suggested by the planner."""
+class Artifact:
+    """One public (``url``) or Skill-bundled (``path``) source suggested by the planner."""
 
     description: str
     url: Optional[str] = None
     path: Optional[str] = None
     revision: Optional[str] = None
 
+    @classmethod
+    def from_dict(cls, data: Any) -> "Artifact":
+        if not isinstance(data, dict):
+            raise ContractError("artifact must be an object")
+        description = _string(data.get("description", ""), "artifact.description")
+        url = _optional_text(data.get("url"))
+        path = _optional_text(data.get("path"))
+        if not description or not (url or path):
+            raise ContractError("artifact requires a description and a url or path")
+        return cls(
+            description=description,
+            url=url,
+            path=path,
+            revision=_optional_text(data.get("revision")),
+        )
+
     def to_dict(self) -> Dict[str, Any]:
-        value: Dict[str, Any] = {"description": self.description}
-        if self.url is not None:
-            value["url"] = self.url
-        if self.path is not None:
-            value["path"] = self.path
-        if self.revision is not None:
-            value["revision"] = self.revision
-        return value
+        return {key: value for key, value in asdict(self).items() if value is not None}
 
 
 @dataclass(frozen=True)
-class AssetRecommendation:
-    """Planner guidance for constructing a workflow's realistic initial world."""
+class Proposal:
+    """One independent problem proposal written by the planner for one creator."""
 
-    purpose: str
-    kind: str
-    sources: tuple[AssetSource, ...]
-    composition: str
-    fallback: str
+    id: str
+    title: str
+    capability: str
+    environment: str
+    problem: str
+    skill_approach: str
+    good_behaviors: tuple[str, ...]
+    bad_behaviors: tuple[str, ...]
+    artifacts: tuple[Artifact, ...] = ()
+
+    @classmethod
+    def from_dict(cls, data: Any) -> "Proposal":
+        if not isinstance(data, dict):
+            raise ContractError("proposal must be an object")
+        values = {
+            key: _required_string(data, key)
+            for key in ("id", "title", "capability", "environment", "problem", "skill_approach")
+        }
+        good = _text_tuple(data.get("good_behaviors"))
+        bad = _text_tuple(data.get("bad_behaviors"))
+        if not good or not bad:
+            raise ContractError("proposal requires good_behaviors and bad_behaviors")
+        artifacts = []
+        for item in data.get("artifacts") or ():
+            try:
+                artifacts.append(Artifact.from_dict(item))
+            except ContractError:
+                continue  # A malformed lead is dropped, not fatal.
+        return cls(
+            **values,
+            good_behaviors=good,
+            bad_behaviors=bad,
+            artifacts=tuple(artifacts),
+        )
 
     def to_dict(self) -> Dict[str, Any]:
         return {
-            "purpose": self.purpose,
-            "kind": self.kind,
-            "sources": [source.to_dict() for source in self.sources],
-            "composition": self.composition,
-            "fallback": self.fallback,
+            "id": self.id,
+            "title": self.title,
+            "capability": self.capability,
+            "environment": self.environment,
+            "artifacts": [artifact.to_dict() for artifact in self.artifacts],
+            "problem": self.problem,
+            "skill_approach": self.skill_approach,
+            "good_behaviors": list(self.good_behaviors),
+            "bad_behaviors": list(self.bad_behaviors),
         }
 
 
 @dataclass(frozen=True)
-class Workflow:
-    """One distinct instructed workflow identified by the planner pass.
+class Plan:
+    """The planner's decomposition of one Skill into independent proposals."""
 
-    ``plan`` is free-form planner-owned metadata (scenario, world inventory,
-    planted defects, solution sketch, verifier strategy, ...); the host passes
-    it through to the creator without enforcing a field set.
-    ``asset_recommendations`` is structured but advisory source/composition
-    guidance. ``axis_pool`` is the planner's ranked list of suitable axis combos.
-    """
+    skill_scenario: str
+    notes: str
+    proposals: tuple[Proposal, ...]
 
-    name: str
-    summary: str
-    plan: Dict[str, Any] = field(default_factory=dict)
-    asset_recommendations: tuple[AssetRecommendation, ...] = ()
-    axis_pool: tuple = ()
+    @classmethod
+    def from_dict(cls, data: Any, *, limit: int) -> "Plan":
+        """Keep well-formed proposals (at most ``limit``) and make their ids unique."""
+        if not isinstance(data, dict) or not isinstance(data.get("proposals"), list):
+            raise ContractError("proposals.json must be an object with a proposals list")
+        proposals: List[Proposal] = []
+        seen: set[str] = set()
+        rejected: List[str] = []
+        for index, item in enumerate(data["proposals"]):
+            try:
+                proposal = Proposal.from_dict(item)
+            except ContractError as exc:
+                rejected.append(f"proposal {index}: {exc}")
+                continue
+            slug = _slug(proposal.id) or f"proposal-{index + 1}"
+            unique, suffix = slug, 2
+            while unique in seen:
+                unique, suffix = f"{slug}-{suffix}", suffix + 1
+            seen.add(unique)
+            proposals.append(replace(proposal, id=unique))
+            if len(proposals) >= limit:
+                break
+        if rejected and not proposals:
+            raise ContractError("; ".join(rejected))
+        return cls(
+            skill_scenario=_optional_text(data.get("skill_scenario")) or "",
+            notes=_optional_text(data.get("notes")) or "",
+            proposals=tuple(proposals),
+        )
 
     def to_dict(self) -> Dict[str, Any]:
         return {
-            "name": self.name,
-            "summary": self.summary,
-            "plan": dict(self.plan),
-            "asset_recommendations": [
-                recommendation.to_dict() for recommendation in self.asset_recommendations
-            ],
-            "axis_pool": [dict(combo) for combo in self.axis_pool],
+            "skill_scenario": self.skill_scenario,
+            "notes": self.notes,
+            "proposals": [proposal.to_dict() for proposal in self.proposals],
         }
 
 
 @dataclass(frozen=True)
 class CreatorResult:
-    """Private result written by the single creator invocation."""
+    """Private metadata written by the creator next to the task it built."""
 
-    status: str
-    skip_reason_code: Optional[str]
-    skip_reason: Optional[str]
     description: str
-    required_tools: List[str]
-    expected_artifacts: List[str]
-    network_mode: str
-    allowed_hosts: List[str]
-    realized_axes: Dict[str, str] = field(default_factory=dict)
+    required_tools: List[str] = field(default_factory=list)
+    expected_artifacts: List[str] = field(default_factory=list)
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "CreatorResult":
         if not isinstance(data, dict):
             raise ContractError("creator result must be an object")
-        expected_fields = {
-            "status",
-            "skip_reason_code",
-            "skip_reason",
-            "description",
-            "required_tools",
-            "expected_artifacts",
-            "network_mode",
-            "allowed_hosts",
-            "realized_axes",
-        }
-        unknown = set(data) - expected_fields
-        missing = expected_fields - set(data)
+        unknown = set(data) - {"description", "required_tools", "expected_artifacts"}
         if unknown:
             raise ContractError(f"creator result has unknown fields: {sorted(unknown)!r}")
-        if missing:
-            raise ContractError(f"creator result is missing fields: {sorted(missing)!r}")
-
-        status = _required_string(data, "status")
-        if status not in CREATOR_STATUSES:
-            raise ContractError(f"invalid creator status: {status!r}")
-        reason_code = _optional_string(data.get("skip_reason_code"))
-        reason = _optional_string(data.get("skip_reason"))
-        description = _string(data.get("description"), "description")
+        description = _required_string(data, "description")
         required_tools = _string_list(data, "required_tools")
         expected_artifacts = _string_list(data, "expected_artifacts")
-        network_mode = _required_string(data, "network_mode")
-        allowed_hosts = _string_list(data, "allowed_hosts")
-        realized_axes = _string_dict(data, "realized_axes")
-        axis_errors = validate_axis_values(realized_axes)
-        if axis_errors:
-            raise ContractError("; ".join(axis_errors))
-
-        if network_mode not in NETWORK_MODES:
-            raise ContractError("generated tasks must use network_mode 'no-network'")
-        if allowed_hosts:
-            raise ContractError("generated tasks cannot include allowed hosts")
-
-        if status == "created":
-            if reason_code is not None or reason is not None:
-                raise ContractError("created result cannot have a skip reason")
-            if not description:
-                raise ContractError("created result requires a description")
-            if not expected_artifacts:
-                raise ContractError("created result requires expected artifacts")
-            for key in ("archetype", "primary_verifier_pattern"):
-                if key not in realized_axes:
-                    raise ContractError(f"created result requires realized_axes.{key}")
-            if any(
-                not PurePosixPath(artifact).is_absolute()
-                or ".." in PurePosixPath(artifact).parts
-                for artifact in expected_artifacts
-            ):
-                raise ContractError("expected artifacts must be absolute environment paths")
-        else:
-            if reason_code not in SKIP_REASON_CODES:
-                raise ContractError(f"invalid skip_reason_code: {reason_code!r}")
-            if reason is None:
-                raise ContractError("skipped result requires skip_reason")
-            if description or required_tools or expected_artifacts:
-                raise ContractError("skipped result cannot describe a task")
-            if network_mode != "no-network" or allowed_hosts:
-                raise ContractError("skipped result must use no-network")
-            if realized_axes:
-                raise ContractError("skipped result cannot include realized axes")
-
+        if any(
+            not PurePosixPath(artifact).is_absolute() or ".." in PurePosixPath(artifact).parts
+            for artifact in expected_artifacts
+        ):
+            raise ContractError("expected artifacts must be absolute environment paths")
         return cls(
-            status=status,
-            skip_reason_code=reason_code,
-            skip_reason=reason,
             description=description,
             required_tools=required_tools,
             expected_artifacts=expected_artifacts,
-            network_mode=network_mode,
-            allowed_hosts=allowed_hosts,
-            realized_axes=realized_axes,
         )
 
     def to_dict(self) -> Dict[str, Any]:
@@ -267,16 +242,23 @@ def _string(value: Any, key: str) -> str:
     return value.strip()
 
 
-def _optional_string(value: Any) -> Optional[str]:
-    if value is None:
-        return None
-    if not isinstance(value, str) or not value.strip():
-        raise ContractError("optional strings must be null or non-empty")
-    return value.strip()
+def _optional_text(value: Any) -> Optional[str]:
+    return value.strip() if isinstance(value, str) and value.strip() else None
+
+
+def _slug(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", value.casefold()).strip("-")[:48].strip("-")
+
+
+def _text_tuple(value: Any) -> tuple[str, ...]:
+    if not isinstance(value, list):
+        return ()
+    return tuple(item.strip() for item in value if isinstance(item, str) and item.strip())
 
 
 def _string_list(data: Dict[str, Any], key: str) -> List[str]:
-    value = data.get(key)
+    """Optional list of unique non-empty strings; a missing key means empty."""
+    value = data.get(key, [])
     if not isinstance(value, list):
         raise ContractError(f"{key} must be a list")
     if any(not isinstance(item, str) or not item.strip() for item in value):
@@ -284,18 +266,4 @@ def _string_list(data: Dict[str, Any], key: str) -> List[str]:
     result = [item.strip() for item in value]
     if len(result) != len(set(result)):
         raise ContractError(f"{key} must not contain duplicates")
-    return result
-
-
-def _string_dict(data: Dict[str, Any], key: str) -> Dict[str, str]:
-    value = data.get(key)
-    if not isinstance(value, dict):
-        raise ContractError(f"{key} must be an object")
-    result: Dict[str, str] = {}
-    for raw_key, raw_value in value.items():
-        if not isinstance(raw_key, str) or not raw_key.strip():
-            raise ContractError(f"{key} keys must be non-empty strings")
-        if not isinstance(raw_value, str) or not raw_value.strip():
-            raise ContractError(f"{key}.{raw_key} must be a non-empty string")
-        result[raw_key.strip()] = raw_value.strip()
     return result

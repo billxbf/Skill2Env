@@ -1,0 +1,50 @@
+{
+  "skill": "agent-orchestration",
+  "version": "2.0.0",
+  "testCases": [
+    {
+      "id": "multi-supervisor",
+      "rule": "multi-supervisor",
+      "query": "Implement a supervisor that routes tasks to specialized agents",
+      "expectedBehavior": [
+        "Uses LLM to determine agent routing",
+        "Supports parallel execution for independent agents",
+        "Passes context between sequential agents using structured message passing",
+        "Returns aggregated results from all agents"
+      ]
+    },
+    {
+      "id": "multi-debate",
+      "rule": "multi-debate",
+      "query": "Handle conflicting outputs from multiple agents",
+      "expectedBehavior": [
+        "Detects conflicts between agent findings using semantic comparison analysis",
+        "Uses confidence scores or LLM arbitration",
+        "Records resolution reasoning with detailed justification for each decision",
+        "Applies resolutions to findings and updates the merged output accordingly"
+      ]
+    },
+    {
+      "id": "scenario-orchestrator",
+      "rule": "scenario-orchestrator",
+      "query": "Orchestrate a skill across simple, medium, and complex scenarios in parallel",
+      "expectedBehavior": [
+        "Defines 3 scenarios with progressive difficulty (1x/3x/8x)",
+        "Uses fan-out for parallel execution across all defined scenario instances",
+        "Aggregates results with quality comparison across simple, medium, and complex scenarios",
+        "Provides scaling analysis and recommendations based on scenario complexity progression"
+      ]
+    },
+    {
+      "id": "scenario-routing",
+      "rule": "scenario-routing",
+      "query": "Implement milestone synchronization for parallel scenario execution",
+      "expectedBehavior": [
+        "Pauses at configurable milestone percentages to synchronize parallel scenario progress",
+        "Waits for all scenarios with timeout",
+        "Continues on timeout to prevent deadlocks",
+        "Tracks progress per scenario with checkpoints"
+      ]
+    }
+  ]
+}

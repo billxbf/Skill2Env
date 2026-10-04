@@ -1,0 +1,569 @@
+{
+  "skill_name": "revops-radar",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm Priya, RevOps manager at Hartwell Logistics Cloud - B2B SaaS, around 180 people. I want a proper list of things to read and listen to so I stop finding out about stuff six months late. Realistically I have about 75 minutes a week at my desk, plus a 25-minute train commute each way that I currently waste staring out the window. Finance has frozen anything paid this year, so no memberships and no conference tickets. I want broad coverage rather than going deep on one topic. Vendor blogs are fine by me as long as I know which ones they are. Our whole stack sits on one big CRM platform. Put the list together for me.",
+      "expected_output": "A date-stamped watch list grouped by consumption rhythm, sized to 75 minutes/week with commute audio discounted, paid sources deleted with the reason named, a community slot reserved, a bench, and closing totals.",
+      "files": [],
+      "expectations": [
+        "The list is grouped by consumption rhythm (weekly core, monthly, annual events, bench, dropped), not grouped by medium.",
+        "A 'Dropped' section names at least one paid source removed, with 'no budget / cannot expense' given as the reason.",
+        "No paid-membership community appears in the weekly, monthly, annual, or bench sections.",
+        "The attention cost of the commute podcast is halved or otherwise reduced because it rides on time already spent.",
+        "Total estimated weekly minutes is stated and is at or under 75.",
+        "Roughly 10% of the budget is explicitly reserved for one community, with source discovery or list renewal named as the reason.",
+        "A bench section names 2-3 verified substitutes instead of adding them to the main list.",
+        "Every entry carries a verification status and a date.",
+        "Every entry carries a URL.",
+        "Vendor-run entries carry an explicit vendor-run flag.",
+        "Closing totals state estimated weekly minutes against budget, counts per section, and how many entries are verified-active.",
+        "The response does not ask for a delivery date or deadline for the watch list."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Give me the RevOps podcast shortlist. I listen while running, so three or four shows maximum, and I want ones that are actually still publishing - last time I subscribed to a batch off somebody's blog post and half of them hadn't shipped an episode in over a year. I'm a sales ops lead at Kestrel Freight Systems.",
+      "expected_output": "A short podcast list where every recommendation carries the date of its most recent confirmed episode, dormant well-known shows are excluded or flagged, and running time is treated as attention already spent.",
+      "files": [],
+      "expectations": [
+        "RevOps FM is not presented as an actively publishing weekly show.",
+        "If RevOps FM appears at all, it is labelled stale or dormant with its months-silent gap stated.",
+        "The Revenue Formula is not presented as an actively publishing weekly show.",
+        "Ops Cast is either absent or flagged as ended, and is never recommended as active.",
+        "The response states that a homepage's own cadence claim such as 'weekly' does not verify a show is alive, and that only a dated episode does.",
+        "At least one show is recommended on the evidence of a recent dated episode, and RevOpsAF appears among the active recommendations.",
+        "Each recommended show carries the date of its most recent confirmed episode, not just a bare 'active' label.",
+        "The attention cost of the podcasts is halved or reduced because they ride on running time already spent.",
+        "No download, listener, or subscriber figure is invented; sources publishing no figure are recorded as 'not stated'.",
+        "No show is attributed to Sales Assembly under the name 'B2B Revenue Vitals'.",
+        "A URL is given for every recommended show.",
+        "The verification date behind the statuses is stated."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I'm cleaning out a bookmarks folder I built about two years ago for revenue ops reading. Here's what I've got and what happens when I click each one: (1) opsstars.com lands on a page saying the domain is for sale; (2) saleshacker.com redirects to gtmnow.com; (3) salesforceben.com returns a 403 through my work proxy, though I'm told it's a big site; (4) seanlane.substack.com shows a 'coming soon' page with nothing published; (5) an old marketing-ops blog URL now loads a dentist practice website; (6) wizardsofops.com gives me a 'server not found' error. Tell me what to keep and what to bin. I'm ops manager at Brightside Analytics.",
+      "expected_output": "A per-URL triage that distinguishes genuinely dead, renamed-but-alive, resold domain, not-yet-alive, DNS-dead, and blocked-therefore-unverified, rather than a binary alive/dead split.",
+      "files": [],
+      "expectations": [
+        "opsstars.com is classified as genuinely dead on the evidence of a parked or for-sale page, and is removed.",
+        "saleshacker.com redirecting to gtmnow.com is classified as renamed or merged but alive, the URL is updated, and the source is kept.",
+        "salesforceben.com is not classified as dead; the 403 is classified as unverified with the block recorded as the reason.",
+        "A manual or alternate check is recommended for the 403'd source rather than dropping it.",
+        "seanlane.substack.com is classified as not-yet-alive (live page, zero published items), excluded from the list, and noted for the next refresh.",
+        "The URL now serving a dentist practice is classified as a resold or squatted domain, distinct from the source itself being dead.",
+        "The response states that a link resolving is not evidence the source is alive, and that page content must be confirmed to match the source's subject.",
+        "The DNS resolution failure is classified as dead, and DNS failure is described as a stronger dead signal than a parked page.",
+        "At least four distinct verdicts are used across the six URLs, rather than a binary alive/dead split.",
+        "No entry is presented as verified-active without a dated item behind it.",
+        "GTMnow is named as the successor brand to Sales Hacker.",
+        "The response advises re-resolving every URL at the next refresh, including ones that worked this time.",
+        "No replacement URL is constructed from memory for any source that cannot be confirmed."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Rank these five by authority so I know where to start: Growth Unhinged (85k readers), GTMnow (60k members), RevOps Impact Newsletter (6.1k subscribers), CRM Daily, and The Signal (10k subscribers). I'm a RevOps IC at Vantage Freight Group and I have maybe 20 minutes a week, so I only want the top two.",
+      "expected_output": "Two picks ranked on role fit and durability signals, with subscriber count explicitly rejected as the ranking basis, no invented figure for the source that publishes none, and the rest benched.",
+      "files": [],
+      "expectations": [
+        "Subscriber or reader count is explicitly rejected as the basis for the ranking.",
+        "The response states that audience size measures reach, not authority.",
+        "Cross-surface recurrence, a named accountable author, and/or institutional backing are named as the durability signals used instead.",
+        "CRM Daily is not assigned an invented subscriber figure; it is recorded as 'not stated' or equivalent.",
+        "CRM Daily is flagged as agency-run rather than presented as an independent publication.",
+        "RevOps Impact Newsletter is attributed to its named practitioner author (Jeff Ignacio) rather than presented as vendor-run.",
+        "Fit to the user's IC role is applied as a ranking criterion ahead of reach.",
+        "Exactly two sources are recommended, matching the stated 20-minute budget.",
+        "The two picks are costed in minutes and totalled against the 20-minute budget.",
+        "The 85,000-reader figure is not given as the reason to read Growth Unhinged first.",
+        "Each pick carries a URL and a verification status.",
+        "One to three of the unpicked sources are named as bench substitutes rather than silently dropped."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "I run revenue ops for a DTC skincare brand, Lumen & Fern - about $40M GMV, mostly a Shopify storefront plus a subscription tier. Everyone keeps sending me revenue ops content that turns out to be all MQLs and enterprise sales cycles, which is useless to me. Build me something that actually fits. About 45 minutes a week, and I read - I don't do podcasts.",
+      "expected_output": "A text-only list that states plainly no dedicated B2C/DTC RevOps branch exists, keeps transferable frameworks from B2B sources with a caveat, and routes the community need to an ecommerce operator community.",
+      "files": [],
+      "expectations": [
+        "The response states explicitly that the RevOps information ecosystem is overwhelmingly B2B-SaaS-centric.",
+        "The response states that no dedicated B2C or DTC 'RevOps' branch exists, without implying parity with the B2B side.",
+        "No B2C-specific RevOps podcast, newsletter, or community is invented to fill the gap.",
+        "Medium-agnostic frameworks such as funnel math, forecasting, or data hygiene are kept from B2B sources, with a reason given for why they still transfer.",
+        "The community and benchmark need is routed to an ecommerce operator community rather than a B2B RevOps community.",
+        "The response warns that most named benchmarks and playbooks in the B2B sources assume B2B sales cycles.",
+        "The list contains no podcast entries, matching the stated exclusion.",
+        "Audio sources are named in a 'Dropped' section with 'no podcasts' as the reason, rather than being ranked lower in the main list.",
+        "Total estimated weekly minutes is stated and is at or under 45.",
+        "Roughly 10% of the budget is reserved for one community.",
+        "Every entry carries a URL and a verification status with a date.",
+        "The list is grouped by consumption rhythm, not by medium."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "I just moved into my first RevOps role at Novaris Payments after five years as a CRM admin. I've got about two hours a week and I honestly don't know this field yet - I want to actually understand how people think about revenue architecture and forecasting, not just skim headlines every week. What should I be reading and listening to?",
+      "expected_output": "A depth-oriented list of 3-5 concentrated sources plus the people publishing on those themes, with long-form deliberately promoted against the efficiency order and the reason stated.",
+      "files": [],
+      "expectations": [
+        "The efficiency ordering across mediums is stated explicitly rather than left implied by row order.",
+        "The response states that long-form (podcasts, talks, events, communities) tops the value axis while sitting at or below the bottom of the efficiency axis.",
+        "Long-form is promoted against the pure efficiency order, with 'new to the field' and/or 'depth' named as the condition that justifies the promotion.",
+        "The delivered list is not composed only of newsletters and blogs.",
+        "The budget is concentrated on roughly 3-5 sources rather than spread across every medium, matching the depth answer.",
+        "People who publish on the user's named themes (revenue architecture, forecasting) are included alongside the publications.",
+        "At least one book is recommended, given the newcomer and depth need.",
+        "Revenue Architecture by Jacco van der Kooij, or an equivalent foundational text, is named as the source of the frameworks rather than a blog post about them.",
+        "If any event is included, it is costed as days cleared in one block rather than as an amortised weekly minute figure.",
+        "Attention costs are given as orders of magnitude (minutes, tens of minutes, most of an hour, days) rather than as false-precision figures.",
+        "Total estimated weekly minutes is stated against the two-hour budget.",
+        "Roughly 10% of the budget is reserved for one community.",
+        "Every entry carries a URL and a verification status."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Which revenue ops conferences are worth going to next year? My employer gives me a $3,500 training budget and roughly three days out of the office. I'm director of RevOps at Calder Health Systems, based in Chicago.",
+      "expected_output": "A short event shortlist costed as cleared days rather than amortised weekly minutes, with dead and unconfirmed events excluded or flagged and the employer budget factored into the ranking.",
+      "files": [],
+      "expectations": [
+        "Events are costed as days cleared in one block, never as an amortised per-week minute figure.",
+        "The response states explicitly that amortising a multi-day conference across 52 weeks understates a cost the user pays as cleared days.",
+        "OpsStars is not recommended.",
+        "REVOLT's next edition is flagged as unconfirmed rather than assumed to recur annually.",
+        "If GTM2026 is recommended, attendgtm.com is given as the URL rather than a joinpavilion.com path.",
+        "HubSpot's event is referred to as UNBOUND and identified as the rebrand of INBOUND rather than as a separate event.",
+        "Candidate events are ranked by fit to a director-level attendee, not by attendee count or event size.",
+        "The response notes that the employer-funded budget changes the ranking by removing price as a reason to skip an event.",
+        "Dates, location, and a verification status are given for each recommended event.",
+        "The speaker roster is named as a by-product worth harvesting for who to follow.",
+        "No date is invented for any event whose next edition is unannounced.",
+        "No more events are recommended than the stated three-day allowance permits."
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Who should I actually follow for revenue operations? I want independent voices, not vendor mouthpieces. Also, I saw Chris Walker recommended on three different lists this month - is he still worth following? I'm head of revenue ops at Tessellate Software.",
+      "expected_output": "A people list ranked by cross-surface recurrence rather than follower count, with affiliation flagged, Chris Walker's changed focus called out, and the highest-yield surfaces for finding more people named.",
+      "files": [],
+      "expectations": [
+        "People are ranked by cross-surface recurrence ahead of follower count.",
+        "The response states explicitly that follower count measures reach, not authority.",
+        "Chris Walker's current feed is flagged as no longer RevOps commentary, and he is recommended for back-catalog credibility only rather than as an active-feed follow.",
+        "The response states that LinkedIn, not X/Twitter, is where RevOps practitioners actually publish.",
+        "No social handle or profile URL is invented for anyone who cannot be confirmed.",
+        "Vendor-affiliated and employer-affiliated people are excluded or clearly flagged, matching the 'independent voices' constraint.",
+        "Rosalyn Santa Elena, or another practitioner justified by recurrence across independent surfaces, is recommended with the recurring surfaces named.",
+        "Where a person's main surface is fetch-blocked, any handle is labelled as stated on another surface rather than independently confirmed.",
+        "Podcast guest lists and conference speaker rosters are named as the highest-yield surfaces for finding more people.",
+        "Community team pages are ranked below guest lists and speaker rosters, and vendor benchmark posts are ranked last.",
+        "Each person is matched to a specific 'best followed for' line rather than a generic endorsement.",
+        "A verification date is carried for the profile links given."
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "I'm putting this together on a locked-down laptop with no internet beyond internal tools - I literally cannot open any of these sites from here. I still need a RevOps watch list I can take home and set up on my own machine this weekend. RevOps analyst, 45 minutes a week, text only, nothing paid. Company is Ardent Rail Systems.",
+      "expected_output": "A delivered list carrying each entry's recorded status and date, an explicit statement that nothing was re-verified this run, and a manual verification procedure with the classification thresholds.",
+      "files": [],
+      "expectations": [
+        "The list is delivered rather than refused for lack of browsing access.",
+        "The response states clearly that it could not re-verify any source in this run.",
+        "Each entry carries its recorded status and the date that status was recorded, not a fresh claim of being active today.",
+        "No entry is presented as verified-active as of today.",
+        "The manual check procedure is given: open each URL, find the newest dated item, and apply the status classifications.",
+        "The classification thresholds are stated: roughly three months or newer for active, older than roughly six months for stale.",
+        "The response tells the user that a 403 or bot block means unverified, never dead.",
+        "Paid sources are excluded outright with the reason named, rather than listed as options.",
+        "The list contains no podcast or video entries, matching the text-only constraint.",
+        "Total estimated weekly minutes is stated and is at or under 45.",
+        "The response flags that the recorded snapshot needs re-verification if it is more than roughly six months old."
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Three months ago you built me a RevOps watch list - 6 weekly sources, 2 monthly, 1 conference, and 3 on the bench. Since then: I've read the two newsletters religiously, I listen to one of the podcasts every week, I never once opened the Slack community, and I genuinely forgot the other three existed. Also, my new employer will now pay for a peer community, which I couldn't afford before. Run the refresh. Still 90 minutes a week. I'm at Merrow Analytics now.",
+      "expected_output": "A refresh pass that re-resolves every URL, drops the unread entries, re-offers the previously deleted paid community because the constraint lifted, sources a discovery, re-totals against budget, and reports the failed measurement check.",
+      "files": [],
+      "expectations": [
+        "Every URL is re-resolved, including the ones that worked at the last check, with renames and domain resale named as the reason.",
+        "The freshness check is re-run on every entry and newly stale entries are downgraded.",
+        "Previously unverified and not-yet-alive entries are retried rather than left at their old status.",
+        "The three sources the user forgot existed are dropped, on the stated grounds that an unread source costs attention anyway.",
+        "The user's consumption report is used as an explicit refresh input, or the question of what was actually consumed is asked.",
+        "The paid peer community is re-offered specifically because the user says the budget constraint has lifted.",
+        "The response states that a source deleted for a constraint is only re-offered once the user says that constraint has lifted.",
+        "The anchor community or the newest additions are asked for one candidate discovery to verify and consider.",
+        "Estimated weekly minutes is re-totalled against the 90-minute budget and any overflow is trimmed.",
+        "A bench entry is considered for promotion onto the main list where a slot opened.",
+        "The next refresh is set or confirmed at a quarterly interval.",
+        "No source previously dropped for a constraint still in force is silently re-added.",
+        "The two-thirds consumption check is reported as failing (3 of 9 listed entries consumed), and the list is revised rather than re-presented unchanged."
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "Can you set me up with a RevOps reading list? I'm at Halverson Grid, been in ops about four years.",
+      "expected_output": "An interview conducted one question at a time covering time budget, catch-up versus habit, mediums, exclusions, breadth versus depth, segment, vendor stance, and platform ecosystem - with no list produced before the answers.",
+      "files": [],
+      "expectations": [
+        "An interview is run before any list is produced.",
+        "Questions are asked one at a time, waiting for each answer, rather than presented as a single block.",
+        "The weekly time budget available for staying current is asked.",
+        "Whether the user is catching up before a specific moment or building a standing weekly habit is asked.",
+        "Which mediums the user actually consumes is asked, capped at two.",
+        "What is ruled out entirely (no commute time, a paywall, an unaffordable community or conference) is asked.",
+        "Breadth versus depth is asked, with a depth answer prompted to name its themes.",
+        "The segment (B2B SaaS, B2C/ecommerce, or both) is asked.",
+        "Whether vendor-run sources should be included is asked.",
+        "Whether the stack is anchored on a dominant CRM platform whose ecosystem sources should be included is asked.",
+        "No delivery date or deadline for the watch list is requested."
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "Just give me the full list - every RevOps podcast, newsletter, community and conference worth knowing about. I'd rather have too much and filter it myself. I've got 30 minutes a week, but honestly I'll find more time if the stuff is good. I'm a sales ops analyst at Pennant Wireless.",
+      "expected_output": "A list cut to the 30-minute budget with the stated ranking order, strong leftovers benched, the 'I'll find more time' premise declined, and expansion offered only on a raised budget.",
+      "files": [],
+      "expectations": [
+        "The list is sized to the stated 30-minute budget rather than delivered as the full inventory.",
+        "The response states that a list overrunning its budget gets abandoned, and that abandonment is total failure rather than partial.",
+        "The 'I'll find more time' premise is declined as a reason to overstuff, and the stated budget is held.",
+        "Strong leftovers are placed on a bench of 2-3 named substitutes rather than in the main list.",
+        "The ranking order is stated out loud rather than left implied by row order.",
+        "The output is not a flat unranked list topped by a 'start here' pick justified by size or fame.",
+        "Roughly 10% of the 30-minute budget is reserved for one community.",
+        "Every entry carries a verification status and date, and no entry is presented as verified when it is not.",
+        "Estimated weekly minutes is totalled against the 30-minute budget.",
+        "Attention is sized as orders of magnitude rather than as precise per-source figures.",
+        "Expanding the list is offered only if the user raises the stated budget, rather than done unilaterally."
+      ]
+    }
+  ],
+  "trigger_queries": [
+    { "query": "Build me a revops radar", "should_trigger": true },
+    {
+      "query": "I'm a new sales ops manager and I have no idea what I should be reading",
+      "should_trigger": true
+    },
+    {
+      "query": "Which RevOps newsletters are actually worth subscribing to?",
+      "should_trigger": true
+    },
+    {
+      "query": "who should I follow on linkedin for revenue operations",
+      "should_trigger": true
+    },
+    {
+      "query": "I want a weekly habit for staying current in revenue ops, about an hour",
+      "should_trigger": true
+    },
+    { "query": "recommend some revenue operations podcasts", "should_trigger": true },
+    { "query": "Are there any RevOps communities worth joining?", "should_trigger": true },
+    {
+      "query": "Which revenue ops conferences should I go to next year?",
+      "should_trigger": true
+    },
+    {
+      "query": "half the ops podcasts I subscribed to have gone dead - rebuild my list",
+      "should_trigger": true
+    },
+    { "query": "what should I read to keep up with sales ops", "should_trigger": true },
+    {
+      "query": "Put together a watch list of revenue operations sources for me, 45 min a week",
+      "should_trigger": true
+    },
+    {
+      "query": "I just moved from marketing ops into revops, what do people in this field actually read?",
+      "should_trigger": true
+    },
+    { "query": "Give me three RevOps books worth reading", "should_trigger": true },
+    { "query": "Is there a good RevOps subreddit?", "should_trigger": true },
+    { "query": "Refresh my revops radar", "should_trigger": true },
+    {
+      "query": "I need to get up to speed on revenue operations before I start a new role in three weeks",
+      "should_trigger": true
+    },
+    { "query": "Which RevOps YouTube channels are any good?", "should_trigger": true },
+    {
+      "query": "curate me a list of sales ops information sources, I have 30 minutes a week",
+      "should_trigger": true
+    },
+    {
+      "query": "are there any good newsletters about CRM and pipeline operations",
+      "should_trigger": true
+    },
+    {
+      "query": "Who are the credible independent voices in revenue operations?",
+      "should_trigger": true
+    },
+    {
+      "query": "I keep seeing the same five names recommended for revops, are any of them still active?",
+      "should_trigger": true
+    },
+    {
+      "query": "I run pipeline and forecasting ops for a SaaS company - what should I be reading every week?",
+      "should_trigger": true
+    },
+    {
+      "query": "Which marketing ops communities overlap with what I do in revenue operations?",
+      "should_trigger": true
+    },
+    {
+      "query": "give me a shortlist of revops podcasts I can listen to on my commute",
+      "should_trigger": true
+    },
+    {
+      "query": "I'd like a quarterly routine for refreshing which industry sources I follow in revenue ops",
+      "should_trigger": true
+    },
+    {
+      "query": "what conferences do revenue operations leaders actually attend",
+      "should_trigger": true
+    },
+    { "query": "Sales Hacker seems to be gone - what replaced it?", "should_trigger": true },
+    {
+      "query": "I have a $3k training budget, where should I spend it for revops learning",
+      "should_trigger": true
+    },
+    {
+      "query": "Which RevOps certifications and training programs are real?",
+      "should_trigger": true
+    },
+    {
+      "query": "recommend people to follow for revenue operations on linkedin, independent only",
+      "should_trigger": true
+    },
+    {
+      "query": "I want to stop doomscrolling and actually read useful ops content - build me a plan",
+      "should_trigger": true
+    },
+    {
+      "query": "What's the RevOps equivalent of a good industry newsletter?",
+      "should_trigger": true
+    },
+    {
+      "query": "Trying to build a learning routine for my ops team - what sources should we all follow?",
+      "should_trigger": true
+    },
+    {
+      "query": "Any decent Slack or Discord groups for revenue ops people?",
+      "should_trigger": true
+    },
+    {
+      "query": "I'm a CRM admin moving into revops - what should be on my reading list?",
+      "should_trigger": true
+    },
+    { "query": "which of these revops newsletters is still publishing", "should_trigger": true },
+    {
+      "query": "set me up with a 20 minute a week revenue operations reading habit",
+      "should_trigger": true
+    },
+    {
+      "query": "who's worth following for pricing and packaging benchmarks in B2B SaaS GTM",
+      "should_trigger": true
+    },
+    { "query": "Where do RevOps practitioners actually hang out online?", "should_trigger": true },
+    {
+      "query": "I only read, no podcasts or videos - what revops sources fit that?",
+      "should_trigger": true
+    },
+    {
+      "query": "Build a source list for a DTC ecommerce ops lead, the revops content I find is all B2B",
+      "should_trigger": true
+    },
+    {
+      "query": "Give me a ranked list of revenue operations information sources by value per minute",
+      "should_trigger": true
+    },
+    { "query": "what's worth my time in the revops world right now", "should_trigger": true },
+    {
+      "query": "I need a watch list for revenue ops that I can actually keep up with",
+      "should_trigger": true
+    },
+    {
+      "query": "Are there any RevOps podcasts hosted by actual practitioners rather than vendors?",
+      "should_trigger": true
+    },
+    {
+      "query": "help me pick two newsletters and one community for staying current in ops",
+      "should_trigger": true
+    },
+    {
+      "query": "my company will pay for one peer community - which one for a revops leader?",
+      "should_trigger": true
+    },
+    {
+      "query": "how do I find out who the good people are in revenue operations",
+      "should_trigger": true
+    },
+    { "query": "I want vendor-free sources only for revenue ops", "should_trigger": true },
+    {
+      "query": "What should a first-time RevOps hire read in their first month?",
+      "should_trigger": true
+    },
+    {
+      "query": "Assemble a quarterly refresh plan for the ops sources I follow",
+      "should_trigger": true
+    },
+    { "query": "which revops blogs publish actual benchmark data", "should_trigger": true },
+    { "query": "is RevOps FM still going?", "should_trigger": true },
+    {
+      "query": "Recommend a conference where I can meet other revenue ops leaders",
+      "should_trigger": true
+    },
+    { "query": "give me the revenue operations media landscape", "should_trigger": true },
+    {
+      "query": "I'd like to follow a few people who post about forecasting and pipeline mechanics",
+      "should_trigger": true
+    },
+    {
+      "query": "Curate revops sources for me - I have a 40 minute commute each way",
+      "should_trigger": true
+    },
+    {
+      "query": "what's the best way to keep up with changes in GTM operations practice",
+      "should_trigger": true
+    },
+    {
+      "query": "Find me an ops community where I can ask questions about lead routing setups",
+      "should_trigger": true
+    },
+    {
+      "query": "Build me a reading list for revenue operations, I'm a director and short on time",
+      "should_trigger": true
+    },
+    {
+      "query": "which revops sources should I drop - I'm subscribed to way too many",
+      "should_trigger": true
+    },
+    { "query": "I want to know which revenue ops voices are worth trusting", "should_trigger": true },
+    { "query": "Set up a standing weekly routine for revops industry reading", "should_trigger": true },
+    {
+      "query": "Suggest RevOps podcasts, newsletters and communities for a sales ops analyst",
+      "should_trigger": true
+    },
+    {
+      "query": "I'm behind on the field after parental leave - what do I need to catch up on in revenue ops?",
+      "should_trigger": true
+    },
+    { "query": "audit our pipeline stage definitions", "should_trigger": false },
+    { "query": "design a lead scoring model for our MQL threshold", "should_trigger": false },
+    { "query": "our round robin is lopsided, fix lead routing", "should_trigger": false },
+    { "query": "build a customer health score with weights and bands", "should_trigger": false },
+    { "query": "which leading indicators actually predict churn for us", "should_trigger": false },
+    { "query": "set up a deal desk discount approval matrix", "should_trigger": false },
+    { "query": "which system is the source of truth for ARR", "should_trigger": false },
+    {
+      "query": "who owns each CRM field and how often does it need refreshing",
+      "should_trigger": false
+    },
+    { "query": "design our revenue funnel stage set from scratch", "should_trigger": false },
+    { "query": "build a KPI tree from board level down to IC", "should_trigger": false },
+    { "query": "where are we losing deals in the funnel", "should_trigger": false },
+    { "query": "write the revenue section of our board deck", "should_trigger": false },
+    { "query": "am I ready for a RevOps manager role?", "should_trigger": false },
+    { "query": "prep me for a RevOps interview loop", "should_trigger": false },
+    {
+      "query": "write a scorecard and interview plan for hiring a RevOps manager",
+      "should_trigger": false
+    },
+    { "query": "which revops skill do I need for this project", "should_trigger": false },
+    { "query": "review our GTM tool stack and decide what to cut", "should_trigger": false },
+    { "query": "why did we miss the forecast last quarter", "should_trigger": false },
+    { "query": "clean up stale deals before the QBR", "should_trigger": false },
+    { "query": "design the handoff from sales to CS after closed won", "should_trigger": false },
+    {
+      "query": "build me a sales radar - which sales podcasts and newsletters should an AE follow",
+      "should_trigger": false
+    },
+    { "query": "which SDR communities should I join", "should_trigger": false },
+    {
+      "query": "who should I follow for cold email and outbound prospecting tips",
+      "should_trigger": false
+    },
+    {
+      "query": "curate a list of developer relations podcasts and newsletters",
+      "should_trigger": false
+    },
+    { "query": "which devrel conferences should I speak at", "should_trigger": false },
+    {
+      "query": "build a watch list of marketing automation vendor blogs to track for competitive intel",
+      "should_trigger": false
+    },
+    { "query": "track what our competitors are publishing each week", "should_trigger": false },
+    { "query": "set up a media monitoring alert for our brand", "should_trigger": false },
+    { "query": "which security newsletters should our SOC team read", "should_trigger": false },
+    {
+      "query": "recommend engineering blogs for a backend team to follow",
+      "should_trigger": false
+    },
+    { "query": "build a reading list for product managers", "should_trigger": false },
+    { "query": "which AI newsletters are worth subscribing to", "should_trigger": false },
+    { "query": "find me podcasts about startup fundraising", "should_trigger": false },
+    { "query": "curate a list of data engineering YouTube channels", "should_trigger": false },
+    { "query": "who should I follow on X for machine learning research", "should_trigger": false },
+    { "query": "build an SEO content calendar for our blog", "should_trigger": false },
+    {
+      "query": "which keywords should we target for our revops software page",
+      "should_trigger": false
+    },
+    {
+      "query": "write a newsletter issue announcing our new pipeline reporting feature",
+      "should_trigger": false
+    },
+    {
+      "query": "help me launch a newsletter about revenue operations",
+      "should_trigger": false
+    },
+    { "query": "pitch me as a speaker to RevOps conferences", "should_trigger": false },
+    { "query": "write a conference talk abstract about revenue operations", "should_trigger": false },
+    { "query": "plan the agenda for our internal revops summit", "should_trigger": false },
+    {
+      "query": "sponsor prospectus for a RevOps conference we're organising",
+      "should_trigger": false
+    },
+    { "query": "research the RevOps software market and size the TAM", "should_trigger": false },
+    { "query": "compare Salesforce and HubSpot for our CRM migration", "should_trigger": false },
+    { "query": "evaluate which revenue intelligence tool we should buy", "should_trigger": false },
+    { "query": "summarize this RevOps podcast episode transcript for me", "should_trigger": false },
+    {
+      "query": "draft LinkedIn posts about revenue operations for my personal brand",
+      "should_trigger": false
+    },
+    {
+      "query": "help me build a personal brand as a RevOps thought leader",
+      "should_trigger": false
+    },
+    { "query": "find RevOps job openings for me", "should_trigger": false },
+    { "query": "review my resume for a sales ops role", "should_trigger": false },
+    { "query": "what salary should I ask for as a RevOps manager", "should_trigger": false },
+    {
+      "query": "should I get a RevOps certification before applying for manager roles?",
+      "should_trigger": false
+    },
+    {
+      "query": "build an onboarding curriculum for our new revops analyst",
+      "should_trigger": false
+    },
+    { "query": "set up a Slack channel structure for our revenue team", "should_trigger": false },
+    { "query": "run a competitive analysis of GTM consultancies", "should_trigger": false },
+    { "query": "which customer success podcasts should a CSM follow", "should_trigger": false },
+    {
+      "query": "build a partner ecosystem source list for a partnerships lead",
+      "should_trigger": false
+    },
+    {
+      "query": "which finance and FP&A newsletters cover SaaS metrics",
+      "should_trigger": false
+    },
+    { "query": "recommend books on negotiation for enterprise deals", "should_trigger": false },
+    { "query": "summarise the top RevOps news from this week", "should_trigger": false },
+    { "query": "set a Google Alert for revenue operations mentions", "should_trigger": false },
+    { "query": "audit our marketing attribution model", "should_trigger": false },
+    { "query": "design a territory and quota plan for next year", "should_trigger": false },
+    { "query": "write documentation for our CRM data dictionary", "should_trigger": false }
+  ]
+}

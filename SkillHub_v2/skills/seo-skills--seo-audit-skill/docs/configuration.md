@@ -1,0 +1,364 @@
+# Configuration
+
+> Customize SEOmator behavior with config files and CLI options
+
+SEOmator uses a layered configuration system. Settings can come from config files, CLI arguments, or built-in defaults.
+
+## Quick Start
+
+Create a config file in your project:
+
+```bash
+seomator init              # Interactive setup
+seomator init -y           # Use defaults
+seomator init --preset blog # Use blog preset
+```
+
+This creates `seomator.toml` in your current directory.
+
+## Configuration File
+
+### Full Example
+
+```toml
+[project]
+name = "my-website"
+domains = ["example.com", "www.example.com"]
+
+[crawler]
+max_pages = 100
+concurrency = 3
+timeout_ms = 30000
+respect_robots = true
+delay_ms = 100
+user_agent = ""                 # Empty = random browser UA per crawl
+
+# URL filtering (glob patterns)
+include = []                    # Empty = crawl all
+exclude = ["/admin/**", "/api/**", "/wp-json/**"]
+
+# Query param handling
+drop_query_prefixes = ["utm_", "gclid", "fbclid", "ref"]
+allow_query_params = []         # Empty = keep all except dropped
+
+# Crawl distribution
+max_prefix_budget = 0.25        # Prevent over-crawling single paths (0-1)
+
+[rules]
+enable = ["*"]                  # Enable all rules by default
+disable = ["perf-inp"]          # Disable specific rules (supports wildcards)
+
+[external_links]
+enabled = true
+cache_ttl_days = 7
+timeout_ms = 10000
+concurrency = 5
+
+[output]
+format = "console"              # console, json, html, markdown, llm
+path = ""                       # Output file path (optional)
+```
+
+## Configuration Sections
+
+### [project]
+
+Project identification and domain configuration.
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `name` | string | - | Project name for reports |
+| `domains` | string[] | - | Allowed domains (crawl stays within these) |
+
+### [crawler]
+
+Controls how SEOmator crawls websites.
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `max_pages` | number | 100 | Maximum pages to crawl |
+| `concurrency` | number | 3 | Concurrent requests |
+| `timeout_ms` | number | 30000 | Request timeout in milliseconds |
+| `respect_robots` | boolean | true | Honor robots.txt directives |
+| `delay_ms` | number | 100 | Minimum gap between the start of any two requests |
+| `per_host_delay_ms` | number | 200 | Minimum gap between requests to one host |
+| `user_agent` | string | "" | Custom user agent (empty = random browser UA) |
+| `include` | string[] | [] | URL patterns to include (glob); empty means all |
+| `exclude` | string[] | [] | URL patterns to exclude (glob) |
+| `drop_query_prefixes` | string[] | ["utm_", "gclid", "fbclid", "mc_", "_ga"] | Query params to strip before comparing URLs |
+| `allow_query_params` | string[] | [] | Query params to keep (empty = all except dropped) |
+| `per_host_concurrency` | number | 2 | **Not implemented** — concurrency is global, not per host |
+| `breadth_first` | boolean | true | **Not implemented** — the queue is always breadth-first |
+| `follow_redirects` | boolean | true | **Not implemented** — redirects are always followed, up to a hop limit |
+| `max_prefix_budget` | number | 0.25 | **Not implemented** — no prefix budget is applied |
+
+The four marked **Not implemented** are parsed and validated, and nothing acts
+on them. Each default matches what the crawler really does, so leaving them
+alone costs nothing; changing one has no effect and
+`seomator config validate` says so.
+
+### [rules]
+
+Enable or disable specific audit rules.
+
+> **A rule filter changes the score.** Fewer checks run, and a category left
+> with no rules at all is dropped from the result rather than scored zero — so
+> a filtered audit is not comparable to a full one. The run records which
+> patterns were in force, and `compare` reports the difference instead of
+> calling it a regression. `seomator config validate` and every affected audit
+> run say so once.
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `enable` | string[] | ["*"] | Rules to run (supports wildcards) |
+| `disable` | string[] | [] | Rules to skip (supports wildcards); takes precedence over `enable` |
+
+**Wildcard Examples:**
+
+```toml
+[rules]
+enable = ["*"]                    # Run every rule
+disable = [
+  "perf-*",                       # Skip most performance rules — but see below
+  "a11y-color-contrast",          # Skip one specific rule
+  "content-word-count",
+]
+# Patterns match rule ids, which are `<category>-<name>`. The separator is `-`,
+# not `/`, and the category is one of the 20 real ids (see the list above).
+#
+# One exception: the five Core Web Vitals rules in the `perf` category are
+# named `cwv-lcp`, `cwv-cls`, `cwv-inp`, `cwv-ttfb` and `cwv-fcp`. A `perf-*`
+# pattern does not reach them. To skip the whole category:
+#   disable = ["perf-*", "cwv-*"]
+```
+
+### [external_links]
+
+External link checking configuration.
+
+> **Not implemented.** No rule requests an external link, and the link cache is
+> never opened, so none of these keys does anything. `seomator config validate`
+> warns if you change one. The rules in the `links` category count and inspect
+> external links found in the HTML; they do not fetch them.
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `enabled` | boolean | true | Check external links — not implemented |
+| `cache_ttl_days` | number | 7 | Days to cache link check results — not implemented |
+| `timeout_ms` | number | 10000 | External link timeout — not implemented |
+| `concurrency` | number | 5 | Concurrent external link checks — not implemented |
+
+### [output]
+
+Default output configuration.
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `format` | string | "console" | Output format: console, json, html, markdown, llm |
+| `path` | string | "" | Default output file path |
+
+## Config Priority
+
+Configuration is merged from multiple sources (highest to lowest priority):
+
+1. **CLI arguments** (`--max-pages 50`)
+2. **Local config** (`./seomator.toml`)
+3. **Parent directory configs** (searches up the tree)
+4. **Global config** (`~/.seomator/config.toml`)
+5. **Built-in defaults**
+
+## Presets
+
+SEOmator includes presets for common use cases:
+
+```bash
+seomator init --preset blog       # Content sites
+seomator init --preset ecommerce  # E-commerce sites
+seomator init --preset ci         # Minimal CI/CD config
+```
+
+| Preset | Description |
+|--------|-------------|
+| `default` | Standard configuration |
+| `blog` | Optimized for content sites - focuses on content, E-E-A-T |
+| `ecommerce` | Optimized for e-commerce - focuses on structured data, performance |
+| `ci` | Minimal config for CI/CD - fast, essential rules only |
+
+## Config Commands
+
+### View configuration
+
+```bash
+seomator config --list            # Show all config values
+seomator config show              # Show merged config with sources
+seomator config path              # Show config file paths
+```
+
+### Get/set values
+
+```bash
+seomator config crawler.max_pages         # Get value
+seomator config crawler.max_pages 50      # Set value
+seomator config --global                  # Modify global config
+```
+
+### Validate configuration
+
+```bash
+seomator config validate          # Check for errors/warnings
+```
+
+## CLI Options
+
+CLI options override config file settings:
+
+| Option | Config Equivalent | Description |
+|--------|-------------------|-------------|
+| `-m, --max-pages <n>` | `crawler.max_pages` | Max pages to crawl |
+| `--concurrency <n>` | `crawler.concurrency` | Concurrent requests |
+| `--timeout <ms>` | `crawler.timeout_ms` | Request timeout |
+| `-c, --categories <list>` | - | Filter to specific categories |
+| `-f, --format <type>` | `output.format` | Output format |
+| `-o, --output <path>` | `output.path` | Output file path |
+| `--no-cwv` | - | Skip Core Web Vitals |
+
+## URL Filtering
+
+### Include patterns
+
+Only crawl URLs matching these patterns:
+
+```toml
+[crawler]
+include = [
+  "/blog/**",           # All blog pages
+  "/products/**",       # All product pages
+]
+```
+
+### Exclude patterns
+
+Skip URLs matching these patterns:
+
+```toml
+[crawler]
+exclude = [
+  "/admin/**",          # Admin pages
+  "/api/**",            # API endpoints
+  "/wp-json/**",        # WordPress REST API
+  "/**?*",              # URLs with query strings
+  "/tag/**",            # Tag archives
+  "/author/**",         # Author archives
+]
+```
+
+### Glob pattern syntax
+
+| Pattern | Matches |
+|---------|---------|
+| `*` | Single path segment |
+| `**` | Multiple path segments |
+| `?` | Single character |
+| `[abc]` | Character class |
+
+## Query Parameter Handling
+
+### Drop tracking parameters
+
+Remove common tracking parameters:
+
+```toml
+[crawler]
+drop_query_prefixes = [
+  "utm_",               # Google Analytics
+  "gclid",              # Google Ads
+  "fbclid",             # Facebook
+  "ref",                # Referral tracking
+  "source",
+  "medium",
+  "campaign",
+]
+```
+
+### Allow specific parameters
+
+Keep only specific query parameters:
+
+```toml
+[crawler]
+allow_query_params = [
+  "page",               # Pagination
+  "sort",               # Sorting
+  "category",           # Filtering
+]
+```
+
+## Environment-Specific Config
+
+### Development
+
+```toml
+[project]
+name = "my-site-dev"
+
+[crawler]
+max_pages = 10
+timeout_ms = 60000    # Longer timeout for slow dev server
+
+[rules]
+disable = ["security-*"]  # Skip security rules in dev
+```
+
+### CI/CD
+
+```toml
+[project]
+name = "my-site-ci"
+
+[crawler]
+max_pages = 50
+concurrency = 5
+
+[output]
+format = "json"
+
+[rules]
+disable = ["perf-inp", "perf-cls"]  # Skip flaky CWV rules in CI
+```
+
+### Production
+
+```toml
+[project]
+name = "my-site"
+
+[crawler]
+max_pages = 500
+respect_robots = true
+
+[external_links]
+enabled = true
+cache_ttl_days = 1    # More frequent link checks
+```
+
+## Storage Locations
+
+SEOmator stores data in these locations:
+
+```
+~/.seomator/                              # Global directory
+├── projects/                             # Per-domain project databases
+│   └── example.com/
+│       └── project.db                    # Crawls, pages, links, images
+├── audits.db                             # Centralized audit results
+├── link-cache.db                         # External link check cache
+└── config.toml                           # Global configuration
+```
+
+See [Storage Architecture](./STORAGE-ARCHITECTURE.md) for details.
+
+## Next Steps
+
+- [Quickstart](./quickstart.md) - Run your first audit
+- [AI Agent Integration](./ai-agent-integration.md) - Use with Claude Code
+- [Rules Reference](./SEO-AUDIT-RULES.md) - All 373 rules explained

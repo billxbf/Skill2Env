@@ -1,0 +1,576 @@
+{
+  "skill_name": "oss-distribution-strategy",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I maintain slipstream, an npm package for streaming CSV transforms. We did a Show HN back in March that got about 900 stars, downloads peaked around 11k/week and then settled at 3,400/week and haven't moved since. I've got maybe 5 hours a month. I want to get us onto more channels - I was thinking Dev.to cross-posts, a subreddit presence, and maybe 15-20 directory submissions to widen the net. Where do we start?",
+      "expected_output": "An audit of the distribution surfaces already running before any new channel is proposed, with a baseline snapshot taken first and the 15-20 directory submissions challenged.",
+      "files": [],
+      "expectations": [
+        "Runs a coverage audit of the distribution surfaces already in place before proposing any new channel.",
+        "Predicts the audit will surface a half-configured foundation channel (empty keyword slots, missing links, or a description predating the current positioning) plus two or three listings that are simply wrong.",
+        "States the audit fixes amount to roughly an hour of work in total and must be done before any new channel is added.",
+        "Explicitly declines to rank those audit fixes against each other, on the grounds that ordering one hour of mandatory work is false precision rather than a plan.",
+        "Tells the maintainer to snapshot the current baseline numbers with their date and source before changing anything.",
+        "Justifies the snapshot by noting repository traffic panels retain only a short rolling window, so an uncaptured baseline is unrecoverable.",
+        "Notes that npm search ranks on title, description, readme and keywords only, with no popularity or quality signal, so the wording is the whole lever.",
+        "Checks whether every keyword slot is filled and whether the documentation, repository, funding and issue-tracker link fields are present.",
+        "Separates coverage metrics (facts auditable today) from arrival metrics (behaviour read as a quarterly trend) when defining what to measure.",
+        "Warns that stars moving without downloads or cloners means an announcement travelled, not that distribution improved.",
+        "Declines the 15-20 directory submissions as proposed, naming either the recurring sweep cost or the damage done by stale listings.",
+        "Asks whether adopters are individual developers choosing for themselves or engineers who must get approval inside a company, before committing to a channel mix.",
+        "Withholds a final channel plan until the audit findings and the adopter-type answer are in hand."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Quick one. We maintain tallowpy, a Python library for parsing fixed-width mainframe extracts. It installs with pip, about 4,800 downloads a month, mostly data engineers at insurance companies. A user opened an issue asking us to get it into Homebrew, and someone else wants a Debian package. My co-maintainer thinks it would make us look more legitimate. We have about 6 hours a month between us. Should we do it?",
+      "expected_output": "A written refusal of downstream system packaging for a library installed inside a virtual environment, with the four promotion conditions named and the refusal shaped so it does not come back next quarter.",
+      "files": [],
+      "expectations": [
+        "Refuses downstream system packaging for this project.",
+        "Grounds the refusal in the install unit: a library installed inside a virtual environment, not a standalone binary or container image.",
+        "Names all four conditions that would promote downstream packaging: company adoption as the declared goal, a standalone binary or container image install unit, release hygiene good enough for a third-party packager to hold it, and maintainer acceptance of the irreversibility.",
+        "States that downstream packaging is irreversible - a shipped distribution package cannot be recalled.",
+        "Writes the refusal as a named channel, a reason, and the condition that would reopen it, rather than as an omission or a 'not right now'.",
+        "Deletes downstream packaging from the ranking entirely rather than parking it at the bottom of a priority list.",
+        "Explains that a channel parked last gets re-litigated every quarter while a named refusal does not.",
+        "Rejects 'looks more legitimate' as a reason and makes no claim that packaging will increase downloads.",
+        "Classifies downstream packaging as a harmful-decay family: a stale package keeps shipping an old version to evaluators rather than going quiet.",
+        "Warns against treating a third-party package as owned, since the maintainer does not control it.",
+        "Recommends checking a cross-repository tracker such as Repology for packages that already exist without the maintainers knowing.",
+        "Points the maintainers at higher-efficiency families first (registry metadata and the release stream) and states the efficiency ordering out loud rather than implying it by list order."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "We built probe-lens, a VS Code extension that visualizes OpenTelemetry spans inline in the editor. It's been on the VS Code Marketplace for 7 months, 4,100 installs, growth is slow and steady but nothing exciting. Our team is two people, maybe 8 hours a month for this. I keep seeing people mention Cursor in our issue tracker. What should our distribution plan look like?",
+      "expected_output": "A dual-publish recommendation to Open VSX with the contractual reason named, the compatibility tax priced as the recurring cost, and the adoption test run on the new entry.",
+      "files": [],
+      "expectations": [
+        "Recommends dual-publishing to Open VSX alongside the Microsoft marketplace.",
+        "Explains that Microsoft's marketplace terms restrict use to Microsoft in-scope products, so every VS Code fork is contractually barred from it.",
+        "Names at least two editors that default to Open VSX from among Cursor, Windsurf, VSCodium and Gitpod.",
+        "States the extension is currently invisible to the AI-first editor segment the issue tracker already shows demand from.",
+        "Notes the VS Code Marketplace provides no first-party install-statistics dashboard.",
+        "Notes Open VSX is CI-publishable and carries a 256 MB binary limit.",
+        "Notes VS Code Marketplace ranking runs on installs, ratings and categories, and is criticized for not being install-weighted.",
+        "Classifies extension marketplaces as harmful decay: an extension incompatible with the host's current version reads as broken.",
+        "Identifies the recurring cost as a per-release compatibility tax against a host version the maintainer does not control.",
+        "Places extension marketplaces and connector hubs at the same rank on the efficiency order, and justifies the tie by their shared cost shape - vendor review gate, per-release compatibility tax, identical harmful decay - with audience the only difference.",
+        "Runs the adoption test on the Open VSX entry: recurring cost, decay behaviour, observable signal, kill date.",
+        "Warns against assuming one store covers the audience."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "I need to convince my VP of Engineering to fund two engineer-weeks of supply-chain work on our open source project girder - cosign signing, SLSA provenance, an SBOM per release, and pushing our OpenSSF Scorecard from 4.2 to above 7. She'll only approve it if it grows adoption. Can you help me build the case that this will increase downloads? We're at 180k monthly downloads on Maven Central and most of our users are at banks and insurers.",
+      "expected_output": "A refusal to build a growth case, replaced by a procurement-enablement case with the honest evidence limits stated and the correct observable signal named.",
+      "files": [],
+      "expectations": [
+        "Refuses to build the requested case that supply-chain work will increase downloads.",
+        "States that the link from Scorecard scores, artifact signing or SLSA provenance to downloads or adoption is unestablished.",
+        "Reframes the ask as risk mitigation and procurement enablement rather than a growth channel.",
+        "Notes that Sigstore's published totals have no control group, and that maturity and funding confound any apparent correlation.",
+        "Notes download counts are gameable, making them a weak outcome measure for this work.",
+        "Labels the 'Scorecard above 7' target as an adopted bar for enterprise review rather than a published standard, and says so when reporting it.",
+        "Names 'pitching trust work as growth' as a failure mode that sets up a failure the next security ask will pay for.",
+        "Points out that the stated audience of banks and insurers is a company-adoption path where trust signals rank near the top of value, even though they rank low on efficiency for individual adoption.",
+        "Gives the observable signal as enterprise evaluations that stop stalling, not as a download figure.",
+        "Warns that publishing a disclosure path means owing a disclosure SLA, an ongoing obligation rather than a one-time cost.",
+        "Notes trust signals carry a concentrated entry cost and a low recurring cost, and states which of the two it means when quoting a cost.",
+        "Mentions that EU Cyber Resilience Act obligations bind manufacturers rather than upstream maintainers, with pressure arriving as fix requests from downstream companies.",
+        "Promises no download lift anywhere in the recommendation."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "fennelwick hit 14,200 stars on GitHub in about eight months - we're in a bunch of awesome lists and we got two newsletter mentions. But weekly downloads are 2,100, the registry says 31 dependents, and neither has moved all year. Our Discord has 3,400 members and maybe 6 are active. How do we convert the star count into actual usage? I was going to do another round of newsletter outreach and try to get back on trending.",
+      "expected_output": "A diagnosis that the announcement travelled and the install did not, redirecting budget to onboarding rather than another awareness push.",
+      "files": [],
+      "expectations": [
+        "Diagnoses this as an onboarding problem rather than an awareness problem.",
+        "Recommends moving budget to documentation rather than adding another awareness channel.",
+        "States the pattern explicitly: high star velocity with flat usage and retention means the announcement travelled and the install did not.",
+        "Declines the proposed second round of newsletter outreach as the next move.",
+        "States that stars measure attention and promotion reach, not distribution.",
+        "Names downloads, dependents, unique cloners and issues from strangers as the measures of distribution.",
+        "Cites that roughly three out of four developers consider a project's star count before using or contributing, and that 36.7% starred a repository because they were already using it.",
+        "Notes the same evidence shows promotion drives star growth, so a star count measures reach as much as merit.",
+        "States that GitHub trending has no published specification and that the star-velocity explanation is folklore.",
+        "Notes GitHub's public events firehose stopped emitting most star events, which broke third-party star-based rankings, and treats external trending tools as unreliable.",
+        "Does not recommend adding badges as a growth lever, or states that a first badge produces only a small, non-sustained bump.",
+        "Pairs any star measurement with downloads or cloners rather than reporting stars alone."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Our project barrowlite is a Go module, pretty much feature-complete - we shipped the last real change 9 months ago and it just works. Someone on our team read that projects should ship every two weeks to stay visible, and proposed we cut a release every second Friday even if it's only dependency bumps, so the registry shows recent activity. Two of us maintain it, about 3 hours a month. Thoughts?",
+      "expected_output": "A rejection of the mandatory minimum cadence, replaced by a maximum-interval commitment plus an explicit maintained-and-stable statement in the README.",
+      "files": [],
+      "expectations": [
+        "Rejects a mandatory minimum release cadence.",
+        "Recommends committing to a predictable maximum interval instead, phrased as a promise that a fix lands within N weeks.",
+        "Names the proposed fortnightly dependency-bump releases as cadence theater.",
+        "Explains that an empty calendar release becomes a noise pull request in every downstream repository.",
+        "Explains that noise releases train downstream maintainers to auto-merge or ignore the one channel that reaches existing users directly.",
+        "Lists at least three of the parties a release actually broadcasts to: dependency-update bots, packagers' pipelines, feed-harvesting newsletters, watchers, and evaluators reading the registry's last-published field.",
+        "Confirms the long silence does fail the liveness proxy evaluators read, even on a finished project.",
+        "Recommends the cheap correction: an explicit 'stable, maintained, low change rate' statement in the README.",
+        "States that security fixes ship out of band and fast, outside the cadence commitment.",
+        "States that small changes get batched into one readable release.",
+        "Treats cadence as a distribution decision and the changelog as a distribution asset.",
+        "Reserves named milestones - a 1.0, a rewrite, a rename - as the legitimate reason to return to awareness channels after the launch window."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Honest constraint: I have about 3 hours a month for this, forever, and I'm the only maintainer. slatevane is a TypeScript library for form state, on npm, roughly 900 weekly downloads, all individual devs as far as I can tell. I want a real distribution plan - I was hoping for something like a quarterly rhythm with a newsletter push, a couple of integrations with popular frameworks, and getting into 3-4 curated lists. What does that look like scaled down to 3 hours?",
+      "expected_output": "A foundation-only mix in which the recurring-cost families are deleted rather than shrunk, with the test ring refused out loud and the capacity ceiling applied.",
+      "files": [],
+      "expectations": [
+        "Deletes the recurring-cost families outright rather than shrinking them to fit 3 hours.",
+        "States explicitly that a low hours ceiling deletes the per-release-tax families rather than reducing them.",
+        "Proposes a foundation-only mix and refuses the test ring out loud.",
+        "Drops creator and newsletter seeding, naming its recurring relationship cost and the fact that its payoff stops the month the pitching stops.",
+        "Drops or sharply caps the framework-integration plan, naming unbounded adapter sprawl a solo maintainer cannot keep green.",
+        "Keeps the set-once families: registry metadata, machine-readable surfaces, and dependency position once earned.",
+        "Applies the ceiling that total recurring cost must stay at or below 60% of declared monthly capacity, and gives the resulting figure against the 3-hour budget.",
+        "Labels that 60% ceiling as a self-set baseline rather than an industry standard.",
+        "Refuses or caps the curated-list plan, pricing the quarterly sweep against the 3-hour budget.",
+        "Warns that capacity shrinks when a project succeeds, because support load grows first, so the plan must fit the worst realistic month.",
+        "Presents two or three candidate mixes rather than a single plan.",
+        "Writes each refused channel with its reason and the condition that would reopen it."
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "We're harrowbase, an Apache-2.0 embedded analytics engine, about 40k monthly downloads, mostly individual developers and small startups. Our docs are genuinely good - we get compliments on them unprompted. But we've had four separate conversations this year where an engineer at a bigger company (one bank, two insurers, a logistics firm) said they loved it, tried to get it approved internally, and it died somewhere. We want company adoption to be the growth story next year. Two maintainers, 20 hours a month combined, and there's a funding decision in March 2027. What's the distribution plan?",
+      "expected_output": "A procurement diagnosis that escalates the trust posture inside the first four weeks and builds a named-adopter wall, rather than adding awareness channels or more docs.",
+      "files": [],
+      "expectations": [
+        "Diagnoses the blocker as procurement rather than awareness.",
+        "Escalates the trust posture before adding any awareness channel.",
+        "Ships the trust posture inside the first four weeks alongside the foundation ring, rather than placing it later in the sequence.",
+        "Lists the minimum trust posture concretely, covering at least four of: signed releases, build provenance, a published SBOM, a SECURITY.md with a disclosure path, and an automated supply-chain score in CI.",
+        "Defines legibility as an approver being able to verify the license, versioning promise, security contact, release rhythm and artifact signatures without asking anyone.",
+        "Distinguishes the evaluator who finds the project from the approver who decides, and notes an artifact proxy or review board can block the install outright.",
+        "Applies the reference catch-22 named by Crossing the Chasm: pragmatic buyers want references from peers in their own segment, and none exist until someone adopts first.",
+        "Recommends a visible wall of named adopters in the target segment, and treats making existing usage visible as a distribution move rather than a vanity one.",
+        "States that one named company adopter beats a thousand anonymous downloads on this path.",
+        "Recommends the downstream-first mix, or otherwise ranks families using the company-adoption value ordering rather than the efficiency ordering.",
+        "Names the March 2027 decision as a hard date that promotes fast-acting families and demotes anything needing a full release cycle to reach an install path.",
+        "Cites the dependency-selection figures as stated preference rather than proven adoption drivers: maturity/stability 62%, usability 55%, documentation 51%, license 45%, active maintenance 44%.",
+        "Does not recommend more documentation work as the fix, given the docs are already strong."
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "We built an open-source connector that pulls data out of our product into warehouses. Right now it lives in our own GitHub org as northreef/northreef-sync and about 60 people have cloned it. Our head of partnerships wants it listed in the big data-integration vendor's marketplace, and separately someone suggested publishing a Terraform module for provisioning it. Also we're seeing 14k downloads on a model hub for a small embedding model we ship alongside it, and leadership keeps comparing that number to our npm downloads. What should we actually do here?",
+      "expected_output": "Treats connector hubs as their own family, flags the support-tier label against the company-adoption goal, gives the Terraform naming rules, and rejects the cross-hub download comparison.",
+      "files": [],
+      "expectations": [
+        "Treats artifact and connector hubs as a family distinct from editor and plugin marketplaces, because the host is a data or infrastructure platform and the reviewer is the platform vendor.",
+        "Notes that inclusion is usually a pull request against the vendor's index repository, or a naming convention its crawler matches, rather than a store upload.",
+        "Warns that the evaluator sees a support tier next to the entry, which no editor store shows.",
+        "Warns that a community-built connector lands in a marketplace tier labelled as not maintained by the vendor with no support SLA, and that the label is part of what the evaluator reads.",
+        "Flags that entering a hub whose support tier advertises the project as unsupported works against a company-adoption goal.",
+        "States the Terraform Registry requires a public repository named terraform-<PROVIDER>-<NAME> with a standard module structure and semver tags.",
+        "Notes that the repository description becomes the module's short description on the Terraform Registry.",
+        "Warns that renaming the repository after listing silently breaks a naming-convention hub.",
+        "Rejects the comparison between the model hub's download number and the npm download number.",
+        "Explains that the model hub counts every GET or HEAD on a per-library set of query files, so a clone inflates the number while a cached run does not appear at all.",
+        "Notes that deduplicated request-level data is a paid publisher-analytics feature on that hub.",
+        "Identifies the recurring cost as a per-release compatibility tax against the host's version, with harmful decay when the host moves.",
+        "Runs the adoption test on each proposed hub entry: recurring cost, decay behaviour, observable signal, kill date."
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Blocking out this Saturday for a big push: I've got a list of 25 awesome-lists, ecosystem showcases and dev tool directories I want to submit pinmarrow to. It's a Python CLI for diffing OpenAPI specs, about 3 months old, 210 stars. I'll write one good 20-word description and paste it everywhere so it stays consistent. Can you help me prioritize the 25 and draft the submission text?",
+      "expected_output": "A refusal of the 25-submission sprint in favour of a small number of selected, maintained listings, with the list conventions and the reused-description trap named.",
+      "files": [],
+      "expectations": [
+        "Declines the 25-submission sprint as proposed.",
+        "Names spray-and-pray listings as a failure mode: twenty submissions in a weekend, all stale a year later.",
+        "States that three maintained surfaces outperform twenty and cost less.",
+        "Names reusing one description verbatim everywhere as a trap rather than a consistency win.",
+        "Applies a selection test to each candidate list, covering at least three of: do target developers browse it, is the link dofollow on a domain with real authority, was the list touched recently, are comparable projects listed, can arrivals be measured.",
+        "Notes the awesome-list convention that a project be at least 30 days old before being submitted upward.",
+        "States the bar is explicitly 'the best, not everything', excluding unmaintained, archived or thinly documented projects by policy.",
+        "Requires reading the target list's contributing file and its recent merged pull requests and matching the entry format exactly, because format failures are rejected before the project is judged.",
+        "Recommends contributing to the list first - dead-link fixes, other projects, section improvements - before self-submitting.",
+        "Prices the recurring cost at roughly 30-60 minutes per submission plus a sweep every quarter.",
+        "Classifies curated lists as actively harmful decay: dead links, old screenshots, superseded names.",
+        "Requires any stale listing already out there to be fixed or removed before a new channel is added, noting curated lists and distribution repositories drop projects that read as unmaintained by published policy."
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "Two things. One: I want cloudferry (a Go CLI, 1,900 stars) to show up on GitHub's devops collection page and on the topic pages for kubernetes and gitops - I've already added those topics to the repo but we're not appearing anywhere. Two: we landed on trending for a day in June and it was our best week ever for clones. I want to engineer that again - what star velocity do we need inside a 24-hour window to get there?",
+      "expected_output": "Explains topic curation runs through github/explore with self-promotion barred, routes the submission through an ally, and refuses to give a trending star-velocity target.",
+      "files": [],
+      "expectations": [
+        "Explains that tagging a repository with a topic does not surface it until the topic itself is curated.",
+        "States that GitHub topics and collections are community-curated through pull requests to the github/explore repository.",
+        "States that self-promotion is explicitly disallowed there: the submission requires attesting the submitter is neither the sole author of the entry nor an employee of the company behind it.",
+        "Routes the submission through a community ally rather than a self-submission.",
+        "Notes that merges go live on a delay.",
+        "Names the required artifacts for a collection entry: a folder named for the URL slug, an index.md, and where applicable a 288x288 PNG under 75KB.",
+        "Refuses to give a star-velocity target for trending.",
+        "States that trending has no published specification and that the star-velocity explanation is folklore.",
+        "Notes GitHub's public events firehose stopped emitting most star, pull-request and issue events, which broke third-party star-based rankings.",
+        "Notes at least one third-party analytics provider withdrew its trending feature rather than publish numbers it could no longer trust.",
+        "Treats a trending appearance as a byproduct rather than a channel.",
+        "Ranks code-host discovery surfaces below registry metadata, the release stream and dependency position on efficiency, and states the ordering out loud."
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "Full picture, here are the answers you'll want. Project: qualmstone, an Apache-2.0 Rust crate plus a standalone binary for replaying HTTP traffic against staging. Installs via cargo, or a downloaded binary. Two maintainers, 12 hours a month total, and that's the honest forever number - nobody else can execute any of it. Adopters today are individual SREs; we want platform teams inside companies next. No hard deadline. We want something that keeps paying without us re-spending, we've had enough one-off wins. Already in place: a crates.io page, the GitHub repo, one accurate awesome-list entry. Nothing packaged downstream. 7,900 monthly crate downloads, 61 dependents, 340 unique cloners last fortnight. Off-limits: no paid placements, and neither of us will do podcasts. Give me the plan.",
+      "expected_output": "Two or three ranked candidate mixes, a three-stage sequence with seeding last and the trust posture in stage 1, delivered section by section with a threshold check at the end.",
+      "files": [],
+      "expectations": [
+        "Presents two or three candidate mixes rather than a single plan, and recommends one with a stated reason.",
+        "Gives each mix a cost in hours per month, the adopter type it serves, and what it gives up.",
+        "Ranks the mixes out loud on efficiency, effort, and value for individual and company adoption separately, rather than letting presentation order imply a ranking.",
+        "States the family efficiency ordering out loud rather than implying it through list order.",
+        "Sequences the plan in three stages: foundation in weeks 1-4, passive discovery over months 1-3, active seeding ongoing.",
+        "Places active seeding last and gates it on stages 1 and 2 holding first.",
+        "Drops or demotes creator and newsletter seeding on the stated compounding mandate, because its payoff stops when the pitching stops.",
+        "Notes the open horizon with no hard date favours compounding families over fast-acting ones, and names which interview answer moved which family.",
+        "Checks the two unresolved downstream-packaging conditions - release hygiene sufficient for a third-party packager, and maintainer acceptance of irreversibility - before promoting that family, given the standalone-binary install unit and the company-adoption goal.",
+        "Runs the adoption test on every candidate channel: recurring cost, decay behaviour, observable signal, kill date.",
+        "Ships the trust posture inside stage 1 because company adoption is a declared goal, rather than adding it later in the sequence.",
+        "Produces the plan under the named section headings: Position today, Adopter, Foundation ring, Sequence, Test ring, Core channel, Refused, Release rhythm, Review, Threshold check.",
+        "Presents the sections one at a time for agreement rather than delivering the whole plan in a single pass.",
+        "Reports the threshold check explicitly, keeping total recurring cost at or below 60% of the 12-hour capacity and labelling the self-set thresholds as adopted bars rather than industry standards."
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "Our downloads have been flat for six months since the launch post - where do people even find us now?",
+      "should_trigger": true
+    },
+    {
+      "query": "How should we spend 5 maintainer hours a month getting our open source project in front of people?",
+      "should_trigger": true
+    },
+    { "query": "Which awesome lists should we target for our Rust crate?", "should_trigger": true },
+    { "query": "Should our CLI be in Homebrew?", "should_trigger": true },
+    { "query": "We ship a VS Code extension - is one marketplace enough?", "should_trigger": true },
+    { "query": "Nobody is using our library and I don't know why.", "should_trigger": true },
+    {
+      "query": "What's the right ongoing distribution mix for an open source project?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our connector lives on our own GitHub. Should it be in the vendor's hub?",
+      "should_trigger": true
+    },
+    {
+      "query": "How often should we cut releases so people don't think the project is dead?",
+      "should_trigger": true
+    },
+    { "query": "Will an OpenSSF Scorecard above 7 grow our downloads?", "should_trigger": true },
+    { "query": "We get lots of stars but almost no installs. What do we do?", "should_trigger": true },
+    { "query": "Should we get packaged into Debian and Fedora?", "should_trigger": true },
+    { "query": "How do I get my Terraform module discovered?", "should_trigger": true },
+    {
+      "query": "Our PyPI page is basically empty - does that actually cost us anything?",
+      "should_trigger": true
+    },
+    {
+      "query": "I want to submit our project to 20 developer directories this weekend. Help me prioritize.",
+      "should_trigger": true
+    },
+    {
+      "query": "How do we keep people finding the project month after month, not just at launch?",
+      "should_trigger": true
+    },
+    {
+      "query": "Which registries and lists should we be on for a Go module?",
+      "should_trigger": true
+    },
+    {
+      "query": "Enterprise evaluations keep dying before anyone installs our open source tool.",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we claim our package name on registries we don't actually publish to?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do we get into the dependency graph of bigger projects in our ecosystem?",
+      "should_trigger": true
+    },
+    { "query": "What star velocity do we need to hit GitHub trending?", "should_trigger": true },
+    {
+      "query": "Our Debian package is two years out of date and users are filing bugs against it.",
+      "should_trigger": true
+    },
+    { "query": "We're on npm but nobody finds us in npm search.", "should_trigger": true },
+    { "query": "Adoption flattened right after the Show HN. What now?", "should_trigger": true },
+    {
+      "query": "How do we make our project installable inside companies that block public registries?",
+      "should_trigger": true
+    },
+    {
+      "query": "What channels keep bringing new users to an open source project after the launch window closes?",
+      "should_trigger": true
+    },
+    { "query": "I have 3 hours a month. Give me the plan.", "should_trigger": true },
+    { "query": "Should we publish to Open VSX as well?", "should_trigger": true },
+    { "query": "Is it worth getting listed on the dbt package hub?", "should_trigger": true },
+    {
+      "query": "We want company adoption next year - where should the distribution effort go?",
+      "should_trigger": true
+    },
+    { "query": "How do I decide which of these channels to do first?", "should_trigger": true },
+    {
+      "query": "Our project is feature-complete and hasn't shipped in 9 months. Does that hurt us?",
+      "should_trigger": true
+    },
+    {
+      "query": "Can you audit where our open source project currently shows up?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're comparing our Hugging Face downloads to our npm downloads - which one is bigger?",
+      "should_trigger": true
+    },
+    {
+      "query": "What should we measure to know whether our open source reach is improving?",
+      "should_trigger": true
+    },
+    { "query": "Should we do a newsletter push every release?", "should_trigger": true },
+    { "query": "How do we get onto the GitHub topic page for kubernetes?", "should_trigger": true },
+    {
+      "query": "My co-maintainer wants to do a relaunch push every quarter. Is that sane?",
+      "should_trigger": true
+    },
+    {
+      "query": "We have a Grafana plugin - should it go in the official catalog?",
+      "should_trigger": true
+    },
+    {
+      "query": "Where do Python developers actually discover libraries like ours?",
+      "should_trigger": true
+    },
+    { "query": "How do I stop our listings going stale everywhere?", "should_trigger": true },
+    {
+      "query": "Which is worth more per hour: fixing our registry page or writing another blog post?",
+      "should_trigger": true
+    },
+    { "query": "Our fork is more popular than our repo. What do we do?", "should_trigger": true },
+    {
+      "query": "Plan the next two quarters of getting our open source tool in front of more engineers.",
+      "should_trigger": true
+    },
+    { "query": "Should we build integrations with 12 frameworks or 2?", "should_trigger": true },
+    {
+      "query": "I want a channel portfolio for our OSS project with costs and kill dates.",
+      "should_trigger": true
+    },
+    {
+      "query": "What's the highest-leverage thing a solo maintainer can do for reach?",
+      "should_trigger": true
+    },
+    { "query": "Is being on more package managers actually worth it?", "should_trigger": true },
+    {
+      "query": "We keep getting told to do more marketing, but we're a library, not a product.",
+      "should_trigger": true
+    },
+    { "query": "How do we make it obvious that the project is still maintained?", "should_trigger": true },
+    { "query": "Our crates.io keyword slots are empty. Is that a real problem?", "should_trigger": true },
+    {
+      "query": "Should we sponsor a newsletter slot or try for an editorial mention?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I know which channel actually brought someone to the project?",
+      "should_trigger": true
+    },
+    { "query": "We just renamed the project. What breaks on the distribution side?", "should_trigger": true },
+    {
+      "query": "I need a written plan I can run without you for getting our OSS adopted.",
+      "should_trigger": true
+    },
+    { "query": "Is it better to be listed everywhere or deep in one ecosystem?", "should_trigger": true },
+    { "query": "How much of my maintainer time should distribution work take?", "should_trigger": true },
+    { "query": "Which of our channels should we stop doing?", "should_trigger": true },
+    { "query": "We shipped a Raycast extension - how do we get it into the store?", "should_trigger": true },
+    {
+      "query": "An engineer at a bank loves our tool but can't get it approved. What's the fix on our side?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our Airbyte connector sits in the marketplace tier - does that matter?",
+      "should_trigger": true
+    },
+    {
+      "query": "What does a realistic quarterly review of our OSS channels look like?",
+      "should_trigger": true
+    },
+    { "query": "We want compounding reach, not another spike.", "should_trigger": true },
+    { "query": "Do README badges help adoption?", "should_trigger": true },
+    {
+      "query": "How do I choose between packaging, listings, and integrations with limited time?",
+      "should_trigger": true
+    },
+    {
+      "query": "What should we do differently now that AI editors are a separate install base?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our project shows up nowhere when people search inside their package manager.",
+      "should_trigger": true
+    },
+    { "query": "How do we build a used-by wall, and is it worth the effort?", "should_trigger": true },
+    { "query": "We can only sustain one channel forever. Which one?", "should_trigger": true },
+    {
+      "query": "Two years in, growth is flat and I'm out of ideas for getting the project in front of people.",
+      "should_trigger": true
+    },
+    {
+      "query": "Write the announcement blog post for our 1.0 open source launch.",
+      "should_trigger": false
+    },
+    { "query": "Plan our Show HN launch day, hour by hour.", "should_trigger": false },
+    {
+      "query": "We're open sourcing the repo next month - what has to be ready before we flip it public?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should I post a weekly shipping log about what I'm building?",
+      "should_trigger": false
+    },
+    { "query": "Is it a mistake to publish our MRR publicly?", "should_trigger": false },
+    { "query": "Turn these 47 commits into release notes.", "should_trigger": false },
+    {
+      "query": "Rewrite our README so a stranger understands the project in 30 seconds.",
+      "should_trigger": false
+    },
+    {
+      "query": "Make our SDK docs something a coding agent can integrate from unattended.",
+      "should_trigger": false
+    },
+    { "query": "Write an llms.txt for our documentation site.", "should_trigger": false },
+    {
+      "query": "Who gets commit rights, and how do we vote on contentious changes?",
+      "should_trigger": false
+    },
+    { "query": "Should we license this AGPL-3.0 or Apache-2.0?", "should_trigger": false },
+    { "query": "Set up our GitHub Sponsors tiers and their rewards.", "should_trigger": false },
+    {
+      "query": "Which open source projects should our company fund next year?",
+      "should_trigger": false
+    },
+    { "query": "Write our CONTRIBUTING.md and pick the good first issues.", "should_trigger": false },
+    { "query": "We have 430 open issues and no triage system.", "should_trigger": false },
+    {
+      "query": "Should our developer tool be open core or a proprietary SaaS?",
+      "should_trigger": false
+    },
+    { "query": "Should we price on seats or on consumption?", "should_trigger": false },
+    { "query": "What should we open source and what should stay closed?", "should_trigger": false },
+    {
+      "query": "Should we join the working group for this protocol or just implement it?",
+      "should_trigger": false
+    },
+    { "query": "Should we let partners build plugins on our platform?", "should_trigger": false },
+    { "query": "Our docs site pages aren't getting indexed by Google.", "should_trigger": false },
+    { "query": "Find keyword targets for our error-message pages.", "should_trigger": false },
+    { "query": "What DevRel metrics should we report to the CEO?", "should_trigger": false },
+    { "query": "Set up event tracking across our docs and blog.", "should_trigger": false },
+    {
+      "query": "Which conferences should we sponsor next year, and at what tier?",
+      "should_trigger": false
+    },
+    { "query": "Pitch our funding round to tech reporters.", "should_trigger": false },
+    { "query": "Should we start a Discord or a forum?", "should_trigger": false },
+    { "query": "Write a blog post explaining our new storage engine.", "should_trigger": false },
+    { "query": "Write the v2 migration guide for our breaking changes.", "should_trigger": false },
+    { "query": "Optimize my personal GitHub profile README.", "should_trigger": false },
+    {
+      "query": "Write a quickstart that gets someone to first success in five minutes.",
+      "should_trigger": false
+    },
+    { "query": "Audit our documentation against Diataxis.", "should_trigger": false },
+    { "query": "Design an unpaid developer champions program.", "should_trigger": false },
+    { "query": "Write a CFP abstract for a cloud-native conference.", "should_trigger": false },
+    { "query": "Outline my 25-minute conference talk.", "should_trigger": false },
+    { "query": "Prep me for a podcast interview next week.", "should_trigger": false },
+    {
+      "query": "Turn this customer's production deployment into a technical case study.",
+      "should_trigger": false
+    },
+    { "query": "Plan our DevRel content calendar for Q3.", "should_trigger": false },
+    { "query": "How do I break into developer advocacy from engineering?", "should_trigger": false },
+    {
+      "query": "Write the job posting and scorecard for a developer advocate role.",
+      "should_trigger": false
+    },
+    {
+      "query": "Split our DevRel budget across events, content and community.",
+      "should_trigger": false
+    },
+    {
+      "query": "Benchmark a competitor's developer relations motion against ours.",
+      "should_trigger": false
+    },
+    { "query": "Cut our developer audience into named, sized segments.", "should_trigger": false },
+    { "query": "Map the developer journey from discovery through advocacy.", "should_trigger": false },
+    { "query": "Should we build a certification program for our platform?", "should_trigger": false },
+    {
+      "query": "Write our code of conduct and the enforcement ladder behind it.",
+      "should_trigger": false
+    },
+    { "query": "Which community health metrics are worth tracking?", "should_trigger": false },
+    { "query": "Write a shooting script for a screencast about our CLI.", "should_trigger": false },
+    { "query": "Make sure the live demo doesn't break on stage.", "should_trigger": false },
+    { "query": "Start a monthly developer meetup in our city.", "should_trigger": false },
+    { "query": "Turn our support tickets into error reference pages.", "should_trigger": false },
+    {
+      "query": "Define the policy every code sample in our docs has to meet.",
+      "should_trigger": false
+    },
+    { "query": "Write a teaching tutorial for our SDK.", "should_trigger": false },
+    { "query": "Which function should DevRel report into?", "should_trigger": false },
+    {
+      "query": "Build our engineering employer brand to attract backend hires.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the bottom-up self-serve motion for our developer product.",
+      "should_trigger": false
+    },
+    { "query": "What should our developer relations strategy be next year?", "should_trigger": false },
+    { "query": "Which DevRel newsletters and podcasts should I follow?", "should_trigger": false },
+    {
+      "query": "Configure npm publish in our GitHub Actions release workflow.",
+      "should_trigger": false
+    },
+    { "query": "Write the RPM spec file for our package.", "should_trigger": false },
+    { "query": "Set up semantic-release so versions bump automatically.", "should_trigger": false },
+    { "query": "Our npm publish token expired - how do I rotate it?", "should_trigger": false },
+    { "query": "Someone typosquatted our package name on npm. What now?", "should_trigger": false },
+    { "query": "What's the practical difference between MIT and BSD-3-Clause?", "should_trigger": false },
+    {
+      "query": "Plan the content distribution calendar for our marketing videos.",
+      "should_trigger": false
+    },
+    { "query": "Set up a CDN and cache headers for our static assets.", "should_trigger": false },
+    {
+      "query": "Distribute our internal desktop app to employees through MDM.",
+      "should_trigger": false
+    },
+    { "query": "How do we handle a CVE reported against our library?", "should_trigger": false },
+    { "query": "Enable Dependabot and configure the update schedule.", "should_trigger": false },
+    {
+      "query": "Draft a contributor license agreement for external contributions.",
+      "should_trigger": false
+    }
+  ]
+}

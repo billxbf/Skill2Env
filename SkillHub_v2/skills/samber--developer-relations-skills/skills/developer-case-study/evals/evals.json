@@ -1,0 +1,591 @@
+{
+  "skill_name": "developer-case-study",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We wrapped the Kestrel Freight rollout last month. They moved their dispatch pipeline off cron onto our workflow engine and it has been live in production for nine weeks now. I have the recording of my call with Dana Okafor (Staff Engineer, Dispatch), our own usage telemetry, and a screenshot of their Grafana board. Their p95 dispatch latency went from 8.4 minutes to 95 seconds on that board, measured over the four weeks either side of cutover. Dana also reckons on-call load dropped by about half, though nobody tracked that anywhere. Write the case study, we want it on the blog this month.",
+      "expected_output": "A publishable verdict and a per-claim evidence ledger produced before any prose, then a draft on the eight-section spine with each figure classified by evidence class and the on-call claim attributed rather than stated as measured.",
+      "files": [],
+      "expectations": [
+        "Produces a verdict line stating whether the story is publishable, and in what form, before any draft prose appears.",
+        "Produces the evidence ledger before the draft, not after it.",
+        "The ledger carries one row per claim the study will make.",
+        "Each ledger row states the claim, its evidence class, the instrument behind it, the measurement window, and who can re-derive it.",
+        "Classifies the p95 dispatch latency change (8.4 minutes to 95 seconds) as measured, naming the Grafana board as the instrument and the four weeks either side of cutover as the window.",
+        "Classifies the halved on-call load as reported rather than measured, and attributes it to the team (for example 'the team estimates') instead of stating it flatly.",
+        "Delivers the parts in the order verdict, evidence ledger, draft, approval package, gate report, derivatives.",
+        "Does not treat the approval package as optional or as something handled after publication.",
+        "The draft spine includes a section on alternatives weighed and rejected, a results section carrying measurement method, and a limitations section, rather than only challenge, solution and results.",
+        "Flags that no alternatives-considered material exists in the supplied evidence and names it as something to go back to Dana for, rather than inventing rejected options.",
+        "Uses quotes only as verbatim material attributable to the recording, and invents no quote."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Bit stuck on this one. Helio Diagnostics has been running our ingest SDK in production for five months on real patient-scheduling traffic, and their lead engineer Marcus Vance is happy to be quoted and named. Problem: when I asked what the old system's throughput and error rate were, he said they never really measured it, there were no dashboards on the legacy path at all. Their current numbers look strong though, 2.1M events a day and 99.97% delivery according to our telemetry. Can we still get a case study out of this, and what should it say?",
+      "expected_output": "A verdict that the missing measured before-state is the only failing gate, with a recommendation to publish a scale and architecture story carrying no delta claim, plus a flag that the delivery figure is vendor-side and needs customer confirmation.",
+      "files": [],
+      "expectations": [
+        "Names the missing measured before-state as the qualification gate this story fails.",
+        "States that the other gates (production not pilot, a named human who will talk, a decision a reader can reuse, a plausible path to approval) are satisfied, rather than treating the story as dead.",
+        "Recommends publishing a scale or architecture story without a delta claim, rather than waiting for a baseline or killing the story.",
+        "Explicitly forbids constructing a before-and-after improvement figure out of the current numbers.",
+        "Does not reconstruct, estimate or infer the legacy throughput or error rate.",
+        "Notes the 99.97% delivery figure comes from vendor-side telemetry and needs someone at Helio to confirm and vouch for it.",
+        "Warns that every number coming from your own dashboards with nothing the customer can confirm is a disqualifying signal.",
+        "Keeps the architecture and rejected-alternatives sections load-bearing, since the results section cannot carry a delta.",
+        "Does not fall back to a testimonial or quote card, given that a named human and a production deployment both exist.",
+        "Names identifying who on Helio's side can confirm the published numbers as part of the plan."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Our standard terms carry this clause: 'Customer grants Vendor a non-exclusive, royalty-free licence to use and reproduce Customer's trademarks, trade names and logos in Vendor's marketing materials and to indicate that Customer is a customer.' Coastline Rail signed it. So I am clear to publish the study with their name, their staff engineer's quotes, the throughput numbers and the architecture diagram without going round asking people individually, right? The deal is closing this quarter and I do not want to spook anyone with a big legal ask.",
+      "expected_output": "A correction that the clause licenses name, logo and the fact of being a customer only, plus the four remaining permissions and their usual holders, and a warning about the relationship cost of publishing on the strength of a logo clause.",
+      "files": [],
+      "expectations": [
+        "Confirms the clause does cover the company name, the logo, and the public statement that Coastline Rail is a customer.",
+        "States the clause does not cover quotes.",
+        "States the clause does not cover metrics.",
+        "States the clause does not cover the architecture description.",
+        "States the clause does not cover a narrative about how the customer runs their systems.",
+        "Names four separate permissions still required: the engineer's consent to be quoted, their manager's consent to spend team credibility, communications sign-off on company name and published wording, and security or legal review of the technical detail.",
+        "Notes those permissions are often held by four different people and that you ask who holds each at first contact.",
+        "Warns that publishing quotes or metrics on the strength of a logo clause is how a reference relationship ends.",
+        "Does not advise publishing first and correcting later, and does not treat silence or the signed contract as consent for the quotes and metrics.",
+        "Notes that if the full story is refused, the clause still leaves a lighter artefact available, such as the logo wall or the fact of being a customer."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Bad news on the Vantage Payments study. Their comms team will not let us use the company name, full stop, they never appear in vendor marketing. Their staff engineer Ines Duarte is personally fine being named and quoted, and their security team already cleared the metrics and the architecture section. The draft is finished. What is the move? I was going to just strip the company name and call them 'a large European payments company', keep Ines's name on the quotes, and ship it.",
+      "expected_output": "A descent to the rung where the company is unnamed but carries an identifying descriptor, with the engineer attributed by role rather than name, the credibility cost named, and the proposed descriptor checked for re-identification risk.",
+      "files": [],
+      "expectations": [
+        "Identifies the top two rungs (named company with named engineer, and named company with unnamed engineer) as both unavailable, since each names the company.",
+        "Recommends the rung of an unnamed company carrying an identifying descriptor, with the metrics left intact.",
+        "Addresses that keeping Ines Duarte's name on the quotes re-identifies her employer, and attributes the quote by role and team instead.",
+        "Names the credibility cost of the descent rather than presenting the lower rung as an equivalent or neutral option.",
+        "Instructs descending one rung at a time rather than dropping straight to a category descriptor or a pattern write-up.",
+        "Warns against sharpening the descriptor until the company becomes identifiable while the study still claims anonymity.",
+        "Assesses the proposed descriptor 'a large European payments company' against re-identification risk rather than accepting it unexamined.",
+        "Does not present the rungs as a menu to pick from by effort, cost or convenience.",
+        "States that at this rung the numbers now carry the whole study.",
+        "Confirms whether the story still clears the qualification gates at that rung, or names which gate it would fail.",
+        "Notes that the bottom rung, a composite or pattern write-up with no attributed quote, is no longer a case study and must be published and labelled as an engineering-pattern post."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Draft is with me for the Meridian Health study. Their engineering manager sent back what he wants in the challenges section, verbatim: (1) 'We plan to consolidate our two orchestration languages next year.' (2) 'Chat-based approvals are on our roadmap for Q3.' (3) 'We would like to extend this to the claims pipeline eventually.' He says that is their honest account of what is left. Slot those in and let us ship, the approvals are all signed and the alternatives section is already in, we are just waiting on this bit.",
+      "expected_output": "A refusal to publish the three roadmap items as limitations, the rule that separates a cost from a plan, a concrete list of replacement questions to put back to Meridian, and a conversion of at least one item into the cost a reader would inherit.",
+      "files": [],
+      "expectations": [
+        "Identifies all three supplied items as roadmap statements rather than limitations.",
+        "States the distinguishing rule: a limitation is a cost the reader would inherit, not a plan.",
+        "Refuses to publish the section as supplied, or marks the limitations check as failing.",
+        "Asks Meridian for the migration effort in engineer-weeks.",
+        "Asks about the dual-running period.",
+        "Asks what broke during rollout.",
+        "Asks what the team had to retrain on.",
+        "Asks which workloads they deliberately did not move.",
+        "Asks what still does not work.",
+        "Requires the section to state who should not copy this architecture.",
+        "Converts item (1) from a plan into a present cost, for example that the orchestration layer sits in a different language from the rest of the team's work so every change routes through the few people who know both, rather than simply deleting the item.",
+        "Notes that if the customer strikes the limitations section entirely the study is weaker but still shippable, while striking limitations and alternatives together makes it an advertisement that must be framed as one to the owner."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Four adopters said yes this month and I have bandwidth for maybe two studies this quarter. (a) Brightloom, a 40-person B2B startup, their CTO approves everything himself, live for four months. (b) Tobias Reiner, solo maintainer of a popular Rust crate, already blogged about using us last spring. (c) Kaleido, a consumer photo app with a 30-engineer platform team, in production eight months. (d) Anvil Group, a 14,000-employee insurer whose legal takes about a quarter and who have never approved a vendor case study, though our biggest open deal, Continental Mutual at a similar size, has been stalled two months because their architecture board wants to talk to a peer at their scale. Also (e) Padma at Lockstep is keen but they are still in evaluation, not production. Rank them for me.",
+      "expected_output": "A stated default efficiency ranking, Lockstep deleted for failing the production gate, Anvil deleted or kept only via an anonymization rung, and the stalled peer-reference deal named as the condition that promotes an enterprise story above the default.",
+      "files": [],
+      "expectations": [
+        "States the default ranking axis as published proof per hour of chasing, and gives the order startup or scale-up, then individual developer or OSS maintainer, then consumer-product engineering team, then enterprise.",
+        "Says the ranking out loud rather than leaving it implied by the order of the list.",
+        "Deletes Lockstep from the candidate list rather than ranking it last, because a deployment still in evaluation fails the production gate.",
+        "Names the stalled Continental Mutual deal as the condition that promotes an enterprise story above the default efficiency order.",
+        "States that three startup studies do not add up to one enterprise reference at that size.",
+        "Treats Anvil Group's never-approved posture as grounds for deletion from the candidate list unless a rung of the anonymization ladder still clears the qualification gates, rather than parking them at the bottom.",
+        "Notes that an anonymised Anvil study loses the named-peer property the stalled deal actually needs, rather than treating anonymisation as a free substitute.",
+        "Notes that Tobias Reiner having already blogged about the product means most of that story's cost is already paid.",
+        "Warns against inflating a solo maintainer's personal-scale figures (build minutes, a hosting bill, a weekend of work) into enterprise language.",
+        "For Kaleido, pushes harder on architecture and scale mechanics and drops buyer-facing business framing, since the audience is peer engineers and the adopter's own users never read it.",
+        "Warns that Brightloom's numbers need verifying yourself, because at that size nobody else checks them.",
+        "States the ranking is a default that shifts with context and with who chases the story, not a law."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Pulling the results section together for the Orbit Cargo study. What I have: their build queue wait went from a 22 minute median to a 6 minute median, both figures off their Buildkite dashboard, the before value over the six weeks prior and the after value over the three weeks post-cutover. They also cut their monthly CI bill from $18,400 to $9,900 in the first month after the move. Their VP said support tickets are way down but nothing tracked that. In the same month they also moved their runner fleet to Graviton and deleted two flaky test suites. Marketing wants the headline to read '$102,000 saved annually' and 'over 70% faster builds'. Draft the results section.",
+      "expected_output": "A results section refusing the annualised figure and the unconfirmed derived percentage, naming the two other changes in the same window, classifying each claim, and expressing the infrastructure cost as a ratio rather than absolute dollars.",
+      "files": [],
+      "expectations": [
+        "Refuses the '$102,000 saved annually' headline because annualising a one-month result is not permitted.",
+        "Names the Graviton runner migration and the two deleted flaky test suites as other changes inside the same window, and states them in the study rather than crediting the product alone for the improvement.",
+        "Classifies the build queue figures as measured, naming the Buildkite dashboard as the instrument and the six weeks before and three weeks after as the windows.",
+        "Treats the untracked support-ticket claim as directional: drops any number and uses the speaker's own words.",
+        "Flags 'over 70% faster builds' as a figure computed rather than confirmed by the customer, and requires it be put back to them before it ships.",
+        "Expresses the CI bill change as a ratio, for example cutting CI spend by roughly half, instead of publishing the absolute dollar figures, noting absolute infrastructure costs are predictably struck in review.",
+        "Places each number's instrument and window next to the number rather than in a footnote.",
+        "Keeps the results section to between two and four numbers rather than publishing every figure available.",
+        "States that two well-sourced numbers beat six loose ones.",
+        "Notes cycle-time figures travel further to a reader than raw volume or absolute spend, because they can be compared without knowing the customer's scale.",
+        "Every published number carries a value before, a value after, the instrument that produced it, and the measurement window."
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Set me up for the Fairhaven Robotics call. I have a 45 minute Zoom booked with their VP Engineering, and the two backend engineers who did the actual work are joining the same call. Plan is to ask how the migration went overall, whether they are happy with the performance now, and whether they would recommend us to a peer. Then I will write it up from my notes afterwards. What questions should I ask?",
+      "expected_output": "A restructured interview: the implementing engineers booked separately and longer than the VP, a recorded call with consent captured on the recording, and a ladder of questions about specifics that already happened rather than opinions.",
+      "files": [],
+      "expectations": [
+        "Recommends splitting the call: the implementing engineers for about an hour, the VP separately for about twenty minutes.",
+        "Gives the reason for the split: in a joint call the hands-on voice defers, and the hands-on voice is the one readers trust.",
+        "Rejects writing up from notes and requires a recording, with consent asked at the start of the call and confirmed on the recording itself.",
+        "States the transcript is kept until publication alongside the approval file, because verbatim quotes are the backbone and paraphrase drifts into vendor register.",
+        "Rewrites 'are you happy with the performance' into a question about what a named dashboard read before cutover and what it reads now.",
+        "Rejects 'would you recommend us to a peer' as an opinion or hypothetical question that invites a compliment rather than producing a publishable fact.",
+        "Names the questioning rule being applied: ask about specifics that already happened, never about opinions or hypotheticals.",
+        "Instructs sending an agenda beforehand asking them to bring the before and after dashboard numbers, because an engineer who has not looked at the old dashboard cannot produce a baseline from memory.",
+        "Orders the questions as a ladder where each rung needs the previous one concrete, covering system context, before-state, cost of the before-state, trigger, alternatives, implementation, numbers, what it cost, what is still unsolved, and advice to a peer.",
+        "Includes an alternatives rung that asks what each rejected option did better, not only why each was rejected.",
+        "Includes a rung covering what they deliberately did not move, what still does not work, and who should not copy this setup.",
+        "Notes the publishable quote usually appears at the advice-to-a-peer rung, when the engineer stops reporting and starts explaining.",
+        "Instructs reading numbers back with their instrument and confirming them on the recording, and confirming name spelling and exact job title during the call."
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Here is my near-final draft of the Stonebridge Bank study, tell me if it is ready to go. 'Stonebridge's migration to our platform was seamless. The team saw game-changing improvements in deployment frequency and now enjoys effortless rollbacks. As their Director of Platform Engineering put it, the solution has been a transformative addition to their toolchain, enabling them to deliver value to customers faster than ever before. Deployments rose sharply and incidents fell. The team plans further adoption across the org.' For context, their director actually said on the call: 'We went from deploying Tuesdays only to about nine times a week, and I stopped getting the Friday rollback ping.' I tightened it up for our blog voice. The numbers are in our internal deck. Clean up the prose and ship it.",
+      "expected_output": "A per-check gate report failing on superlatives, quote fidelity, claim classification, instrument and window, limitations, alternatives and approval evidence, with the verbatim quote restored and the humanizer pass placed before the gate.",
+      "files": [],
+      "expectations": [
+        "Reports each of the seven publication-gate checks individually as pass or fail, rather than returning a single overall verdict.",
+        "Fails the unsupported-superlatives check and removes or backs with a number every instance of 'seamless', 'game-changing', 'effortless', 'transformative' and 'faster than ever before'.",
+        "Fails the quote check and restores the director's verbatim sentence about deploying Tuesdays only, about nine times a week, and the Friday rollback ping.",
+        "States that the tightened-for-blog-voice version is not a quote and must not be published as one.",
+        "Fails the claim-classification check, because 'deployments rose sharply and incidents fell' carries no evidence class.",
+        "Fails the instrument-and-window check, stating that 'in our internal deck' does not satisfy it and each number needs its instrument and window stated or one click away.",
+        "Fails the limitations check: no limitation is published that is specific enough for a reader to decide against you on it.",
+        "Fails the alternatives check: no rejected alternative is named.",
+        "Fails the approval-evidence check: nothing is on file for company name, logo, quotes or security review.",
+        "Requires the director's confirmed exact name and title for attribution rather than the bare role.",
+        "Places the humanizer pass before the publication gate rather than in place of it.",
+        "States the humanizer pass must preserve every quote, every number, version strings, component names and the architecture description exactly as written, because a humanised quote is a fabricated quote.",
+        "Requires two human reads before publishing: the interviewed engineer confirming technical accuracy, and someone outside the account checking it is comprehensible without insider vocabulary."
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "The Larkspur study went live yesterday, approval all signed for the blog post. We are a pure open-source project, no sales team and no deals. We make money from hosted support plans people sign up for on the site with a credit card. I want to get everything I can out of this: a one-page PDF, a conference talk, a post from their engineer on their own blog, and a link from the docs. What order do I do them in, and how long should each take?",
+      "expected_output": "A ranking by reuse per hour that puts the documentation cross-link first, skips the sales one-pager entirely because no sales motion exists, and flags that the signed approval does not yet cover any of the new surfaces.",
+      "files": [],
+      "expectations": [
+        "Ranks the derivative versions by reuse per hour and states the ranking out loud.",
+        "Puts the documentation cross-link first, at near-zero effort, sitting where an evaluator already reads.",
+        "Skips the sales one-pager rather than ranking it, because there is no sales motion at this company.",
+        "States that the one-pager is the highest value of the set wherever a sales motion exists at all, and worthless where none does.",
+        "Gives orders of magnitude rather than precise estimates: near-zero for the docs link, about an hour for the community post, about a day for conference material.",
+        "Notes the engineer's own post under their own name travels further than anything published under yours.",
+        "Notes only that engineer can authorise the community post.",
+        "Notes conference material depends on a slot existing and pays nothing until the talk is accepted, while the before-and-after architecture is already a slide so the marginal cost is low.",
+        "Checks whether the existing approval covers each new surface and flags that it does not, since permission was signed for the blog post only.",
+        "Advises asking for the derivative permissions while the reviewer is still engaged, ideally before approval rather than after.",
+        "Recommends filing the study's atoms, each metric, each quote and the architecture diagram, into a proof library with a public or private flag.",
+        "Gives the reason for the proof library: nobody re-reads a full-length study to find one number."
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "I want a case study on how we rebuilt our own ingestion layer from Kafka to Redpanda last spring. Big architectural change, 40% cost drop, and our staff engineer Rui will give quotes. Give it the same treatment you would give a customer story. Separately, my teammate wants one about the migration project she led here, for her promo packet, so maybe do both in the same format.",
+      "expected_output": "A scope check that routes the internal rebuild to the engineering blog post skill and identifies the promo-packet piece as a personal case study whose hero is the author, declining to apply the customer case study spine to either.",
+      "files": [],
+      "expectations": [
+        "Declines to treat the internal Kafka to Redpanda rebuild as a developer case study, because no external adopter is involved.",
+        "Routes the internal rebuild to samber/developer-relations-skills@engineering-blog-post by name.",
+        "Identifies the teammate's promo-packet piece as a personal case study whose hero is the author.",
+        "States explicitly that this skill inverts that framing, because a developer case study's hero is the adopter and not the author.",
+        "Does not silently apply the customer case study spine to either piece.",
+        "Distinguishes both from an ongoing progress-as-it-happens story, which routes to samber/developer-relations-skills@build-in-public.",
+        "Says the routing out loud rather than producing the requested artefacts anyway.",
+        "Notes the 40% cost drop still needs an instrument and a measurement window wherever it is published.",
+        "Does not invent a customer or external adopter to make the case study framing work."
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "Marketing wants to run our Coastal Freight study as a paid LinkedIn ad and stick it on the homepage carousel. We published it in March of the year before last. Their engineer who gave us the quotes, Sam Oduya, left them about a year ago I think. Also our CSM mentioned Coastal's renewal is looking shaky. Can we ship it Friday?",
+      "expected_output": "A refusal to reuse it as-is: re-verification required past the roughly 18-month convention, the churn risk named, separate permission required for the paid and homepage surfaces, and the Friday date made conditional.",
+      "files": [],
+      "expectations": [
+        "Refuses to reuse the study without re-verification, because it is past the roughly eighteen-month mark.",
+        "States that eighteen months is a working convention rather than a measured shelf life, and should be shortened for adopters who ship fast or churn.",
+        "Names what re-verification checks: whether the adopter migrated away, whether the numbers have moved, and whether the quoted engineer has left.",
+        "Flags Sam Oduya's departure as a reason the quote and its attribution need re-confirming.",
+        "Flags the shaky renewal as a churn risk and states that publishing a study for a customer who churned is a reputational cost far larger than the study's value.",
+        "Recommends unpublishing rather than leaving the study up if the customer has in fact churned.",
+        "States that republication in a paid or advertising context commonly needs its own permission, separate from the original approval.",
+        "Treats the homepage carousel as a separate surface that may need its own permission too.",
+        "Refuses the Friday ship date outright or makes it conditional on the re-verification and the new permissions landing first.",
+        "Recommends dating every study at publication and setting its re-verification date then, rather than discovering staleness at reuse time."
+      ]
+    },
+    {
+      "id": 13,
+      "prompt": "Our CMO wants a number on the case study program before the next budget cycle. She is asking me to attribute closed-won revenue to each study, we published six last year. My plan was to take every deal that touched a study in the CRM and split the revenue across the studies it touched. Sound right? And what should the dashboard show her?",
+      "expected_output": "A refusal to attribute revenue to individual studies, with a replacement set of signals about whether studies move evaluations forward, framed as things to weigh rather than targets, plus an honest statement of what the published research does and does not measure.",
+      "files": [],
+      "expectations": [
+        "Refuses to attribute closed-won revenue to a single case study.",
+        "Gives the reason: overclaiming attribution is the same credibility failure the artefact exists to avoid.",
+        "Rejects traffic as the measure of a study, in favour of whether it moved evaluations forward.",
+        "Proposes use in live deals: how often sales or solutions engineers actually send it, and at which stage.",
+        "Proposes read-through rate and clicks through to the artefacts the study links, such as docs, repository or architecture page.",
+        "Proposes inbound reference requests, meaning prospects asking to talk to that customer.",
+        "Proposes whether the adopter's own engineers amplify the study themselves.",
+        "Proposes coverage of the story bank, noting one credible study per major use case and adopter size beats five for the same profile.",
+        "States these are signals to weigh rather than targets to hit.",
+        "States that no published metric isolates case studies aimed specifically at developers as their own category.",
+        "Notes the general B2B technology-buyer research places vendor-produced case studies well behind product demos, free trials and prior experience with the product for buying-decision impact."
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "Write a case study about how Northwind moved their billing pipeline onto our workflow engine",
+      "should_trigger": true
+    },
+    {
+      "query": "We need a technical case study for the blog, the customer is a fintech running us in production",
+      "should_trigger": true
+    },
+    { "query": "draft a customer success story for our developer site", "should_trigger": true },
+    {
+      "query": "Can you turn this interview transcript with their staff engineer into something publishable about their production rollout?",
+      "should_trigger": true
+    },
+    {
+      "query": "how do I get a reference customer to agree to be named in a write-up",
+      "should_trigger": true
+    },
+    {
+      "query": "our biggest user agreed to be featured, what do I ask them on the call",
+      "should_trigger": true
+    },
+    {
+      "query": "legal will not let us name the company in the write-up, what are our options",
+      "should_trigger": true
+    },
+    {
+      "query": "four customers said yes to being featured, which one do we do first",
+      "should_trigger": true
+    },
+    {
+      "query": "is this story even worth writing, they are still evaluating us",
+      "should_trigger": true
+    },
+    {
+      "query": "the customer never measured their old system, can we still publish the story",
+      "should_trigger": true
+    },
+    {
+      "query": "what should go in a developer adoption story besides the numbers",
+      "should_trigger": true
+    },
+    {
+      "query": "turn the approved Acme study into a one-pager for the sales team",
+      "should_trigger": true
+    },
+    {
+      "query": "how long before we should re-verify a published customer story",
+      "should_trigger": true
+    },
+    { "query": "our study reads like a testimonial, how do I fix it", "should_trigger": true },
+    { "query": "write up how Acme uses us", "should_trigger": true },
+    {
+      "query": "we want proof that engineers actually run this in production, help me produce it",
+      "should_trigger": true
+    },
+    {
+      "query": "who do I need approval from before publishing a customer's metrics",
+      "should_trigger": true
+    },
+    { "query": "the customer struck all our numbers in review, what now", "should_trigger": true },
+    {
+      "query": "interview guide for talking to a customer engineer about their migration onto us",
+      "should_trigger": true
+    },
+    {
+      "query": "what does a limitations section look like in a customer story",
+      "should_trigger": true
+    },
+    { "query": "our contract has a logo clause, does that cover quotes", "should_trigger": true },
+    {
+      "query": "help me write the results section with the measurement method included",
+      "should_trigger": true
+    },
+    { "query": "how many numbers should a customer story carry", "should_trigger": true },
+    {
+      "query": "should I annualise the one-month savings figure in the write-up",
+      "should_trigger": true
+    },
+    {
+      "query": "the engineer said it is way faster, how do I turn that into something publishable",
+      "should_trigger": true
+    },
+    {
+      "query": "we want a published account of a real production deployment by one of our users",
+      "should_trigger": true
+    },
+    { "query": "draft the approval email for the customer story review", "should_trigger": true },
+    { "query": "what do security reviewers usually cut from these write-ups", "should_trigger": true },
+    {
+      "query": "an OSS maintainer who uses our SDK wants to be featured, how is that different from an enterprise",
+      "should_trigger": true
+    },
+    {
+      "query": "should we chase the big insurer story or the three startups",
+      "should_trigger": true
+    },
+    { "query": "our study has no alternatives section, does that matter", "should_trigger": true },
+    {
+      "query": "what do I do when the customer rewrites their quote into marketing language",
+      "should_trigger": true
+    },
+    {
+      "query": "we have telemetry showing their error rate dropped, can we publish that as their number",
+      "should_trigger": true
+    },
+    {
+      "query": "help me qualify whether this deployment can carry a published story",
+      "should_trigger": true
+    },
+    { "query": "how do I stop this reading like vendor copy", "should_trigger": true },
+    { "query": "build the evidence ledger for these claims before I draft", "should_trigger": true },
+    {
+      "query": "the customer's comms team wants to own the narrative, how do I handle that",
+      "should_trigger": true
+    },
+    {
+      "query": "how do I structure a story about a customer's migration off cron onto our scheduler",
+      "should_trigger": true
+    },
+    {
+      "query": "we published a story last year and the customer just churned",
+      "should_trigger": true
+    },
+    { "query": "case study outline for a developer audience", "should_trigger": true },
+    {
+      "query": "what is a good headline for a customer story about cutting build times",
+      "should_trigger": true
+    },
+    { "query": "can I quote their VP without written permission", "should_trigger": true },
+    {
+      "query": "the migration story is great but they will not share absolute costs",
+      "should_trigger": true
+    },
+    { "query": "how do I measure whether our customer stories are working", "should_trigger": true },
+    {
+      "query": "our CMO wants revenue attributed to each published customer story",
+      "should_trigger": true
+    },
+    {
+      "query": "a user wrote a blog post about us, can we turn that into a formal story",
+      "should_trigger": true
+    },
+    {
+      "query": "what makes engineers actually believe a vendor-published story",
+      "should_trigger": true
+    },
+    {
+      "query": "need proof points for our docs showing who runs this at scale and how",
+      "should_trigger": true
+    },
+    {
+      "query": "we want to publish how a customer built on our API, they are fine with it",
+      "should_trigger": true
+    },
+    {
+      "query": "how do I ask a customer's engineer about what broke during rollout",
+      "should_trigger": true
+    },
+    { "query": "should the manager and the engineer be on the same call", "should_trigger": true },
+    {
+      "query": "the deadline is in three weeks, does the enterprise candidate still work",
+      "should_trigger": true
+    },
+    { "query": "we want one credible story per use case, how do I plan that", "should_trigger": true },
+    { "query": "the draft has seamless and game-changing all over it", "should_trigger": true },
+    {
+      "query": "how do I attribute a quote when the company cannot be named",
+      "should_trigger": true
+    },
+    {
+      "query": "the customer changed three things at once, how do I write the results",
+      "should_trigger": true
+    },
+    {
+      "query": "what is the difference between a case study and a testimonial for a dev tool",
+      "should_trigger": true
+    },
+    {
+      "query": "my write-up about a user's deployment needs a cost section, what goes in it",
+      "should_trigger": true
+    },
+    { "query": "how do I get numbers I can publish out of a customer call", "should_trigger": true },
+    {
+      "query": "which of our adopters gives us the most published proof per hour",
+      "should_trigger": true
+    },
+    {
+      "query": "draft the section on why they picked us over the alternatives",
+      "should_trigger": true
+    },
+    {
+      "query": "the account team wants something to send a stalled deal that proves peer usage",
+      "should_trigger": true
+    },
+    { "query": "we interviewed them but never got the manager, is that a problem", "should_trigger": true },
+    {
+      "query": "how do I document a user's production setup so other engineers can judge it",
+      "should_trigger": true
+    },
+    {
+      "query": "write an engineering blog post about how we rebuilt our own ingestion layer",
+      "should_trigger": false
+    },
+    { "query": "case study for my design portfolio", "should_trigger": false },
+    {
+      "query": "help me write a portfolio case study about the dashboard I redesigned",
+      "should_trigger": false
+    },
+    {
+      "query": "turn our approved customer story into a conference talk outline",
+      "should_trigger": false
+    },
+    {
+      "query": "script a video walkthrough of the approved customer story",
+      "should_trigger": false
+    },
+    { "query": "prep me for a podcast interview about our product", "should_trigger": false },
+    {
+      "query": "pitch our customer story to a journalist at a trade publication",
+      "should_trigger": false
+    },
+    {
+      "query": "schedule our content for next quarter across the blog and the newsletter",
+      "should_trigger": false
+    },
+    { "query": "write the release notes for v2.4", "should_trigger": false },
+    { "query": "write the upgrade guide from v1 to v2", "should_trigger": false },
+    {
+      "query": "write a tutorial showing how to build a webhook consumer with our SDK",
+      "should_trigger": false
+    },
+    { "query": "our quickstart takes 40 minutes, fix it", "should_trigger": false },
+    { "query": "should I publish our MRR publicly every month", "should_trigger": false },
+    { "query": "start a weekly devlog for my open-source project", "should_trigger": false },
+    {
+      "query": "plan the launch of our open-source project on Hacker News",
+      "should_trigger": false
+    },
+    { "query": "who are our developer segments and how do they differ", "should_trigger": false },
+    {
+      "query": "map the developer journey from first docs visit to first deploy",
+      "should_trigger": false
+    },
+    { "query": "which devrel metrics should we report to the board", "should_trigger": false },
+    { "query": "build a dashboard for our devrel analytics", "should_trigger": false },
+    { "query": "how should we split next year's devrel budget", "should_trigger": false },
+    { "query": "design a developer champions program", "should_trigger": false },
+    { "query": "our Discord is dead, how do we revive it", "should_trigger": false },
+    { "query": "write a CFP abstract for a Kubernetes conference", "should_trigger": false },
+    { "query": "should we sponsor this conference or skip it", "should_trigger": false },
+    { "query": "restructure our docs information architecture", "should_trigger": false },
+    {
+      "query": "our code samples are inconsistent across languages, standardise them",
+      "should_trigger": false
+    },
+    { "query": "improve our docs ranking for rate limit python", "should_trigger": false },
+    { "query": "find the keywords developers search for in our space", "should_trigger": false },
+    {
+      "query": "rewrite our README so the project is understandable in 30 seconds",
+      "should_trigger": false
+    },
+    { "query": "triage 400 open issues in our repo", "should_trigger": false },
+    { "query": "pick a licence for our new library", "should_trigger": false },
+    {
+      "query": "set up governance now that we have maintainers outside the company",
+      "should_trigger": false
+    },
+    { "query": "design the onboarding path for first-time contributors", "should_trigger": false },
+    { "query": "how do we price our developer tool", "should_trigger": false },
+    { "query": "open core or BSL for our business model", "should_trigger": false },
+    { "query": "hire our first developer advocate", "should_trigger": false },
+    { "query": "how do I get promoted from advocate to head of devrel", "should_trigger": false },
+    {
+      "query": "write job posts that attract senior engineers to our company",
+      "should_trigger": false
+    },
+    { "query": "optimize my GitHub profile README", "should_trigger": false },
+    {
+      "query": "which podcasts and newsletters should I follow in devrel",
+      "should_trigger": false
+    },
+    { "query": "should we push our spec through a standards body", "should_trigger": false },
+    {
+      "query": "compare our developer experience against two competitors",
+      "should_trigger": false
+    },
+    {
+      "query": "structure our AGENTS.md so coding agents use our library correctly",
+      "should_trigger": false
+    },
+    {
+      "query": "write a troubleshooting page for the 429 errors people keep hitting",
+      "should_trigger": false
+    },
+    { "query": "plan a live demo for our keynote that will not break", "should_trigger": false },
+    { "query": "start a monthly meetup program in three cities", "should_trigger": false },
+    { "query": "our GitHub Sponsors page is not converting", "should_trigger": false },
+    { "query": "which registries should we publish our SDK to", "should_trigger": false },
+    {
+      "query": "write a case brief for the security incident we handled last week",
+      "should_trigger": false
+    },
+    { "query": "teach me the Harvard Business School case method", "should_trigger": false },
+    { "query": "write up a patient case report for the journal", "should_trigger": false },
+    { "query": "prepare a legal case summary for the deposition", "should_trigger": false },
+    { "query": "write a UX case study for my Behance profile", "should_trigger": false },
+    { "query": "moderation policy for our community Slack", "should_trigger": false },
+    { "query": "launch a community forum for our users", "should_trigger": false },
+    {
+      "query": "how should our devrel team be structured once we are 40 people",
+      "should_trigger": false
+    },
+    {
+      "query": "build the go-to-market plan for our developer-first product",
+      "should_trigger": false
+    },
+    { "query": "write a testimonial request email for our G2 page", "should_trigger": false },
+    {
+      "query": "design our developer certification and education program",
+      "should_trigger": false
+    },
+    {
+      "query": "how do we build an ecosystem of integrations around our API",
+      "should_trigger": false
+    },
+    { "query": "what is our three-year devrel strategy", "should_trigger": false },
+    { "query": "brief our AE for a customer reference call next week", "should_trigger": false },
+    {
+      "query": "help me write a business case to buy this observability tool",
+      "should_trigger": false
+    },
+    {
+      "query": "draft the internal post-mortem for our failed migration last quarter",
+      "should_trigger": false
+    }
+  ]
+}

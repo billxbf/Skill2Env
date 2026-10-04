@@ -1,0 +1,476 @@
+{
+  "skill_name": "app-marketplace-launch-marketing",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I run partner marketing at Kelvinly, a B2B workflow automation SaaS. We've had a public \"integrations directory\" for three years - 412 listings, most built either by us or by partners who filled in a Google Form and sent a logo. Next month we relaunch it as the Kelvinly App Marketplace with the same 412 listings carried straight over. Engineering says a real security review process is \"on the roadmap for Q3.\" My draft press release opens with \"412 curated, security-vetted apps available on day one\" and our CMO loves that line. Can you sharpen the announcement copy and tell me what else the release should include?",
+      "expected_output": "A refusal to polish the copy as written: the 412 listings are a migrated catalog, not a vetted cohort, and with no live review gate the curated/vetted language has to go or the gate has to be built first. Includes the precedent that press counts launch numbers independently, and offers a tiered or subset framing that carries an honest quality claim alongside the breadth number.",
+      "files": [],
+      "expectations": [
+        "Identifies the 412 listings as a migrated pre-existing catalog rather than a curated launch cohort",
+        "Refuses to keep \"curated\" and \"security-vetted\" in the announcement copy while the review gate is still unbuilt",
+        "States that a cohort's credibility claim is only as strong as the review gate behind it",
+        "Offers exactly two honest paths: stand up the review gate before launch, or drop every curated/vetted claim from the launch language",
+        "Routes the review-gate work to the sibling skill samber/developer-platform-skills@app-marketplace-review, or names designing that review process as a prerequisite step owned elsewhere",
+        "Warns that press counts launch-day app numbers independently instead of accepting the operator's figure",
+        "Cites monday.com's marketplace launch as precedent: the operator claimed over a hundred apps and press counted 78",
+        "Cites Atlassian Marketplace's 2012 \"~1,000 add-ons\" as a migrated plugin catalog rather than a curated cohort",
+        "States that catalog migration buys a large headline number cheaply and near-zero vetting credibility",
+        "Does not propose inflating, rounding up, or re-describing the 412 figure to sound vetted",
+        "Proposes tiering inside the cohort - a smaller vetted subset named separately from the 412-listing breadth claim - citing HubSpot's 2017 split of 65 launch integrations into 30 beta integrators and 35 certified partners",
+        "Asks its clarifying questions one at a time rather than delivering a single batched list of questions"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Nessforth is a 40-person API-first billing platform. We just announced at our all-hands that the Nessforth App Marketplace debuts at our user conference, Nessforth Connect, 10 weeks from now. Today we have zero third-party apps - nobody has built anything against our API yet. Our VP Marketing wants \"at least 50 partners on stage.\" We have a review checklist drafted in a doc but no reviewer hired and no pipeline running. What's the plan?",
+      "expected_output": "A design-partner micro-cohort of roughly 3-6 partners instead of 50, justified by supply recruited from zero plus a review pipeline that is not live, with partner selection on urgency/capability/representativeness and the reveal anchored to the Nessforth Connect keynote.",
+      "files": [],
+      "expectations": [
+        "Rejects the 50-partner target as unachievable from zero supply in 10 weeks and says so plainly rather than hedging",
+        "Recommends a design-partner micro-cohort of roughly 3 to 6 launch partners",
+        "Cites Notion's 2021 integrations debut with 3 launch partners as the micro-cohort precedent",
+        "Selects the partners on the a16z design-partner criteria: urgency, capability, and representativeness",
+        "States explicitly that selection is not made on logo size alone",
+        "Notes the a16z framework advises 5-10 high-quality design partners over a large day-one cohort",
+        "Ties the step down to the two conditions actually present: supply must be recruited from zero, and the review pipeline is not live",
+        "Names the default cohort shape being stepped down from - a curated vetted cohort of roughly 15-65 apps anchored by 3-6 marquee logos",
+        "States that the hard conference date promotes fast-acting options and demotes slow compounding ones",
+        "Flags that with no live reviewer the cohort cannot honestly be marketed as vetted",
+        "Anchors the reveal to the Nessforth Connect keynote rather than a standalone quiet-week press moment"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Draycott, customer-support platform. Our marketplace launches with 22 partner apps and I own announcement week. Current plan: we email every partner the logo pack and approved boilerplate on launch morning, and tell them \"post sometime during launch week, whenever works for your team.\" Our own blog post goes live Tuesday at some point that day. Two of the 22 apps touch payment data so those partners have security teams in the loop. Sanity-check this plan before I send the partner email.",
+      "expected_output": "A rewrite of announcement week around one canonical embargo time with an explicit timezone, kits shipped ahead of the lift carrying the embargo notice, pre-approved quotes embedded in Draycott's own release, a ~15-minute social window, and 1-2 weeks of lead for the payment-data partners.",
+      "files": [],
+      "expectations": [
+        "Rejects shipping the co-marketing kit on launch morning and requires it to reach every partner before the embargo lifts",
+        "Requires the kit to ship carrying the embargo notice itself rather than the notice arriving separately or later",
+        "Replaces \"post sometime during launch week\" with one single canonical announcement time",
+        "Requires that canonical time to state an explicit timezone",
+        "States that no partner release publishes before Draycott's own reveal",
+        "Recommends coordinating social posts within roughly 15 minutes of the wire time",
+        "Recommends 1-2 weeks of embargo lead specifically because the payment-data apps make this a security-sensitive launch",
+        "Requires partner quotes to be pre-approved by each partner's comms team and embedded in Draycott's own release",
+        "States that the operator release is drafted first so both sides reuse the same pre-cleared language",
+        "Specifies the kit contents: approved boilerplate for both brands, the pre-cleared quote, and logo and banner assets",
+        "Explains the kit's purpose as removing the partner's extra approval round-trip on launch day",
+        "Labels the embargo mechanics as inferred from standard PR practice rather than operator-disclosed"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Hollowmere runs an app marketplace for retail ops software - 240 listed apps, roughly 15 new ones added a month. We're launching a quality badge called \"Hollowmere Verified\": minimum 50 net paid installs, minimum 5 reviews, plus a four-part quality checklist reviewed by our app team. Marketing wants the launch blog to say badged apps see a 49% install lift in 14 days and rank higher in marketplace search. Separately, our long-tail developers keep complaining nobody ever finds them. Does the badge fix that, and is the blog copy safe to ship?",
+      "expected_output": "No on both counts: an install/review-gated badge structurally cannot surface apps that have neither, so a time-boxed editorial rotation is added alongside it; and the 49% figure must carry its operator-published label while the search-ranking claim is dropped as contested.",
+      "files": [],
+      "expectations": [
+        "Answers no to the long-tail question: a badge gated on 50 installs and 5 reviews structurally cannot surface apps that have neither",
+        "States that always-on quality-gated badges are the mechanic structurally worst at surfacing new apps",
+        "Recommends adding a time-boxed editorial rotation alongside the badge rather than replacing the badge with one",
+        "Specifies the rotation selects explicitly not on existing install base",
+        "Gives the rotation a cadence of roughly weekly, citing Shopify Staff Picks",
+        "Notes the badge and the rotation compose, and that Shopify runs both in parallel on one marketplace",
+        "Identifies the 49% new-installs-in-14-days figure as operator-published and requires that label to travel with it",
+        "Rejects the search-ranking claim because independent developer rank-tracking found no organic keyword-rank change from the badge, making the effect contested",
+        "Frames the badge as buying eligibility, a trust signal, and an install bump - never a guaranteed rank boost",
+        "Requires any lift figure Hollowmere publishes to be baselined against each app's own prior period first",
+        "Warns that partners run their own rank trackers and will call out an overclaim publicly",
+        "Requires the badge eligibility gates to be published and re-audited on a cycle, with badge loss dropping the endorsement rather than the listing"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "At Brimhollow we're under revenue pressure and want to monetize marketplace merchandising. The idea: a \"Featured App of the Month\" hero slot on the marketplace homepage, sold each month to whichever partner bids highest, with no badge and no disclosure - we present it as our editorial pick so it carries more weight with buyers. Partner marketing here is two people total. Our top 8 partners would probably all bid every month. Poke holes in this.",
+      "expected_output": "A rejection of the undisclosed auction: paid placement gets labeled as paid, pricing gets published as a menu rather than bid, fulfillment capacity is named as the binding constraint for a two-person team, and a non-paid merchandising surface stays separate from the paid slot.",
+      "files": [],
+      "expectations": [
+        "Rejects presenting a sold slot as an editorial pick and requires paid placement to be labeled as paid",
+        "States that an undisclosed paid slot spends the trust the marketplace's review gate bought",
+        "Rejects highest-bidder pricing in favour of published price points, because unpublished pricing reads as pay-to-play favoritism",
+        "Cites Salesforce's AppExchange Marketing Program as the menu-priced paid-catalog precedent with operator-published price points",
+        "Reproduces at least two AMP price points accurately from: ~$4K industry e-books, ~$14K webinar promotions, $5K-$7.5K paid-media extensions",
+        "Recommends capping partners at one application per quarter, as AMP does",
+        "Identifies the menu-priced paid catalog as the highest-fulfillment-effort option, which loses every efficiency ranking",
+        "Names the two-person partner-marketing team as the binding constraint on fulfillment rather than treating partner demand as the constraint",
+        "States the condition that would promote a paid catalog anyway: partner co-marketing demand outstripping team capacity even after tier-gating",
+        "Keeps at least one non-paid merchandising surface - an editorial rotation or a quality badge - clearly separate from the paid slot",
+        "Does not recommend running the auction as designed"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Quillane has 130 apps in its marketplace. Every single partner emails us asking for a joint webinar, a case study, or MDF. Right now we say yes to whoever shouts loudest, and the ones we turn down accuse us of playing favorites - one wrote it up on LinkedIn last month. Finance just gave us $900K for partner marketing next year. My instinct is to divide it evenly: about $6,900 of MDF per partner, everybody treated exactly the same, nobody can complain. Design the allocation for me.",
+      "expected_output": "A two-motion budget design: a non-rival marketplace-wide demand-gen baseline funded for all 130 partners, plus a rival per-partner co-marketing layer rationed on a published partner-tier ladder with an invitation cohort for partners too new to have climbed it.",
+      "files": [],
+      "expectations": [
+        "Rejects the even per-partner split of the $900K",
+        "Splits marketplace marketing into two structurally different motions rather than treating it as one budget",
+        "Identifies marketplace-wide demand generation - marketplace SEO, curated collections, category pages, keynote launches - as non-rival, where one partner benefiting costs the others nothing",
+        "Identifies per-partner co-marketing - MDF, co-sell, custom campaigns, spotlights - as rival, consuming operator staff time or budget per engagement",
+        "Funds the non-rival demand-gen baseline broadly, for all 130 partners by default",
+        "Rations the rival layer rather than offering it broadly",
+        "Makes a partner-tier ladder the default rationing mechanism for the rival layer",
+        "Requires the allocation rule to be published so a partner can self-assess against it without asking",
+        "States that an unpublished rule is what makes every grant read as favoritism, and that transparent rationing is what makes a \"no\" survivable",
+        "Cites Atlassian's stated posture of focusing on general promotion of the marketplace rather than individual co-marketing with partners",
+        "Adds an invitation cohort for partners too new to have climbed the tier ladder, citing HubSpot's Partner Growth Accelerator or Salesforce's Builders Initiative",
+        "Specifies objective tier thresholds a partner can read - an ARR band or a trailing-12-month sales bar - citing monday.com unlocking MDF and lead sharing from Silver up, or Microsoft tiering benefits by trailing-12-month marketplace sales"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Vantreel's marketplace has been live for just over two years - 310 apps, steady growth, nothing dramatic. Our new CMO joined last month and has asked me for \"a marketplace launch plan\" by Friday. She's also told the whole marketing org that next year every partner-marketing dollar has to show attributable pipeline inside the quarter it's spent or it gets cut. And the mandate she gave me is to build something that still compounds three years from now. Where do we start?",
+      "expected_output": "A program that starts at the ongoing featuring/spotlight design rather than founding-cohort sizing, plus an explicit callout of the efficiency ratchet: quarterly attributable-pipeline gating starves exactly the compounding investments the three-year mandate requires.",
+      "files": [],
+      "expectations": [
+        "Does not produce a founding-cohort sizing exercise for an already-live marketplace",
+        "Starts the program design at the ongoing featuring and spotlight program rather than at cohort sizing or reveal planning",
+        "Names the contradiction between a quarterly attributable-pipeline funding rule and a three-year compounding mandate",
+        "Names the efficiency ratchet: funding only what measures well starves new-app surfacing and technical enablement",
+        "States that partner programs funding only what ranks well over-serve sales-adjacent co-marketing",
+        "Deliberately promotes the high-value, high-effort options because the mandate is a compounding asset rather than a one-off win",
+        "Requires re-promoting the starved options on a schedule, not only when metrics demand it",
+        "Warns that non-rival demand-gen spend cannot show per-partner attributable pipeline by construction, so that metric is the wrong gate for it",
+        "Proposes measuring the share of partner-marketing spend on non-rival demand gen versus rival co-marketing, plus the count of partners touched by each motion",
+        "Reframes the CMO's \"launch plan\" request as an ongoing program and states plainly which debut-launch steps do not apply here"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Post-launch readout time at Sedgewood. Our marketplace went live 6 weeks ago with 28 apps and 2,100 day-one installs. The board deck my analyst drafted benchmarks us against Salesforce AppExchange, which she has at \"575 apps, 250 ISVs,\" and against Atlassian's 1,000 add-ons - we look terrible in that table. Separately, our biggest partner had one great week after we featured them and wants us to publish that being featured \"doubles installs.\" What should this readout actually say?",
+      "expected_output": "A readout that drops the operator benchmark table as non-comparable (both figures are misread), refuses the unbaselined \"doubles installs\" claim, and reports launch-moment, featuring, and budget-split measures against Sedgewood's own baseline.",
+      "files": [],
+      "expectations": [
+        "Rejects benchmarking a 6-week-old marketplace against the Salesforce AppExchange and Atlassian Marketplace figures",
+        "Identifies Salesforce's \"575 apps / 250 ISVs\" as a fiscal-year-end snapshot months after the 2005 launch, not a launch-day figure",
+        "Identifies Atlassian's ~1,000 add-ons as a migrated plugin catalog rather than a launch cohort",
+        "States that operator anchors are context rather than targets, and that the baseline is Sedgewood's own first quarter",
+        "Refuses to publish the partner's \"doubles installs\" claim on the evidence of a single week",
+        "Requires any feature-window lift to be baselined against that app's own prior fortnight before any average is publicized",
+        "Reports press pickup and partner same-day posts relative to the 28-app cohort size, alongside the 2,100 day-one installs",
+        "Reports the split of partner-marketing spend between non-rival demand gen and rival per-partner co-marketing",
+        "Reports the count of partners touched by each of the two motions",
+        "States that the rival co-marketing layer touching only the top tier is by design, while the demand-gen layer touching only some partners is a bug",
+        "Notes that no industry pass-standard exists for a marketing-program artifact, so the program's pass gates are self-set"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "Our app marketplace goes live at our user conference in June - how many launch partners do we actually need?",
+      "should_trigger": true
+    },
+    {
+      "query": "Twenty partners all want to post about our launch on the same day. How do we coordinate that?",
+      "should_trigger": true
+    },
+    {
+      "query": "Design our featured apps program - badges, staff picks, or something else?",
+      "should_trigger": true
+    },
+    {
+      "query": "Partners keep asking for co-marketing and we're drowning. How do we decide who gets MDF?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're opening our integrations directory to third-party developers next quarter. What does the reveal look like?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we charge partners for placement on our app store homepage?",
+      "should_trigger": true
+    },
+    {
+      "query": "How many marquee logos do we need co-signing the press release?",
+      "should_trigger": true
+    },
+    { "query": "app of the month program design", "should_trigger": true },
+    {
+      "query": "We want a partner spotlight every month. How do we pick without it looking rigged?",
+      "should_trigger": true
+    },
+    {
+      "query": "What's a fair way to ration marketing development funds across our ISV partners?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our first 12 integration partners all ship in March. How do we make a moment out of it?",
+      "should_trigger": true
+    },
+    {
+      "query": "Write the embargo plan for our ecosystem announcement",
+      "should_trigger": true
+    },
+    {
+      "query": "We have 300 apps in our store and nobody knows the store exists. What should marketing fund?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I say no to a partner asking for a joint campaign without torching the relationship?",
+      "should_trigger": true
+    },
+    {
+      "query": "Plan the go-to-market for our new developer app store",
+      "should_trigger": true
+    },
+    {
+      "query": "Our partners think featuring decisions are favoritism. How do we fix that?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're migrating our old plugin directory into a new storefront. How should we announce it?",
+      "should_trigger": true
+    },
+    {
+      "query": "launch cohort sizing for a b2b marketplace",
+      "should_trigger": true
+    },
+    {
+      "query": "One big launch or stagger it across two events six months apart?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our platform team built an app store. Now what is marketing supposed to do with it?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do other B2B platforms decide which partner apps get homepage placement?",
+      "should_trigger": true
+    },
+    {
+      "query": "We told partners the badge would boost their installs. Was that a mistake?",
+      "should_trigger": true
+    },
+    {
+      "query": "Need help structuring tiers so the co-marketing budget goes to the right partners",
+      "should_trigger": true
+    },
+    {
+      "query": "Our launch partners want to publish their own press releases. How do we keep it coordinated?",
+      "should_trigger": true
+    },
+    {
+      "query": "What should our own release say about the partners who built on us?",
+      "should_trigger": true
+    },
+    {
+      "query": "Give me a program for surfacing new apps that nobody has installed yet",
+      "should_trigger": true
+    },
+    {
+      "query": "We have zero partners and a keynote in ten weeks. Help.",
+      "should_trigger": true
+    },
+    {
+      "query": "Design the ongoing partner marketing program for our integrations ecosystem",
+      "should_trigger": true
+    },
+    {
+      "query": "How much of our partner marketing budget goes to the marketplace itself versus individual partners?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our CEO wants \"500 apps at launch\" in the press release. We have 40 that passed review.",
+      "should_trigger": true
+    },
+    {
+      "query": "What goes in the kit we send launch partners before announcement day?",
+      "should_trigger": true
+    },
+    {
+      "query": "Is a paid featured slot a good idea for our app directory?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're relaunching our integrations page as a real marketplace. Announcement plan?",
+      "should_trigger": true
+    },
+    {
+      "query": "My exec keeps asking why we fund the marketplace at all. What's the argument?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I pick the first three partners to build on our new API before we go public?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our partner program has no tiers yet and everyone wants the same marketing help",
+      "should_trigger": true
+    },
+    {
+      "query": "app store launch announcement checklist",
+      "should_trigger": true
+    },
+    {
+      "query": "How should we sequence the marketplace beta and the GA announcement?",
+      "should_trigger": true
+    },
+    {
+      "query": "We want a recurring \"partner of the quarter\" thing. How do other platforms run it?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our app directory has 80 listings and zero merchandising. Where do we start?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do we review third-party apps for security before they go live on our marketplace?",
+      "should_trigger": false
+    },
+    {
+      "query": "What should we require in every listing - screenshot sizes, description length, category rules?",
+      "should_trigger": false
+    },
+    {
+      "query": "What revenue share should we take on marketplace transactions, and who is merchant of record?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we build our own marketplace or just get listed on Zapier and Workato?",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we onboard partner developers into a sandbox before they submit their first app?",
+      "should_trigger": false
+    },
+    {
+      "query": "We're listing our product on AppExchange - how do we improve our view-to-install rate?",
+      "should_trigger": false
+    },
+    {
+      "query": "Optimize our Shopify App Store listing title, tagline, and screenshot order",
+      "should_trigger": false
+    },
+    {
+      "query": "Which technology partners should we integrate with first, and how deep should each go?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our outbound webhook retry, backoff, and dead-letter policy",
+      "should_trigger": false
+    },
+    {
+      "query": "How should we version our public API and communicate deprecations?",
+      "should_trigger": false
+    },
+    {
+      "query": "Our API error messages are useless. Redesign the error-code taxonomy.",
+      "should_trigger": false
+    },
+    {
+      "query": "What rate limits should we publish for our free tier versus our enterprise tier?",
+      "should_trigger": false
+    },
+    {
+      "query": "Do we need a GraphQL API or is REST plus webhooks enough for now?",
+      "should_trigger": false
+    },
+    {
+      "query": "Which language SDKs should we ship first, and generated or handwritten?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our OAuth consent screen and scope taxonomy for third-party apps",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up a sandbox mode with magic test values and simulated events",
+      "should_trigger": false
+    },
+    {
+      "query": "Our developer portal has no search and signup-to-first-call takes an hour. Fix the onboarding path.",
+      "should_trigger": false
+    },
+    {
+      "query": "Audit our API reference for undocumented endpoints and missing error codes",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we run a public status page for API incidents and postmortems?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design idempotency keys and replay windows for our payments API",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we expose a JDBC endpoint so customers can query their own data?",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan our source connector on Fivetran and Airbyte",
+      "should_trigger": false
+    },
+    {
+      "query": "Build an MCP server for our SaaS so agents can operate it",
+      "should_trigger": false
+    },
+    {
+      "query": "How do partners see why their integration deliveries are failing?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our bulk Parquet export and partitioning contract for enterprise customers",
+      "should_trigger": false
+    },
+    {
+      "query": "We're hiring an API product manager. What does the interview loop look like?",
+      "should_trigger": false
+    },
+    {
+      "query": "I want to move into partner engineering. What's the path from backend dev?",
+      "should_trigger": false
+    },
+    {
+      "query": "Review our REST URI naming, status codes, and pagination pattern",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our API key format, prefix, and rotation policy",
+      "should_trigger": false
+    },
+    {
+      "query": "Should our public gRPC surface stream or stay unary?",
+      "should_trigger": false
+    },
+    { "query": "Plan our Product Hunt launch day", "should_trigger": false },
+    {
+      "query": "How do we get our iPhone app featured on the App Store?",
+      "should_trigger": false
+    },
+    {
+      "query": "Our mobile game needs a launch plan for Google Play, including paid installs",
+      "should_trigger": false
+    },
+    {
+      "query": "Draft a co-marketing agreement with our reseller - who owns the leads?",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan a joint webinar with Acme Corp for next month",
+      "should_trigger": false
+    },
+    {
+      "query": "Build the launch strategy for our v2 product release",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we sponsor DevOpsDays and get the best booth position?",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up an affiliate program with commission tiers and cookie windows",
+      "should_trigger": false
+    },
+    {
+      "query": "Design a customer referral program with double-sided rewards",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we run a hackathon to get developers building on our API?",
+      "should_trigger": false
+    }
+  ]
+}

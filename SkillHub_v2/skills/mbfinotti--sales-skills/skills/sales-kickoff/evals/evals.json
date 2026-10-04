@@ -1,0 +1,831 @@
+{
+  "skill_name": "sales-kickoff",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I run sales at Harlowe Freight Systems - B2B SaaS for logistics ops teams, $22k ACV, 3 SDRs and 2 AEs. Our reply rate fell off a cliff and roughly half our seed-list test sends are landing in spam since we cut over to a new sending domain six weeks ago. On top of that our quarter closes on the 10th of next month and we're sitting at 61% of number. Nothing is written down anywhere in this repo. Tell me what to work on.",
+      "expected_output": "A cold-start kickoff: capped interview, a single route to cold-email-deliverability, an execution-ladder short-list with channel integrity pinned to the top by the sender-reputation symptom, deadline-driven re-ranking stated out loud, a Not now list carrying the close date, and a written sales-context.md.",
+      "files": [],
+      "expectations": [
+        "Routes the immediate task to exactly one skill, and that skill is cold-email-deliverability.",
+        "Treats the absence of sales-context.md as a cold start without asking the user whether this is a cold or a warm start.",
+        "Asks at most 7 interview questions, one question per message, with multiple-choice options offered.",
+        "Short-list contains between 5 and 8 skills.",
+        "No planning skill (sales-motion, sales-icp-definition, sales-market-sizing, sales-account-segmentation, sales-account-tiering, sales-org-structure, sales-quota-setting, sales-pipeline-coverage-modeling, sales-comp-design) appears anywhere in the short-list.",
+        "States explicitly that the sender-reputation symptom pinned channel integrity to the top rung of the short-list.",
+        "States explicitly that the close date promoted the deal-triage and message/call-asset classes.",
+        "Every short-list line names both the bottleneck it attacks and what the session costs.",
+        "Anything paying back over a quarter is moved to a Not now list carrying the close date as its unblocking condition, rather than being ranked last on the short-list.",
+        "Output contains a Route section, a Short-list section, and a Not now section.",
+        "Notes that the authentication/DNS records sit outside the sales team, so the deliverability fix costs an approval and a wait rather than rep hours.",
+        "Writes or updates sales-context.md, including one session-log line, before ending the session."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Picking this back up. The project root already has sales-context.md and it reads:\n\n# Sales context\n- **Updated**: 2026-10-02 (session 6)\n- **Motion**: B2B outbound-led, mid-market; ACV ~$26k, 70-day cycle\n- **Seat / team**: me (head of sales) + 2 AEs + 1 SDR\n- **ICP / offer**: QA leads at 300-900-person medtech manufacturers; pricing floor $19k\n- **Bottleneck**: meetings book fine, deals stall right after the demo\n- **In-flight work**: champion maps on 4 stalled deals\n- **Decided**: 9-touch cadence locked, email + phone only, no social\n- **Open**: whether to add a second SDR before January\n- **Constraints**: call recording not permitted on our EU prospect calls\n- **Landing date**: 2026-12-19 (Q4 close)\n- **Horizon / effort ceiling**: compounding; a few hours every week, no headcount\n- **Stakeholders**: me -> decides; CFO -> consulted (pricing floor)\n\n## Session log\n- 2026-09-18 - build the cadence -> sales-outbound-sequence -> 9-touch plan committed\n- 2026-10-02 - map stakeholders -> deal-champion-mapping -> 4 deals single-threaded\n\nToday I want to unstick those four deals that died after the demo.",
+      "expected_output": "A warm-start kickoff: exactly five summary lines, only the session-goal question asked, deal triage pinned to rung 1 by the stalled-deal bottleneck, decided and blocked items removed from the short-list, and the artifact patched with one new log line.",
+      "files": [],
+      "expectations": [
+        "Produces a state summary of exactly 5 lines.",
+        "The state summary covers motion, seat and team shape, in-flight work, top open decision, and active constraint.",
+        "Asks only the session-goal question, and asks no question about motion, seat, bottleneck, constraints, landing date, horizon, or effort ceiling.",
+        "Re-ranks using the landing date and the horizon/effort ceiling read from the artifact instead of re-asking them.",
+        "Appends exactly one new session-log line to sales-context.md.",
+        "Patches only the fields that changed rather than rewriting the whole artifact.",
+        "Routes the immediate task to exactly one of deal-red-flags, meddpicc-scorecard, or deal-champion-mapping.",
+        "Pins the deal-triage class to rung 1 and cites the stalled-after-demo bottleneck as the reason.",
+        "Pulls negotiation-concession-planner and deal-value-calc up above their default class position.",
+        "sales-outbound-sequence is absent from the short-list because the cadence is a decided item, and is not parked at the bottom of it.",
+        "sales-call-review appears under Not now with the EU no-recording constraint as its unblocking condition, rather than on the short-list.",
+        "Short-list contains no planning-altitude skill."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Vestrel Analytics, 60 people, B2B SaaS. I need a 30-60-90 plan and a solid set of SDR interview questions, ideally by Friday. Can you put that together?",
+      "expected_output": "One disambiguating question about who is asking before any route, then an employer-side route to sales-hiring made rung 1, with every pipeline class deleted from the short-list.",
+      "files": [],
+      "expectations": [
+        "Asks exactly one disambiguating question before routing: whether the user is hiring for this role or interviewing for it.",
+        "Does not route on the keywords \"30-60-90\" or \"interview questions\" alone.",
+        "Names mbfinotti/sales-skills@sales-hiring and mbfinotti/sales-skills@sales-career as the two candidate skills.",
+        "States that the deciding factor is who is asking, not the topic keywords.",
+        "Notes that each of the two skills self-detects a wrong audience and points across to the other.",
+        "On an employer-side answer, routes to exactly mbfinotti/sales-skills@sales-hiring.",
+        "Places that skill at rung 1 of the short-list.",
+        "Deletes every pipeline class from this session's short-list rather than ranking them lower.",
+        "States out loud that the seat answer is what removed the pipeline classes.",
+        "sales-radar does not appear on the short-list.",
+        "Every skill is referenced in owner/repo@skill form, never as a bare name.",
+        "Writes or updates sales-context.md with one session-log line before ending the session."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Three things are hurting at Calderon Metrics. Inbound leads sit unassigned for a day and a half before anyone touches them. Our pipeline is stuffed with deals that haven't moved in 90+ days and nobody agrees what \"Stage 3\" even means. And the forecast has come in 20% under call three quarters running. Which of your sales skills handle these?",
+      "expected_output": "All three classified as CRM/pipeline-tactical work outside this collection, with a named recommendation to install the revops sibling repo and the specific skills inside it, and no forced route onto a sales-skills sibling.",
+      "files": [],
+      "expectations": [
+        "Classifies all three requests as CRM/pipeline-tactical work outside the sales-skills collection's boundary.",
+        "Recommends installing mbfinotti/revops-skills.",
+        "Names lead-routing (or lead-scoring) for the unassigned-lead problem.",
+        "Names sales-pipeline-hygiene or pipeline-stage-definition-audit for the stale-deal and stage-definition problem.",
+        "Names sales-forecast-diagnostic for the repeated forecast miss.",
+        "Does not route any of the three to meddpicc-scorecard, deal-red-flags, sales-account-tiering, or sales-pipeline-coverage-modeling.",
+        "Frames the sibling repo as a recommendation and states that sales-skills stays fully usable standalone.",
+        "Does not answer with a flat \"no skill fits\".",
+        "Explains the boundary as ownership of the decision: the sales plan is sales-skills, the systems, data and reporting that instrument it are revops-skills.",
+        "Distinguishes sales-pipeline-coverage-modeling (is there enough pipeline) from a hygiene sweep (is the pipeline that exists clean and current).",
+        "Invents no skill name that does not exist in either collection.",
+        "References every named skill in owner/repo@skill form."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Kestrel Ops here. Board wants three things this quarter: stand up a reseller program with two or three tiers, settle who owns the account when a reseller and one of our own AEs are both working it, and launch an affiliate program paying 15% recurring to anyone who sends us signups. Where do I start?",
+      "expected_output": "All three classified as partner/channel and affiliate-program territory, with a named recommendation to install the partnerships sibling repo, the sales-motion boundary stated, and no force-fit onto sales-comp-design or sales-account-tiering.",
+      "files": [],
+      "expectations": [
+        "Classifies the request as partner, channel and program-relationship work outside the sales-skills collection's boundary.",
+        "Recommends installing mbfinotti/partnerships-skills.",
+        "Names partner-channel-program, partner-ecosystem, or partner-tiering for the reseller program design.",
+        "Names partner-channel-conflict or co-selling-strategy for the account-ownership overlap.",
+        "Names an affiliate-* skill for the affiliate program.",
+        "States the boundary against sales-motion: whether to run a channel motion at all is sales-motion, designing the program once that is decided is partnerships-skills.",
+        "Does not force-fit sales-comp-design onto the 15% recurring affiliate commission question.",
+        "Does not force-fit sales-account-tiering onto the reseller tier design.",
+        "Frames the sibling repo as a recommendation, never a dependency.",
+        "Does not answer with a flat \"no skill fits\".",
+        "References every named skill in owner/repo@skill form.",
+        "Invents no skill name that does not exist in either collection."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Amberline Solar, residential, 22 reps across three states. I need three deliverables: voicemail scripts the reps leave when nobody picks up, a battlecard against the two installers who beat us most often, and a repeatable method for cutting our territories so the three states are carved fairly. What have you got?",
+      "expected_output": "Three explicit gap statements, no stretched route onto cold-call-opener, segmentation or tiering, and no invented skill.",
+      "files": [],
+      "expectations": [
+        "States plainly that the collection has no skill for voicemail scripts.",
+        "States plainly that the collection has no skill for competitive positioning or battlecard content.",
+        "States plainly that the collection has no skill for territory-carve methodology.",
+        "Does not stretch cold-call-opener onto the voicemail script request.",
+        "Notes that cold-call-opener stops at the first 5-30 seconds of a live call and explicitly excludes voicemail.",
+        "Does not stretch sales-account-segmentation or sales-account-tiering onto the territory-carve request.",
+        "Notes that segmentation and tiering score and rank accounts but neither draws the territory boundaries.",
+        "Does not stretch sales-objection-handling or deal-value-calc onto the battlecard request.",
+        "Neither invents a skill name nor promises that a skill exists.",
+        "Checks the two sibling repos (revops-skills, partnerships-skills) before declaring the gaps.",
+        "Presents the three gaps in a dedicated Gap section rather than scattered through prose.",
+        "Does not produce a short-list of unrelated skills to fill the answer out."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "I'm CRO at Rothwyn Cloud - 45 people, $30k ACV, sales-led. Reps came in at 105% of quota last year, which sounds fine until you notice roughly 40% of the logos they closed churned inside twelve months. Two of my AEs are now pushing for a steeper accelerator above 100%. I've got a planning cycle starting in three weeks. What do I fix first?",
+      "expected_output": "A planning-altitude kickoff: planning ladder only, people-and-pay promoted out of its efficiency slot because reps are hitting quota on out-of-profile accounts, re-comp before re-org, and the frame class held open while the ICP is contested.",
+      "files": [],
+      "expectations": [
+        "Treats the session as planning altitude and says so.",
+        "Builds the short-list from the planning ladder only, with no execution-altitude skill ranked inside it.",
+        "Promotes the people-and-pay class rather than leaving it at the bottom, citing that reps are hitting quota on out-of-profile accounts.",
+        "States that people-and-pay is top on value, top on effort, and the least reversible, which is exactly what a pure efficiency order starves.",
+        "Recommends re-comping before re-orging when both are moving.",
+        "Names sales-icp-definition as the frame-class skill the churn signal implicates.",
+        "Does not open the short-list below the frame class while the ICP is contested.",
+        "Attaches a compliance-cost note to the people-and-pay class (consultation on reporting lines, re-signed agreements with HR and legal) and attaches none to the other three planning classes.",
+        "Routes the immediate task to exactly one skill.",
+        "Every short-list line names both the bottleneck it attacks and what the session costs.",
+        "Does not blend planning and execution skills into one ranked list.",
+        "Expresses effort in orders of magnitude (a workshop, days, a planning cycle, a reorg) rather than currency amounts or exact hour counts."
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Thurlow Data. Honestly our answer to \"who do you sell to\" is \"anyone with a data team\", and it shows - about 70% of our outbound goes absolutely nowhere. I want to fix our targeting. We have 14 months of closed-won and closed-lost data, roughly 3,000 accounts sitting in the CRM, and no tiers or segments of any kind.",
+      "expected_output": "A single route to sales-icp-definition, an ordered planning chain through sizing, segmentation and tiering presented as dependency order, and the three-way targeting boundary stated.",
+      "files": [],
+      "expectations": [
+        "Routes the immediate task to exactly mbfinotti/sales-skills@sales-icp-definition.",
+        "Does not route the immediate task to sales-account-segmentation, sales-account-tiering, sales-market-sizing, or sales-outreach-personalization.",
+        "Proposes the chain sales-icp-definition then sales-market-sizing then sales-account-segmentation then sales-account-tiering.",
+        "States that the chain is in dependency order, not efficiency order.",
+        "Explains the three-way boundary: ICP answers who qualifies at all, segmentation how the qualifying accounts are scored and grouped, tiering where the cutoffs sit and what service level each group gets.",
+        "States that each of the three consumes the one before it and never re-derives it.",
+        "Notes that sizing a market before the ICP filters it produces a number nobody can act on.",
+        "Gives one line per chain link on what it hands to the next link.",
+        "Does not rank or reorder the chain links by value or effort.",
+        "Uses the 14 months of closed-won history as the input the ICP weighting is calibrated against.",
+        "Distinguishes account-level fit from contact-level lead scoring and points the latter at mbfinotti/revops-skills@lead-scoring.",
+        "Keeps the short-list on the planning ladder only."
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Pellworth Insurance Software. We're 100% inbound - demo requests from our content and a marketplace listing - with two full-cycle AEs and no SDRs. Cold calling and cold emailing are off the table, it's a company policy and it isn't changing. Demo-to-close conversion is 11% and I need that number up. What should we run?",
+      "expected_output": "A short-list with the channel-integrity class and the cold-outreach half of the message class deleted outright, the motion answer named as the cause, and the remaining execution ladder opened at the highest unresolved class.",
+      "files": [],
+      "expectations": [
+        "Deletes cold-email-deliverability from the short-list entirely rather than ranking it low.",
+        "Deletes sales-outreach-personalization, cold-email-subject-line-tester, and cold-call-opener from the short-list.",
+        "States out loud that the inbound / full-cycle AE motion answer is what removed them.",
+        "None of those four skills appears at the bottom of the short-list as a demoted entry.",
+        "Opens the short-list at the highest class the interview left unresolved.",
+        "Names sales-discovery-questions, deal-value-calc, or negotiation-concession-planner among the reusable-structure entries.",
+        "Routes the immediate task to exactly one skill.",
+        "Short-list contains between 5 and 8 entries, drawn from the execution ladder only.",
+        "Every short-list line names both the bottleneck it attacks and what the session costs.",
+        "Does not propose a monthly sending-setup-check routine.",
+        "Does not recommend a cold-outbound cadence; any sequence work is framed as inbound-lead or post-demo follow-up.",
+        "Does not reclassify the 11% demo-to-close problem as a planning-altitude question."
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Solo founder at Nyle Instruments, industrial sensors, selling it myself. I have maybe four hours total this week and that is genuinely it. No CRM, no call recording, and I am not going to build a system I then have to maintain. Deals keep dying after the first call. Just tell me the one or two things worth doing.",
+      "expected_output": "A two-entry short-list from the top two classes, exactly one routine (the kickoff re-invocation) shown as a dry-run with an output channel, sales-call-review moved to Not now, and no scaffolding.",
+      "files": [],
+      "expectations": [
+        "Cuts the short-list to exactly two entries.",
+        "Both short-list entries come from the channel-integrity or deal-triage classes.",
+        "Proposes exactly one routine.",
+        "The single proposed routine is the periodic re-invocation of the kickoff itself.",
+        "Does not propose a weekly tape-review routine.",
+        "Moves sales-call-review to a Not now list with a first recorded call as its stated unblocking condition.",
+        "States that the missing CRM and call-recording access turns deal triage into a manual pass over notes already in hand.",
+        "States out loud which interview answer cut the short-list to two entries.",
+        "Does not propose more than four routines.",
+        "The proposed routine names exactly one explicit output channel, and \"notify me\" is not used as the channel.",
+        "The routine is shown as a dry-run, with a first-run date, before anything recurring is created.",
+        "Does not scaffold directories, templates, or a decision log beyond what this session needs."
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "Need a gut check on whether this one is real. Brakewell Foods, $140k, three calls so far, all with the same person - Dana, who runs supply chain ops. My notes: call 1 \"loves the product, says budget is probably there\"; call 2 \"will take it to her boss, didn't say when\"; call 3 \"asked about integrations, said let's reconnect after their busy season\". No next meeting booked. This is the biggest thing in my number this quarter so I want a straight answer.",
+      "expected_output": "A single route to deal-red-flags with the notes-versus-eight-elements boundary named, the deal treated as execution altitude, and no CRM dependency.",
+      "files": [],
+      "expectations": [
+        "Routes the immediate task to exactly mbfinotti/sales-skills@deal-red-flags.",
+        "Names the deciding boundary: an unstructured sweep of free-text notes quoting fragments, versus a structured pass against the eight named MEDDPICC elements.",
+        "Does not route the immediate task to meddpicc-scorecard.",
+        "Does not treat the question as planning altitude despite its framing as the biggest item in the number.",
+        "States that a question about one named deal is never planning altitude, however strategic it sounds.",
+        "Notes that deal-red-flags reads one deal's free-text notes and never a pipeline export.",
+        "Places the deal-triage class at rung 1 of the execution short-list.",
+        "Names deal-champion-mapping as the skill for \"who is the real decision maker\" and single-threading mapping, and does not conflate it with the red-flag sweep.",
+        "Any chain proposed is listed in dependency order with one line per link on what it hands to the next, and is not reordered by value or effort.",
+        "Does not require CRM access to complete the route.",
+        "Short-list is drawn from the execution ladder only, with no planning skill inside it.",
+        "Invents no skill name outside the collection's routing table."
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "Your memory carries across sessions, right? Save everything I just told you so we don't redo this next time: we're outbound-led, $28k ACV, ICP is heads of facilities at 200-500 person manufacturers, our discount floor is $19k and I don't go under it. Priya Raman at Delworth Foods is our biggest open deal at $84k and she's the one championing us internally. My two AEs are at 71% and 103% attainment. This repo is git-tracked, by the way.",
+      "expected_output": "The artifact written first and the memory entry derived from it, the exclusion list stated on first write, the named contact, discount floor and attainment figures kept out of memory, an indexed single storage location, and a diff plus approval before any commit.",
+      "files": [],
+      "expectations": [
+        "Writes the captured answers into sales-context.md first, then derives the memory entry from the artifact.",
+        "Does not write the memory entry straight from the user's message.",
+        "States the memory exclusion list on first writing memory.",
+        "Excludes the named individual, Priya Raman, and her company contact detail from the memory entry.",
+        "Excludes the $19k discount floor from the memory entry.",
+        "Excludes the 71% and 103% per-rep attainment figures from the memory entry.",
+        "Stores memory in exactly one of three places: local to the user's environment, a team knowledge base, or a memories/ directory in the repository.",
+        "Creates or updates an index file listing each memory entry with a one-line hook.",
+        "Shows the diff and asks for approval before committing memory into the git repository.",
+        "States that the artifact is the source of truth and wins by default when memory and artifact diverge.",
+        "Gives the reason the artifact leads: memory is invisible and unreviewable to teammates, so a memory-first flow forks the project state per user.",
+        "Keeps the pricing floor recorded in sales-context.md even though it is excluded from memory."
+      ]
+    },
+    {
+      "id": 13,
+      "prompt": "Corran Networks - set me up with some recurring automations for the sales side. Keep it light, I don't want to be pinged all day long. Context: we run outbound email and phone, every call is recorded through our dialer, my manager already sits down with me every Friday and goes through one of my recordings, and our forecast call is Thursday mornings at 9.",
+      "expected_output": "Two to four routines ranked by value per unit of standing effort, deal inspection anchored the day before Thursday's forecast call, the tape review demoted as a duplicate, the source refresh not leading, and every routine shown as a dry-run with one named output channel.",
+      "files": [],
+      "expectations": [
+        "Proposes between 2 and 4 routines, and never more than 4.",
+        "Proposes a pre-forecast deal inspection anchored the day before the Thursday forecast call, never after it.",
+        "That routine invokes mbfinotti/sales-skills@deal-red-flags.",
+        "Includes a sequence checkpoint that fires at the committed touch count rather than on a clock.",
+        "Includes a monthly or quarterly re-invocation of the kickoff itself.",
+        "Demotes or omits the weekly tape review because the manager already runs one, rather than grading the same call twice.",
+        "Does not lead the proposal with the quarterly source refresh.",
+        "If the source refresh is mentioned at all, it is named as the cheapest candidate and the last one to install.",
+        "Every proposed routine names exactly one explicit output channel, and \"notify me\" is rejected as a channel.",
+        "Every routine is shown as a dry-run with a first-run date before anything recurring is created.",
+        "Lists the existing routines and flags obsolete ones for deletion before adding new ones.",
+        "States the routine ordering out loud as value per unit of standing effort, rather than leaving it implied by list order."
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "We're spinning up a new outbound motion at Larkwell Systems next quarter - where do I start?",
+      "should_trigger": true
+    },
+    { "query": "Which sales skill do I need?", "should_trigger": true },
+    { "query": "Run my sales check-in.", "should_trigger": true },
+    {
+      "query": "I'm the founder at Teluma and I've never done cold outreach. What should I do first?",
+      "should_trigger": true
+    },
+    {
+      "query": "Start a new sales project for our Series A SaaS.",
+      "should_trigger": true
+    },
+    {
+      "query": "Kick off the sales work for our Q3 push.",
+      "should_trigger": true
+    },
+    {
+      "query": "help, my whole sales process is a mess and I have no idea what to fix first",
+      "should_trigger": true
+    },
+    {
+      "query": "I have four sales problems and two weeks. Triage them for me.",
+      "should_trigger": true
+    },
+    {
+      "query": "Where do I start with sales at a 12-person company?",
+      "should_trigger": true
+    },
+    {
+      "query": "Can you re-route me? The approach we picked last time isn't the right one.",
+      "should_trigger": true
+    },
+    {
+      "query": "Monthly sales review time - what's changed and what do I run next?",
+      "should_trigger": true
+    },
+    {
+      "query": "New quarter, new sales project. Set me up.",
+      "should_trigger": true
+    },
+    {
+      "query": "Give me an ordered plan of which sales work to do in what order.",
+      "should_trigger": true
+    },
+    {
+      "query": "I don't know which of these applies to me - deals stall after the demo, our emails bounce, and my SDR is brand new.",
+      "should_trigger": true
+    },
+    { "query": "Onboard me to this sales collection.", "should_trigger": true },
+    {
+      "query": "what should I work on first if I want to hit number this quarter",
+      "should_trigger": true
+    },
+    {
+      "query": "I just took over as VP Sales at Nordvane. Walk me through where to begin.",
+      "should_trigger": true
+    },
+    {
+      "query": "Resume the sales project we started last month.",
+      "should_trigger": true
+    },
+    {
+      "query": "Do a periodic review of my sales setup.",
+      "should_trigger": true
+    },
+    {
+      "query": "Which of your capabilities fits \"our pipeline feels fake\"?",
+      "should_trigger": true
+    },
+    {
+      "query": "I need help selling but I'm honestly not sure what kind of help.",
+      "should_trigger": true
+    },
+    {
+      "query": "Route this for me: we need better targeting, better messaging, and a comp plan.",
+      "should_trigger": true
+    },
+    { "query": "Sales check-in, please.", "should_trigger": true },
+    {
+      "query": "Start here: I'm building a sales function from zero.",
+      "should_trigger": true
+    },
+    {
+      "query": "what's the highest-leverage sales thing I can do with six hours this week",
+      "should_trigger": true
+    },
+    {
+      "query": "Pick the right approach for me - I'm an AE at a 40-person startup and my quarter is slipping.",
+      "should_trigger": true
+    },
+    {
+      "query": "We're at 30% of quota with five weeks left. What do I do, and in what order?",
+      "should_trigger": true
+    },
+    {
+      "query": "Take stock of our sales situation and tell me the next step.",
+      "should_trigger": true
+    },
+    {
+      "query": "I'm switching us from inbound-only to outbound. Where do I begin?",
+      "should_trigger": true
+    },
+    {
+      "query": "Set up a sales project for Brightmoor Logistics.",
+      "should_trigger": true
+    },
+    {
+      "query": "Give me a short-list of what's actually worth my time in sales right now.",
+      "should_trigger": true
+    },
+    {
+      "query": "Re-run the routing - my situation has changed since last session.",
+      "should_trigger": true
+    },
+    {
+      "query": "I keep bouncing between fixing our emails and fixing our discovery calls. Decide for me.",
+      "should_trigger": true
+    },
+    {
+      "query": "Which comes first: fixing deliverability or rewriting my opener?",
+      "should_trigger": true
+    },
+    {
+      "query": "Tell me which sales problems I should ignore this quarter.",
+      "should_trigger": true
+    },
+    {
+      "query": "First session on a new sales engagement - what do you need from me?",
+      "should_trigger": true
+    },
+    {
+      "query": "Help me figure out what's actually broken in how we sell.",
+      "should_trigger": true
+    },
+    {
+      "query": "I have a sales-context.md from last time. Pick up from there.",
+      "should_trigger": true
+    },
+    {
+      "query": "new project: commission-only real estate team, six agents, no process at all",
+      "should_trigger": true
+    },
+    {
+      "query": "we sell solar door to door and literally nothing is written down. where do we start",
+      "should_trigger": true
+    },
+    {
+      "query": "I want a plan for the whole sales year, not one task.",
+      "should_trigger": true
+    },
+    { "query": "quarterly sales planning session - go", "should_trigger": true },
+    {
+      "query": "Can you look at everything and tell me what to do first?",
+      "should_trigger": true
+    },
+    {
+      "query": "My board wants a sales plan and I don't know what pieces it needs.",
+      "should_trigger": true
+    },
+    { "query": "Take my sales mess and sequence it.", "should_trigger": true },
+    {
+      "query": "Is there anything here for someone who just got promoted to sales manager?",
+      "should_trigger": true
+    },
+    {
+      "query": "which one of these do I run, and in what order",
+      "should_trigger": true
+    },
+    {
+      "query": "I'd like a recurring cadence for reviewing my sales work - set that up too.",
+      "should_trigger": true
+    },
+    {
+      "query": "We're mid-project on the outbound build. Re-summarize and tell me what's next.",
+      "should_trigger": true
+    },
+    {
+      "query": "Do you have something for \"I don't know what I don't know\" in sales?",
+      "should_trigger": true
+    },
+    {
+      "query": "Frame the problem for me before we pick a tactic.",
+      "should_trigger": true
+    },
+    {
+      "query": "Getting started at Cavora Health - three reps, $40k ACV, no playbook.",
+      "should_trigger": true
+    },
+    {
+      "query": "Everything is on fire: no meetings, stalled deals, and a comp plan nobody trusts.",
+      "should_trigger": true
+    },
+    { "query": "Assess and route.", "should_trigger": true },
+    {
+      "query": "check in on where the sales project stands",
+      "should_trigger": true
+    },
+    { "query": "what should my first move be", "should_trigger": true },
+    {
+      "query": "I only have a week. What's the one sales thing worth doing?",
+      "should_trigger": true
+    },
+    {
+      "query": "Sales strategy session, start to finish. Begin wherever makes sense.",
+      "should_trigger": true
+    },
+    {
+      "query": "We just hired two SDRs and I have no idea what to set up for them.",
+      "should_trigger": true
+    },
+    {
+      "query": "Between fixing our targeting, our messaging, and our quotas - which first?",
+      "should_trigger": true
+    },
+    {
+      "query": "I want to build something that keeps paying off, not a one-off fix for this quarter.",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I stay organized across sessions on this sales work?",
+      "should_trigger": true
+    },
+    {
+      "query": "Restart: the ICP changed, so half of what we planned is wrong now.",
+      "should_trigger": true
+    },
+    {
+      "query": "Give me the map of what's available and where I fit on it.",
+      "should_trigger": true
+    },
+    {
+      "query": "I run a four-person insurance agency and nothing is systematized. Help.",
+      "should_trigger": true
+    },
+    {
+      "query": "Which direction should we take this quarter - more meetings or a better close rate?",
+      "should_trigger": true
+    },
+    {
+      "query": "Bring me up to speed on our sales project and propose next steps.",
+      "should_trigger": true
+    },
+    {
+      "query": "Not sure whether my problem is the list, the message, or the call itself. Diagnose it.",
+      "should_trigger": true
+    },
+    { "query": "Plan out my next three sales sessions.", "should_trigger": true },
+    {
+      "query": "set up the sales workspace for this repo",
+      "should_trigger": true
+    },
+    {
+      "query": "what's the equivalent of a kickoff meeting for the selling side here",
+      "should_trigger": true
+    },
+    {
+      "query": "I need a hiring plan and a quota model and a cadence. Order them for me.",
+      "should_trigger": true
+    },
+    {
+      "query": "Take it from the top - we've never done structured selling.",
+      "should_trigger": true
+    },
+    {
+      "query": "Recurring review: is the sales plan still the right plan?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our motion changed from PLG to sales-assisted and I don't know what to redo.",
+      "should_trigger": true
+    },
+    {
+      "query": "Write me a cold call opener for a CFO at a 200-person manufacturer.",
+      "should_trigger": false
+    },
+    {
+      "query": "Score these five subject lines for my Series B outreach.",
+      "should_trigger": false
+    },
+    {
+      "query": "Our cold emails land in spam - check my SPF and DKIM setup.",
+      "should_trigger": false
+    },
+    {
+      "query": "Build an 8-touch outbound cadence mixing email and phone.",
+      "should_trigger": false
+    },
+    {
+      "query": "Draft discovery questions for a first call with a RevOps lead.",
+      "should_trigger": false
+    },
+    {
+      "query": "The prospect said \"we're happy with our current vendor\" - give me a rebuttal.",
+      "should_trigger": false
+    },
+    {
+      "query": "Score this deal against MEDDPICC for me.",
+      "should_trigger": false
+    },
+    {
+      "query": "Who's the real economic buyer in this deal? Here are my call notes.",
+      "should_trigger": false
+    },
+    {
+      "query": "Sweep these deal notes for qualification red flags.",
+      "should_trigger": false
+    },
+    {
+      "query": "Build the ROI case for a $90k renewal.",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan my concessions before tomorrow's pricing call.",
+      "should_trigger": false
+    },
+    {
+      "query": "Turn these messy notes into a recap email with owned next steps.",
+      "should_trigger": false
+    },
+    {
+      "query": "Grade this call transcript against a rubric.",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we go PLG or sales-led at $8k ACV?",
+      "should_trigger": false
+    },
+    {
+      "query": "Define our ICP from 18 months of closed-won data.",
+      "should_trigger": false
+    },
+    {
+      "query": "Calculate TAM and SAM for logistics software in Germany.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design a fit-by-readiness segmentation model for 4,000 accounts.",
+      "should_trigger": false
+    },
+    {
+      "query": "Where should the tier cutoffs sit, and how many tiers do we need?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design a pod structure with a 1:3 SDR-to-AE ratio.",
+      "should_trigger": false
+    },
+    {
+      "query": "Set quotas for eight AEs, three of them still ramping.",
+      "should_trigger": false
+    },
+    {
+      "query": "How much pipeline do we need for a $2M quarter at a 22% win rate?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design an AE comp plan with accelerators above 100%.",
+      "should_trigger": false
+    },
+    {
+      "query": "Write an SDR scorecard and a structured interview loop for my team.",
+      "should_trigger": false
+    },
+    {
+      "query": "I'm interviewing for an AE role next week - prep me for the mock cold call.",
+      "should_trigger": false
+    },
+    {
+      "query": "What sales podcasts and newsletters should I be following?",
+      "should_trigger": false
+    },
+    {
+      "query": "Rank these three personalization angles for my prospect list.",
+      "should_trigger": false
+    },
+    {
+      "query": "What do I say in the first ten seconds when they pick up?",
+      "should_trigger": false
+    },
+    {
+      "query": "Fix my open rates - the subject lines are dead.",
+      "should_trigger": false
+    },
+    {
+      "query": "How many touches before I stop a sequence?",
+      "should_trigger": false
+    },
+    {
+      "query": "Is \"guarantee\" a spam trigger word inside a subject line?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design lead routing rules for round-robin assignment.",
+      "should_trigger": false
+    },
+    {
+      "query": "Audit our pipeline stage definitions and exit criteria.",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a lead scoring model from our form-fill and product usage data.",
+      "should_trigger": false
+    },
+    {
+      "query": "Why is our forecast always 20% off?",
+      "should_trigger": false
+    },
+    { "query": "Design a partner tiering program.", "should_trigger": false },
+    {
+      "query": "Write affiliate program terms with a 20% recurring commission.",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan an influencer campaign brief for a developer tool.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design a refer-a-friend incentive for our consumer app.",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up co-selling rules with our two biggest resellers.",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a customer health score from usage and support data.",
+      "should_trigger": false
+    },
+    {
+      "query": "Run the project kickoff meeting agenda for our new website build.",
+      "should_trigger": false
+    },
+    {
+      "query": "Kick off a marketing campaign for our spring launch.",
+      "should_trigger": false
+    },
+    {
+      "query": "Starting a new engineering sprint - what ceremonies do we need?",
+      "should_trigger": false
+    },
+    {
+      "query": "Draft a client kickoff deck for an agency onboarding.",
+      "should_trigger": false
+    },
+    {
+      "query": "Run the devrel kickoff for our developer relations program.",
+      "should_trigger": false
+    },
+    { "query": "Where do I start with RevOps?", "should_trigger": false },
+    {
+      "query": "Which partnerships skill do I need for our alliance work?",
+      "should_trigger": false
+    },
+    {
+      "query": "Kick off our developer platform project.",
+      "should_trigger": false
+    },
+    { "query": "Run my marketing check-in.", "should_trigger": false },
+    {
+      "query": "New event project - where do I begin organizing our conference?",
+      "should_trigger": false
+    },
+    {
+      "query": "Onboarding kickoff for a new engineer joining the team next Monday.",
+      "should_trigger": false
+    },
+    {
+      "query": "Start a customer success project from scratch.",
+      "should_trigger": false
+    },
+    {
+      "query": "Which advertising skill fits my Google Ads problem?",
+      "should_trigger": false
+    },
+    {
+      "query": "Help me kick off a seed fundraising round.",
+      "should_trigger": false
+    },
+    {
+      "query": "Run the kickoff for our OKR planning cycle.",
+      "should_trigger": false
+    },
+    {
+      "query": "What's the first step in setting up our recruiting process for engineers?",
+      "should_trigger": false
+    },
+    {
+      "query": "I need a project charter template for a cross-functional initiative.",
+      "should_trigger": false
+    },
+    {
+      "query": "Start a new product discovery project.",
+      "should_trigger": false
+    },
+    {
+      "query": "Which support skill covers ticket deflection?",
+      "should_trigger": false
+    },
+    {
+      "query": "Kick off a security review of our public API.",
+      "should_trigger": false
+    },
+    {
+      "query": "Do I need a do-not-call scrub before dialing consumers in Florida?",
+      "should_trigger": false
+    },
+    {
+      "query": "Rewrite this rebuttal so it sounds natural said out loud on the phone.",
+      "should_trigger": false
+    },
+    {
+      "query": "What's our BATNA if they walk from a $60k deal?",
+      "should_trigger": false
+    },
+    {
+      "query": "How do I prove a champion is real and not just friendly?",
+      "should_trigger": false
+    },
+    {
+      "query": "Give me a do-not-ask list for discovery calls.",
+      "should_trigger": false
+    },
+    {
+      "query": "Which ramp relief schedule works for a rep starting mid-quarter?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write a follow-up email after the demo with action items and owners.",
+      "should_trigger": false
+    },
+    {
+      "query": "How long should a discovery call run for a $15k deal?",
+      "should_trigger": false
+    },
+    {
+      "query": "Our sending domain got blacklisted last week - what now?",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a mutual action plan for a Q4 close.",
+      "should_trigger": false
+    },
+    {
+      "query": "What's a healthy SDR-to-AE ratio once we're at 30 reps?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should base/variable be 50/50 or 60/40 for enterprise AEs?",
+      "should_trigger": false
+    },
+    {
+      "query": "Model coverage by segment with seasonality indexing.",
+      "should_trigger": false
+    },
+    {
+      "query": "Which communities should a B2C insurance agent join?",
+      "should_trigger": false
+    },
+    {
+      "query": "Evaluate this AE offer - $70k base, $140k OTE. Is it competitive?",
+      "should_trigger": false
+    }
+  ]
+}

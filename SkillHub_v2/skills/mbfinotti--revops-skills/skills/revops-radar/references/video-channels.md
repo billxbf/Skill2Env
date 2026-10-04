@@ -1,0 +1,14 @@
+# YouTube channels
+
+Compiled 2026-09-08 via direct browser verification, bypassing the consent wall that blocks plain fetches - the field's thinnest-covered medium in the prior snapshot (every entry previously `unverified`) is now confirmed with real subscriber counts and upload recency.
+
+| Name                         | URL                           | Subscribers          | Most recent upload  | Best for                                                                                                 | Independence                                                         |
+| ---------------------------- | ----------------------------- | -------------------- | ------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Salesforce Admins (official) | youtube.com/@SalesforceAdmins | 135K                 | Very active         | Official companion to the Salesforce Admins Podcast (see sources.md)                                     | Vendor (Salesforce)                                                  |
+| Winning by Design            | youtube.com/@WinningByDesign  | 29K                  | ~7 months old       | Revenue-architecture framework content (Growth Architecture, Bowtie, SPICED)                             | Vendor-affiliated                                                    |
+| Salesforce Break             | youtube.com/@SalesforceBreak  | 5.03K                | ~1 month old        | Salesforce admin/dev training                                                                            | Independent                                                          |
+| RevPartners                  | youtube.com/@revpartners      | 1.06K, ~1,000 videos | Active, high volume | RevOps + GTM engineering on HubSpot                                                                      | Vendor-affiliated (Walker Sands company, HubSpot/Clay elite partner) |
+| RevOps Co-op                 | youtube.com/@revopscoop       | 941                  | ~3 months old       | Video versions of RevOpsAF podcast episodes and community sessions                                       | Independent (community-run)                                          |
+| MarketingOps (MO Pros)       | youtube.com/@MarketingOpscom  | 485                  | ~2 months old       | Video versions of Ops Cast (now ended, see sources.md) and the "MOOPs TV" marketing-ops-failure playlist | Independent (community-run)                                          |
+
+No genuinely independent, high-subscriber, currently-active channel focused purely on RevOps practice (as opposed to Salesforce-admin tutorials or vendor-run content) was found - that gap in the field appears real, not a research miss.

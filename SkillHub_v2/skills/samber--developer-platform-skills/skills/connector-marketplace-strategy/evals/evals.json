@@ -1,0 +1,459 @@
+{
+  "skill_name": "connector-marketplace-strategy",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm VP Product at Threadline, an HR onboarding SaaS. 320 customers, about $4.1M ARR. Last year we lost six enterprise deals where the buyer explicitly named missing integrations as the reason, and support gets integration requests most weeks. We've hand-built nine integrations in-house (Workday, BambooHR, a few ATSs). We have no public API, no developer docs, no sandbox, and no partner manager - engineering is 14 people total and fully committed to the core roadmap. Nobody outside the company has ever built anything on us and no partner has ever asked to. Our CEO wants an app marketplace live by Q2 and has already said it in an all-hands. Put together our marketplace strategy.",
+      "expected_output": "A gated decision that declines to build now: the four build trigger conditions evaluated against the evidence, two of them failing (no supply signal, no organizational readiness for the partner lifecycle), with a curated partner catalog or deeper bilateral integrations recommended as the intermediate step and the trigger conditions restated as promotion criteria.",
+      "files": [],
+      "expectations": [
+        "Applies a build / join / buy gate before proposing any marketplace design",
+        "Recommends against building a marketplace now",
+        "Names all four build trigger conditions that must hold before choosing build",
+        "Identifies the absent supply signal (no third party has built on the platform, no partner has asked) as a failed trigger condition",
+        "Identifies the absent organizational readiness for the full partner lifecycle (no public API, docs, sandbox, or partner staffing) as a failed trigger condition",
+        "Credits customer pull as a satisfied trigger condition, citing the six lost deals and the recurring support requests",
+        "Recommends a curated partner catalog or better bilateral integrations as the intermediate step instead",
+        "States the four trigger conditions as explicit promotion criteria for revisiting the build decision later",
+        "Warns that building without confirmed supply and demand produces little more than an expensive partner directory",
+        "Does not deliver a take-rate, curation ladder, or seeding plan as the headline recommendation"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Cadence Ops here - field-service management SaaS, 1,100 customers, $22M ARR. Our partner directory lists 40 integrations. Six partners have asked to be able to charge for their apps, and three third parties have already shipped unofficial integrations by reverse-engineering our web app. We do have a documented public API and two partner engineers. I need the full marketplace operating model document today: curation, revenue share, governance rules, seeding plan, the whole thing. Board meeting is Thursday.",
+      "expected_output": "An interview conducted one question at a time before any proposal, then 2-3 candidate operating models that differ across the whole bundle, each with a platform archetype, what it optimizes for, its cost and failure mode, a recommendation tied to the answers, and a pause for the user's pick before detailing governance, curation, take-rate and seeding.",
+      "files": [],
+      "expectations": [
+        "Asks interview questions before proposing any operating model, despite the same-week deadline",
+        "Asks one question per message rather than batching the questions into a single list",
+        "Asks the effort ceiling: engineering hours, partner-team headcount, subsidy budget, or appetite for irreversible public commitments",
+        "Asks whether this is a one-off win or a compounding asset",
+        "Asks by when a result must land",
+        "Presents 2-3 candidate operating models that differ across the whole bundle (curation level, partner mix, take-rate, seeding), not on a single dial",
+        "Gives each candidate the real-platform archetype it resembles, what it optimizes for, what it costs, and the failure mode it courts",
+        "Recommends one candidate with reasoning tied back to specific interview answers",
+        "Waits for the user's pick before detailing governance, curation, take-rate, and seeding",
+        "Drafts the document section by section with user validation between sections rather than delivering every section at once"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Lumen Freight, logistics visibility SaaS. Our marketplace launches in five months with 12 partner apps lined up, none of them charging yet. Billing already runs through our own platform, so we can collect on partners' behalf from day one. Our CFO wants 25% of partner app revenue, plus a $2,500 one-time security review fee and a $400 annual listing fee - her argument is that the big enterprise app stores charge that and nobody walks away from Apple over 30%. Tell me how to structure the rate and what to announce to partners.",
+      "expected_output": "A recommendation of zero take-rate through the seeding phase, with the 25%-plus-fee-stack rung identified as one earned by irreplaceable distribution rather than ambition, an explicit promotion path to a volume-tiered rate, an anti-circumvention rule with a delisting path, and a committed notice period for rate changes.",
+      "files": [],
+      "expectations": [
+        "Recommends against a 25% take-rate at launch",
+        "Recommends a zero take-rate during the seeding phase",
+        "States that zero take-rate is a deliberate architecture rather than a transitional state, citing a major marketplace that charges no revenue share and funds itself as a retention asset",
+        "Explains that taxing the hard side during the cold start selects against the supply the network's survival depends on",
+        "States that a 15-25% flat rate is earned by distribution the partner cannot replicate, naming the procurement-gate position (91% of one platform's customers using at least one marketplace app) as what earns it",
+        "Names the promotion condition to a volume-tiered rate: billing flowing through the platform plus some partners visibly winning",
+        "Gives the volume-tiered archetype with its threshold shape (0% under $1M per year, 15% above)",
+        "Treats take-rate as level plus tier axis plus fee stack rather than a single percentage",
+        "Pairs whatever rate is chosen with an anti-circumvention rule carrying a delisting path",
+        "Commits a notice period for future rate changes in the document itself, citing the six-months-notice pattern",
+        "Does not use Apple or Google's 30% as justification for the proposed rate"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Veriquil builds clinical trial management software for CROs and research sites. Third-party apps on our planned marketplace would read de-identified patient records, site financials, and protocol deviation logs. Our head of product's position is: open app store, anyone can publish, we review nothing - supply is the binding constraint and we only have four launch partners committed. Separately she wants to sell the homepage 'Featured' slot to partners for $5,000 a quarter to help fund the program. Give me the quality bar and the placement design.",
+      "expected_output": "A curation spectrum with the hybrid default named, then the single hard review gate promoted above it because apps read regulated and sensitive data, with the promotion attributed to that answer, the openness counter-argument acknowledged, and a disclosure rule required for the paid featured placement as a separate axis from admission.",
+      "files": [],
+      "expectations": [
+        "Presents the curation choice as a ranked spectrum of four rungs, not a binary open-versus-closed decision",
+        "States that the default rung is hybrid: open admission with a minimal automated bar plus a separate certified tier",
+        "Promotes the single hard review gate above the default for this case, because every app can read regulated or sensitive customer data",
+        "Says explicitly which interview answer (data sensitivity = high) moved which rung",
+        "Acknowledges that the single hard review gate loses the efficiency ranking because review cost scales with every submission",
+        "Warns that an uncertified-but-listed tier is an incident waiting to be attributed to the platform when apps read sensitive data",
+        "Describes the review gate as staged - completeness, compliance, security testing, scope minimization - followed by post-approval monitoring",
+        "Names the openness counter-argument (heavy gatekeeping inflates prices, hampers innovation, costs choice) as the live trade-off rather than ignoring it",
+        "Treats admission (who gets listed) and discoverability (who gets seen first) as separate axes",
+        "Requires a disclosure rule labeling the paid featured placement",
+        "Warns that undisclosed paid placement reading as an editorial pick spends the trust curation bought"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Brightloom Retail, cloud POS platform. Our marketplace has been live 14 months with about 180 apps. Two partners now account for 61% of marketplace GMV between them and both are pushing for preferential terms and homepage placement. Last month a security engineer found one listed app forwarding customer transaction data to an undisclosed analytics vendor - and nobody internally could say who has authority to pull an app, on what notice, or what the partner's recourse is. All we have written down today is a listing requirements page. Legal has asked me for 'the marketplace rules doc'. Draft it.",
+      "expected_output": "A governance document structured around admission, value split, and conflict resolution, each with a named owner, including a concrete removal path with notice and decision authority, every rule traced to at least one of the four platform market-failure causes, a pooled-scale countermeasure for the GMV concentration, and a scheduled governance review.",
+      "files": [],
+      "expectations": [
+        "Structures the governance rules around three questions: admission, value split, and conflict resolution",
+        "Attributes that three-part definition of platform governance to a named source (_Platform Revolution_)",
+        "Assigns a named owner to each of the three governance answers",
+        "Specifies a removal path: what gets an app delisted, with what notice, decided by whom",
+        "Checks the draft rules against the four named causes of platform market failure",
+        "Names all four causes: information asymmetry, externalities, monopoly power, and risk",
+        "Treats a market-failure cause with no rule written against it as a gap in the document",
+        "Maps the undisclosed data-forwarding incident to information asymmetry",
+        "Treats the 61% GMV concentration in two partners as a governance problem, not only a commercial negotiation",
+        "Prescribes pooling scale for smaller complementors - shared analytics, shared marketing infrastructure - as the standing concentration countermeasure",
+        "Schedules a recurring governance review rather than treating the launch rules as permanent, because platforms tend to grow more open over time"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Onwards Labs - API-first expense management SaaS, 2,400 customers, marketplace shell already built and styled. The plan on the table from our ecosystem lead: launch with 60 connectors spread across every category we can think of (accounting, HRIS, travel, card issuers, BI, procurement), run a $50,000 hackathon in month one to generate buzz, and stand up a build fund. Constraints: the launch date is fixed four months out, finance has not approved any subsidy budget yet, and our API portal has 31 registered developers, nearly all of them internal teams at existing customers. We have no developer community, no Discord, no meetups. Sanity-check this plan and give me the seeding sequence.",
+      "expected_output": "A seeding sequence that names the developers as the hard side, replaces the 60-connector breadth plan with a dense atomic network in one use case, defaults to first-party complements, and demotes the hackathon as the starved option whose two promotion conditions both fail here, with the subsidy rung flagged as unfunded.",
+      "files": [],
+      "expectations": [
+        "Names the connector and app developers as the hard side of this network",
+        "States that the hard side determines whether the network survives and must be given a reason to build before customers see value",
+        "Defines the atomic network as the smallest self-sustaining cluster - one use case, dense and mutually reinforcing",
+        "Rejects the 60-connectors-across-every-category plan in favor of density over breadth, naming a broad thin catalog as the failure",
+        "Recommends first-party complements as the default seeding rung: the platform builds the first handful of connectors itself so day-one customers see value with no external dependency",
+        "Gives the promotion condition off first-party complements: when the catalog must outgrow what first-party engineering can build",
+        "Demotes the hackathon, stating that social mechanisms lose every efficiency round",
+        "Names the two conditions that would promote hackathons anyway: a compounding mandate plus an existing developer community",
+        "Notes that both hackathon promotion conditions fail here, citing the fixed four-month deadline and the absence of a developer community",
+        "Notes that subsidies are promoted by a hard deadline only when real budget sits behind them, which is not yet the case here",
+        "Names the sequential / Trojan-horse option - ship a stand-alone tool the hard side wants on its own merits, 'come for the tool, stay for the network' - as the rung for a hard side with no reason to show up yet"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Pathvine, vertical SaaS for veterinary clinic groups. 240 customers, $9M ARR. Our VP Product wrote a one-pager arguing the marketplace creates a flywheel: more apps attract more customers, more customers attract more apps, and it compounds. Our CEO shot back that at 240 clinics nobody is going to build a business on our platform, so the flywheel argument is fantasy and the whole thing is a distraction. They've asked me to settle it and to say what we'd actually measure in year one if we go ahead. What's the honest read?",
+      "expected_output": "The two business cases separated and argued independently, with the retention/expansion case named as the one that can carry the decision at this scale, a requirement that the document state which case carries it, and a year-one metric set led by supply-side metrics with mature-platform figures labeled as context rather than targets.",
+      "files": [],
+      "expectations": [
+        "Separates the ecosystem/distribution (flywheel) case from the retention/expansion case as two independent justifications",
+        "States that a platform can act on the retention/expansion case even where the flywheel case does not apply at its scale",
+        "Requires the strategy document to name which single case carries the decision",
+        "States that a document blending the two cases cannot be falsified",
+        "Cites the retention evidence that customers integrating multiple tools churn measurably less",
+        "Names the 4+ integrations cluster as the switching-cost threshold to watch",
+        "Cites buyer research placing integration capability among the top SaaS purchase criteria (86% importance)",
+        "Leads the year-one metric set with supply-side metrics, stating the supply side is the hard side and fails first",
+        "Includes at least three supply-side metrics from: active partners with a live listing, time from partner signup to first live listing, catalog freshness, partner revenue concentration",
+        "Labels mature-platform figures such as 91% of customers using at least one marketplace app as context anchors, not year-one targets",
+        "States that marketplace-attributed deal influence is inherently soft attribution rather than presenting it as a hard number"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Statlas, product analytics SaaS, $17M ARR. Sales has a running list of 40-something named integrations that show up in RFPs - Salesforce, HubSpot, Zendesk, Intercom, Stripe, NetSuite, the usual suspects. Nothing exotic. Our in-house pace is about five integrations a year with the two engineers we can spare. Our head of platform wants to build a full marketplace with a developer program, partner tiers, and a revenue share. While you're at it, tell me what payout cadence and merchant-of-record setup we should use for paying partners.",
+      "expected_output": "A gate that selects buy (embedded iPaaS) rather than build, because the problem is integration volume rather than distribution-hub ambition, with the build path's true cost stated, no operating-model design produced for an unselected path, and the payout-cadence and merchant-of-record question routed to the marketplace monetization skill.",
+      "files": [],
+      "expectations": [
+        "Runs the build / join / buy gate before responding to the marketplace request",
+        "Recommends the buy path (embedded iPaaS) as the fit for this situation",
+        "Distinguishes the buy trigger explicitly: the problem is needing many integrations fast, not needing to become a distribution hub",
+        "Contrasts the embedded-iPaaS pace (a sourced case building 100+ integrations in a year) against the stated in-house pace of about five per year",
+        "States that build is justified for market leaders with the scale and proprietary data to sustain an independent ecosystem, at multi-year, eight-figure-plus investment",
+        "Evaluates join - listing on the established marketplaces customers already trust - as the pragmatic default that borrows existing distribution and trust",
+        "Does not treat 40 RFP-requested integrations as evidence of a supply signal",
+        "Does not design a take-rate, curation ladder, or partner-tier program for a path that was not selected",
+        "Declines to specify payout cadence and merchant-of-record posture, routing that question to the marketplace monetization skill"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "Should we build our own app marketplace or just list on the marketplaces our customers already use?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're thinking about launching an integration marketplace next year - where do we even start?",
+      "should_trigger": true
+    },
+    {
+      "query": "What revenue share should we charge partners who list apps on our platform?",
+      "should_trigger": true
+    },
+    {
+      "query": "Is our company actually ready to run an app ecosystem?",
+      "should_trigger": true
+    },
+    {
+      "query": "curated vs open admission for third-party apps - how do we decide which way to go",
+      "should_trigger": true
+    },
+    {
+      "query": "How do we get developers to build integrations for us when nobody is asking to?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our partner directory has 40 integrations and partners now want to charge money. What's the next step?",
+      "should_trigger": true
+    },
+    {
+      "query": "Design the operating model for our connector marketplace.",
+      "should_trigger": true
+    },
+    {
+      "query": "We keep losing enterprise deals because we don't have enough integrations. What's the play here?",
+      "should_trigger": true
+    },
+    {
+      "query": "Do we need an app store, or would embedded iPaaS get us there faster?",
+      "should_trigger": true
+    },
+    {
+      "query": "What take-rate is defensible for a marketplace that hasn't launched yet?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do we seed a two-sided developer ecosystem from zero?",
+      "should_trigger": true
+    },
+    {
+      "query": "who gets to list on our platform and who decides - we have literally nothing written down",
+      "should_trigger": true
+    },
+    {
+      "query": "Our CEO wants an app store by Q3. Talk me out of it or help me scope it.",
+      "should_trigger": true
+    },
+    {
+      "query": "How curated should our third-party app program be if the apps can read patient data?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we charge 15% or 20% on partner app revenue?",
+      "should_trigger": true
+    },
+    {
+      "query": "we have no partner program, no public API, and the board wants an ecosystem story by next quarter",
+      "should_trigger": true
+    },
+    {
+      "query": "What metrics tell us whether our app marketplace is actually working in year one?",
+      "should_trigger": true
+    },
+    {
+      "query": "Two partners are 60% of our marketplace revenue and now they want better terms. What do we do?",
+      "should_trigger": true
+    },
+    {
+      "query": "Is a hackathon a good way to kickstart our integration ecosystem?",
+      "should_trigger": true
+    },
+    {
+      "query": "Write the rules for who can publish on our platform and what gets them removed.",
+      "should_trigger": true
+    },
+    {
+      "query": "We're a $6M ARR vertical SaaS. Does an app store make any sense at our size?",
+      "should_trigger": true
+    },
+    {
+      "query": "how do the big platforms decide what percentage to take from app developers",
+      "should_trigger": true
+    },
+    {
+      "query": "What's the case for building an ecosystem when the flywheel argument is weak at our scale?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our marketplace is live but stale - half the listings haven't been touched in a year. Rethink the operating model.",
+      "should_trigger": true
+    },
+    {
+      "query": "Help me choose between a certified tier and reviewing every single app before it goes live.",
+      "should_trigger": true
+    },
+    {
+      "query": "What do we need in place before we open our platform up to third-party builders?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should the first connectors be ones we build ourselves or ones partners build?",
+      "should_trigger": true
+    },
+    {
+      "query": "We want to raise our commission from 15% to 20%. How do we do that without blowing up partner trust?",
+      "should_trigger": true
+    },
+    {
+      "query": "Is there ever a reason to charge nothing at all for apps on our marketplace?",
+      "should_trigger": true
+    },
+    {
+      "query": "how many apps do we actually need at launch for this to look credible",
+      "should_trigger": true
+    },
+    {
+      "query": "Our legacy framework and our new one - can we price the commission differently to push partners to migrate?",
+      "should_trigger": true
+    },
+    {
+      "query": "Partners are billing customers outside our platform to dodge the rev share. How should we handle that?",
+      "should_trigger": true
+    },
+    {
+      "query": "Plan the ecosystem strategy for our platform: who we let in, what we charge them, and how we get them.",
+      "should_trigger": true
+    },
+    {
+      "query": "We want to put a revenue line on our app directory - what are the options and what does each cost us in supply?",
+      "should_trigger": true
+    },
+    {
+      "query": "should we be a platform other people build on, or just keep integrating with everyone ourselves",
+      "should_trigger": true
+    },
+    {
+      "query": "Build me the decision doc for whether we launch an app marketplace.",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I convince my exec team that not building a marketplace is the right call?",
+      "should_trigger": true
+    },
+    {
+      "query": "What payout cadence and hold window should we use for paying app developers?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we be merchant of record for paid apps, or let developers bill customers directly?",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we handle VAT and marketplace-facilitator tax obligations on app sales?",
+      "should_trigger": false
+    },
+    {
+      "query": "Which billing rails do we need so revenue share is collected at source?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the billing API that third-party apps call to charge our customers.",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we implement fee waivers for partners in our incentive tier?",
+      "should_trigger": false
+    },
+    {
+      "query": "What should our automated pre-screening check before a human reviewer ever opens an app submission?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the re-review triggers for when an already-published app ships an update.",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we harden our app publish channel against supply-chain attacks?",
+      "should_trigger": false
+    },
+    {
+      "query": "What's a fair appeal path for a developer whose app submission we rejected?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the permission and data-access audit checkpoints inside our app review pipeline.",
+      "should_trigger": false
+    },
+    {
+      "query": "What screenshot dimensions and demo-video specs should we require on every listing?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write objective reject criteria for listing descriptions that are too thin.",
+      "should_trigger": false
+    },
+    {
+      "query": "How should we design the category taxonomy for our marketplace?",
+      "should_trigger": false
+    },
+    {
+      "query": "Our listing content is decaying - what's the staleness enforcement rule?",
+      "should_trigger": false
+    },
+    {
+      "query": "How big should our founding launch cohort of partners be, and how do we stage the announcement?",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we split MDF between marketplace-wide demand gen and per-partner co-marketing?",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up an app-of-the-month spotlight program for our marketplace.",
+      "should_trigger": false
+    },
+    {
+      "query": "We're selling featured placement slots on the marketplace homepage - how do we run that program day to day?",
+      "should_trigger": false
+    },
+    {
+      "query": "Our AppExchange listing gets plenty of views but almost no installs. How do we fix the funnel?",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we get more reviews on our Shopify app listing without breaking their rules?",
+      "should_trigger": false
+    },
+    {
+      "query": "Which keywords should go in our HubSpot marketplace listing title and tagline?",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we chase the Built for Shopify badge and does it actually move rank?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we build a Fivetran connector ourselves or wait for them to build one for us?",
+      "should_trigger": false
+    },
+    {
+      "query": "Can our REST API realistically support CDC for a data-pipeline integration?",
+      "should_trigger": false
+    },
+    {
+      "query": "Which ETL platforms should we get listed on as a source connector first?",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we prioritize which technology partners to integrate with next quarter?",
+      "should_trigger": false
+    },
+    {
+      "query": "What are the graduation gates between a referral partnership and an OEM one?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should our technology partnerships function report into sales or into product?",
+      "should_trigger": false
+    },
+    {
+      "query": "How fast should a new partner developer get a sandbox tenant after signup?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should partner developer registration be self-service or application-gated?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we add a GraphQL layer before or after building out our webhook surface?",
+      "should_trigger": false
+    },
+    {
+      "query": "Are we a product or a platform? We can't agree on whether to open our API to outsiders at all.",
+      "should_trigger": false
+    },
+    {
+      "query": "How do I get my SaaS listed on the Salesforce AppExchange?",
+      "should_trigger": false
+    },
+    {
+      "query": "What's the best marketplace to sell my Shopify theme on?",
+      "should_trigger": false
+    },
+    {
+      "query": "We run a two-sided marketplace for freelance designers and supply liquidity is terrible in three cities. Fix it.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our reseller channel program - margins, deal registration, and partner tiers.",
+      "should_trigger": false
+    },
+    {
+      "query": "What rate limits should we publish for third-party apps calling our public API?",
+      "should_trigger": false
+    }
+  ]
+}

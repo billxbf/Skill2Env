@@ -1,0 +1,661 @@
+{
+  "skill_name": "revenue-data-governance-strategy",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I run RevOps at Meridian Layer, a B2B SaaS company, 180 employees, about $24M ARR, seat-based annual contracts. Our stack is Salesforce, HubSpot for marketing automation, Chargebee for billing, Amplitude for product analytics, and Snowflake. Two weeks ago our CEO stood up at the all-hands and declared that Salesforce is our single source of truth and everyone should treat it as authoritative for customer data. Nothing has changed. Sales ops, the CS dashboard, and the finance pack all report a different active customer count, and each team can walk you through why theirs is correct. We have a quote on the table for a metrics layer product and the CFO wants to sign it this quarter so we stop arguing. Write me the governance policy that ends this.",
+      "expected_output": "A revenue data governance policy that replaces the per-system truth declaration with a per-object-class designation table separating authoring system from read-side truth, each row with a named owner, sequenced ahead of any tool purchase, and validated against the QBR test.",
+      "files": [],
+      "expectations": [
+        "Rejects the per-system declaration that Salesforce is the single source of truth, and states that truth must be designated per object class rather than per system",
+        "Defines system of record as the operational store that authors a record on the write path, and source of truth as the derived reconciled value decisions read on the read path",
+        "States that forcing one system to serve both the write path and the read path is the recurring design mistake because the two paths want opposite properties",
+        "Produces a designation table with one row per object class covering at minimum account, contact or person, opportunity, subscription or contract, usage event, and revenue metrics",
+        "Every designation table row names an authoring system, a read-side truth, and a named owner or owning role",
+        "Designates the billing platform, not Salesforce, as the authoring system for the subscription or contract object class",
+        "Treats the revenue metrics row as derived with no single authoring system rather than inventing one for it",
+        "Instructs the user to publish the designation table before purchasing the metrics layer product, and gives the reason that a tool bought first renders the same dispute in a new interface",
+        "Applies the QBR test as the enforcement check: no two teams can present conflicting ARR numbers and both be defensible",
+        "Labels the per-object-class designation table as the dominant pattern in practice rather than a published standard or canon",
+        "Asks clarifying questions one at a time about motion, systems, scale, deadline, and effort ceiling before drafting the deliverable",
+        "Does not propose Salesforce validation rules, required fields, or a record deduplication pass as the fix for the conflicting customer counts"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Halverson Grid, 310 employees, roughly $41M ARR, B2B subscription software. At last week's board meeting our CRO presented $41.2M ARR and twenty minutes later our CFO presented $36.8M. The CEO was visibly angry and has told me to, and I quote, run a data cleanup sprint on Salesforce and dedupe everything so this never happens again. He also asked me to price a data quality tool. I have four weeks and two analysts. Give me the plan.",
+      "expected_output": "A plan that reframes the gap as a definitional dispute rather than a hygiene problem, runs a signed metric taxonomy workshop across Finance, Sales, and Marketing before any encoding, stores definitions in a diffable home with change review, and measures success by conflicting-number incidents.",
+      "files": [],
+      "expectations": [
+        "Diagnoses the two numbers as a definitional dispute rather than a data quality or duplicate record problem",
+        "Names bookings, billings, recognized revenue, and ARR/MRR as four distinct numbers that are not expected to match",
+        "States that no amount of CRM cleanup or deduplication resolves a taxonomy dispute",
+        "Prescribes a metric definition workshop producing one shared taxonomy signed by Finance, Sales, and Marketing",
+        "Requires the cross-functional definition agreement to be reached before any definition is encoded in a tool or semantic layer",
+        "Requires the signed definitions to live somewhere diffable or version-controlled with a documented change-review process",
+        "States that ARR and MRR are normalized from active subscriptions rather than read off raw billings",
+        "States that a CRM figure and a general ledger figure diverge by design rather than because one of them is wrong",
+        "Advises against reporting ARR or MRR straight out of the CRM",
+        "Uses conflicting-number incidents per executive review cycle, target zero, as the success measure",
+        "Rejects counting documented definitions or written contracts as a success metric because both count artifacts rather than enforcement",
+        "Marks any signature that cannot be collected inside the four weeks as pending with a date and a named signer rather than leaving the signer unnamed",
+        "Does not present the cleanup and dedupe sprint or the data quality tool purchase as the primary remedy"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I am Head of Data at Corvid Analytics, about $60M ARR, and I own the Q3 data plan. The plan I have drafted is: data contracts on all 46 GTM pipelines, each producing team documents its schema in a shared YAML template by end of month, and my team reviews the whole library quarterly. We run dbt on Snowflake and I have four analytics engineers. I need a rollout plan and the contract template to hand out at the kickoff.",
+      "expected_output": "A narrow contract register scoped to named revenue-critical producer-consumer boundaries, each with producer, consumer, bundle, and an enforcement rung with a named actor, starting consumer-defined, with the practitioner debate stated both ways and org-wide coverage removed from the menu.",
+      "files": [],
+      "expectations": [
+        "Rejects contract coverage across all 46 pipelines and narrows the register to a named handful of revenue-critical producer-consumer boundaries",
+        "Gives the reason that broad coverage produces contracts that are written but never enforced",
+        "States that every register entry must name a producer, a consumer, and an enforcement action",
+        "Names the four elements a contract bundles: schema, quality checks, SLA, and ownership",
+        "Recommends starting consumer-defined rather than producer-defined, as the mechanism that builds awareness first",
+        "Presents enforcement as ranked rungs running from consumer-defined monitoring checks through scheduled contract tests to producer-side CI or pre-merge validation",
+        "States the condition for promoting a boundary to producer-enforced CI: its breakage has already taken down revenue reporting once, or a single stale sync cycle changes an action rather than a report",
+        "Presents the data contract debate as genuinely unsettled and states both sides rather than presenting contracts as settled practice",
+        "Attributes the coining of the term and the GoCardless experience to Andrew Jones, including his framing of contracts as a large culture shift",
+        "Cites Chad Sanderson's measured position that contracts work on the handful of boundaries everyone already agrees are critical",
+        "Notes the conflict of interest that vendors selling contract tooling have an incentive to claim broader efficacy than the evidence supports",
+        "Rejects a quarterly documentation review as enforcement, stating that a contract with no enforcement action is documentation",
+        "Removes org-wide contract coverage from the option menu entirely rather than listing it as a lower-ranked option"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Tessellate Cloud, RevOps lead here. Snowflake computes three things for every account: a health tier, a computed ARR figure, and a 30-day usage summary. Census pushes all three into Salesforce every night at 2am. Reps routinely overwrite the health tier when they disagree with it. Our enrichment vendor overwrites employee count on the account object on its own schedule. And there is a Zapier automation someone built last year that writes the ARR field when a renewal closes. The result is that numbers flip back and forth between Monday and Wednesday and the exec team has stopped trusting the account page entirely. What is the rule I should write?",
+      "expected_output": "A sole-author rule naming the warehouse as the only writer of every reverse-ETL'd field, written into the designation table, with each competing writer ruled on, a non-writeback feedback path for rep disagreement, and operational systems retained as SOR for what they author.",
+      "files": [],
+      "expectations": [
+        "Names the warehouse as the sole author of every field it syncs outward into the CRM",
+        "Explains the failure as circular lineage: the value re-exports until there is no truth left to point at",
+        "Requires that no governed value have two writers without a declared winner named in the policy",
+        "Rules individually on all three competing writers: the reps' manual overrides, the enrichment vendor, and the renewal automation",
+        "Writes the sole-author rule into the designation table itself rather than leaving it as loose prose advice",
+        "Keeps the operational systems as system of record for what they author while the warehouse remains source of truth for the modeled values",
+        "Provides a non-writeback path for rep disagreement with the health tier, such as an override request or feedback routed to the model owner, instead of allowing direct field edits",
+        "Names an owner for each synced field",
+        "Identifies the setup as warehouse-as-hub federated and says which described facts support that operating model",
+        "Does not resolve the flipping by making the CRM authoritative for the computed values",
+        "States that field-level write precedence inside the CRM is a narrower, different problem from the cross-system authority question this policy settles",
+        "Ties success to each governed value having exactly one author rather than to the nightly sync completing without errors"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Nimbleford runs a hybrid motion: self-serve signup with a sales team that works expansion. Roughly 40,000 monthly anonymous visitors, 9,000 self-serve workspaces, and 400 accounts in Salesforce that sales actually touches. Our identity match rate sits at 28% and the board has set a 90% target for end of year. I have a $220k per year quote from an identity resolution vendor that claims it can close most of that gap. Separately, churn events fire in Stripe and never make it onto the account record in Salesforce, so CS finds out about cancellations from the customer. I need an identity and ownership policy.",
+      "expected_output": "An identity spine with canonical account and person IDs, an alias table, exact-then-review resolution, coverage measured against the linkable population rather than all traffic, the 90% target renegotiated, the hybrid workspace-to-account seam named, and billing designated SOR for churn events.",
+      "files": [],
+      "expectations": [
+        "Reframes the coverage measure: resolution coverage must be measured against the linkable population, never against all traffic or all visitors",
+        "States that anonymous behavioral identity is largely unresolvable and that no tool closes that seam",
+        "Advises against funding the large vendor spend on the premise that anonymous identity is fully resolvable",
+        "Prescribes exactly one canonical account ID and one canonical person ID",
+        "Prescribes an alias table mapping every system's native keys back to the canonical IDs",
+        "Specifies automatic resolution for exact matches with fuzzy cases routed to human review",
+        "Identifies the hybrid seam, reconciling the user-to-workspace graph against the account hierarchy, as where most identity failures originate",
+        "Names domain clustering of self-serve signups into workspaces as the standard bridge for the hybrid motion",
+        "States that domain matching and using the CRM ID as a universal key both break on M&A, subsidiaries, and self-serve signups, and that the alias table absorbs those breaks",
+        "Treats the Stripe churn events not reaching Salesforce as a join-key problem and designates the billing platform as the authoring system for subscription and churn events",
+        "Expresses the coverage target against the linkable population rather than accepting a single blended percentage across all traffic",
+        "Does not accept the 90% match-rate target as the board stated it"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Bracken Type Co, 62 employees, $6.4M ARR, seat-based annual plans only. We run HubSpot and Stripe Billing. No warehouse, no data engineer, no analytics engineer. I am the entire RevOps function and I can realistically spend about six hours a week on this. Our CTO read a long article about data mesh over the weekend and now wants each GTM team to own its data as a product behind contracts. I have a board meeting in five weeks where I need to present a governance architecture. Design it.",
+      "expected_output": "A CRM-centric hub recommendation justified against the practitioner threshold, with the operating-model options ranked explicitly, data mesh's value-versus-effort position and promotion condition named, options deleted by the capacity and deadline constraints recorded with their cause, and the designation table plus definition workshop sequenced for the five-week window.",
+      "files": [],
+      "expectations": [
+        "Recommends the CRM-centric hub operating model rather than data mesh or warehouse-as-hub",
+        "Justifies the recommendation against the roughly $10M ARR and seat-based billing threshold for staying CRM-centric",
+        "Labels that threshold explicitly as a practitioner benchmark rather than audited research",
+        "Presents two or three candidate operating models with trade-offs, recommends one, and asks for approval before drafting the designation table",
+        "States the efficiency ordering of operating models explicitly, with CRM-centric hub ahead of warehouse-as-hub federated ahead of data-mesh domain ownership",
+        "States that data mesh ranks highest on value and loses every efficiency round because its effort is organizational rather than technical",
+        "Names the condition that would promote data mesh anyway: multiple domain teams already producing governed datasets plus a sponsor mandate covering operating-model change",
+        "Deletes CI-enforced producer contracts and warehouse-as-hub from this cycle's menu on the grounds that there is no data engineering capacity",
+        "Records each deleted option together with the specific constraint that deleted it, inside the deliverable",
+        "Promotes the designation table and the definition workshop because of the five-week board deadline and queues contract engineering for a later cycle",
+        "Names the point at which CRM-centric stops scaling: when usage events or billing reconciliation start to matter, because a CRM cannot hold an event log",
+        "Does not recommend purchasing a warehouse, reverse-ETL tooling, or a semantic layer product in this cycle"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Straylight Compute bills purely on consumption, per gigabyte processed. Our application emits usage events into Segment, which fans them out to Amplitude and to Snowflake. A nightly script reads Snowflake and generates the invoices. Last month Finance found a customer who was billed twice for the same processing job in March, and a second customer whose March usage was understated because a late-arriving batch landed after invoicing. My plan was to declare Snowflake the source of truth for usage and add a pile of dbt tests on the usage model. My VP Eng thinks that is fine. Tell me what the governance call should be.",
+      "expected_output": "A designation making the metering platform SOR and SOT for billable usage events, with the structural reason the warehouse and product analytics are excluded, idempotency-keyed ingestion, a bounded correction window, a void-and-regenerate path, and the ingestion boundary written into the contract register.",
+      "files": [],
+      "expectations": [
+        "Designates a metering or billing platform as both the authoring system and the read-side truth for billable usage events, rather than the warehouse or product analytics",
+        "Rejects the plan to declare Snowflake the source of truth for billable usage",
+        "Explains the exclusion structurally: billing needs row-level correctness guarantees while warehouses and analytics tools are built for aggregate, eventually consistent analysis",
+        "States that a warehouse can join CRM, billing, telemetry, and support data but has no opinion about what any of it means for a single invoice line",
+        "Names an event-level idempotency key or transaction identifier as the dedup mechanism that prevents the observed double billing",
+        "Names a bounded backfill or resubmission window as part of the contract, citing a documented vendor example such as the 34-day correction window",
+        "Names a documented void-and-regenerate procedure for invoices finalized before a correction landed, covering the understated customer",
+        "Writes the metering ingestion boundary into the contract register with its schema, quality, SLA, and ownership elements",
+        "States that the metering vendor landscape has consolidated into payments and CRM incumbents while the designation itself holds regardless of which company operates that layer",
+        "Notes that product analytics or the application database can author usage events only before that usage becomes billable",
+        "States that usage-based billing raises event data to revenue-grade and moves the warehouse question forward in the operating-model decision",
+        "Does not accept dbt tests on the warehouse model as sufficient enforcement for the billing boundary",
+        "Separates the warehouse's reconciliation and reporting role from the metering platform's authoritative billable-usage role instead of assigning both jobs to one system"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Lattimer Row, B2B software, about $55M ARR. Our CFO wants one revenue number and has asked me to build revenue recognition logic in Snowflake so that CRM ARR and the NetSuite revenue number reconcile exactly every month. Concrete example that set him off: a $1.2M annual contract signed on 18 December shows as $1.2M in Salesforce and about $34k in NetSuite for December. He says something is broken and wants it fixed before the Q1 close. We run Salesforce, Zuora for billing, and NetSuite as the GL. Tell me how to respond and what policy to write.",
+      "expected_output": "An explanation of the divergence as structural, a four-layer CRM to billing to RevRec to GL chain with recognized revenue authored in the GL under Finance, a refusal to rebuild revenue recognition in the warehouse, named divergence categories, a bookings-to-recognized bridge, and both architectural schools stated.",
+      "files": [],
+      "expectations": [
+        "States that the CRM figure and the general ledger figure are two different objects and are not expected to match",
+        "Explains the December gap as ratable recognition with the remainder sitting in deferred revenue, not as a defect",
+        "Names the four-layer chain of CRM, billing, revenue recognition engine, and general ledger, and what each layer is authoritative for",
+        "States that the general ledger is a system of record and explicitly not a data warehouse",
+        "Designates recognized revenue as authored in the general ledger under Finance ownership",
+        "Declines to redesign revenue recognition itself, scoping the work to designating the boundary",
+        "Rejects building revenue recognition logic in Snowflake as the fix",
+        "Names structural divergence categories such as timing differences, allocation differences, and modification differences",
+        "Names at least one billing-to-RevRec seam failure, such as invoices generated before service activation, credits that never flow into a RevRec adjustment, usage billed in arrears against ratably recognized fixed fees, or refunds processed outside billing",
+        "States that the RevRec engine posts a summarized journal entry per period into the GL rather than raw transaction detail",
+        "Presents the emerging native-GL or unified-ledger architecture as a second school alongside the traditional separate-and-reconcile school, without silently picking a winner",
+        "Labels the unified-ledger position as vendor positioning documenting a real trend rather than as established practice",
+        "Proposes a reconciliation or bridge artifact between bookings and recognized revenue instead of forcing the two numbers to be equal"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Aldergrove Systems, 900 employees, VP RevOps speaking. Three asks. First, place us on Forrester's RevOps maturity stages so I can show the exec team exactly where we sit and what the next stage requires. Second, I want to stand up a data governance council. I can get one hour a month from directors in Sales Ops, Marketing Ops, and FP&A. Our CFO and CRO have both declined to join and have not committed to backing whatever the council decides. Third, we have 140 quota-carrying sellers and I need a defensible RevOps headcount number to take into planning.",
+      "expected_output": "A refusal to restate paywalled Forrester maturity stage names, the public Opportunity Lifecycle framework offered instead, a blunt call that a council without CFO/CRO backing is worse than none, a charter specification with decision rights and escalation, and a staffing figure carried as a benchmark range.",
+      "files": [],
+      "expectations": [
+        "States that the stage names of Forrester's RevOps maturity assessment sit behind a paywall and that any restatement of them is unverified",
+        "Declines to place the company on named Forrester maturity stages, or does so only with that unverified label attached",
+        "Offers Forrester's public Opportunity Lifecycle framework as the citable alternative and names its four tenets",
+        "States that a council without executive sponsorship is a council in name only and is worse than not having one",
+        "Names the missing CFO and CRO backing as the specific defect, because escalation must run to the council first and then to the CFO or CRO",
+        "Requires the council charter to carry named members, a cadence on a calendar, documented decision rights, and enforcement actions naming who acts when each fires",
+        "States that a council holding authority without an enforcement mechanism becomes a tax on the organization",
+        "Gives a staffing figure anchored on roughly 12 sellers to 1 RevOps headcount, flagged as a practitioner benchmark rather than audited research",
+        "States that ratios across sources range from 10:1 to 50:1 rather than presenting a single precise number",
+        "Notes that the seller-to-RevOps ratio thins past roughly 1,000 employees",
+        "Does not attribute a $4-8M ARR first-RevOps-hire trigger to Stage 2 Capital",
+        "Picks one decision-rights vocabulary, either data owner and data steward or domain owner, and uses it consistently throughout",
+        "If any maturity claim is used, cites the verified Gartner findings that advanced-maturity RevOps organizations are twice as likely to exceed revenue goals and 2.3 times as likely to exceed profit goals",
+        "Does not cite a Clari RevOps maturity model and does not present RevOps Co-op's four pillars as a staged maturity model"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Kestrel Health Data closed its acquisition of Pallas Analytics four months ago. We now run two CRMs, Salesforce on our side and Dynamics on theirs, two billing systems, and two separate warehouses. We wrote a source-of-truth document about 18 months ago, before the deal, and every page of it is now wrong. Our CEO keeps telling the exec team that we should just run our revenue data the way Stripe and Figma do and asks me every week why we have not copied them yet. I need a policy I can actually defend in the integration steering committee on Thursday.",
+      "expected_output": "A policy that refuses the lore-based model, starts from GitLab's public handbook structure, re-designates per object class across the merged stack, absorbs the join-key breaks in an alias table, and makes designation review a standing M&A integration step with the QBR test re-run.",
+      "files": [],
+      "expectations": [
+        "States that public claims about how Stripe, Figma, Atlassian, Notion, or Datadog run internal revenue data governance are industry lore, because none of them documents it publicly",
+        "Declines to model the policy on Stripe or Figma practices",
+        "Recommends GitLab's public handbook as the documented exception to start the structure from",
+        "Names verifiable GitLab elements such as a central enterprise data team with embedded function analytics teams, a data quality program, or KPI definitions required to state their canonical data source and calculation formula",
+        "Makes designation-table review a standing step in M&A integration rather than a one-off cleanup",
+        "States that the designation table is only current until the next system of record arrives",
+        "Requires re-running the QBR test after the merger and after every new system entering the stack",
+        "Resolves the two-CRM situation by designating authority per object class rather than declaring one CRM the winner for everything up front",
+        "Uses the alias table to absorb the M&A join-key breaks instead of relying on domain matching or a universal CRM ID",
+        "Names the failure mode in which systems of record multiply faster than the designation table consolidates them",
+        "Asks which systems the merger duplicated, and the rest of the intake questions, before proposing the consolidation",
+        "Separates tool ownership and consolidation decisions from data authority, and does not present a CRM migration choice as the governance deliverable"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "Finance and Sales presented two different ARR numbers to the board again. How do I make one of them authoritative?",
+      "should_trigger": true
+    },
+    {
+      "query": "We need a source of truth map across Salesforce, our billing platform, and Snowflake.",
+      "should_trigger": true
+    },
+    {
+      "query": "Set up revenue data governance for our GTM stack.",
+      "should_trigger": true
+    },
+    {
+      "query": "Which system should win when the CRM opportunity and the billing subscription disagree?",
+      "should_trigger": true
+    },
+    {
+      "query": "Nobody has ever written down which system is authoritative for what. Can you build that?",
+      "should_trigger": true
+    },
+    {
+      "query": "Design a system-of-record and source-of-truth designation table for our revenue objects.",
+      "should_trigger": true
+    },
+    {
+      "query": "Our CEO declared Salesforce the single source of truth and it has not stopped the dashboard fights.",
+      "should_trigger": true
+    },
+    {
+      "query": "We have three dashboards showing three different customer counts and every team insists theirs is right.",
+      "should_trigger": true
+    },
+    {
+      "query": "Who should own the definition of ARR at our company?",
+      "should_trigger": true
+    },
+    {
+      "query": "I need a data contract register for the pipelines that feed our revenue reporting.",
+      "should_trigger": true
+    },
+    {
+      "query": "Where should our metric definitions live and who signs off when one changes?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our self-serve signups never match the accounts sales works. Design the identity and ownership policy.",
+      "should_trigger": true
+    },
+    {
+      "query": "help me figure out who owns what data across our revenue systems",
+      "should_trigger": true
+    },
+    {
+      "query": "two teams, two ARR numbers, one very angry CEO. fix it",
+      "should_trigger": true
+    },
+    {
+      "query": "Should the warehouse or the CRM be authoritative for computed ARR?",
+      "should_trigger": true
+    },
+    {
+      "query": "We are standing up a governance council for revenue data. What should its charter say?",
+      "should_trigger": true
+    },
+    {
+      "query": "Post-merger we have two CRMs and two billing systems and no rule for which one wins.",
+      "should_trigger": true
+    },
+    {
+      "query": "Our warehouse syncs values back into Salesforce but reps also edit those fields. What is the policy?",
+      "should_trigger": true
+    },
+    {
+      "query": "Write the org-wide policy for which system authors each revenue object.",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I stop bookings, billings, and recognized revenue from being used interchangeably around here?",
+      "should_trigger": true
+    },
+    {
+      "query": "Do we need data contracts between our GTM teams, and if so, where exactly?",
+      "should_trigger": true
+    },
+    {
+      "query": "Build the identity spine for our accounts and users across CRM, billing, and product analytics.",
+      "should_trigger": true
+    },
+    {
+      "query": "Churn fires in Stripe and never shows up on the account record. What is the governance fix?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our board wants one revenue number and we currently have four. Where do I start?",
+      "should_trigger": true
+    },
+    {
+      "query": "I want a policy document that says which system decides what, and who arbitrates disputes.",
+      "should_trigger": true
+    },
+    {
+      "query": "what is the right way to decide who owns a metric definition",
+      "should_trigger": true
+    },
+    {
+      "query": "We are moving to usage-based billing. Which system should be authoritative for usage events?",
+      "should_trigger": true
+    },
+    {
+      "query": "Everyone builds their own ARR query. How do we make one of them the official one?",
+      "should_trigger": true
+    },
+    {
+      "query": "Design the federated ownership model for our revenue data.",
+      "should_trigger": true
+    },
+    {
+      "query": "Can you help me write the escalation path for when two teams disagree about a number?",
+      "should_trigger": true
+    },
+    {
+      "query": "My analytics engineer and my RevOps lead both think they own the pipeline metrics. Who actually does?",
+      "should_trigger": true
+    },
+    {
+      "query": "We bought a semantic layer tool six months ago and the arguments have not stopped.",
+      "should_trigger": true
+    },
+    {
+      "query": "How should we govern revenue metric definitions across Finance, Sales, and Marketing?",
+      "should_trigger": true
+    },
+    {
+      "query": "I need to decide whether we go warehouse-as-hub or keep everything in the CRM.",
+      "should_trigger": true
+    },
+    {
+      "query": "Is data mesh the right model for our GTM data, or is it overkill for us?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our CRM says $41M ARR and NetSuite says $37M. Which one is wrong?",
+      "should_trigger": true
+    },
+    {
+      "query": "set the rules for which tool authors which customer record",
+      "should_trigger": true
+    },
+    {
+      "query": "Our quarterly business reviews always devolve into arguing about whose number is right.",
+      "should_trigger": true
+    },
+    {
+      "query": "Draft a revenue data governance policy for a hybrid PLG and sales-led company.",
+      "should_trigger": true
+    },
+    {
+      "query": "We keep buying tools to fix reporting disputes and the disputes keep coming back.",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I get Finance, Sales, and Marketing to sign one metric taxonomy?",
+      "should_trigger": true
+    },
+    {
+      "query": "What should the arbitration process look like when data definitions conflict across teams?",
+      "should_trigger": true
+    },
+    {
+      "query": "I need to document, per object, which system authors it and which one we report from.",
+      "should_trigger": true
+    },
+    {
+      "query": "Who owns the account hierarchy, sales or the data team?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our identity match rate is 30% and the board wants 90%. What do I tell them?",
+      "should_trigger": true
+    },
+    {
+      "query": "Can you write the rule for our reverse-ETL fields so we stop having two writers?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should product analytics or the billing platform be the truth for consumption data?",
+      "should_trigger": true
+    },
+    {
+      "query": "Every system in our stack claims to be the customer master. Sort it out.",
+      "should_trigger": true
+    },
+    {
+      "query": "We need a governance operating model for revenue data that survives adding new systems.",
+      "should_trigger": true
+    },
+    {
+      "query": "Help me scope a metric definition workshop with Finance and Sales.",
+      "should_trigger": true
+    },
+    {
+      "query": "explain how to split system of record from source of truth for our revenue objects",
+      "should_trigger": true
+    },
+    {
+      "query": "What enforcement plan keeps the governance doc from just rotting in a drive folder?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our recognized revenue and our CRM bookings never tie out and nobody knows whose job that is.",
+      "should_trigger": true
+    },
+    {
+      "query": "I am the new VP RevOps and there is no data authority policy at all. Where do I start?",
+      "should_trigger": true
+    },
+    {
+      "query": "Make a plan so no two teams can present conflicting revenue numbers and both be defensible.",
+      "should_trigger": true
+    },
+    {
+      "query": "Who arbitrates when the pipeline number in the dashboard disagrees with the CRM?",
+      "should_trigger": true
+    },
+    {
+      "query": "Who should own the Industry picklist field in Salesforce and how often must it be refreshed?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write validation rules so reps cannot leave the close date blank on an opportunity.",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a CRM field dictionary with write precedence and conflict rules for each field.",
+      "should_trigger": false
+    },
+    {
+      "query": "Our CRM has 400 custom fields and nobody knows which are still used. Audit them.",
+      "should_trigger": false
+    },
+    {
+      "query": "Set freshness SLAs for the contact fields in our CRM.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design a field lifecycle process for deprecating unused CRM fields.",
+      "should_trigger": false
+    },
+    {
+      "query": "Which revenue KPIs should the board see versus the frontline AE?",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a metric tree that rolls up from rep-level activity to company ARR.",
+      "should_trigger": false
+    },
+    {
+      "query": "What guardrail counter-metric should ride alongside pipeline coverage?",
+      "should_trigger": false
+    },
+    {
+      "query": "Pick the right KPI set for a Series B product-led company.",
+      "should_trigger": false
+    },
+    {
+      "query": "Structure our monthly board revenue deck so a miss does not blindside anyone.",
+      "should_trigger": false
+    },
+    {
+      "query": "What narrative order should an executive revenue report follow?",
+      "should_trigger": false
+    },
+    {
+      "query": "Set the cadence for weekly versus monthly versus quarterly revenue reporting.",
+      "should_trigger": false
+    },
+    {
+      "query": "Find where deals are silently dying between MQL and SQL and size the loss in recoverable dollars.",
+      "should_trigger": false
+    },
+    {
+      "query": "We think we are losing money on renewals but cannot prove it. Trace the leak.",
+      "should_trigger": false
+    },
+    {
+      "query": "We have 47 GTM tools and a renewal coming up. What do we cut?",
+      "should_trigger": false
+    },
+    {
+      "query": "Score our sales tech stack with TIME and tell me what to consolidate.",
+      "should_trigger": false
+    },
+    {
+      "query": "Our MQL threshold is producing garbage leads. Recalibrate the scoring model.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the round-robin rules for assigning inbound leads to reps by territory.",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a weighted customer health score from product usage and support tickets.",
+      "should_trigger": false
+    },
+    {
+      "query": "Rank the leading indicators of churn for our enterprise accounts.",
+      "should_trigger": false
+    },
+    {
+      "query": "Our forecast has missed four quarters running. Diagnose why.",
+      "should_trigger": false
+    },
+    {
+      "query": "Audit our pipeline stage exit criteria against buyer-verifiable milestones.",
+      "should_trigger": false
+    },
+    {
+      "query": "Flag every stale deal in the pipeline and give me a disposition for each one.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design what data transfers from Sales to CS when a deal closes.",
+      "should_trigger": false
+    },
+    {
+      "query": "Build the discount approval matrix for non-standard deals.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our funnel stage set and decide whether the unit of analysis is the lead or the buying group.",
+      "should_trigger": false
+    },
+    {
+      "query": "What does a Director of RevOps need on their resume to get promoted to VP?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the interview loop and scorecard for a RevOps manager hire.",
+      "should_trigger": false
+    },
+    {
+      "query": "Give me a list of RevOps podcasts and newsletters worth following.",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up a data quality testing framework for our dbt models.",
+      "should_trigger": false
+    },
+    {
+      "query": "Write our GDPR data handling and retention policy for customer personal data.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the schema for our event ingestion pipeline into the data lake.",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a data catalog so analysts can find the right tables in Snowflake.",
+      "should_trigger": false
+    },
+    {
+      "query": "How do I set up column-level lineage tracking in our warehouse?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write an OpenAPI contract for our public REST endpoints and version it properly.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design a master data management approach for our product catalog SKUs.",
+      "should_trigger": false
+    },
+    {
+      "query": "Our Airflow DAGs keep failing silently. Add alerting and retries.",
+      "should_trigger": false
+    },
+    {
+      "query": "Define governance rules for which AI agents can access which internal tools.",
+      "should_trigger": false
+    },
+    {
+      "query": "Normalize our Postgres schema for the orders table.",
+      "should_trigger": false
+    },
+    {
+      "query": "Which data warehouse should we buy: Snowflake, BigQuery, or Databricks?",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up row-level security in Snowflake so each department only sees its own rows.",
+      "should_trigger": false
+    },
+    {
+      "query": "Write a data retention and deletion policy to satisfy our SOC 2 audit.",
+      "should_trigger": false
+    },
+    {
+      "query": "We are migrating reporting from Looker to Tableau. What breaks?",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a dbt semantic model for our orders and revenue tables.",
+      "should_trigger": false
+    },
+    {
+      "query": "How do I implement ASC 606 recognition rules for multi-element arrangements?",
+      "should_trigger": false
+    },
+    {
+      "query": "Reconcile last month's Stripe payouts against our bank statement.",
+      "should_trigger": false
+    },
+    {
+      "query": "What should our sales commission plan pay out on multi-year deals?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write a privacy notice for our website covering cookies and tracking.",
+      "should_trigger": false
+    },
+    {
+      "query": "Set naming conventions for our product event tracking plan in Segment.",
+      "should_trigger": false
+    },
+    {
+      "query": "Our Salesforce-to-HubSpot sync keeps creating duplicate contacts. Debug the integration.",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a customer 360 dashboard in Looker.",
+      "should_trigger": false
+    },
+    {
+      "query": "Choose a CDP for us: Segment, RudderStack, or mParticle?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the incident runbook for when our nightly ETL job fails.",
+      "should_trigger": false
+    },
+    {
+      "query": "Draft a vendor security questionnaire for our data processors.",
+      "should_trigger": false
+    },
+    {
+      "query": "Explain how a star schema differs from one big table for analytics modeling.",
+      "should_trigger": false
+    }
+  ]
+}

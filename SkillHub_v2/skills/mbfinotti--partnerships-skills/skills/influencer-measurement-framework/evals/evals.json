@@ -1,0 +1,512 @@
+{
+  "skill_name": "influencer-measurement-framework",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Our agency just sent the reporting section of their proposal for the spring flight and I have to take it to our CFO on Friday. Brand is Halden & Co, DTC skincare, this is the first time we've ever worked with creators. The flight is 8 micro-creators on TikTok and Reels, $40K, six weeks. What they've put down is: EMV target of $250K, projected 5.78x return based on industry data, and a 4.5% engagement rate target which they say is the industry benchmark. Can you turn this into the actual measurement plan we'd run?",
+      "expected_output": "A pre-launch measurement plan document that strips the EMV figure, the 5.78x projection and the borrowed 4.5% ER target, replaces them with a recomputable glossary and a first-flight baseline-setting posture, and does not invent tracking capabilities the brand has not confirmed.",
+      "files": [],
+      "expectations": [
+        "Refuses to carry the $250K EMV figure into the plan as a financial, revenue, or ROI value",
+        "States that EMV and MIV are AVE derivatives whose only legitimate use is relative, directional comparison inside one vendor's own methodology",
+        "Cites the AMEC Barcelona Principles, specifically that AVEs are not the value of communication, as the basis for rejecting EMV as value",
+        "Rejects the 5.78x figure as a planning input and identifies it as a vendor benchmark with weak or inconsistent provenance",
+        "Rejects the 4.5% engagement-rate figure as a target because vendor benchmarks are calibration context, not targets",
+        "Sets no numeric performance target and labels this a first, baseline-setting flight because the brand has no trailing history of its own",
+        "Names which engagement-rate denominator the plan will use (reach, impressions, followers, or views) and commits to holding it constant for the whole campaign",
+        "Notes that the same post reads very differently depending on which engagement-rate denominator is chosen",
+        "Delivers a measurement plan document containing at minimum glossary, KPI tree, attribution, baseline, test design, cadence, data sources and blind spots sections",
+        "Gives each KPI a definition that states numerator, denominator and window",
+        "Does not assume any tracking capability the user has not confirmed: either asks which of codes, UTM links, affiliate network, pixel, post-purchase survey or CRM field exist, or records them as unconfirmed open items",
+        "Labels the provenance of figures it carries forward (standards-body, platform-published, vendor-sourced, practitioner, or the brand's own history)"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Northwind Audio is launching a new pair of over-ear headphones. This is a pure brand push - 3 YouTube tech reviewers and 2 podcast hosts, $180K, eight weeks, and the goal is simply that more people in our category have heard of us. Two constraints from above: our VP of Growth says the headline number in the readout has to be ROAS so it sits next to our paid search dashboard, and he wants the YouTube brand lift study because it's the cheapest one to run. The readout goes to the board, who will use it to decide whether to double our category spend next year. Put the measurement plan together.",
+      "expected_output": "A measurement plan that refuses ROAS as the primary KPI for an awareness objective, substitutes awareness-stage KPIs, makes pre-launch baseline capture mandatory, and escalates the brand-lift choice above a platform-run study because the board decision must survive the seller grading its own work.",
+      "files": [],
+      "expectations": [
+        "Refuses ROAS as the primary KPI and states the reason: the primary KPI's funnel stage must match the campaign objective's funnel stage",
+        "Proposes an awareness-stage primary KPI set instead, drawn from reach, impressions, CPM, video views, or brand lift",
+        "Explains the refusal to the user rather than silently complying with the ROAS instruction",
+        "Makes pre-launch baseline capture mandatory and names trailing branded-search volume and direct traffic as what gets captured",
+        "States the consequence of launching without that baseline: post-campaign lift claims will be unsupported",
+        "Removes geo-lift and platform conversion-lift holdout from the test-design menu on the grounds that an awareness campaign with no conversion volume cannot use them",
+        "Identifies brand lift as the only instrument that measures this campaign's stated objective",
+        "Flags the self-measurement conflict in a platform-run brand-lift study: the platform that sold the media grades its own work",
+        "Recommends independent-panel brand lift, or names the condition requiring it, because the readout drives a budget-size board decision",
+        "Notes that brand-lift studies need roughly 1-4 weeks of in-flight surveying and that short flights return inconclusive results",
+        "Does not equate a platform view count with an MRC-viewable impression, and states the MRC bar (50% of pixels for 1 second display, 2 seconds video)",
+        "States that podcast placements have no native brand-side analytics access and must be measured through codes, vanity URLs and publisher-reported numbers"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Cedarline is a meal-kit startup. We ran one creator flight last quarter - 5 Instagram creators, roughly 380 attributed orders, $55K spend. Finance now thinks the whole creator line item is wasted money. To buy time I told them we'd run a geo-lift test this quarter across our 6 shipping regions to prove incrementality, and the result has to be in the board pack in five weeks. Write the measurement plan so I can show them the methodology.",
+      "expected_output": "A measurement plan that runs the MDE power check first, concludes the program cannot power a geo-lift test at this volume and on this timeline, writes directional-only into the plan, and substitutes the baseline-anchored branded-search series with correlational framing.",
+      "files": [],
+      "expectations": [
+        "Runs, or requires as the first step, a Minimum Detectable Effect power check before any commitment to the geo-lift test",
+        "States the decision rule: if the computed MDE exceeds the lift the business would actually act on, the test is not run",
+        "Concludes that a program at this conversion volume cannot power the test and writes \"directional only\" into the plan instead of promising incrementality",
+        "Explains that an underpowered test returns \"no significant lift\" for a channel that genuinely works, and a working channel gets cut on that result",
+        "References the practitioner MDE target of roughly 5-10% over a 4-8 week window",
+        "Notes that the five-week deadline alone rules out geo-lift, which needs roughly a quarter of calendar time to return an answer",
+        "Keeps branded-search and direct-traffic movement against the pre-launch baseline in the plan as the series that survives when the test does not",
+        "Labels that branded-search comparison as correlational rather than causal",
+        "Names concrete geo-lift or synthetic-control tooling (Meta's GeoLift package or Google's CausalImpact) rather than leaving the method unspecified",
+        "Does not hand the board an incrementality or causal claim the design cannot support",
+        "States that incrementality is realistic at always-on or aggregated portfolio level and never per creator",
+        "Given the hard date, prioritises the near-zero-setup rungs - unique promo codes, UTM-tagged links, and the branded-search proxy"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Arcwell is a B2B observability platform, average deal around $38K ACV, sales cycle runs about seven months. We've just put four people on retainer indefinitely - two newsletter writers and two podcast hosts - at $12K a month total. Our VP Marketing wants a monthly report showing revenue from the program. We already have UTM links and a \"how did you hear about us\" dropdown on the demo form; right now about 12% of closed-won deals pick anything trackable in that dropdown. Build the measurement plan.",
+      "expected_output": "A B2B always-on measurement plan whose revenue object is influenced pipeline rather than revenue, that promotes the self-reported channel field to primary because trackable attribution is below the threshold, limits the stack to what newsletter and podcast placements actually allow, and declines incrementality on power grounds.",
+      "files": [],
+      "expectations": [
+        "Replaces revenue with influenced pipeline or opportunities created as the primary revenue object, because purchase rarely falls inside the flight window in B2B",
+        "States that a roughly seven-month cycle makes per-flight conversion KPIs undercount, and either stretches the attribution window or shifts to pipeline-stage metrics",
+        "Promotes the \"how did you hear about us\" field to the primary conversion source because fewer than about 20% of closed-won deals name a trackable channel",
+        "States that the self-reported channel field is analyzed at cohort level and never per deal",
+        "Uses trailing branded-search volume as the corroborating proxy alongside the self-reported field",
+        "Notes that newsletter and podcast placements give the brand no native analytics access",
+        "Limits the attribution options for those placements to unique codes and per-creator vanity URLs",
+        "Asks whether the publishers' download numbers are certified against the IAB Tech Lab Podcast Measurement Technical Guidelines v2.2",
+        "States that podcast downloads prove delivery, not response",
+        "Declines an incrementality test because B2B conversion volume at this size cannot power one, and writes that into the plan",
+        "Flags publisher-reported figures as publisher-sourced wherever they appear in reporting",
+        "Sets reporting cadence per stakeholder, with each row naming the decision that cadence drives",
+        "Declares dark social as a blind spot, including that the person filling the demo form may not be the person the creator influenced"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Tavolo is a DTC cookware brand and we're finally doing creator marketing properly this year - around 20 creators across three flights. My plan was to have engineering build the TikTok and Meta pixel and shopping integration first, since that's the most accurate source we'd have, then layer everything else on top; eng quotes about six weeks including the consent work. Context: we already run an affiliate network for our coupon-site partners, and checkout is a Shopify build we can change freely. This is meant to be a capability we reuse every flight, not a one-off. What order should we build the measurement stack in, and write me the plan.",
+      "expected_output": "A measurement plan that explicitly ranks the attribution stack by coverage and confidence bought per hour of setup, puts pixel last rather than first, treats codes plus UTM links as the floor, promotes the already-live affiliate network and the post-purchase survey, and names which user answer moved each rung.",
+      "files": [],
+      "expectations": [
+        "Ranks the attribution stack explicitly by coverage and confidence bought per hour of setup, not by each method's apparent rigour",
+        "Places platform pixel and shopping integration last in the build order rather than first",
+        "Gives the reason pixel is last: engineering plus consent work, for a lossy signal the platform grades itself",
+        "Places unique promo codes and UTM-tagged links first, as the floor of the stack",
+        "States that codes and tagged links are kept together because they cover different slices - a code survives being screenshotted or read aloud, a tagged link does not",
+        "Promotes the already-running affiliate network to the top rung at near-zero incremental effort, and names that existing platform as the answer that moved it",
+        "Recommends the one-question post-purchase survey and justifies it by the reuse-every-flight mandate, noting it is the only method that sees dark social",
+        "States that a single-method stack is not triangulated",
+        "Writes each method's known failure mode next to it in the plan",
+        "Includes a code-leakage policy and a leakage monitor alongside the promo-code rung",
+        "Notes that pixel-based counts are a floor rather than a total, because of mobile tracking opt-outs and blocked third-party cookies"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Kestrel Supply runs an affiliate-linked creator program - 30 creators, each with their own discount code. Our links are split across two networks because we migrated halfway through the year and the old contracts don't expire until March. Last month redemptions on four of the codes jumped about 40% but the click numbers on those creators didn't move at all. Finance also wants me to reconcile what each creator is owed for Q1 in the same document. Draft the measurement plan.",
+      "expected_output": "A measurement plan that reads the redemption-without-clicks pattern as code leakage rather than performance, installs the leakage guardrail and remediation ladder, records the two networks' differing cookie windows without summing across them, and refuses to do payout reconciliation in this document.",
+      "files": [],
+      "expectations": [
+        "Identifies redemptions rising with no matching link clicks as promo-code leakage rather than genuine creator performance",
+        "Names coupon or cashback browser extensions inserting themselves as the last click as the mechanism behind it",
+        "Makes code-leakage rate a mandatory guardrail KPI for this affiliate-linked objective rather than an optional extra",
+        "Defines the leakage monitor concretely as redemptions with zero matching link clicks",
+        "Recommends immediate deactivation of leaked codes",
+        "Recommends switching to single-use codes once leakage passes a few percent of redemptions",
+        "Adds a creator-onboarding policy restricting code distribution to the creator's own channels rather than coupon sites",
+        "States that the two affiliate networks' cookie windows differ and records each window in the glossary",
+        "Refuses to sum or compare conversions across the two networks as if they were on the same basis",
+        "Declines to compute what each creator is owed in this document and states that payout and commission reconciliation is a separate exercise",
+        "States that unmonitored leakage inflates the creator's credit and misallocates spend",
+        "Fixes one attribution window for the campaign and labels it in the glossary"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Quick one. Bramble Home does about 12 creator collabs a quarter across TikTok, Instagram and YouTube. Current process: each creator DMs us screenshots of their insights a week after posting, we add the view counts up into one \"total views\" figure for the quarterly deck, and we compare that against the same quarter last year to show growth. Our new CMO says our numbers look soft next to what she saw at her last company. I want to tighten this up before Q3 kicks off - what should the measurement plan say?",
+      "expected_output": "A measurement plan that replaces screenshot sourcing with contracted analytics access, refuses the cross-platform view total, splits the year-over-year series at the platform view-definition change, date-stamps definitions in the glossary, and rejects the CMO's previous-company numbers as a target.",
+      "files": [],
+      "expectations": [
+        "Flags creator-supplied screenshots as trivially falsifiable and a documented fraud vector",
+        "Requires API or account-level analytics access to be written into the creator agreement rather than requested ad hoc",
+        "States that any figure that remains screenshot-sourced must be labelled as such in every report that carries it",
+        "Refuses to sum view counts across platforms into a single \"total views\" number",
+        "Gives the reason: each platform defines a view differently, so the totals are not additive",
+        "States that platforms redefined or relabelled views during 2025-2026 and that the year-over-year comparison crosses a definition change",
+        "Requires the reporting series to be split at the definition-change date and annotated there",
+        "Records each platform's view definition in the glossary with a date stamp",
+        "Rejects the CMO's numbers from a previous company as a target and sets targets from Bramble Home's own trailing median by platform instead",
+        "Distinguishes impressions from reach, noting impressions count repeat displays and are always greater than or equal to reach",
+        "Does not equate a platform view with an MRC-viewable impression",
+        "Delivers the fix as a measurement plan starting with the glossary, not as an ad-hoc correction to the existing deck"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Sable & Finch, apparel brand. We have a dashboard wired to our creator data that refreshes hourly and everyone in the company has the link - me, the two founders, the paid social lead, the merch team, finance. Nobody looks at it. Our head of brand now wants me to add sentiment and share of voice to it as well. We're about to start a 10-creator autumn flight and I'd like to get the reporting right this time. What should the measurement plan say about reporting?",
+      "expected_output": "A measurement plan whose cadence section is a per-stakeholder table tying each audience to a frequency, a metric set and a named decision, that identifies the everyone-sees-everything live dashboard as the defect, and that declines to add metrics no decision depends on.",
+      "files": [],
+      "expectations": [
+        "Builds the cadence as rows, one per stakeholder, each naming who, how often, which metrics they see, and the decision it drives",
+        "States that a report driving no decision gets cut from the plan",
+        "Identifies the always-on dashboard shared with everyone and owned by no decision as the defect, rather than a shortage of metrics",
+        "Declines to add sentiment and share of voice unless a named stakeholder decision depends on them",
+        "Asks which decision each named stakeholder makes from the report before assigning them metrics",
+        "Demotes vanity counts such as reach, likes and follower counts from headline numbers to context",
+        "Ties the primary KPI both to the campaign objective's funnel stage and to the decision the report exists to drive",
+        "Points out that an hourly refresh serves no stated decision cadence",
+        "Produces a measurement plan for the autumn flight rather than dashboard advice alone",
+        "Declares the blind spots the reporting structurally cannot see"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Meridian Pet Co. Our autumn creator flight is $92K all-in: $61K in creator fees, $14K for a shared studio production day that all nine creators used, $9K agency retainer, and $8K in whitelisted paid amplification that we only ran behind four of the nine. I want to report CPA per creator weekly and pause anyone above $45 CPA at the two-week mark. Write the measurement section.",
+      "expected_output": "A measurement section that makes CPA per creator recomputable by writing the cost-allocation rule into the glossary first, assigns creator-specific costs directly, decides explicitly how shared costs are handled, and blocks the pause decision until the rule and the attribution window are settled.",
+      "files": [],
+      "expectations": [
+        "Requires a written cost-allocation rule in the glossary before CPA per creator is reported at all",
+        "Assigns creator-specific costs directly to the creators who incurred them, including the $8K amplification that ran behind only four of the nine",
+        "Decides explicitly whether the $14K shared production day and $9K agency retainer are excluded from the per-creator numerator or allocated pro-rata by fee share, and states which was chosen",
+        "States that per-creator CPAs will not sum to flight-level CPA, and that this is noted on every report carrying both numbers",
+        "States that without the allocation rule the metric is not recomputable and must not drive a pause, budget-shift, or rebook decision",
+        "Flags the conflict between a pause decision taken at two weeks and the attribution window the plan fixes",
+        "Fixes and names a single attribution window for the campaign",
+        "Defines CPA with its numerator, denominator and window",
+        "Does not import an external or industry CPA benchmark to validate or replace the $45 threshold",
+        "Delivers the section in measurement-plan shape, naming the data source behind each KPI"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "We're paying 8 TikTok micro-influencers for a skincare launch next month - how do we measure it?",
+      "should_trigger": true
+    },
+    {
+      "query": "Build the measurement plan for our creator campaign before it launches",
+      "should_trigger": true
+    },
+    { "query": "What KPIs should we use for an influencer campaign?", "should_trigger": true },
+    {
+      "query": "Design the KPI and attribution plan for our B2B ambassador program with 4 newsletter writers",
+      "should_trigger": true
+    },
+    { "query": "How do we attribute sales to individual creators?", "should_trigger": true },
+    {
+      "query": "Our agency wants to report EMV as our return. Is that legitimate?",
+      "should_trigger": true
+    },
+    {
+      "query": "We have promo codes and Google Analytics, nothing else. What can we honestly measure on this creator campaign?",
+      "should_trigger": true
+    },
+    {
+      "query": "Finance wants proof the creator line item works before we renew it",
+      "should_trigger": true
+    },
+    {
+      "query": "Set up the reporting for our influencer program before the flight starts",
+      "should_trigger": true
+    },
+    {
+      "query": "Which engagement rate formula should we standardise on across creators?",
+      "should_trigger": true
+    },
+    { "query": "Can we run an incrementality test on our creator spend?", "should_trigger": true },
+    {
+      "query": "How do I know if my creator campaign actually caused anything?",
+      "should_trigger": true
+    },
+    {
+      "query": "What should we capture before we launch so we can prove lift afterwards?",
+      "should_trigger": true
+    },
+    {
+      "query": "Write the measurement framework for a YouTube sponsorship flight",
+      "should_trigger": true
+    },
+    {
+      "query": "We sponsor 3 newsletters and 2 podcasts. How do we track whether any of it works?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our creators send screenshots of their analytics. Is that good enough for reporting?",
+      "should_trigger": true
+    },
+    { "query": "Define what counts as a view for our creator reporting", "should_trigger": true },
+    {
+      "query": "Draft the pre-launch measurement plan for our autumn creator flight",
+      "should_trigger": true
+    },
+    {
+      "query": "How often should I report on our influencer program, and to whom?",
+      "should_trigger": true
+    },
+    {
+      "query": "My CMO wants one total views number across TikTok, Instagram and YouTube. Thoughts?",
+      "should_trigger": true
+    },
+    {
+      "query": "We need to decide which creators to rebook. What do we need to be measuring now?",
+      "should_trigger": true
+    },
+    {
+      "query": "Marketing wants an awareness push with 3 YouTube creators and finance wants proof it works",
+      "should_trigger": true
+    },
+    {
+      "query": "What's a realistic engagement rate target for our first creator campaign?",
+      "should_trigger": true
+    },
+    {
+      "query": "Can you help me structure the reporting deck for a creator flight, before we start it?",
+      "should_trigger": true
+    },
+    { "query": "How do we measure a podcast sponsorship?", "should_trigger": true },
+    {
+      "query": "Our influencer promo codes are getting scraped by coupon extensions. How should the reporting handle that?",
+      "should_trigger": true
+    },
+    {
+      "query": "Do we have enough volume to run a geo holdout on our creator channel?",
+      "should_trigger": true
+    },
+    {
+      "query": "How should we define CPA per creator when a lot of the cost is shared across the whole flight?",
+      "should_trigger": true
+    },
+    {
+      "query": "B2B creator program, seven-month sales cycle. What do we actually report monthly?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our attribution shows creators driving almost nothing but prospects keep telling sales they heard about us on a podcast. How do we reconcile that?",
+      "should_trigger": true
+    },
+    {
+      "query": "What should go in the glossary for our creator campaign reporting?",
+      "should_trigger": true
+    },
+    {
+      "query": "Is the $5.78 per dollar figure a reasonable planning assumption for influencer marketing?",
+      "should_trigger": true
+    },
+    {
+      "query": "We never captured a baseline before launching. What can we still claim?",
+      "should_trigger": true
+    },
+    { "query": "Set up brand lift measurement for our creator campaign", "should_trigger": true },
+    {
+      "query": "What are the blind spots we should be declaring in our creator reporting?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I stop our influencer reports from being argued about after every flight?",
+      "should_trigger": true
+    },
+    {
+      "query": "Put together the measurement approach for a 20-creator always-on program",
+      "should_trigger": true
+    },
+    {
+      "query": "Which tracking methods should we build first for creator marketing, given limited engineering time?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our board asked whether the platform's own lift study is trustworthy. What do we do?",
+      "should_trigger": true
+    },
+    {
+      "query": "Plan how we'll evaluate our creator partnerships at the end of the quarter, starting now",
+      "should_trigger": true
+    },
+    {
+      "query": "We're about to sign 6 creators. What tracking needs to be in place first?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do we compare creator performance when each one is on a different platform?",
+      "should_trigger": true
+    },
+    {
+      "query": "What's the right way to measure an always-on ambassador program?",
+      "should_trigger": true
+    },
+    { "query": "Should we use engagement rate by followers or by reach?", "should_trigger": true },
+    {
+      "query": "We migrated affiliate networks mid-year and the creator numbers don't line up. How should reporting handle it?",
+      "should_trigger": true
+    },
+    {
+      "query": "I need a document that fixes how we'll judge this creator campaign before anyone spends money",
+      "should_trigger": true
+    },
+    {
+      "query": "Design reporting for our creator program that our CFO will actually accept",
+      "should_trigger": true
+    },
+    {
+      "query": "What's the honest version of influencer ROI we can put in front of the board?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our influencer reporting is all reach and likes. What should it be instead?",
+      "should_trigger": true
+    },
+    { "query": "Write the creative brief for the 6 creators we just signed", "should_trigger": false },
+    {
+      "query": "What deliverable specs should I put in our creator brief - video length, aspect ratio, hook timing?",
+      "should_trigger": false
+    },
+    {
+      "query": "Draft the key messages and brand guardrails for an influencer campaign brief",
+      "should_trigger": false
+    },
+    {
+      "query": "How many revision rounds should I allow a creator in the brief?",
+      "should_trigger": false
+    },
+    { "query": "Help me shortlist creators for a fitness apparel launch", "should_trigger": false },
+    {
+      "query": "What criteria should I use to vet influencers for brand safety?",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a scoring template for ranking candidate creators against our audience fit",
+      "should_trigger": false
+    },
+    {
+      "query": "Find me B2B creators in the observability space worth approaching",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the first DM I send to a creator we want to work with",
+      "should_trigger": false
+    },
+    {
+      "query": "Draft a follow-up sequence for creators who haven't replied to our pitch",
+      "should_trigger": false
+    },
+    {
+      "query": "How much should I pay a creator with 80k followers on Instagram?",
+      "should_trigger": false
+    },
+    { "query": "What usage rights should I ask for in a creator contract?", "should_trigger": false },
+    {
+      "query": "The creator came back asking for category exclusivity. What's my counter?",
+      "should_trigger": false
+    },
+    {
+      "query": "Set my walk-away threshold for a podcast sponsorship negotiation",
+      "should_trigger": false
+    },
+    { "query": "Spec the dashboard for our ongoing affiliate program", "should_trigger": false },
+    {
+      "query": "What metrics belong on an affiliate program dashboard for the exec team?",
+      "should_trigger": false
+    },
+    {
+      "query": "Define the alert thresholds for our affiliate program dashboard",
+      "should_trigger": false
+    },
+    {
+      "query": "Audit our Q1 affiliate commission payout run before we disburse it",
+      "should_trigger": false
+    },
+    {
+      "query": "Recompute what each affiliate is owed this month, including clawbacks",
+      "should_trigger": false
+    },
+    { "query": "What commission rate should we pay our affiliates?", "should_trigger": false },
+    {
+      "query": "Should our affiliate program be revenue share or flat CPA?",
+      "should_trigger": false
+    },
+    { "query": "Does this creator's caption meet FTC disclosure rules?", "should_trigger": false },
+    {
+      "query": "Review our influencer contracts against UK CAP disclosure requirements",
+      "should_trigger": false
+    },
+    {
+      "query": "Build the rules that flag cookie stuffing in our affiliate program",
+      "should_trigger": false
+    },
+    {
+      "query": "How do I tell real affiliate fraud from a low-incrementality cashback partner?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the welcome email series for newly approved affiliates",
+      "should_trigger": false
+    },
+    {
+      "query": "Write outreach copy to recruit new affiliates into our program",
+      "should_trigger": false
+    },
+    {
+      "query": "Draft the terms and conditions affiliates accept when they join",
+      "should_trigger": false
+    },
+    { "query": "Build a per-partner scorecard for our reseller program", "should_trigger": false },
+    { "query": "Design the QBR structure for our channel partners", "should_trigger": false },
+    {
+      "query": "Model the unit economics of our biggest reseller relationship",
+      "should_trigger": false
+    },
+    { "query": "Plan a joint webinar campaign with our integration partner", "should_trigger": false },
+    { "query": "How much should we pay out for a refer-a-friend referral?", "should_trigger": false },
+    {
+      "query": "Set velocity limits so customers can't game our referral program",
+      "should_trigger": false
+    },
+    {
+      "query": "Rank these five candidate technology alliances by expected value",
+      "should_trigger": false
+    },
+    {
+      "query": "Write our deal registration policy for partner-sourced deals",
+      "should_trigger": false
+    },
+    { "query": "How many tiers should our partner program have?", "should_trigger": false },
+    {
+      "query": "Should we list on AWS Marketplace or Azure Marketplace first?",
+      "should_trigger": false
+    },
+    {
+      "query": "Build the measurement plan for our Meta and Google paid search campaigns",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up GA4 conversion tracking and goals for our website",
+      "should_trigger": false
+    },
+    { "query": "Design a marketing mix model for our whole media budget", "should_trigger": false },
+    {
+      "query": "How do I measure our own company newsletter's open and click rates?",
+      "should_trigger": false
+    },
+    {
+      "query": "What KPIs should we track for our employee advocacy program on LinkedIn?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write a social media content calendar for our brand's own TikTok account",
+      "should_trigger": false
+    },
+    { "query": "Measure the ROI of our booth at next month's trade show", "should_trigger": false },
+    {
+      "query": "Build the attribution model for our entire demand gen funnel",
+      "should_trigger": false
+    },
+    {
+      "query": "Which metrics should we hold our PR agency to for earned media coverage?",
+      "should_trigger": false
+    },
+    { "query": "Set up a customer satisfaction survey after purchase", "should_trigger": false },
+    {
+      "query": "Track our SEO keyword rankings and organic traffic month over month",
+      "should_trigger": false
+    }
+  ]
+}

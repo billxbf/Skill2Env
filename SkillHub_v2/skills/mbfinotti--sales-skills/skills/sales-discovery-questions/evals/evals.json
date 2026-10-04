@@ -1,0 +1,373 @@
+{
+  "skill_name": "sales-discovery-questions",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I run the SDR team at Corvidex, we sell warehouse labour-planning software. Tomorrow I've got a 15-minute call with an IT manager at Tallgrass Accounting, mid-market, about 400 people, who filled in the 'book a demo' form on our pricing page yesterday. My VP wants the BANT fields filled in the CRM after every first call, so please open with the budget and timeline questions and get the decision maker's name early, then whatever else fits in the time. Give me the question list.",
+      "expected_output": "A 15-minute SDR call sheet whose question path runs pain, root cause, impact first, with budget, timeline and authority questions pushed behind impact or justifiably skipped, plus an explicit do-not-ask list naming the two logistics-first offenders.",
+      "files": [],
+      "expectations": [
+        "Places budget and timeline questions after the impact stage, never as openers.",
+        "Names 'What's the timeline for this project?' and 'Is there budget allocated?' (or near-identical wordings) on an explicit do-not-ask-as-openers list.",
+        "Explains that logistics-first questions harvest deal admin before establishing that a problem exists, rather than only refusing the request.",
+        "States that budget and timeline become legitimate later in the call, once impact has been quantified.",
+        "Moves the decision-maker/authority question into a decision-context stage that follows impact, or justifies skipping that stage on a 15-minute SDR call.",
+        "Sizes the set to roughly one primary question plus its follow-ups per 3-4 minutes of questioning time.",
+        "Does not cite a target or ideal number of discovery questions as a rule to hit.",
+        "Caps situation questions at 1-2 on the grounds that research should answer the rest.",
+        "Distinguishes the inbound origin from outbound, treating this buyer as already problem-aware rather than needing awareness built first.",
+        "Orders the question path pain, then root cause, then impact, with root cause probed before any quantifying question.",
+        "Attaches a 2-3 rung follow-up ladder to at least one primary question.",
+        "Delivers a call sheet carrying ranked hypotheses to test, branch triggers, and a dated next-step ask."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I'm building a standard discovery template for my five AEs at Brightmoor Systems - HR compliance SaaS, about $40k ACV, 45-minute first calls. I read that top reps ask 11-14 questions and keep a 43:57 talk-to-listen ratio, so I want the template to land on exactly 13 questions, and I want to score the reps against that ratio in our Monday review. Draft the template and tell me how to enforce the two numbers.",
+      "expected_output": "A 45-minute template sized by call minutes rather than by a question count, with both benchmarks explicitly caveated as correlational vendor claims that the vendor's own later data revised, and conversion-per-persona proposed as the real measurement.",
+      "files": [],
+      "expectations": [
+        "Refuses to set 13, or any fixed count, as a target the template must hit.",
+        "States that the published question-count figure is a vendor claim, correlational, and drawn from a non-auditable corpus.",
+        "Notes that the same vendor's later refresh reported different numbers - won deals around 15-16 questions and lost deals around 20 - so the benchmark is internally inconsistent across its own refreshes.",
+        "States that the 43:57 talk-to-listen ratio was revised by the same vendor's own later data to a much smaller gap, roughly 57% rep talk on won calls against roughly 62% on lost.",
+        "Recommends using talk-listen only as a directional coaching signal, never as a scored target.",
+        "Sizes the 45-minute call by minutes, roughly one primary question plus its ladder per 3-4 minutes of questioning time, instead of by a question count.",
+        "Coaches the behaviour - fewer, deeper, evenly spread questions with follow-ups - rather than the number.",
+        "Proposes first-call-to-next-meeting or first-call-to-opportunity conversion, tracked per persona and per template version, as the measurement that matters.",
+        "Notes that the question-count rule of thumb explicitly breaks down against C-suite buyers.",
+        "Includes per-call success signals such as several distinct problems surfaced with at least one quantified in the prospect's own number.",
+        "Adds depth through follow-up ladders rather than by expanding the count of standalone primary questions.",
+        "Does not present either the ratio or the count as an established or proven law of discovery."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Q3 ends in five weeks and I need this one to land. Aventrix Fleet, freight telematics - I'm talking to their Director of Safety on Thursday for 30 minutes. It's the second call, the first was mostly a product overview. She hasn't given me any deadline of her own. Write me questions that build urgency and get her to feel like waiting is expensive. I want to walk out with a signed pilot scope.",
+      "expected_output": "A question path that quantifies impact before any why-now question, hunts a real trigger event, records the honest absence of a compelling event if none exists, and keeps the rep's quarter-end out of the wording.",
+      "files": [],
+      "expectations": [
+        "Places every urgency or why-now question after at least one quantifying impact question.",
+        "States that urgency asked before impact is quantified reads as pressure rather than diagnosis.",
+        "Cites published buyer-indecision research finding that added pressure deepens indecision rather than resolving it.",
+        "Instructs the rep to record the honest absence of a compelling event rather than inventing or implying a deadline.",
+        "Treats the absence of a compelling event as deal intelligence rather than a failed call.",
+        "Contains no leading questions with the desired answer embedded in the wording, such as 'that must be costing you a fortune, right?'.",
+        "Frames cost of inaction in the prospect's own number rather than in the rep's ROI math.",
+        "Notes that mentioning the seller's ROI math during discovery correlates with worse next-step outcomes.",
+        "Includes at least one question hunting a real trigger event - renewal, launch, audit, season - instead of a manufactured one.",
+        "Probes root cause before quantifying impact, so the figure attaches to the problem rather than to a symptom.",
+        "Keeps the rep's own quarter-end out of the question wording, or states plainly that it is not a reason the buyer can act on.",
+        "Closes with a specific, dated next step argued from the impact figure uncovered on the call."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "I sell residential solar installs, average job around $28,000, and I do a 75-minute in-home sit-down with both homeowners. Right now I just walk through the system sizing sheet and ask about their electric bill. Build me a proper question set for the appointment - Dale and Priya Achterberg, they've been in the house eleven years, called us off a yard sign.",
+      "expected_output": "A B2C high-ticket consult sheet running two spines, one per homeowner, leading impact with personal dimensions, with the decision-context stage deleted and prior-attempts carrying root cause.",
+      "files": [],
+      "expectations": [
+        "Asks the pain and impact questions of each homeowner separately, treating two decision makers as two spines.",
+        "Leads the impact stage with personal impact - household time, money, stress - ahead of the business and technical dimensions.",
+        "Deletes the decision-context or buying-process stage outright rather than including a reduced version of it.",
+        "Carries the root-cause stage with a prior-attempts question in the form of 'what's kept you from doing this until now?'.",
+        "Opens the pain stage with the trigger question 'what finally made you book this conversation?' or an equivalent asking what prompted the appointment now.",
+        "Uses the eleven-year tenure as the anchor for a why-now question rather than assuming a deadline exists.",
+        "Includes a branch for the two homeowners disagreeing that surfaces the disagreement as a question instead of taking a side.",
+        "Excludes hypothetical purchase questions such as 'would you buy, use, or pay for X'.",
+        "Caps situation questions at 1-2, keeping the system sizing and electric-bill fact-finding out of the opening.",
+        "Keeps the same spine, sequencing rules, follow-up ladders and quality gate used for B2B rather than inventing a separate B2C structure.",
+        "Ends with a summary in the prospects' own words followed by a specific dated next step."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Our whole floor runs MEDDPICC and the CRM has a field per letter. I'm an AE at Kestrel Ledger - treasury automation, enterprise, deals run 5-7 months. I have a 45-minute first discovery with a Director of Treasury Ops at a $2B distributor next Tuesday. Give me the question set and, at the end, score where the deal sits on each MEDDPICC letter so I can paste it straight into the CRM.",
+      "expected_output": "A 45-minute question set with every spine stage relabeled into MEDDPICC vocabulary, the other frameworks removed from the sheet, decision-context gathered as questions only, and the scoring request declined and routed elsewhere.",
+      "files": [],
+      "expectations": [
+        "Maps every spine stage to MEDDPICC vocabulary so the answers land in the team's CRM fields.",
+        "Removes SPIN, Sandler and GAP from the delivered sheet rather than ranking them below MEDDPICC.",
+        "Gathers decision-context elements as questions only, producing no qualification score, verdict, or letter-by-letter rating.",
+        "Routes the scoring itself to a separate MEDDPICC scorecard skill instead of performing it here.",
+        "Uses the Three Whys - 'Why anything? Why you? Why now?' - for the urgency stage.",
+        "Assigns 'why anything' and 'why now' to discovery and defers 'why you' as positioning for later.",
+        "Keeps the decision-context stage in the set, given the enterprise deal and multi-month cycle.",
+        "Still orders the path pain, root cause, impact, urgency rather than walking the MEDDPICC letters in their acronym order.",
+        "Includes a metrics question in the form of 'what would you need to see to know it worked?'.",
+        "Includes a prior-evaluation question covering competition, including the do-nothing option.",
+        "Notes that MEDDPICC elements are gathered rather than ticked off as a checklist.",
+        "Sizes the set to the 45-minute call rather than to the eight letters."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Got 20 minutes with the COO of Marrowfield Grocers on Monday - she's stepping into a slot her Director of Supply Chain originally booked. We sell demand forecasting. I want all three impact angles covered, technical, business and personal, plus a good walk through their current process so I understand the setup before I ask anything hard.",
+      "expected_output": "A 20-minute executive sheet with technical impact deleted rather than compressed, a halved question count, the process walkthrough replaced by a point-of-view statement, and any skipped stage logged as a next-touch gap.",
+      "files": [],
+      "expectations": [
+        "Deletes the technical impact dimension outright rather than compressing all three into 20 minutes.",
+        "States that two funded impact dimensions beat three rushed ones, and that the quality bar asks for two.",
+        "Keeps business impact ahead of personal impact for this persona.",
+        "Halves the question count relative to a standard discovery call because an executive is in the room.",
+        "Trades the situation or current-process walkthrough for a point-of-view statement rather than delivering it as questions.",
+        "Leads with the single sharpest pain hypothesis instead of testing several in sequence.",
+        "Caps situation questions at one at most, declining to run the requested full process walkthrough with the COO.",
+        "Notes that published question-count rules of thumb explicitly break down against C-suite buyers.",
+        "Prioritizes whichever lens reaches a quantified figure fastest with this executive.",
+        "Still probes root cause before the impact question rather than dropping that stage to save minutes.",
+        "Marks any stage skipped for time as an explicit gap to close on the next touch."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Enterprise deal, I'm the AE. Selling clinical scheduling software into Ridgeline Health, a 9-hospital system. First real discovery is a 45-minute call with their VP of Nursing Informatics, and I already know at least eight people will touch this before it's signed - nursing, IT security, legal, supply chain, and a CFO somewhere. Build my question set. I'd also like a couple of questions about her personal comp or bonus targets, since that usually motivates people.",
+      "expected_output": "A regulated, multi-stakeholder set that funds decision-context coverage first, adds a compliance and procurement review question, drops the personal-comp request outright, and splits into persona-specific variants.",
+      "files": [],
+      "expectations": [
+        "Prioritizes decision-context coverage first when allocating the call's question minutes, because the buying group runs past a single economic buyer and the buyer is regulated.",
+        "Drops the requested questions about the VP's personal compensation or bonus targets.",
+        "States that personal-finance-adjacent questions are off limits with a regulated buyer, rather than merely rephrasing them.",
+        "Adds an explicit security, compliance, or procurement review question for a purchase of this kind.",
+        "Expands decision-process and procurement coverage relative to a non-regulated deal.",
+        "Generates persona-specific question variants rather than one set reused across all eight stakeholders.",
+        "Aims workflow-pain questions at end users, business-outcome questions at the economic buyer, and architecture or security questions at technical evaluators.",
+        "Routes stakeholder strategy itself - naming the champion, economic buyer and blockers - to a separate stakeholder-mapping skill rather than mapping the committee here.",
+        "Keeps personal impact in scope as the team's week-to-week experience, distinct from the banned personal-finance questions.",
+        "Gathers decision-context elements as questions without producing a qualification verdict.",
+        "Notes that discovery recurs per persona across the cycle rather than finishing in this one call.",
+        "Keeps the pain, root cause, impact, urgency ordering intact within the call itself."
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "I'm certain what's wrong at Quillon Freight - their AP team is drowning in manual invoice matching, I've seen it at every 3PL this size. Thirty-minute call with their Controller on Wednesday, outbound, he replied 'sure, send a time' to my third email. Write me questions that walk him into admitting the matching problem so I can get to a demo. I've already read their annual report and their careers page.",
+      "expected_output": "A set built on 2-3 ranked hypotheses to test rather than one to confirm, with no leading questions, past-specific wording, capped situation questions, and a branch for when no pain surfaces.",
+      "files": [],
+      "expectations": [
+        "Restates the manual-invoice-matching belief as a hypothesis to test rather than a fact to confirm.",
+        "Produces 2-3 candidate pain hypotheses, ranked, instead of building the whole set around the single assumed one.",
+        "Contains no leading questions with the desired answer embedded in the wording.",
+        "Requires a recent, specific example before a pain counts as found.",
+        "Uses past-specific wording such as 'when did that last happen, and what did it cost?' rather than hypotheticals about imagined situations.",
+        "Keeps questions product-agnostic until the close, with the product entering only after the gap is established.",
+        "Includes a branch for no pain surfacing after two hypotheses, offering an honest fallback question.",
+        "Instructs the rep not to manufacture pain when neither hypothesis lands.",
+        "Caps situation questions at 1-2 because the annual report and careers page already answer the rest.",
+        "Opens the pain stage for this outbound contact with a one-sentence point-of-view statement to react to, rather than assuming problem awareness.",
+        "Earns 2-3 follow-up rungs on each meaningful answer before moving to a new topic."
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Second discovery with Halbrook Dental Group's Operations Director, 30 minutes on Friday. On the first call she volunteered, unprompted, that rework on their insurance claims costs them about $14,000 a month, then immediately asked what we charge and I fumbled it. I don't want to waste her time re-asking about the problem, so I'd like to go straight from that number into urgency and the proposal. My manager also wants this sheet reusable for every practice manager we call.",
+      "expected_output": "A sheet that banks the $14,000 figure but returns to root cause before urgency, handles the price question with a brief answer and a trade back into the spine, and ships as a reusable persona template with full ladders.",
+      "files": [],
+      "expectations": [
+        "Banks the $14,000-per-month figure and returns to the root-cause stage rather than skipping it.",
+        "States that quantifying a symptom quantifies the wrong thing, so a volunteered figure does not exempt the root-cause stage.",
+        "Carries the $14,000 monthly figure through to the close summary and the next-step ask.",
+        "Includes a prior-attempts question - what they tried, and whether it worked - in the root-cause stage.",
+        "Explains that the spine orders exit conditions rather than a fixed script, which is why an out-of-order answer is banked instead of dropped.",
+        "Handles the mid-call price question with a brief answer followed by a trade back into the spine, not a pricing discussion.",
+        "Treats the reusable-across-practice-managers requirement as a compounding asset that funds the full follow-up ladder rather than the bare spine.",
+        "Delivers a persona-level template with slots to fill per account, not a one-off sheet tied only to this prospect.",
+        "Requires at least one impact dimension beyond the business figure already volunteered.",
+        "Places urgency questions after root cause has been established, not immediately after the banked figure.",
+        "Ends with an after-the-call section listing which stage exit conditions went unmet, as gaps for the next touch."
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "build my discovery question set for tomorrow's 30-minute call with a VP Ops at a 200-person logistics company",
+      "should_trigger": true
+    },
+    { "query": "what should I ask this prospect on Thursday", "should_trigger": true },
+    { "query": "discovery call prep for an inbound demo request", "should_trigger": true },
+    { "query": "I need qualification questions for a 15-minute SDR call", "should_trigger": true },
+    { "query": "give me SPIN questions for a first sales meeting", "should_trigger": true },
+    {
+      "query": "pain funnel questions for a prospect who keeps giving me vague answers",
+      "should_trigger": true
+    },
+    { "query": "first meeting agenda for a new sales opportunity", "should_trigger": true },
+    {
+      "query": "I have a call with a CFO tomorrow and no idea what to ask her",
+      "should_trigger": true
+    },
+    {
+      "query": "help me plan the questions for my in-home consultation with a couple buying a kitchen",
+      "should_trigger": true
+    },
+    {
+      "query": "what questions get someone to tell me what a problem actually costs them",
+      "should_trigger": true
+    },
+    {
+      "query": "sales discovery questions for a security-conscious enterprise buyer",
+      "should_trigger": true
+    },
+    { "query": "my discovery calls feel like interrogations, fix my question list", "should_trigger": true },
+    {
+      "query": "I keep hearing 'we're just too busy' and can't get past it on calls",
+      "should_trigger": true
+    },
+    { "query": "write me the question path for a 45-minute AE deep discovery", "should_trigger": true },
+    { "query": "how do I structure a first call with a prospect", "should_trigger": true },
+    { "query": "need a call sheet for Tuesday's prospect call", "should_trigger": true },
+    { "query": "questions to uncover root cause on a sales call", "should_trigger": true },
+    { "query": "prep me for a discovery call with a director of supply chain", "should_trigger": true },
+    {
+      "query": "I want a reusable question template my AEs can run on every first call",
+      "should_trigger": true
+    },
+    { "query": "how do I get a prospect to quantify their pain", "should_trigger": true },
+    { "query": "what should I ask a technical evaluator during discovery", "should_trigger": true },
+    { "query": "questions for a solar consultation with homeowners", "should_trigger": true },
+    {
+      "query": "my reps jump straight to the demo, give me something that makes them diagnose first",
+      "should_trigger": true
+    },
+    {
+      "query": "give me follow-up questions to go deeper when someone answers in one line",
+      "should_trigger": true
+    },
+    { "query": "MEDDPICC discovery questions for a treasury ops director", "should_trigger": true },
+    {
+      "query": "help me build a question set to test my hypothesis about their problem",
+      "should_trigger": true
+    },
+    {
+      "query": "I don't know what to ask on a first sales call with a hospital system",
+      "should_trigger": true
+    },
+    {
+      "query": "need questions that find the compelling event without being pushy",
+      "should_trigger": true
+    },
+    {
+      "query": "discovery questions for an outbound prospect who has no idea they have a problem",
+      "should_trigger": true
+    },
+    { "query": "what do I ask to figure out how they'd actually buy this", "should_trigger": true },
+    {
+      "query": "I have 20 minutes with a COO, what are the highest value questions",
+      "should_trigger": true
+    },
+    { "query": "build a qualification call script for our new SDRs", "should_trigger": true },
+    { "query": "questions to ask before I scope a pilot", "should_trigger": true },
+    {
+      "query": "how many questions should I ask on a discovery call and which ones",
+      "should_trigger": true
+    },
+    {
+      "query": "prep questions for a second call where the first was all product overview",
+      "should_trigger": true
+    },
+    {
+      "query": "give me a list of things to ask a prospect and what to listen for in their answers",
+      "should_trigger": true
+    },
+    {
+      "query": "our first calls never turn into second meetings, help me with the questions",
+      "should_trigger": true
+    },
+    {
+      "query": "design the questioning sequence for a complex multi-stakeholder deal",
+      "should_trigger": true
+    },
+    {
+      "query": "I want to stop asking about budget and timeline first, what should I ask instead",
+      "should_trigger": true
+    },
+    { "query": "what do I say after 'tell me about your current process'", "should_trigger": true },
+    { "query": "questions for a high-ticket coaching consultation", "should_trigger": true },
+    { "query": "sales call questions that aren't leading", "should_trigger": true },
+    { "query": "need a do-not-ask list for my team's discovery calls", "should_trigger": true },
+    { "query": "build discovery for a regulated finance buyer", "should_trigger": true },
+    { "query": "how should I sequence pain, impact and urgency questions", "should_trigger": true },
+    { "query": "help me prepare for tomorrow's meeting with a new lead", "should_trigger": true },
+    {
+      "query": "what do I ask a practice manager to find out where their money leaks",
+      "should_trigger": true
+    },
+    {
+      "query": "write the first 10 seconds of my cold call so they don't hang up",
+      "should_trigger": false
+    },
+    { "query": "what do I say when they pick up the phone", "should_trigger": false },
+    { "query": "they said we're too expensive, what do I say back", "should_trigger": false },
+    {
+      "query": "build me an objection library for price and timing pushback",
+      "should_trigger": false
+    },
+    { "query": "score this call transcript and tell me how my rep did", "should_trigger": false },
+    { "query": "grade my discovery call recording against a rubric", "should_trigger": false },
+    { "query": "score this opportunity on MEDDPICC", "should_trigger": false },
+    { "query": "is this deal real, score it against BANT", "should_trigger": false },
+    { "query": "who's the actual champion in this deal", "should_trigger": false },
+    { "query": "build a power map for this account", "should_trigger": false },
+    { "query": "scan these call notes for deal risk", "should_trigger": false },
+    { "query": "this deal has gone quiet, is it slipping", "should_trigger": false },
+    { "query": "write the follow-up email after my discovery call", "should_trigger": false },
+    { "query": "turn my call notes into a recap with next steps", "should_trigger": false },
+    { "query": "find me a reason to reach out to this prospect", "should_trigger": false },
+    { "query": "they just raised a Series B, what's my angle", "should_trigger": false },
+    { "query": "how many touches should my outbound sequence have", "should_trigger": false },
+    { "query": "design a 14-day cadence with calls and emails", "should_trigger": false },
+    { "query": "test these three subject lines for me", "should_trigger": false },
+    { "query": "why are my cold emails landing in spam", "should_trigger": false },
+    { "query": "build the ROI business case for this deal", "should_trigger": false },
+    { "query": "what payback period should I show the CFO", "should_trigger": false },
+    { "query": "procurement wants 20% off, plan my concessions", "should_trigger": false },
+    { "query": "what should I trade for a multi-year commitment", "should_trigger": false },
+    { "query": "define our ideal customer profile", "should_trigger": false },
+    { "query": "build a fit score for our accounts", "should_trigger": false },
+    { "query": "where should the cutoffs between our account tiers sit", "should_trigger": false },
+    { "query": "how much quota should an AE carry next year", "should_trigger": false },
+    { "query": "design the commission plan for our SDRs", "should_trigger": false },
+    {
+      "query": "what pipeline coverage ratio do we need to hit the number",
+      "should_trigger": false
+    },
+    { "query": "write the interview questions for hiring an AE", "should_trigger": false },
+    { "query": "build a scorecard and interview loop for a new SDR hire", "should_trigger": false },
+    { "query": "how do I break into tech sales from support", "should_trigger": false },
+    { "query": "prep me for my SDR interview tomorrow", "should_trigger": false },
+    { "query": "which sales podcasts and newsletters should I follow", "should_trigger": false },
+    { "query": "should we go product-led or sales-led", "should_trigger": false },
+    { "query": "pods vs assembly line for our sales team", "should_trigger": false },
+    { "query": "how big is the addressable market for this product", "should_trigger": false },
+    { "query": "which sales skill should I start with", "should_trigger": false },
+    { "query": "I have a broad sales problem and don't know where to begin", "should_trigger": false },
+    {
+      "query": "customer discovery interviews to validate my startup idea",
+      "should_trigger": false
+    },
+    {
+      "query": "set up a continuous discovery habit with weekly customer interviews",
+      "should_trigger": false
+    },
+    {
+      "query": "write user research interview questions for our onboarding flow",
+      "should_trigger": false
+    },
+    {
+      "query": "questions to ask in a stakeholder discovery workshop before a software build",
+      "should_trigger": false
+    },
+    {
+      "query": "what should I ask participants in a usability study to avoid biasing them",
+      "should_trigger": false
+    },
+    {
+      "query": "draft the discovery questionnaire we send clients before a consulting engagement",
+      "should_trigger": false
+    },
+    {
+      "query": "questions for a churn interview to find out why a customer left",
+      "should_trigger": false
+    }
+  ]
+}

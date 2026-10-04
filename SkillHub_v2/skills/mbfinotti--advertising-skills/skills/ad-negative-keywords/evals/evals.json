@@ -1,0 +1,183 @@
+{
+  "skill_name": "ad-negative-keywords",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I run Google Ads for Brightpath HR, a B2B payroll software company, spending about $12k/month. I'm sure we're bleeding money on junk clicks. Can you just write me a solid negative keyword list to paste in today? Also, we're launching a brand-new campaign for a new product line next Monday with zero history - I want negatives on that one from day one too.",
+      "expected_output": "A refusal to name specific negatives for the live account until its search term report is provided, a request for that export plus clarifying questions, and a labelled pre-launch starter list allowed only for the new zero-history campaign.",
+      "files": [],
+      "expectations": [
+        "Declines to name any specific candidate negative keyword for the live account before receiving its search term report",
+        "Requests an export of the search term report (search query report) as the prerequisite for the live account",
+        "Explains that a list invented without query data has no evidence of what actually matches, and that its cost - blocked converting queries - is invisible",
+        "Allows a starter exclusion list only for the brand-new zero-history campaign",
+        "Labels the starter list as pre-launch and says to review it against real queries after 7-14 days",
+        "Asks what counts as a conversion and for the target CPA, and asks for the account's CPC range",
+        "Asks which queries or themes must never be blocked (brand terms, converting themes, deliberate competitor bidding)",
+        "Asks whether this is a one-off cleanup or a standing maintenance job"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "First-ever cleanup for Lexon Legal Software (B2B case management, Google Ads). Here's the zero-conversion cut of our 30-day search terms report: $14,200 analyzed non-brand spend, target CPA $250, average CPC around $7. Rows (term - clicks, cost, conversions this window, conversions last 90 days): 'legal software jobs' - 34, $238, 0, 0. 'free legal case template' - 26, $182, 0, 0. 'what is case management software' - 18, $126, 0, 0. 'legal case management pricing' - 11, $77, 0, 4. 'best legal software' - 21, $147, 0, 0. 'casehawk pricing' - 16, $112, 0, 0 (CaseHawk is our main competitor). 'legal case tracker excel' - 8, $56, 0, 0. 'law firm consulting services' - 9, $410, 0, 0 (crazy expensive CPCs on that one). What should I exclude and how?",
+      "expected_output": "A full pass in the output shape: gated candidates with match type, level, evidence, category and variants; the prior-converter and strategy-call terms held out of the additions; a watchlist; a summary with wasted spend; and a next review date - delivered as a draft.",
+      "files": [],
+      "expectations": [
+        "Applies a tightened click gate of 10-12 clicks rather than the standard 15-20, because the average CPC is above roughly $3",
+        "Marks 'law firm consulting services' as a candidate via the spend gate ($410 sits in the 1.5-2x band of the $250 target CPA) despite only 9 clicks",
+        "Places 'legal case management pricing' on the do-not-negate list because it converted 4 times in the prior 90 days, even though it crosses the click gate this window",
+        "Treats 'best legal software' as comparison intent to confirm with the user - a strategy call, not an automatic negative",
+        "Treats 'casehawk pricing' as a competitor-term strategy call to confirm before negating, since some accounts bid competitor terms deliberately",
+        "Puts 'legal case tracker excel' (8 clicks) on a watchlist instead of negating it, and names the gate that would trip it",
+        "Recommends phrase as the match type for the theme negatives (job seeker, DIY/free, informational), not exact and not broad",
+        "Recommends a weekly recurring pass with a 7-14 day lookback going forward, given monthly spend above roughly $10k",
+        "Expands plural, synonym, or stem variants manually for at least one added negative, because negative keywords do not match close variants",
+        "Assigns recurring junk themes to a shared exclusion list and reserves account level for universal disqualifiers such as the job-seeker terms",
+        "Summary reports spend analyzed and wasted spend found as an amount and a percentage of analyzed spend",
+        "Output includes a do-not-negate section, a watchlist, and a next review date",
+        "Presents the additions as a draft for approval rather than instructing a silent mass-apply",
+        "Each addition carries its evidence (clicks, cost, conversions) and a taxonomy category"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Google Ads question for my store Trailforge Outdoors. Last month I added about 45 negatives directly from the search terms report screen. This month the same junk is back: I negated 'tent repair kit' but 'tent repair kits' still shows up, and my broad match negative 'free camping checklist' was supposed to at least kill everything with 'free' in it, but searches for just 'free tent' keep appearing. I was about to also add capitalized versions and common typos of every negative. Is Google ignoring my negative keywords?",
+      "expected_output": "A diagnosis from negative-match mechanics: default exact when adding from the report, no close-variant expansion on negatives, and broad requiring ALL its words - with a phrase re-add plus manual plural variants as the fix, and no casing/typo variants needed.",
+      "files": [],
+      "expectations": [
+        "Identifies that adding negatives from the report screen used the pre-selected default of exact match, which blocks only the literal query - so the list looks maintained while the waste continues",
+        "States that negative keywords do not expand to close variants, so 'tent repair kits' must be added separately from 'tent repair kit'",
+        "States that a broad negative blocks only searches containing ALL of its words, so 'free camping checklist' cannot block 'free tent'",
+        "Recommends deliberately switching the report additions to phrase match",
+        "States that casing and misspellings are matched automatically, so capitalized and typo variants are unnecessary",
+        "Warns against fixing the gap with a bare single-word broad negative 'free' without first running the overblocking and conflict check, since it could block converting free-trial-style queries",
+        "Concludes the platform is applying the negatives exactly as entered - the observed behavior follows documented match mechanics, not a bug"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Emergency at Novapoint (B2B project software). Our core non-brand ad group has had zero impressions for three weeks. Every keyword shows 'active', budget untouched, bids unchanged. The only change around that time: our new hire cleaned up search terms and added 'project management' as a phrase negative in the account-level list to stop all the how-to searches. Platform support told us to review our bid strategy. What is going on?",
+      "expected_output": "A diagnosis that the account-level phrase negative conflicts with the ad group's own keywords and silently blocks them, with removal/narrowing as the fix, a conflict check on future negatives, and a quarterly conflict sweep - not a bidding change.",
+      "files": [],
+      "expectations": [
+        "Diagnoses the account-level phrase negative 'project management' as conflicting with the ad group's own active keywords",
+        "States that negatives always beat positives: a blocked keyword still displays as active but never enters the auction",
+        "Recommends removing or narrowing the conflicting negative as the fix",
+        "Recommends replacing it with narrower exclusions targeted at the actual informational queries (for example exact or phrase negatives on specific how-to searches), never a theme word that overlaps core keywords",
+        "Flags account level as the wrong exclusion level for this term - widest reach, hardest to audit and reverse",
+        "Recommends a conflict check against active keywords anywhere in the account before every future negative is added",
+        "Recommends a quarterly conflict sweep as the standing safeguard, because this failure mode is silent",
+        "Does not attribute the outage to bid strategy, budget, or a learning phase"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "I manage search ads for Fernhaven Kitchens, an e-commerce store doing about $16k/month in ad spend. Annoying discovery: if I sum every row in the search terms report, I only get about $9k. Where did the other $7k go, and how am I supposed to find junk queries I can't even see? I'm comfortable with Python if that helps.",
+      "expected_output": "An explanation that platforms hide a large share of search terms (around 40% of spend), plus an n-gram token-mining procedure over the visible export - tokenize, aggregate cost/conversions per token, gate, negate bad tokens as phrase - with a script path for this user.",
+      "files": [],
+      "expectations": [
+        "Explains that the platform hides a large share of search terms - practitioner measurements center around 40% of spend - so the missing $7k is expected, not a tracking bug",
+        "Recommends token-level (n-gram) mining of the visible export to recover signal the report no longer shows",
+        "Tokenizes queries into unigrams, bigrams, and trigrams",
+        "Aggregates cost and conversions per token across every query containing that token",
+        "Sorts tokens by cost descending, filters to zero conversions, and applies the same candidate gates as the term-level workflow",
+        "Negates bad tokens as phrase negatives",
+        "Flags high-converting tokens as expansion leads for the account owner while declining to do the positive keyword research itself",
+        "Points this user to the script/tokenizer path given their stated Python ability, noting the spreadsheet pivot is the equivalent no-script alternative",
+        "Does not promise to recover the hidden queries themselves - the mining works on the visible export only"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Our agency runs Meltbury Home Goods, an e-commerce account at $40k/month. After four months of weekly search term cleanups, wasted spend share is down to 6% of non-brand. My director wants it at 0%, and she just bought a 2,300-term 'ultimate negative keyword mega-list' from a PPC forum to bulk-add at account level this week. She also asked whether we should move to daily reviews to squeeze out the rest. What do you recommend?",
+      "expected_output": "A recommendation to stop forcing new exclusions: 6% is at the practical floor, the mega-list fails the evidence gate and negative volume does not move CPA/ROAS, effort shifts to the conflict sweep and watchlist, and the cadence lengthens rather than going daily.",
+      "files": [],
+      "expectations": [
+        "States that 6% sits within the 4-8% practical floor of a healthy account and recommends against forcing new exclusions toward 0%",
+        "Advises against bulk-adding the purchased mega-list because it was not derived from this account's own search term report",
+        "Cites that a large published study of account-level exclusions found near-zero CPA/ROAS difference versus accounts without them - where and how negatives are applied matters more than how many",
+        "Warns that the mega-list at account level was never checked against this account's conversion history and active keywords, so it risks silently blocking converting queries with the widest, hardest-to-audit blast radius",
+        "Recommends shifting effort to the conflict sweep and the watchlist instead of new exclusions",
+        "Recommends lengthening the review interval rather than moving to daily passes",
+        "Frames success against the pass threshold: wasted spend share under 10% of non-brand spend AND zero converting terms blocked, verified against the change log and conversion history",
+        "States that every negative narrows reach: negate the clearly wrong, never the merely uncertain"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "We just took over paid search for Corvale Systems on Microsoft Advertising. The same junk theme - webinar, course, and certification searches - keeps appearing across all 6 campaigns' query reports and it clears our click thresholds. Two complications: the client keeps account-level settings locked, we can only edit campaigns and ad groups, and my colleague wants to just add broad match negatives covering the whole theme. How should we set this up?",
+      "expected_output": "A setup using a shared negative keyword list attached per campaign, the account-level rung reported as deleted by the edit-rights constraint, the broad plan rejected because the platform has no negative broad match, manual variants, and a logged change.",
+      "files": [],
+      "expectations": [
+        "Reports the account-level exclusion rung as deleted from this account's menu because of the missing edit rights - removed by the constraint, not ranked last",
+        "Recommends a shared negative keyword list for the recurring cross-campaign theme",
+        "Notes that on this platform negative keyword lists attach to campaigns only, never ad groups, so the list must be attached to each of the 6 campaigns",
+        "Rejects the broad match plan because this platform has no negative broad match at all - phrase and exact only",
+        "States this platform's default negative match type is phrase, so report additions need no switch away from exact",
+        "States that close variants of a negative still match on this platform too, so plural and synonym variants must be added manually",
+        "Recommends the platform's dedicated negative keyword conflict report for the periodic conflict sweep",
+        "Recommends logging the change with date, terms, level, match type, and reason"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    { "query": "My search terms report is full of junk like 'free template' and 'diy' - clean it up for me", "should_trigger": true },
+    { "query": "We keep paying for clicks from job seekers searching our category plus 'careers'. How do I stop that?", "should_trigger": true },
+    { "query": "How do I stop my ads showing for searches that never convert?", "should_trigger": true },
+    { "query": "here's my search query report export, build me an exclusion list", "should_trigger": true },
+    { "query": "Should I use phrase or exact for a negative keyword?", "should_trigger": true },
+    { "query": "Do negatives belong at campaign level or in a shared list?", "should_trigger": true },
+    { "query": "irrelevant search terms are eating my Google Ads budget", "should_trigger": true },
+    { "query": "how to block keywords in google ads", "should_trigger": true },
+    { "query": "My PPC budget leaks to 'how to' and tutorial searches - we sell software, not courses", "should_trigger": true },
+    { "query": "How often should I review the search query report for new exclusions?", "should_trigger": true },
+    { "query": "Is an n-gram analysis of my search terms export worth doing?", "should_trigger": true },
+    { "query": "The search terms report only accounts for half my spend - how do I find junk in the hidden queries?", "should_trigger": true },
+    { "query": "I added a negative keyword but the plural still triggers my ads. Why?", "should_trigger": true },
+    { "query": "We only sell new machines but people searching 'used' keep clicking our ads", "should_trigger": true },
+    { "query": "Should I exclude competitor brand names from my search campaigns?", "should_trigger": true },
+    { "query": "What can I exclude to cut junk traffic on a Performance Max campaign?", "should_trigger": true },
+    { "query": "Can you audit our exclusion list? I think we blocked queries that used to convert", "should_trigger": true },
+    { "query": "My ad group shows active but got zero impressions since we cleaned up keywords last month", "should_trigger": true },
+    { "query": "wasted spend cleanup for my ecommerce search campaigns", "should_trigger": true },
+    { "query": "With only 30 conversions a month, how do I decide which search terms to cut?", "should_trigger": true },
+    { "query": "Set up a maintenance cadence for search term cleanup across our accounts", "should_trigger": true },
+    { "query": "Stop my shopping ads matching 'repair' and 'user manual' searches", "should_trigger": true },
+    { "query": "Our B2B ads get clicked by students hunting course material - fix?", "should_trigger": true },
+    { "query": "What keyword exclusions should a brand-new campaign start with when there's no history yet?", "should_trigger": true },
+    { "query": "How many clicks with zero conversions before I block a search term?", "should_trigger": true },
+    { "query": "cleaning up irrelevant clicks on Microsoft Advertising - where do I start", "should_trigger": true },
+    { "query": "Should I just add 'cheap' as a negative across the whole account?", "should_trigger": true },
+    { "query": "My Amazon auto campaign keeps matching shopper searches that never convert - what do I do?", "should_trigger": true },
+    { "query": "How do I check whether any of my negatives are blocking keywords I'm actively bidding on?", "should_trigger": true },
+    { "query": "Why did my CPA double last month across the whole account?", "should_trigger": false },
+    { "query": "My ads used to work - run a full account audit", "should_trigger": false },
+    { "query": "Target CPA or maximize conversions - which bidding strategy?", "should_trigger": false },
+    { "query": "How should I split $50k a month between search and social?", "should_trigger": false },
+    { "query": "Is my campaign on pace to hit the monthly budget?", "should_trigger": false },
+    { "query": "Pick target keywords for my new SEO content cluster", "should_trigger": false },
+    { "query": "Which keywords should I bid on for a brand-new search campaign?", "should_trigger": false },
+    { "query": "Write five ad copy variations for my search campaign", "should_trigger": false },
+    { "query": "My pixel double-fires and shows duplicate conversions", "should_trigger": false },
+    { "query": "The ad platform reports 200 conversions but our CRM shows 120 - reconcile?", "should_trigger": false },
+    { "query": "Ads get plenty of clicks but the landing page doesn't convert", "should_trigger": false },
+    { "query": "Should I merge my 40 campaigns into 5 to exit learning limited?", "should_trigger": false },
+    { "query": "Design a retargeting sequence for cart abandoners", "should_trigger": false },
+    { "query": "Build a lookalike audience from my best customers", "should_trigger": false },
+    { "query": "What audience segments should my B2B SaaS ads target?", "should_trigger": false },
+    { "query": "Exclude existing customers from my prospecting audience", "should_trigger": false },
+    { "query": "How do I block bot traffic and invalid clicks on my ads?", "should_trigger": false },
+    { "query": "Add IP exclusions so our own employees stop clicking the ads", "should_trigger": false },
+    { "query": "Which ad platform should I start on with $5k a month?", "should_trigger": false },
+    { "query": "Remove low-performing keywords from my SEO rank tracker project", "should_trigger": false },
+    { "query": "Exclude bad website placements from my display campaigns", "should_trigger": false },
+    { "query": "When can I scale my winning campaign from $200 to $600 a day?", "should_trigger": false },
+    { "query": "What CAC can I afford at a $90 average order value?", "should_trigger": false },
+    { "query": "Write negative prompts for the AI images in my ad creatives", "should_trigger": false },
+    { "query": "Exclude violent content categories from our CTV video buys", "should_trigger": false },
+    { "query": "My Amazon listing dropped in organic search rank - help with listing keywords", "should_trigger": false },
+    { "query": "Filter internal office traffic out of GA4 reports", "should_trigger": false },
+    { "query": "Is my creative fatigued? CTR is sliding on an ad that ran for months", "should_trigger": false },
+    { "query": "Map the buying committee for our enterprise deals so ads reach each role", "should_trigger": false }
+  ]
+}

@@ -1,0 +1,582 @@
+{
+  "skill_name": "app-marketplace-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I run the platform team at Larkfield, we make field-service software and we opened an app marketplace 14 months ago. 62 listed apps, about 4,100 customer tenants with at least one app installed. Last Thursday one of our listed reporting apps started shipping customer job records to an endpoint nobody recognized. Forensics came back this morning: the publisher's account was taken over after someone phished their credentials, and the attacker pushed version 3.2.1, which reached every installed tenant inside an hour. Our CEO's answer is 'make review stricter' - she wants a mandatory third-party penetration test on every new app submission before anything gets listed. Updates go out to installed tenants automatically today, no admin action needed. I have to write up what we actually change by Friday.",
+      "expected_output": "A remediation plan that separates the incident from the admission gate, refuses to attribute it to a review failure, and puts publish-channel hardening (FIDO publisher 2FA, short-lived scoped publish tokens, a 24-48h propagation hold with kill switch and security-fix expedite path, OIDC trusted publishing as the promotion) ahead of deepening initial review, while declining the blanket per-submission pen test.",
+      "files": [],
+      "expectations": [
+        "States that the initial admission review could not have prevented this incident, because the compromise was of publisher credentials and rode the update channel",
+        "Declines to treat the incident as a review-gate failure and does not assert a causal review-process change from it",
+        "Prioritizes publish-channel hardening ahead of deepening the admission review",
+        "Recommends phishing-resistant (FIDO) two-factor authentication on publisher accounts as a default control",
+        "Recommends short-lived scoped publish tokens, citing a 7-day default and 90-day maximum lifetime",
+        "Specifies a publish-to-propagation hold of 24-48 hours between a cleared update and auto-propagation to installed tenants",
+        "Includes an operator kill switch usable inside the propagation-hold window",
+        "Includes an expedite path through the hold for genuine security fixes",
+        "Treats the propagation hold as mandatory rather than optional, because updates auto-propagate to installed tenants",
+        "Names OIDC trusted publishing from CI/CD as the promotion once publisher count outgrows token hygiene",
+        "States the controls must be layered rather than relying on any single one, noting that published marketplace controls have demonstrated real-world bypasses",
+        "Does not adopt a mandatory third-party penetration test on every new submission as the primary remediation"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I'm drafting the update policy for Meridian Stack's integration marketplace - 180 listed apps, roughly 140 updates a month, two reviewers. The line I have written right now is: 'Any substantial change to an app's features, purpose or functionality requires resubmission for full review; routine updates do not.' Legal signed off on it. My reviewers hate it because they spend half their week arguing with developers about what counts as substantial, and I suspect a bunch of partners have just decided nothing they ship is substantial. Tighten this into something I can publish in the partner docs.",
+      "expected_output": "A rewritten re-review policy that deletes the subjective trigger and replaces it with the objective five-item trigger list, pairs the minor-update fast path with per-release automated scanning, and positions unconditional re-certification and periodic expiry as conditional promotions rather than the default.",
+      "files": [],
+      "expectations": [
+        "Rejects 'substantial change' as a re-review trigger rather than refining its wording",
+        "Gives the reason that a subjective trigger cannot be self-assessed by the developer and decays into apps that are never resubmitted",
+        "Replaces it with an objective trigger list",
+        "Trigger list includes a request for new OAuth scopes",
+        "Trigger list includes new external endpoints",
+        "Trigger list includes a change to data handling",
+        "Trigger list includes a payment-model change",
+        "Trigger list includes a new app type or edition",
+        "States the test of an objective trigger is that a developer can self-assess it before submitting",
+        "Pairs the minor-update fast path with automated scanning on every release",
+        "Warns that without that scanning the fast path becomes the gap it was meant to close",
+        "Recommends the objective minor-update fast path as the default rung",
+        "States unconditional re-certification of every post-approval change is viable only where a deterministic automated test suite returns a report fast enough to keep it cheap, benchmarked around 24 working hours",
+        "States periodic approval expiry is the only rung that catches drift in apps that never ship an update, and promotes it as an annual floor for the restricted-scope tier rather than as the main policy"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Tessellate runs an app marketplace for HR platforms; about 40% of our listed partners are EU-based companies. Today when we reject a submission the developer gets an email saying 'your app did not meet our marketplace quality standards, please review the guidelines and resubmit.' We also run a partner office hours call every second Tuesday where developers can raise problems with review decisions, and internally we've been calling that our appeals process. Two partners escalated to my VP last month saying they have no way to contest a decision at all. What should this actually look like?",
+      "expected_output": "An appeal design that strips the 'appeal' label off office hours, requires decision-independent human review with a stated turnaround and policy-citing rejections, and promotes the dashboard-integrated appeal on the strength of EU platform-to-business mediation exposure.",
+      "files": [],
+      "expectations": [
+        "States the office hours call is an escalation channel, not an appeal, and must not be labelled one",
+        "Gives the reason that an escalation channel is guidance rather than an independent re-review of the decision",
+        "Requires the appeal to be reviewed by a human who did not make the original decision",
+        "Requires a stated turnaround commitment on appeal decisions",
+        "Requires every rejection to cite the specific policy it violated, as a prerequisite for any appeal to function",
+        "Notes the current generic rejection wording leaves an appellant nothing to argue against",
+        "Identifies EU platform-to-business rules as giving EU business users mediation rights over listing decisions",
+        "Uses that EU exposure to promote the appeal rung above the default rather than treating it as a footnote",
+        "Recommends the dashboard-integrated appeal, pre-populated with the violation context, as the rung EU exposure promotes",
+        "States that a defined human-reviewed appeal is cheap to stand up: a documented channel, a decision-independence rule, and a turnaround commitment",
+        "States fix-and-resubmit alone is acceptable only pre-launch at trivial volume",
+        "Names appeal overturn rate as a metric to track once the process is live"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Quick sanity check. Corvid Systems sells warehouse-management software to mid-market and enterprise logistics companies. We're standing up an app directory: partner apps can read our public product catalog and our published carrier-rate metadata through a read-only API. No customer orders, no shipment records, no personal data, no write access of any kind. Our CTO's position is that because we sell to enterprise logistics, we should run the same sort of multi-week manual security review Salesforce does before anything gets listed, otherwise procurement teams won't take the directory seriously. Realistically I have one engineer who can spend about 4 hours a week on this. How deep does this review need to go?",
+      "expected_output": "A tiering answer that sets depth from the maximum data grant rather than the enterprise buyer profile, recommends a light functional and scope-focused gate for metadata-only apps with post-publication scanning retained, and writes an objective escalation trigger for the day the grant widens.",
+      "files": [],
+      "expectations": [
+        "Ties review depth to the maximum data grant an app can hold, not to the marketplace's market, buyer size, or enterprise positioning",
+        "Rejects the enterprise-B2B framing as the input that sets review depth",
+        "States the consequence explicitly: a consumer-adjacent marketplace whose apps hold restricted scopes should out-review a B2B marketplace whose apps only read metadata",
+        "Recommends a lighter depth - functional and scope-focused rather than a mandated multi-week security review - for the metadata-only grant",
+        "States that functional-only review is the right depth for a metadata-only tier inside a larger process, not a whole-marketplace shape once apps reach business data",
+        "Keeps post-publication automated scanning in place despite the lighter admission gate",
+        "Defines an objective escalation trigger that moves an app up a review tier if it later requests write access or restricted scopes",
+        "Requires that escalation trigger to be written so a developer can self-assess it before submitting",
+        "Refuses a no-review registry as an option rather than offering it as the cheapest choice",
+        "Fits the recommendation inside the stated 4-hour-per-week reviewer ceiling rather than proposing a process that exceeds it",
+        "Warns that the sensitivity tiering must be settled early, because changing it late forces a rewrite of the re-review, hardening and enforcement sections built on top of it"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Halyard Cloud. Our marketplace has 2 full-time reviewers. We take in about 40 new apps a month and 600 app updates a month, and every single one of them goes through the same full manual review. The queue is at 6 weeks and three of our largest partners have threatened to pull their apps. We bought a SAST product last year and wired it so that every finding opens a Jira ticket for the review team - it generated 1,900 tickets last quarter and the reviewers have basically stopped opening them. About half of first submissions fail on something. I have budget for one more headcount, that's it. What do I do?",
+      "expected_output": "A staged-gate redesign with an objective fast path for minor updates, a triage rule that auto-tickets only critical and high findings and routes only secret-scan hits to humans, cost-tiered scan cadence, a developer-facing pre-submission checker, and the matching operating metrics.",
+      "files": [],
+      "expectations": [
+        "Promotes a staged gate with an objective fast path, on the grounds that update volume has made reviewer cost the binding constraint",
+        "Keeps full review for new apps and major versions",
+        "Grants near-instant clearance only to objectively defined minor updates",
+        "Keeps continuous automated scanning covering what the fast path skips",
+        "Changes the ticketing rule so that only critical and high findings auto-raise a ticket",
+        "Routes to human reviewers only judgment calls plus a single genuinely ambiguous signal class, naming secret-scan hits as that class",
+        "Gives the reason: scanning everything and ticketing everything drowns reviewers",
+        "Tiers scan cadence by cost - cheap checks daily, expensive per-version checks on release, slow checks monthly",
+        "Hands developers the reviewers' own checking tool to run before submission",
+        "Connects that pre-submission self-check to reducing the first-pass failure rate",
+        "Treats the roughly-half-of-first-submissions-fail figure as a benchmarked floor to beat rather than as an acceptable norm",
+        "Names automated-scan false-positive rate as a tracked metric, because rising false positives retrain reviewers to ignore the scanner",
+        "Names share of updates clearing the fast path as a tracked metric"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Two things for the marketplace policy doc at Northcut. First: a researcher reported a stored XSS in a listed app that has about 900 installs. The app's publisher answered once, asked for a repro, and has gone quiet for nine days. My head of security wants the policy to say 'apps with confirmed vulnerabilities are delisted immediately' and be done with it. Second, unrelated: we're about to require every listed app to ship an SBOM. We have 300 apps already listed. I want to announce it in two weeks and enforce it from the first of next month. Write me the enforcement side of the policy.",
+      "expected_output": "A severity-tiered enforcement ladder with per-rung owner, notice period and firing evidence, an explicit note that this ladder is not effort-ranked, publisher-level enforcement for chronic non-responders, standing discovery channels, and a rejection of the one-month SBOM runway in favour of a six-month minimum.",
+      "files": [],
+      "expectations": [
+        "Replaces blanket immediate delisting with a severity-tiered enforcement ladder",
+        "The ladder runs: finding raised, remediation SLA by severity, listing hidden, new installs suspended, tokens revoked or kill switch, then delisting with notification to affected customers",
+        "Every rung names an owner",
+        "Every rung names a developer-notice period",
+        "Every rung names the evidence that fires it",
+        "States explicitly that this ladder carries no efficiency or effort ranking, because severity and the developer's response pick the rung rather than the operator's effort budget",
+        "Adds graduated publisher-level enforcement for chronic non-responsive or low-quality submitters, distinct from rejecting or removing a single app",
+        "Rejects the proposed announce-in-two-weeks, enforce-next-month runway for the SBOM requirement",
+        "Sets at least six months of notice before a new requirement takes effect on already-listed apps",
+        "Gives the reason: retroactive rule changes without runway burn the partner trust the review program exists to build",
+        "Requires a named security contact per partner as a standing discovery channel",
+        "Requires an incident-reporting channel feeding the ladder",
+        "Lists vulnerability discovery through internal scanning, a disclosure program, and a bug bounty as the program matures"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "I'm reviewing a submission on Pallas, our marketplace for accounting software. The app is a spend-analytics dashboard. It's requesting ledger.read, vendors.read and ledger.write. In the submission form, under justification for ledger.write, the developer wrote: 'Required for planned auto-reconciliation features on our Q3 roadmap.' Their screenshots only show read-only charts and exports. Their backend posts to two endpoints we've never seen in a submission before, one of which resolves to a third-party data-enrichment vendor. How should I handle this one, and what should the written rule be so the next reviewer handles it the same way?",
+      "expected_output": "A decision that refuses the roadmap justification on demonstrated-necessity grounds, escalates the app a tier for the write scope, extends review to post-consent data flow and subprocessors, and writes the per-scope rule plus the five reviewer verification techniques into the process.",
+      "files": [],
+      "expectations": [
+        "Rejects the roadmap justification, on the rule that high-risk scopes require demonstrated necessity rather than declared intent",
+        "States the review's job is to check the app does not ask for more than it actually uses",
+        "Writes scope minimization as a named per-scope rule rather than a general least-privilege principle",
+        "Treats the ledger.write request as escalating the app up one review tier",
+        "Requires the tier-escalation trigger to be objective enough for a developer to self-assess it before submitting",
+        "Extends the data-access review past the grant itself to where data goes after consent - external endpoints, subprocessors, and retention",
+        "Treats the unrecognized third-party enrichment vendor as a subprocessor question inside that review",
+        "States secrets-handling rules as prohibitions covering source repositories, URL strings, and logs",
+        "Applies codebase scanning for prohibited patterns as a reviewer verification technique",
+        "Applies configuration and manifest inspection, plus UI/UX verification, as reviewer verification techniques",
+        "Applies OAuth, billing and install flow tracing as a reviewer verification technique",
+        "Applies scope-necessity assessment against the app's declared functionality as a reviewer verification technique"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Pre-launch question. Arbolet is a CRM for construction companies; our app marketplace opens in 11 weeks. Listed apps will get read and write access to customer CRM records - contacts, deals, job files, the lot. My head of ecosystem wants to launch open: anyone can list after a basic completeness check, and then we run an 'Arbolet Certified' badge program that the good apps can earn later. Her argument is that we need 50 apps at launch for the marketplace to look alive, and a heavy gate gets us maybe 12. We also want an enterprise trust tier at some point, because our top 20 accounts ask about app security in every single renewal conversation. Give me your recommendation and the reasoning behind it.",
+      "expected_output": "A recommendation of the single hard gate for a read-write business-data grant, with the two-rung ladder named and argued down, the three separate pipeline orderings emitted with the trust/efficiency inversion explained, and the enterprise tier positioned as a later stackable layer.",
+      "files": [],
+      "expectations": [
+        "Recommends a single hard gate as the default rung, given apps reach read-write access on business records",
+        "States the two-rung ladder starves the quality floor because 'listed' clears almost no bar",
+        "States the ladder is promoted only when the binding risk is developer-adoption friction, which is rare once the data grant passes metadata-only",
+        "Warns that an uncertified-but-listed tier is an incident waiting to be attributed to the operator",
+        "Emits reviewer effort per submission as its own ordering across the pipeline shapes",
+        "Emits buyer trust signal as its own separate ordering",
+        "Emits efficiency as its own separate ordering",
+        "Explains that the trust and efficiency orderings invert, because a uniform hard bar gives every buyer the same guarantee at full reviewer cost while a fast path or ladder means 'listed' certifies less than 'certified'",
+        "Treats the enterprise trust tier as stackable on top of whichever base gate exists, never as a replacement for one",
+        "Sequences the enterprise trust tier after the base gate is proven rather than at launch",
+        "Names the staged gate with an objective fast path as the later promotion once update volume makes reviewer cost the binding constraint, not as the launch shape",
+        "States which input moved which rung, specifically that the read-write grant on business records is what holds the hard gate"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Here's the summary of the review policy doc we're about to ship at Ferrule. B2B procurement SaaS, marketplace with 210 listed apps, and updates auto-install into customer tenants overnight. Section 1, Admission: every app gets a completeness check, a scope review and a security questionnaire; apps touching purchase-order data go to 'enhanced review' at the reviewer's discretion. Section 2, Updates: minor updates publish without re-review, major updates require re-review. Section 3, Publish: developers push builds from the partner portal using their username and password plus an SMS code, and builds go live to tenants that night. Section 4, Enforcement: the trust and safety team may hide, suspend or remove any app that violates our policies. Section 5, Curation: we also need to settle in this doc whether Ferrule should be an open marketplace or a curated one. Is this ready to ship?",
+      "expected_output": "A gate-by-gate verdict against the four design-document gates, failing sections 1-4 with the specific missing objective criteria, owners, notice periods and publish-channel controls, plus a ruling that the curation question belongs upstream in marketplace strategy.",
+      "files": [],
+      "expectations": [
+        "Checks the document against a fixed set of four design-document gates rather than giving general impressionistic feedback",
+        "Fails Section 1 because 'enhanced review at the reviewer's discretion' is not an objective escalation trigger a developer can self-assess",
+        "Fails Section 2 because 'minor update' is left undefined",
+        "Supplies the objective minor-update definition: no new scopes, no new external endpoints, no change to data handling",
+        "Fails Section 4 because no enforcement rung names an owner, a notice period, or the evidence that fires it",
+        "Fails Section 3 because the publish channel carries none of the default controls",
+        "Requires a publish-to-propagation hold specifically because updates auto-install into tenants overnight",
+        "Flags the SMS second factor as not phishing-resistant and replaces it with FIDO-based 2FA",
+        "Replaces the long-lived portal password publish path with short-lived scoped publish tokens",
+        "States the open-versus-curated decision in Section 5 belongs to marketplace strategy, and that this review process enforces that decision rather than re-making it",
+        "Instructs iterating on the document until all four gates pass rather than shipping with known gaps",
+        "Lists operating metrics for once it is live, including time-to-first-decision against a published SLA and post-approval security findings per quarter with time-to-remediation"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "Design the security review process for third-party apps on the marketplace we're launching next quarter",
+      "should_trigger": true
+    },
+    {
+      "query": "what should our approval criteria be for apps submitted to our marketplace",
+      "should_trigger": true
+    },
+    {
+      "query": "how do we decide which partner apps actually get into our app store",
+      "should_trigger": true
+    },
+    {
+      "query": "our app review takes six weeks and partners are furious, where can we add a fast path",
+      "should_trigger": true
+    },
+    {
+      "query": "when should an app update have to go through review again",
+      "should_trigger": true
+    },
+    {
+      "query": "write the policy for what counts as a minor update that skips re-approval",
+      "should_trigger": true
+    },
+    {
+      "query": "a listed integration just leaked customer data through an auto-update, what do we change",
+      "should_trigger": true
+    },
+    {
+      "query": "how do we audit the OAuth scopes a submitted app is asking for before we list it",
+      "should_trigger": true
+    },
+    {
+      "query": "a partner wants read-write on all CRM records and says it's for a feature on their roadmap",
+      "should_trigger": true
+    },
+    {
+      "query": "do we need an appeals process when we reject a partner's app",
+      "should_trigger": true
+    },
+    {
+      "query": "developers keep complaining that our rejections are opaque and they can't contest them",
+      "should_trigger": true
+    },
+    {
+      "query": "how do we delist an app that turned out to be malicious",
+      "should_trigger": true
+    },
+    {
+      "query": "we need a written policy for pulling an app out of the marketplace",
+      "should_trigger": true
+    },
+    {
+      "query": "what stops a compromised publisher from pushing a bad version to all our customers",
+      "should_trigger": true
+    },
+    {
+      "query": "should we hold cleared updates for a day before they reach installed tenants",
+      "should_trigger": true
+    },
+    {
+      "query": "our scanner opens a ticket for every finding and the reviewers have stopped reading them",
+      "should_trigger": true
+    },
+    {
+      "query": "how many reviewers do we need for 600 app updates a month",
+      "should_trigger": true
+    },
+    {
+      "query": "design the vetting process for integrations before they go into our directory",
+      "should_trigger": true
+    },
+    {
+      "query": "what security checks should we run on a third-party app before approving it",
+      "should_trigger": true
+    },
+    {
+      "query": "we want a certified tier badge sitting on top of a basic listing bar, thoughts",
+      "should_trigger": true
+    },
+    {
+      "query": "should we require every submitted app to pass a penetration test",
+      "should_trigger": true
+    },
+    {
+      "query": "our marketplace goes live in 11 weeks and we have no process for deciding what gets in",
+      "should_trigger": true
+    },
+    {
+      "query": "someone impersonated one of our partners and uploaded a fake build of their app",
+      "should_trigger": true
+    },
+    {
+      "query": "how do we handle a publisher who keeps submitting sloppy apps and ignoring our feedback",
+      "should_trigger": true
+    },
+    {
+      "query": "write the enforcement ladder for apps that fail a post-approval security check",
+      "should_trigger": true
+    },
+    {
+      "query": "what KPIs tell us whether our marketplace vetting is actually working",
+      "should_trigger": true
+    },
+    {
+      "query": "how do I tier how strictly we check apps based on what data they can touch",
+      "should_trigger": true
+    },
+    {
+      "query": "we're adding an SBOM requirement for all listed apps, how much notice do partners get",
+      "should_trigger": true
+    },
+    {
+      "query": "our EU partners are claiming they have mediation rights over our rejection decisions",
+      "should_trigger": true
+    },
+    {
+      "query": "can we just let apps publish updates instantly the way npm does",
+      "should_trigger": true
+    },
+    {
+      "query": "what keeps a stolen publish token from turning into a supply chain attack on our customers",
+      "should_trigger": true
+    },
+    {
+      "query": "how should we split automated scanning versus human reviewers on submissions",
+      "should_trigger": true
+    },
+    {
+      "query": "how do we know an app isn't asking for more permissions than it actually uses",
+      "should_trigger": true
+    },
+    {
+      "query": "we approved an app two years ago and nobody has looked at it since",
+      "should_trigger": true
+    },
+    {
+      "query": "should approvals expire?",
+      "should_trigger": true
+    },
+    {
+      "query": "we need to decide what re-triggers a full re-check once an app is already live",
+      "should_trigger": true
+    },
+    {
+      "query": "the exec team wants stricter gates after the breach but I don't think the gate was the problem",
+      "should_trigger": true
+    },
+    {
+      "query": "design the intake and approval workflow for our integrations directory",
+      "should_trigger": true
+    },
+    {
+      "query": "what should a rejection email to a partner developer actually say",
+      "should_trigger": true
+    },
+    {
+      "query": "our reviewers are the bottleneck, how do we scale without lowering the bar",
+      "should_trigger": true
+    },
+    {
+      "query": "how should we handle apps that request restricted mailbox and file scopes",
+      "should_trigger": true
+    },
+    {
+      "query": "give partners a way to check their own app before they submit it to us",
+      "should_trigger": true
+    },
+    {
+      "query": "what happens to a listed app when its publisher's account gets taken over",
+      "should_trigger": true
+    },
+    {
+      "query": "we want to be able to kill an installed app remotely if it goes bad",
+      "should_trigger": true
+    },
+    {
+      "query": "how do we decide when to revoke an app's tokens versus just hiding the listing",
+      "should_trigger": true
+    },
+    {
+      "query": "our app store has basically no quality bar and it's starting to hurt us",
+      "should_trigger": true
+    },
+    {
+      "query": "set up the gate that decides what gets into our integration catalog",
+      "should_trigger": true
+    },
+    {
+      "query": "should a change to an app's pricing model force a new review",
+      "should_trigger": true
+    },
+    {
+      "query": "how strict does our vetting need to be if apps only ever see public metadata",
+      "should_trigger": true
+    },
+    {
+      "query": "write the onboarding flow for new partner developers signing up to build on our platform",
+      "should_trigger": false
+    },
+    {
+      "query": "how do we provision sandbox tenants for partner developers before their first build",
+      "should_trigger": false
+    },
+    {
+      "query": "what screenshot dimensions and video specs should we require on marketplace listings",
+      "should_trigger": false
+    },
+    {
+      "query": "design the category taxonomy for our app directory",
+      "should_trigger": false
+    },
+    {
+      "query": "write the quality bar for listing descriptions and marketing copy in our app store",
+      "should_trigger": false
+    },
+    {
+      "query": "what revenue share should we take on paid apps in our marketplace",
+      "should_trigger": false
+    },
+    {
+      "query": "how and when do we pay out developers for marketplace sales",
+      "should_trigger": false
+    },
+    {
+      "query": "should we be merchant of record for marketplace transactions or let developers bill directly",
+      "should_trigger": false
+    },
+    {
+      "query": "pick the ten launch partners for our marketplace announcement and set the embargo",
+      "should_trigger": false
+    },
+    {
+      "query": "how should we run an app-of-the-month spotlight program",
+      "should_trigger": false
+    },
+    {
+      "query": "should we build our own marketplace or just list our integrations on HubSpot's",
+      "should_trigger": false
+    },
+    {
+      "query": "is our ecosystem mature enough to justify having a marketplace at all",
+      "should_trigger": false
+    },
+    {
+      "query": "how do we get more installs on our AppExchange listing",
+      "should_trigger": false
+    },
+    {
+      "query": "our app ranks badly in Atlassian Marketplace search results, fix our listing",
+      "should_trigger": false
+    },
+    {
+      "query": "design the consent screen third-party apps see when requesting access to a customer account",
+      "should_trigger": false
+    },
+    {
+      "query": "what scope granularity should our OAuth authorization server expose",
+      "should_trigger": false
+    },
+    {
+      "query": "should our refresh tokens rotate on every use",
+      "should_trigger": false
+    },
+    {
+      "query": "design our API key prefix and checksum format",
+      "should_trigger": false
+    },
+    {
+      "query": "how do we rotate customer API keys without downtime",
+      "should_trigger": false
+    },
+    {
+      "query": "build a test mode with magic values so integrators can exercise our API safely",
+      "should_trigger": false
+    },
+    {
+      "query": "how should integrators reset and reseed their sandbox data",
+      "should_trigger": false
+    },
+    {
+      "query": "which languages should get official SDKs first",
+      "should_trigger": false
+    },
+    {
+      "query": "write our deprecation notice window for breaking API changes",
+      "should_trigger": false
+    },
+    {
+      "query": "how should we structure our 429 responses and Retry-After headers",
+      "should_trigger": false
+    },
+    {
+      "query": "design the component model for our public status page during incidents",
+      "should_trigger": false
+    },
+    {
+      "query": "give partners a dashboard showing their failed webhook deliveries",
+      "should_trigger": false
+    },
+    {
+      "query": "design the retry, backoff and dead-letter policy for our outbound webhooks",
+      "should_trigger": false
+    },
+    {
+      "query": "review our REST endpoint naming and pagination style for consistency",
+      "should_trigger": false
+    },
+    {
+      "query": "audit our OpenAPI reference for undocumented endpoints and error codes",
+      "should_trigger": false
+    },
+    {
+      "query": "what tools should our MCP server expose to AI agents",
+      "should_trigger": false
+    },
+    {
+      "query": "should we publish a GraphQL API alongside our REST one",
+      "should_trigger": false
+    },
+    {
+      "query": "set query depth and complexity limits on our public GraphQL schema",
+      "should_trigger": false
+    },
+    {
+      "query": "should our public gRPC surface be transcoded to JSON at the edge",
+      "should_trigger": false
+    },
+    {
+      "query": "design Parquet file drops to S3 for our enterprise data export product",
+      "should_trigger": false
+    },
+    {
+      "query": "price a JDBC access add-on for customers connecting Tableau to their data",
+      "should_trigger": false
+    },
+    {
+      "query": "plan our listing as a source connector on Fivetran and Airbyte",
+      "should_trigger": false
+    },
+    {
+      "query": "which technology partners should we integrate with next quarter",
+      "should_trigger": false
+    },
+    {
+      "query": "how do we attribute partner-sourced versus partner-influenced pipeline",
+      "should_trigger": false
+    },
+    {
+      "query": "redesign the information architecture of our developer portal",
+      "should_trigger": false
+    },
+    {
+      "query": "how do we cut time to first API call for newly signed-up developers",
+      "should_trigger": false
+    },
+    {
+      "query": "how do I hire an API product manager for our platform team",
+      "should_trigger": false
+    },
+    {
+      "query": "prep me for a partner engineer interview next week",
+      "should_trigger": false
+    },
+    {
+      "query": "which platform skill should I start with for our new public API program",
+      "should_trigger": false
+    },
+    {
+      "query": "review this pull request for security vulnerabilities before I merge it",
+      "should_trigger": false
+    },
+    {
+      "query": "do a code review of our authentication middleware",
+      "should_trigger": false
+    },
+    {
+      "query": "our iOS app got rejected by Apple's App Store review team, help me write the response",
+      "should_trigger": false
+    },
+    {
+      "query": "improve our Google Play store listing conversion rate",
+      "should_trigger": false
+    },
+    {
+      "query": "write the vendor security questionnaire we send to SaaS tools before we buy them",
+      "should_trigger": false
+    },
+    {
+      "query": "audit our npm dependencies for known vulnerabilities",
+      "should_trigger": false
+    }
+  ]
+}

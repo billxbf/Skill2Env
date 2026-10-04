@@ -1,0 +1,398 @@
+{
+  "skill_name": "partner-app-onboarding",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I run platform at Kettleworth, we do restaurant scheduling SaaS. We're opening an app marketplace next quarter. My VP wants every partner to fill out an application we review by hand - company details, use case, a reference customer - and then we'd slot them into Bronze/Silver/Gold based on that application, with Gold getting API access first and Bronze waiting. A decent developer gets a hello-world app running against our API in about two hours; our API only touches shift schedules, no payments, no PII beyond staff first names. We expect mostly indie devs and two-person shops. Sanity check this before I take it to eng?",
+      "expected_output": "A pushback that replaces the manual application gate with self-service signup, justified by the two-hour time-to-first-working-app and the low data sensitivity, and that kills the graded entry ladder outright rather than resizing it.",
+      "files": [],
+      "expectations": [
+        "Recommends self-service signup - a form plus a program-agreement checkbox with no human reviewer - as the entry gate, rejecting the manual application review",
+        "Uses the roughly two-hour time to a first working app as an explicit reason the application gate is not justified here",
+        "States that application-reviewed registration earns its cost only when build complexity runs to weeks-to-months or when data sensitivity requires knowing who is building before granting access",
+        "Rejects the Bronze/Silver/Gold entry ladder outright rather than renaming, resizing, or simplifying it",
+        "States that entry tiers gate nothing at most real partner programs and that partner tiers are earned post-launch on performance",
+        "Routes the design of a post-launch tier ladder to samber/developer-platform-skills@connector-marketplace-strategy instead of designing it here",
+        "Rejects giving any tier earlier API access than another: credentials and API access are granted to every partner at signup",
+        "Treats a staged pre-launch ladder (Registered then Exploration then Build) as a documented exception justified by build complexity, not a pattern to copy",
+        "Does not introduce a countersigned company-level agreement or a per-applicant admission decision into the entry path"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Northvale Systems - we sell field-service management software to utilities. We're designing our partner developer program from zero. Current plan on the whiteboard: partner signs up, we review the company over 2-4 business days, once approved we email them credentials and spin up a sandbox tenant, then they build, then they submit the app for our security review. Feels clean to me. Where would you push back?",
+      "expected_output": "Identifies the sandbox-behind-the-review-gate failure, moves provisioning to signup, keeps human review at the submission gate, and interviews the user on build complexity and data sensitivity one question at a time before settling the gate.",
+      "files": [],
+      "expectations": [
+        "Identifies gating sandbox and credential provisioning behind the partner-approval step as the central problem and names it as a recognized failure mode",
+        "Recommends provisioning the dev account, sandbox tenancy, and credentials at signup, before any human review",
+        "States the principle that starting to build is decoupled from getting approved",
+        "Concentrates human review at the app-submission gate, where it protects end customers",
+        "States that ungated build access is the shape most major B2B marketplaces use, not a risk-tolerant outlier",
+        "Describes the cost of the current plan as partners churning silently in the gap between signup and the ability to test",
+        "Asks how long a competent developer needs to reach a first working app on the platform, offering hours / days / weeks-to-months as the answer set",
+        "Asks how sensitive the data partner apps touch is, in regulatory-exposure or customer-trust terms",
+        "Asks at most one question per message rather than delivering a block of questions at once",
+        "Defers review-pipeline and approval-checkpoint mechanics to samber/developer-platform-skills@app-marketplace-review instead of designing the review process here"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Perrin Labs, B2B analytics platform. Marketplace has been live 14 months, 60-odd apps listed. Of the apps submitted last quarter, 22% failed review on the first pass - mostly OAuth scope misuse and missing data-deletion webhooks. Our head of ecosystem wants to make our 4-hour 'Building on Perrin' course mandatory: you can't click submit until you've passed the assessment. I've got budget to build the course properly this quarter. Draft the plan.",
+      "expected_output": "Declines the submission-gating certification, cites the 22% rate as below the promotion threshold, sequences a pre-submission validator and a published review checklist ahead of any education mandate, and keeps education as an optional parallel track.",
+      "files": [],
+      "expectations": [
+        "Declines to make the course a prerequisite for clicking submit",
+        "States that the 22% first-review fail rate sits below the roughly 30-40% threshold at which mandatory education is even considered",
+        "Recommends building a pre-submission validator - an automated check partners run before submitting - ahead of any education mandate",
+        "States that mandatory pre-submission certification is not standard practice on any major B2B marketplace",
+        "Recommends keeping education as an optional parallel track available from day one, required by nothing",
+        "Locates quality enforcement at the review gate, with education positioned to help partners pass it faster",
+        "Recommends publishing the review checklist inside the onboarding docs so requirements are not discovered at first rejection",
+        "Offers a credentialed but still non-gating education path with named, displayable certificates as the upgrade when partner credibility is a buyer-facing signal",
+        "States that promoting mandatory certification would additionally require failure analysis tracing failures to partner knowledge gaps rather than documentation gaps",
+        "Flags that the cited failure causes (OAuth scope misuse, missing data-deletion webhooks) read as documentation or checklist gaps rather than a case for a four-hour course"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Quick one. We're standing up dashboards for the partner program at Halmsted - workforce planning SaaS, marketplace went live 5 weeks ago. Exec wants a single north-star number and specifically asked me for 'time to first submitted app' plus the industry benchmark we should be measuring ourselves against. What's the benchmark, and what else belongs on that dashboard?",
+      "expected_output": "Refuses to supply a benchmark number, explains that partner-funnel conversion data is not published, labels the metric self-defined, names the adjacent published metrics, and specifies the four-checkpoint funnel with a trend-based rather than absolute pass bar.",
+      "files": [],
+      "expectations": [
+        "States that no published industry benchmark for time-to-first-submitted-app exists, because marketplaces keep partner-onboarding conversion numbers internal",
+        "Declines to supply a numeric industry benchmark for time-to-first-submitted-app",
+        "States that time-to-first-submitted-app is a self-defined metric and must be labelled as such wherever it is reported",
+        "Names time-to-first-call - signup to first successful API call - as the established named metric sitting before it",
+        "Names time-to-first-deal - partner-agreement signature to first registered opportunity - as the named partner-ecosystem metric sitting after it",
+        "Specifies four funnel checkpoints: signup to provisioned, provisioned to first API call, first API call to first app submitted, and submission to approval",
+        "Recommends baselining against the platform's own first quarter and tracking quarter-over-quarter conversion rather than setting an absolute pass bar",
+        "Gives roughly 10 minutes as the working threshold above which provisioned-to-first-API-call means onboarding friction gets fixed before anything else",
+        "Attributes the drop-off evidence behind that threshold to general developer-tool funnels rather than to marketplace-partner data"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Here's our partner signup form as it stands at Colvers (B2B expense platform). Fields, in order: company name, tax ID, bank account for payouts, choose your pricing model (free / we bill / you bill), proposed list price, upload a W-9 or local equivalent, accept the reseller agreement, then a use-case description. We're seeing 70% abandonment on this form. Head of partnerships thinks we should cut the use-case description since it's the longest field to fill in. Thoughts?",
+      "expected_output": "Rejects cutting the use-case field, moves every commercial and payout field out of registration to the launch/listing stage, and proposes the agreement-split shape where building stays ungated and only selling carries the agreement and identity checks.",
+      "files": [],
+      "expectations": [
+        "Rejects cutting the use-case description as the fix and identifies the commercial and payout fields as the cause of abandonment",
+        "Moves the pricing-model choice (free / platform-billed / vendor-billed) out of registration to the launch stage, as the last gate before listing",
+        "Moves the proposed list price out of registration for the same reason",
+        "Moves the reseller or seller agreement to first listing rather than registration",
+        "Moves payout banking details and tax documentation (tax ID, W-9 or local equivalent) out of the registration path",
+        "Recommends that registration carry only a click-through program agreement needing a single legal sign-off and no per-partner review",
+        "Describes the agreement-split shape: building stays ungated for everyone, and a separate verified seller track carries the agreement signature plus KYC/KYB identity checks",
+        "States that a partner forced to price an app they have not built answers randomly",
+        "Ties any revenue-reporting obligation to first sale rather than to registration"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Brindle - payments orchestration for marketplaces. We want partners building apps that move money between our customers' sub-accounts. Engineering's sandbox proposal: partners just use their own live Brindle account with a 'partner mode' flag on it. Zero infra for us to build, they can start in minutes, and if we later find we need something heavier we'll build proper sandboxes then. Deadline is tight and we have 6 partners already waiting. Go or no-go?",
+      "expected_output": "A no-go on own-account-as-sandbox because the apps move money, with the option deleted rather than parked as a later fallback, instant dedicated dev tenancy recommended instead, provisioning still at signup despite the deadline, and isolation mechanics deferred to the sibling skill.",
+      "files": [],
+      "expectations": [
+        "Returns a no-go on using the partner's own live account as the test environment",
+        "Bases the no-go on partner apps touching money and irreversible actions, and on other tenants' data being reachable",
+        "Instructs deleting the own-account-as-sandbox option outright rather than keeping it as a later fallback or a demoted rung",
+        "Explains that an option ruled out by constraints but parked at the bottom of a menu silently reappears later as scope",
+        "Recommends instant dedicated dev tenancy - a free dev instance or account created at signup, no time limit, no payment information required - as the rung to build",
+        "Keeps provisioning at signup rather than deferring it because of the tight deadline",
+        "Notes that production-mirror sandboxes are heavy enough that real platforms ration them, via quotas or by gating them behind a paid tier",
+        "Defers test-key prefixing, magic test values, isolation architecture, and graduation-to-live mechanics to samber/developer-platform-skills@api-test-mode-design"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Ostara Cloud, observability vendor. Our app directory has about 900 registered developers, of which roughly 40 are commercial ISVs that actually sell through us; the rest are individuals and small shops building private integrations for their own employers. Support today is a docs site plus a GitHub Discussions board and it's drowning - the same 12 questions over and over, mostly about our event-schema versioning and about what the review checklist actually wants. Finance approved 4 partner-manager hires. How do I allocate them?",
+      "expected_output": "Allocates the named managers only to the 40 commercial ISVs, answers the repeated-question problem with real-time community chat and engineer-staffed office hours rather than headcount, and keeps docs plus forum as the base layer with an explicit efficiency ordering.",
+      "files": [],
+      "expectations": [
+        "Assigns named partner managers only to the roughly 40 commercial ISVs, never to the roughly 860 individual developers",
+        "Recommends real-time community chat as the response to the clustered repeated questions, rather than headcount",
+        "Recommends office hours staffed by a platform engineer for the recurring hard steps - event-schema versioning and the review gate - that peers cannot answer",
+        "Keeps the existing docs and community forum in place, layering new rungs on top rather than replacing them",
+        "States explicitly that the support rungs stack and never substitute for one another",
+        "Gives an explicit ordering of the support rungs on efficiency, leading with docs plus community forum",
+        "States that answered forum threads compound, each one deflecting the next partner's ticket",
+        "States that named partner managers scale only with headcount, which is why they lose on efficiency despite carrying the highest unblock power"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "We just had a partner blow up at us in our community Slack. Vessen, HR platform - our marketplace review won't even start until an app has 5 active installs on real customer workspaces, and our 'Vessen Certified' badge needs 6 months listed plus 60 active installs. This partner shipped, hit the install wall, and said we wasted three months of their engineering time. Two other partners have since said the same thing. What do we change?",
+      "expected_output": "Frames this as a disclosure-timing failure rather than a threshold-existence one, moves both thresholds into the onboarding documentation, names the hidden-post-launch-wall pattern, and keeps certification non-gating for submission.",
+      "files": [],
+      "expectations": [
+        "Identifies the problem as disclosure timing rather than the existence of the thresholds themselves",
+        "Recommends disclosing the 5-active-install review-eligibility threshold inside the onboarding documentation",
+        "Recommends disclosing the 6-month-plus-60-install certification thresholds inside the same onboarding documentation",
+        "States the general rule that every post-launch threshold is disclosed at onboarding, never at the moment the partner hits it",
+        "Names hidden post-launch walls as a recognized failure pattern that hits partners after they believe onboarding is complete",
+        "Notes that both threshold shapes - an install count before review can start, and tenure plus install counts before certification - exist on real major B2B marketplaces",
+        "Recommends naming the journey stages explicitly, including the post-launch stage, so the walls are visible from the entry docs",
+        "Keeps certification non-gating for submission while still disclosing its post-launch eligibility bar upfront"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "Design the onboarding journey for developers building apps on our platform, from signup through to first submitted app.",
+      "should_trigger": true
+    },
+    {
+      "query": "Should partner registration be an application we review, or just self-service signup?",
+      "should_trigger": true
+    },
+    {
+      "query": "When in the process do we hand partner developers a sandbox?",
+      "should_trigger": true
+    },
+    {
+      "query": "partners sign up and then nothing ever happens, where are they getting stuck",
+      "should_trigger": true
+    },
+    {
+      "query": "We're launching a developer program for our CRM platform next quarter. Where do I start?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we require a certification course before partners are allowed to submit an app?",
+      "should_trigger": true
+    },
+    {
+      "query": "What should I be measuring between a partner signing up and them shipping their first app?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our ISVs keep telling us the getting-started experience is a maze. Fix it.",
+      "should_trigger": true
+    },
+    {
+      "query": "Do we need entry tiers for the partners building on our app platform?",
+      "should_trigger": true
+    },
+    {
+      "query": "how long should it take someone to go from 'I want to build on you' to 'I submitted something'",
+      "should_trigger": true
+    },
+    {
+      "query": "Write the plan for taking a third-party developer from zero to a live listing on our marketplace.",
+      "should_trigger": true
+    },
+    {
+      "query": "We ask for pricing and banking details on our partner signup form. Is that normal?",
+      "should_trigger": true
+    },
+    {
+      "query": "Draft the registration gate for our app ecosystem.",
+      "should_trigger": true
+    },
+    {
+      "query": "Should ISVs get a free dev instance automatically, or only after we approve them?",
+      "should_trigger": true
+    },
+    {
+      "query": "Set up the support channels for the people building integrations on top of us.",
+      "should_trigger": true
+    },
+    {
+      "query": "We have a 90% drop-off between partner account creation and their first API call. What's the plan?",
+      "should_trigger": true
+    },
+    {
+      "query": "map out the stages a technology partner goes through with us",
+      "should_trigger": true
+    },
+    {
+      "query": "We want to gate access until we've vetted the company properly. Good idea or not?",
+      "should_trigger": true
+    },
+    {
+      "query": "What does a good developer program entry path look like for a B2B SaaS?",
+      "should_trigger": true
+    },
+    {
+      "query": "The first thing anyone building on us sees is a 14-field form. Rethink it.",
+      "should_trigger": true
+    },
+    {
+      "query": "how do i shorten time to first submitted app",
+      "should_trigger": true
+    },
+    {
+      "query": "Our head of ecosystem wants Bronze/Silver/Gold assigned at signup. Push back or agree?",
+      "should_trigger": true
+    },
+    {
+      "query": "Need a plan for onboarding the 12 ISVs we recruited ahead of our marketplace launch.",
+      "should_trigger": true
+    },
+    {
+      "query": "Where should the human review actually sit in a partner program?",
+      "should_trigger": true
+    },
+    {
+      "query": "Partners keep hitting requirements they never knew existed until we reject them. What now?",
+      "should_trigger": true
+    },
+    {
+      "query": "Do we need partner managers, or is a forum enough for 800 developers?",
+      "should_trigger": true
+    },
+    {
+      "query": "audit our developer program entry funnel",
+      "should_trigger": true
+    },
+    {
+      "query": "We want people building on us within an hour of first hearing about us. What has to be true?",
+      "should_trigger": true
+    },
+    {
+      "query": "Design the path from partner signup to first app submission on our B2B platform.",
+      "should_trigger": true
+    },
+    {
+      "query": "when should we ask a partner how they plan to monetize their app",
+      "should_trigger": true
+    },
+    {
+      "query": "Our KYC checks are blocking developers who just want to experiment. Rework it.",
+      "should_trigger": true
+    },
+    {
+      "query": "Does sandbox access come before or after the partner agreement gets signed?",
+      "should_trigger": true
+    },
+    {
+      "query": "Design the review pipeline and approval checkpoints for third-party apps on our marketplace.",
+      "should_trigger": false
+    },
+    {
+      "query": "What exactly should our security review check before we approve a partner app?",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we isolate our sandbox from production - a separate copy, or a test-mode flag on live data?",
+      "should_trigger": false
+    },
+    {
+      "query": "Pick our test-key prefix convention and the magic test card numbers we publish.",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the listing content rules every app in our marketplace has to meet.",
+      "should_trigger": false
+    },
+    {
+      "query": "How many screenshots should a marketplace listing require, and at what resolution?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we be the merchant of record for apps sold through our marketplace?",
+      "should_trigger": false
+    },
+    {
+      "query": "What take rate should we charge on marketplace app sales, and how often do we pay out?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we build our own app marketplace at all, or just list on other people's?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our post-launch partner tier ladder and what each tier earns.",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan the launch cohort and the keynote reveal for our new app marketplace.",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we get our own app ranking higher on the Salesforce AppExchange?",
+      "should_trigger": false
+    },
+    {
+      "query": "Which technology partners should we integrate with first, and how deep should each go?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the information architecture of our developer portal.",
+      "should_trigger": false
+    },
+    {
+      "query": "Our docs site search is terrible. Restructure it.",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the OAuth consent screen and scope taxonomy for third-party apps on our API.",
+      "should_trigger": false
+    },
+    {
+      "query": "Set our API rate limits per tier and pick which rate-limit headers we return.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our API key format, storage, and rotation policy.",
+      "should_trigger": false
+    },
+    {
+      "query": "How should we version our public API and communicate deprecations?",
+      "should_trigger": false
+    },
+    {
+      "query": "Build an error-code taxonomy for our public API.",
+      "should_trigger": false
+    },
+    {
+      "query": "Which SDK languages should we ship first, and generated or handwritten?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our outbound webhook retry, backoff, and dead-letter policy.",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we show partners the delivery logs for their failed webhook calls?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we publish a GraphQL API alongside our REST one?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the job description and interview loop for a partner integration engineer.",
+      "should_trigger": false
+    },
+    {
+      "query": "I'm a backend engineer - how do I move into an API platform role?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the onboarding flow for new employees joining our platform team.",
+      "should_trigger": false
+    },
+    {
+      "query": "Write a user onboarding checklist for people starting our free trial.",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we onboard a new enterprise customer in the 30 days after they sign?",
+      "should_trigger": false
+    },
+    {
+      "query": "Improve the activation rate of new end users in our SaaS product.",
+      "should_trigger": false
+    },
+    {
+      "query": "Our channel resellers need training on how to pitch and demo our product.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design a bulk Parquet export for customers who want our data in their own warehouse.",
+      "should_trigger": false
+    }
+  ]
+}

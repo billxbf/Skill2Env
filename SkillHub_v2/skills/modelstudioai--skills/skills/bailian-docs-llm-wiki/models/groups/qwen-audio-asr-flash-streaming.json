@@ -1,0 +1,60 @@
+{
+  "name": "Qwen-Audio-ASR-Flash-Streaming",
+  "description": "Qwen-Audio-ASR-Flash-Streaming是新一代端到端实时语音识别大模型，面向实时会议、直播字幕与智能交互等场景，具备低延迟、高精度的流式语音转写能力。模型支持多语种与多地区中文方言识别、中英文自由切换、热词及上下文增强、标点预测与文本规范化，并具备较强的噪声鲁棒性，可适应复杂声学环境。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Audio"
+        ]
+      },
+      "description": "qwen-audio-3.0-asr-flash-streaming是通义实验室专为低延迟、高并发实时交互场景打造的旗舰级语音识别模型。它不仅能实现“边说边出字”的极致流畅体验，并深度集成了 Context（上下文增强）能力，还针对垂直行业专业词汇进行了深度强化训练，是构建实时会议同传、智能客服坐席辅助、语音助手等应用的首选。",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen-audio-3.0-asr-flash-streaming",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.00033",
+          "ntmAmountType": "duration",
+          "type": "content_duration",
+          "priceName": "音频时长"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 20,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 20,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "Realtime-ASR"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-07-30T15:11:41.943+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Audio-3.0-ASR-Flash-Streaming",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide",
+      "category": "Audio",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nimport dashscope\nfrom dashscope.audio.asr import Recognition\nimport os\n\n\ndashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')\ndashscope.base_websocket_api_url='wss://[workspace-id].cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'\n\nrecognition = Recognition(model='qwen-audio-3.0-asr-flash-streaming',\n                          format='wav',\n                          sample_rate=16000,\n                          callback=None)\nresult = recognition.call('{YOUR_AUDIO_FILE}')\nif result.status_code == HTTPStatus.OK:\n    print('Recognition result: ')\n    print(result.get_sentence())\nelse:\n    print('Error: ', result.message)\n    \nprint(\n    '[Metric] requestId: {}, first package delay ms: {}, last package delay ms: {}'\n    .format(\n        recognition.get_last_request_id(),\n        recognition.get_first_package_delay(),\n        recognition.get_last_package_delay(),\n    ))",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide"
+          }
+        }
+      }
+    }
+  ]
+}

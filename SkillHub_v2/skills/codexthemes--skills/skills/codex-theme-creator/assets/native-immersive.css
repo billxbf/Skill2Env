@@ -1,0 +1,218 @@
+/* __THEME_ID__: preserve geometry while coordinating semantic materials.
+   Slots below map to the decoration menu in references/design-playbook.md §8.
+   Fill each slot for the contracted decorDensity; delete slots the contract excludes. */
+
+:root[data-codexthemes-theme="__THEME_ID__"] {
+  --ct-canvas: #fffaf6;
+  --ct-surface: rgba(255, 253, 251, 0.91);
+  --ct-raised: #ffffff;
+  --ct-text: #3f3033;
+  --ct-muted: #806d72;
+  --ct-accent: #bd4968;
+  --ct-accent-soft: rgba(189, 73, 104, 0.14);
+  --ct-border: #ead3d9;
+  --ct-focus: #bd4968;
+  --ct-shadow: rgba(63, 48, 51, 0.12);
+  --ct-art: url("./assets/artwork.png");
+  /* Typography pairing: display stack for headings/brand moments, body stack for prose. */
+  --ct-font-display: "Iowan Old Style", "Songti SC", serif;
+  --ct-font-body: "Avenir Next", "PingFang SC", sans-serif;
+
+  /* Native token sweep (required): Codex components resolve colors from the app's
+     own --color-token-* variables, which follow the USER's native light/dark mode.
+     Override the full set so the theme renders identically on every machine.
+     Tune each value to the semantic palette; never delete entries. */
+  color-scheme: light;
+  /* Direct semantic bridge used by current settings, panels, and mounted roots. */
+  --color-background-surface: var(--ct-canvas) !important;
+  --color-background-surface-under: var(--ct-surface) !important;
+  --color-background-panel: var(--ct-surface) !important;
+  --color-background-control: var(--ct-raised) !important;
+  --color-background-control-opaque: var(--ct-raised) !important;
+  --color-background-editor-opaque: var(--ct-canvas) !important;
+  --color-background-elevated-primary: var(--ct-raised) !important;
+  --color-background-elevated-primary-opaque: var(--ct-raised) !important;
+  --color-background-elevated-secondary: var(--ct-surface) !important;
+  --color-background-elevated-secondary-opaque: var(--ct-surface) !important;
+  --color-text-foreground: var(--ct-text) !important;
+  --color-text-foreground-secondary: var(--ct-muted) !important;
+  --color-text-foreground-tertiary: var(--ct-muted) !important;
+  --color-icon-primary: var(--ct-text) !important;
+  --color-icon-secondary: var(--ct-muted) !important;
+  --color-icon-tertiary: var(--ct-muted) !important;
+  --color-border: var(--ct-border) !important;
+  --color-border-light: var(--ct-border) !important;
+  --color-border-heavy: var(--ct-border) !important;
+  --color-border-focus: var(--ct-focus) !important;
+  --color-token-bg-primary: var(--ct-canvas) !important;
+  --color-token-bg-secondary: var(--ct-surface) !important;
+  --color-token-bg-tertiary: var(--ct-raised) !important;
+  --color-token-main-surface-primary: var(--ct-canvas) !important;
+  --color-token-side-bar-background: var(--ct-surface) !important;
+  --color-token-foreground: var(--ct-text) !important;
+  --color-token-text-primary: var(--ct-text) !important;
+  --color-token-text-secondary: var(--ct-muted) !important;
+  --color-token-text-tertiary: var(--ct-muted) !important;
+  --color-token-description-foreground: var(--ct-muted) !important;
+  --color-token-icon-foreground: var(--ct-muted) !important;
+  --color-token-input-background: var(--ct-raised) !important;
+  --color-token-input-foreground: var(--ct-text) !important;
+  --color-token-input-placeholder-foreground: var(--ct-muted) !important;
+  --color-token-input-border: var(--ct-border) !important;
+  --color-token-border: var(--ct-border) !important;
+  --color-token-border-default: var(--ct-border) !important;
+  --color-token-border-heavy: var(--ct-border) !important;
+  --color-token-border-light: var(--ct-border) !important;
+  --color-token-list-hover-background: var(--ct-accent-soft) !important;
+  --color-token-list-active-selection-background: var(--ct-accent-soft) !important;
+  --color-token-list-active-selection-foreground: var(--ct-text) !important;
+  --color-token-toolbar-hover-background: var(--ct-accent-soft) !important;
+  --color-token-button-background: var(--ct-accent) !important;
+  --color-token-button-foreground: var(--ct-raised) !important;
+  --color-token-button-border: var(--ct-border) !important;
+  --color-token-link: var(--ct-accent) !important;
+  --color-token-text-link-foreground: var(--ct-accent) !important;
+  --color-token-text-link-active-foreground: var(--ct-accent) !important;
+  --color-token-primary: var(--ct-accent) !important;
+  --color-token-focus-border: var(--ct-focus) !important;
+  --color-token-dropdown-background: var(--ct-raised) !important;
+  --color-token-dropdown-foreground: var(--ct-text) !important;
+  --color-token-menu-background: var(--ct-raised) !important;
+  --color-token-menu-border: var(--ct-border) !important;
+  --color-token-checkbox-background: var(--ct-raised) !important;
+  --color-token-checkbox-border: var(--ct-border) !important;
+  --color-token-checkbox-foreground: var(--ct-accent) !important;
+  --color-token-badge-background: var(--ct-accent-soft) !important;
+  --color-token-badge-foreground: var(--ct-text) !important;
+  --color-token-scrollbar-slider-background: var(--ct-accent-soft) !important;
+  --color-token-scrollbar-slider-hover-background: var(--ct-accent-soft) !important;
+  --color-token-scrollbar-slider-active-background: var(--ct-accent-soft) !important;
+  --color-token-conversation-header: var(--ct-muted) !important;
+  --color-token-conversation-body: var(--ct-text) !important;
+  --color-token-conversation-summary-leading: var(--ct-muted) !important;
+  --color-token-conversation-summary-trailing: var(--ct-muted) !important;
+  --color-token-non-assistant-body-descendant: var(--ct-muted) !important;
+  --color-token-text-preformat-foreground: var(--ct-text) !important;
+  --color-token-text-preformat-background: var(--ct-surface) !important;
+  --color-token-text-code-block-background: var(--ct-raised) !important;
+}
+
+/* Layered canvas: gradient + artwork or texture, never one flat color. */
+main.main-surface[data-codexthemes-page="home"],
+main.main-surface[data-codexthemes-page="conversation"] {
+  color: var(--ct-text);
+  background: var(--ct-canvas);
+}
+
+main.main-surface[data-codexthemes-page="home"]::before,
+:root[data-codexthemes-background-scope="workspace"] main.main-surface[data-codexthemes-page="conversation"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(rgba(255,250,246,.32), rgba(255,250,246,.52)), var(--ct-art) 50% 50% / cover no-repeat;
+  pointer-events: none;
+}
+
+/* Coordinated surfaces: sidebar, composer, menus, dialogs, output/diff share one material system. */
+aside.app-shell-left-panel,
+.composer-surface-chrome,
+[role="menu"],
+[role="dialog"],
+[data-codexthemes-surface="output"],
+[data-codexthemes-surface="diff"] {
+  color: var(--ct-text);
+  background: var(--ct-surface);
+  border-color: var(--ct-border);
+}
+
+/* Home stage — hero treatment (rich): frame the native heading region as a banner card.
+   Anchor to a verified heading container inside the home page; keep a veil gradient over
+   the text-safe region and keep every native control clickable. Example shape:
+
+main.main-surface[data-codexthemes-page="home"] <verified-heading-container> {
+  border: 1px solid var(--ct-border);
+  border-radius: 24px;
+  background:
+    linear-gradient(90deg, var(--ct-canvas) 0%, rgba(255,250,246,.85) 55%, rgba(255,250,246,.1) 85%),
+    var(--ct-art) right center / auto 200% no-repeat;
+  box-shadow: 0 14px 34px var(--ct-shadow);
+}
+*/
+
+/* Home stage — tagline (rich): one short themed line via a pseudo-element on a verified
+   non-interactive hook under the heading. Keep it pointer-events: none. */
+
+/* Home stage — suggestion cards (balanced+): themed material, badged icon, gentle hover lift.
+   Anchor to the verified suggestion-card hook; keep labels readable and cards clickable.
+
+main.main-surface[data-codexthemes-page="home"] <verified-suggestion-card> {
+  border: 1px solid var(--ct-border);
+  border-radius: 20px;
+  background: linear-gradient(var(--ct-raised), var(--ct-surface));
+  box-shadow: 0 8px 18px var(--ct-shadow);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+main.main-surface[data-codexthemes-page="home"] <verified-suggestion-card>:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 26px var(--ct-shadow);
+}
+*/
+
+/* Chrome accents (rich): header lockup, corner emblem, ambient particles, composer marker.
+   Every accent is a positioned pseudo-element with pointer-events: none, below native
+   controls, scoped to the home marker, and dropped at narrow widths. Example ambient dot: */
+main.main-surface[data-codexthemes-page="home"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 88% 12%, var(--ct-accent-soft) 0 2px, transparent 3px),
+    radial-gradient(circle at 12% 22%, var(--ct-accent-soft) 0 1px, transparent 2px);
+  background-size: 89px 89px, 67px 67px;
+  opacity: .5;
+  animation: ct-__THEME_ID__-drift 8s ease-in-out infinite alternate;
+}
+
+@keyframes ct-__THEME_ID__-drift {
+  from { opacity: .35; }
+  to { opacity: .6; }
+}
+
+/* Token sweep: scrollbars, selection, caret, focus — no stale native color survives. */
+main.main-surface[data-codexthemes-page="home"],
+main.main-surface[data-codexthemes-page="conversation"],
+aside.app-shell-left-panel {
+  scrollbar-color: var(--ct-accent-soft) transparent;
+}
+
+[data-codex-terminal="true"] {
+  --vscode-terminal-background: var(--ct-canvas) !important;
+  --vscode-terminal-foreground: var(--ct-text) !important;
+  --color-background-panel: var(--ct-canvas) !important;
+  --color-background-editor-opaque: var(--ct-canvas) !important;
+  color: var(--ct-text) !important;
+  background: var(--ct-canvas) !important;
+}
+
+.xterm,
+.xterm-viewport,
+.xterm-screen,
+[data-codexthemes-surface="terminal"] {
+  color: var(--ct-text) !important;
+  background: var(--ct-canvas) !important;
+}
+
+:focus-visible { outline-color: var(--ct-focus); }
+
+@media (max-width: 980px) {
+  main.main-surface[data-codexthemes-page="home"]::before { background-position: 62% 50%; }
+  /* Drop corner emblems and ambient layers first; keep materials and palette. */
+  main.main-surface[data-codexthemes-page="home"]::after { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}

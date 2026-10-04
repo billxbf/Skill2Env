@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "organization": "Tigris Data",
+  "date": "March 2026",
+  "abstract": "Resize, crop, and optimize images stored in Tigris. Covers upload-time variant generation, responsive image serving, and CDN delivery patterns for Next.js (next/image + Sharp), Remix (Sharp), Rails (Active Storage variants), Django (django-imagekit + Pillow), Laravel (Intervention Image), and Express (Sharp middleware).",
+  "references": [
+    "https://www.tigrisdata.com/docs/sdks/tigris/",
+    "https://sharp.pixelplumbing.com/",
+    "https://www.tigrisdata.com/docs/"
+  ]
+}

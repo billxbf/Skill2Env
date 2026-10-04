@@ -1,0 +1,11 @@
+User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+Content-Usage: train-ai=n, search=y
+Allow: /
+Disallow: /documentation/
+Disallow: /external/
+Disallow: /design/human-interface-guidelines
+Disallow: /videos/play/
+
+Sitemap: https://sosumi.ai/sitemap.xml
+Agentmap: https://sosumi.ai/.well-known/ard.json

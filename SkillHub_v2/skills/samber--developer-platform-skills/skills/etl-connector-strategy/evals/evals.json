@@ -1,0 +1,459 @@
+{
+  "skill_name": "etl-connector-strategy",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm head of platform at Cadenza, a workforce-scheduling SaaS with about 1,400 business customers and $18M ARR. Our CFO wants a one-page business case before she'll fund a source connector for the big ELT platforms. She's asked specifically for the revenue line and the payback period, because that's how she evaluated our reseller and referral partnerships last year. Engineering quoted roughly 9 weeks for a first build. Write the case.",
+      "expected_output": "A business case with no platform revenue line, built on support-cost deflection and retention, carrying a recurring maintenance percentage and an explicit statement that no ETL/ELT platform pays source vendors.",
+      "files": [],
+      "expectations": [
+        "The business case contains no projected revenue-share, commission, or catalog-placement income line from the ETL/ELT platform.",
+        "States explicitly that no ETL/ELT platform pays a source vendor for its connector.",
+        "Any revenue-share program mentioned is described as announced but never delivered as described, not as an existing precedent to plan around.",
+        "Describes the program that actually shipped as flat one-time per-task bounties rather than a revenue share, citing at least one amount in the $10-$150 range (for example $150 for a new sync mode or $50 for a minor bug).",
+        "Ranks the payoff sources with support-ticket deflection and customer retention first and revenue share last.",
+        "Places competitive-parity distribution above co-marketing or partner-tier demand-gen in that same ranking.",
+        "Notes that co-marketing and partner-tier benefits require an active partnership relationship, not merely a listed connector.",
+        "Budgets recurring annual maintenance at 15-30% of the original build cost, and notes it can reach roughly 50% in mature, high-change phases.",
+        "States that each additional connector is an independent recurring obligation and that nothing amortizes across connectors.",
+        "Frames the connector as a cost center bought for distribution, retention, and support-cost deflection rather than as a revenue source.",
+        "Treats any build-cost benchmark figures as order-of-magnitude ranges rather than as quotes.",
+        "Answers the payback request without inventing an ROI figure or a modeled revenue number."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our marketing site has a 'Data sync' page and our PMM wants to add a 'CDC support' checkmark to the comparison table, because two competitors show it and a prospect asked about it on a call. We're Lumenstack, B2B contract-management SaaS. Everything a customer can get out of us goes through our public REST API, which has updated_at on most objects. The ELT platforms our customers use pull from us every 6 hours. Give me the copy for that page and tell me whether the checkmark stays.",
+      "expected_output": "Customer-facing copy using incremental-sync and eventual-consistency wording with the poll interval and its known gaps named, plus a refusal of the unqualified CDC checkmark and the reason it is structurally unavailable.",
+      "files": [],
+      "expectations": [
+        "Rejects an unqualified 'CDC support' claim or checkmark for this product.",
+        "Explains that CDC as the ETL platforms mean it is log-based: reading the database's own transaction log, such as a write-ahead log, binlog, or redo log.",
+        "States that this product cannot use that mechanism because neither an external platform nor a public API has access to the internal transaction log of a multi-tenant SaaS backing database.",
+        "Frames that limitation as a structural boundary rather than a maturity gap or a roadmap item.",
+        "Uses 'incremental sync' or eventual-consistency language in the customer-facing copy instead of 'CDC'.",
+        "States the 6-hour sync or poll interval in the customer-facing copy.",
+        "Names changes made and overwritten within a single poll interval as something the model misses.",
+        "Names hard deletes as undetectable wherever no deletion feed exists.",
+        "Does not propose Debezium or any other log-based CDC tool as a path for this API-only product.",
+        "Any webhook proposal is scoped as a freshness supplement that is not a backfill substitute and captures nothing before the connection date.",
+        "Presents the honest substitute ladder in order of completeness: timestamp/cursor polling, then webhooks, then a vendor-side change/deletion feed, then periodic full re-import reconciliation.",
+        "Treats a vendor-side deletion feed as a later completeness upgrade triggered by reported missed deletes, not as a launch-day promise."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Northwind Fleet here, telematics SaaS, 320 customers, mostly mid-market logistics. Our VP Sales noticed our closest competitor sitting in a major ELT catalog and wants us listed before the Q4 board meeting. Support hasn't logged any requests for it that I'm aware of, and nothing came up in renewals this year. Engineering has capacity in November. Put the plan together.",
+      "expected_output": "A stop at the demand-validation gate: no build approval, a named list of evidence to collect, a concrete reopening signal, and an alternative investment recommendation.",
+      "files": [],
+      "expectations": [
+        "Refuses to approve a connector build on the evidence given, classifying it as an internal hypothesis rather than observed customer pull.",
+        "Names the categories of verifiable demand evidence to collect first: support tickets naming a platform, lost-deal or churn notes citing data-stack mismatch, API-log evidence of hand-rolled extraction, and security or procurement questionnaires asking about warehouse sync.",
+        "Describes the API-log evidence concretely as high-frequency paginated scans from data-team service accounts.",
+        "States a concrete signal that would reopen the decision, such as a specific number of named-platform tickets within a quarter or one lost deal citing the gap.",
+        "Recommends improving the raw API or a direct-to-storage delivery path as the alternative investment instead of building the connector now.",
+        "Warns that a connector shipped without evidence still bills its annual maintenance percentage every year regardless of use.",
+        "Treats competitive parity as a documented business driver but not as a substitute for named demand evidence.",
+        "Does not produce a build plan, platform pick, or delivery timeline as the primary deliverable.",
+        "Conducts the intake as an interview asking one question at a time rather than delivering a single block of questions.",
+        "Requires the demand evidence to be attached to the decision record, with each claimed driver citing at least one verifiable artifact."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Veridian Labs, clinical-trial ops SaaS, 40 enterprise customers. We have a 900k EUR renewal on the line where the customer's data team made 'available in our ELT tool' a written condition, and their procurement review closes in about five months. We can spare maybe 3 engineer-weeks up front and realistically 4 hours a month after that. Two of our four backend engineers write Python daily. Our object schema barely changes. Which way do we build it?",
+      "expected_output": "A ranked build-path menu across several axes, the platform-managed listing recommended as default with its costs named, the compliance-cost inversion stated, and 2-3 candidate strategies ending in one recommendation and an explicit pick request.",
+      "files": [],
+      "expectations": [
+        "Recommends the platform-managed listing, where the platform builds and maintains the connector, as the default path for this case.",
+        "Shows an explicit ranked ordering across more than one axis rather than a flat list of options.",
+        "Orders maintenance-tax exposure with the custom outside-platform path highest and the platform-managed listing lowest.",
+        "States that compliance cost runs in the opposite direction to effort: highest on the platform-managed path, lowest on the custom path.",
+        "Justifies that inversion by the platform-managed path's external source review, which can reject the source outright, and by its binding release-phase promotion clock.",
+        "States that control over quality and cadence ties between the custom and vendor-SDK paths, and justifies the tie by the vendor keeping every implementation decision on both.",
+        "Names the platform-managed path's real costs: a review gate of weeks that can reject the source, zero control over feature scope and cadence, and a fit limited to stable, non-dynamic schemas.",
+        "Explicitly ties the hard renewal deadline to promoting the platform-managed queue in the ranking.",
+        "Explicitly ties the 4-hours-per-month ceiling to demoting the higher-effort paths, or to the option of not building yet.",
+        "Notes that the team's existing Python fluency lowers the effort of the vendor-SDK path and re-ranks against that fact rather than applying the default order unchanged.",
+        "Checks the platform-managed path's own clock, including weeks of initial API-documentation analysis plus its advertised post-acceptance turnaround, against the five-month deadline instead of assuming it lands in time.",
+        "Presents 2-3 candidate strategies, each combining a platform, a build path, and a resource scope, with trade-offs stated.",
+        "Ends with one argued recommendation and asks the user for an explicit pick before moving on to the API readiness audit."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Here's what our API looks like at Palladia, a B2B expense platform. List endpoints use page= and per_page= offset pagination. modified_at exists on expenses and reports but not on approvals or vendors. Deleting an expense sets is_active=false and the record keeps returning for 90 days, then it disappears from the API entirely. Rate limit is 600 req/min and we return a bare 429 with no body. First sync for a big customer is roughly 4M expense rows. We want to start writing the connector next sprint - anything we should know?",
+      "expected_output": "An extraction-readiness audit sequenced before the connector build, grading each resource against the checklist and naming the cursor, delete-signal, backfill, rate-limit-signaling, and versioning fixes with their reasons.",
+      "files": [],
+      "expectations": [
+        "Sequences the API fixes ahead of the connector build rather than alongside it or after it.",
+        "States that fixing the extraction API cuts build and maintenance cost on every build path simultaneously, including customers' own hand-rolled pipelines.",
+        "Flags offset pagination as unsafe under concurrent writes, because offsets shift under mid-scan inserts and deletes, and recommends an opaque stable cursor instead.",
+        "Flags approvals and vendors as unable to sync incrementally until they expose a cursor or modification timestamp stable across syncs.",
+        "Identifies the absent delete signal as the single most common gap, noting that most application APIs do not return deletes as changes so connectors silently miss them.",
+        "Flags that records hard-deleted past the 90-day soft-delete window are lost permanently from the extraction path.",
+        "Recommends a durable 'changes or deletes since <cursor>' feed as the buildable upgrade over relying on the is_active flag alone.",
+        "Recommends a bulk or async backfill export endpoint separate from the UI-grade paginated endpoints, citing the 4M-row first sync and rate-limit exhaustion.",
+        "Requires the 429 response to carry Retry-After so a connector can back off programmatically.",
+        "Prescribes the overlap-window reconciliation pattern: persist the last cursor, re-query a small overlap window, upsert by stable key, and pair it with periodic full reconciliation.",
+        "Grades each resource pass/fail against the checklist, with any resource that cannot pass carrying an explicit exclusion note rather than a silent skip.",
+        "Raises versioning and deprecation discipline, noting that the large majority of breaking API versions ship with no deprecation notice at all (87.3% across 1,068 specifications), so monitoring rather than changelog-watching is the detection mechanism."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Good news - our connector PR got merged and we're live in the marketplace as of Tuesday. Sales wants 'Certified connector, supported by the platform' on our integrations page and in our security questionnaire boilerplate. Separately our CTO is asking what the Partner Certified badge costs, because he'd like it in hand before our user conference in March. We're Sablefin, B2B payments reconciliation.",
+      "expected_output": "A refusal of the certified/supported claim with the marketplace tier's actual support status, the listing-versus-certification distinction, the destination-only limit on the Partner Certified tier, and the quantitative bars adopted as SLOs.",
+      "files": [],
+      "expectations": [
+        "Rejects both the 'certified' and the 'supported by the platform' claims for a freshly merged marketplace-tier connector.",
+        "States that marketplace-tier connectors are explicitly outside the platform's support SLAs and may ship backward-incompatible breaking changes with no notice.",
+        "Distinguishes listing, which is passing the platform's standard test suite, from certification, which is optional and earned.",
+        "States that the Partner Certified tier covers destination connectors only, so a source connector cannot earn that badge.",
+        "States that no platform charges a source vendor a fee for certification and none pays for it either: the cost is engineering time.",
+        "Names the quantitative bars: at least 95% first-sync success, at least 95% overall sync success, first response within 3 business days, and the connector updated at least every 6 months.",
+        "Recommends adopting those bars as the connector's own SLOs and feeding them into the maintenance plan even where the tier does not formally require them.",
+        "States the certification framing that reliability and usability beat feature count, rather than treating certification as a feature-completeness bar.",
+        "Lists the certification-grade behaviors to build regardless: every supported sync mode integration-tested, incremental sync wherever the source allows it, and failures that are fast and actionable rather than a configuration the platform accepts but that is guaranteed to break.",
+        "Advises targeting certification only once the connector holds up across real syncs, rather than scheduling it backwards from the March conference date."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "One of our backend engineers, Tomas, is keen to write an open-spec tap for our product in his Friday time. Zero budget, ships in maybe three weeks, and it gets us listed on the community hub immediately. That looks strictly better than waiting two months for a platform review. We're Brightloom Analytics, 90 customers, mostly data-forward startups running their own open-source ELT. Sign off?",
+      "expected_output": "A conditional approval that confirms the segment fit but refuses the volunteer-ownership arrangement, naming the decay record, the full maintenance-tax exposure, the month-13 owner requirement, and active monitoring.",
+      "files": [],
+      "expectations": [
+        "Does not sign off on the plan as stated, despite the customer segment genuinely matching the open-source-first archetype.",
+        "States that the custom or open-spec tap path carries 100% of the maintenance tax, with no part of it absorbed by a platform.",
+        "Identifies the volunteer side-project arrangement as the documented decay path and requires a named owner with standing budget for month 13.",
+        "Notes that the open-spec ecosystem has no entry gate and therefore no quality floor.",
+        "Cites the ecosystem's decay record: taps of unknowable quality until used, several breaking upstream changes per year, and maintainers disappearing once sponsor attention moved.",
+        "Notes that the open spec solved initial connector coverage but never ongoing maintenance.",
+        "Confirms the one condition that does promote the custom path here: a strategic customer segment composing open-source-first stacks that the commercial platforms do not reach.",
+        "Requires active monitoring and alerting on sync failures and schema-drift errors rather than waiting for customer tickets to surface breakage.",
+        "Notes that upstream APIs will not announce their breaking changes, so changelog-watching is not a viable detection mechanism.",
+        "Does not present the three-week, zero-budget estimate as the total cost of the path."
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Three things landed on my desk this week at Corvid, B2B logistics visibility. One: two customers' data teams want our shipment data as Parquet files dropped nightly into their own S3 buckets. Two: a prospect's analyst asked whether they can point Tableau at our data and query it live. Three: separately, two of our own integration partners want to build connectors into our app directory so joint customers can flip them on. The board deck calls all of this 'the connector strategy'. Sort it out.",
+      "expected_output": "A separation of the three requests by direction and surface, routing the file-drop and live-query asks away from ETL source-connector work and identifying the inbound-marketplace request as the opposite problem.",
+      "files": [],
+      "expectations": [
+        "Separates the three requests instead of treating them as one connector strategy.",
+        "Routes the nightly Parquet-to-S3 request to a bulk or direct-to-storage data-sharing surface rather than to an ETL source connector.",
+        "Routes the live-query-from-Tableau request to a SQL or JDBC access surface rather than to an ETL source connector.",
+        "Identifies the partners-building-into-our-app-directory request as the opposite direction: third parties building into the vendor's own marketplace, a different problem from being a source in someone else's catalog.",
+        "States the direction distinction explicitly: ETL connector strategy covers the vendor being extracted from by platforms the customer runs.",
+        "Does not design an ETL/ELT source connector for the Parquet file-drop or the live-query request.",
+        "Notes that none of the three requests as described constitutes demand evidence for ETL catalog presence.",
+        "Asks which extraction platforms the customers' data teams actually run before recommending any catalog target."
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "We got budget approved: 2 FTE for four quarters to 'cover the data ecosystem'. My plan is to ship source connectors on the six biggest ELT platforms in year one so we're never the reason a deal stalls. I'll admit I don't actually know which of them our customers use - we've never asked. Kestrel Compliance, 600 customers. Poke holes in this.",
+      "expected_output": "A reduction to one platform first gated on measured maintenance load, a blocking finding on the unknown customer stacks, and the archetype framing that decides platform choice.",
+      "files": [],
+      "expectations": [
+        "Reduces the plan to one platform first, with a second only after the first connector's maintenance load has been measured.",
+        "States that the maintenance obligation compounds linearly with connector count and that nothing amortizes across connectors.",
+        "Cites the threshold that self-built connector maintenance is manageable at roughly three to five sources and punishing beyond about ten.",
+        "Treats the unknown customer stacks as a blocking gap: commissions the finding through a customer or prospect survey or a pass through integration-request tickets, and suspends the rest of the workflow until it lands.",
+        "States that platform choice follows where customers' data teams actually run, never where the vendor's own engineers would prefer to build.",
+        "Names the three platform archetypes and how each gates differently: the curated platform gatekeeps entry, the open-contribution platform gatekeeps labels, and the open-spec tap ecosystem has no gate at all.",
+        "Notes that only customers with a warehouse and a data team extract anything, so the addressable segment is narrower than the 600-customer base.",
+        "Requires a named owner for each connector before its launch, rather than treating the 2-FTE headline as the ownership answer."
+      ]
+    }
+  ],
+  "trigger_queries": [
+    { "query": "Should we build a Fivetran connector for our product?", "should_trigger": true },
+    {
+      "query": "Customers keep asking when we'll show up in their ETL platform's catalog - what do I tell them?",
+      "should_trigger": true
+    },
+    { "query": "how do we get listed on Airbyte as a source", "should_trigger": true },
+    {
+      "query": "Our data-sync page claims CDC support. Is that honest for an API-only SaaS?",
+      "should_trigger": true
+    },
+    {
+      "query": "what's the business case for a source connector if nobody pays us for it",
+      "should_trigger": true
+    },
+    {
+      "query": "we want our customers' data teams to pull our data into Snowflake without writing any code",
+      "should_trigger": true
+    },
+    {
+      "query": "Do we build the connector ourselves on their SDK or go through the platform's request program?",
+      "should_trigger": true
+    },
+    { "query": "should we write a Singer tap for our API", "should_trigger": true },
+    { "query": "planning our ELT catalog presence for next year", "should_trigger": true },
+    {
+      "query": "our API really isn't built for being extracted from - what do we fix first?",
+      "should_trigger": true
+    },
+    { "query": "who maintains a data connector after year one", "should_trigger": true },
+    {
+      "query": "customers are hand-rolling their own extraction jobs against us, it's all over our logs",
+      "should_trigger": true
+    },
+    { "query": "what does it actually cost to keep a data connector alive", "should_trigger": true },
+    {
+      "query": "is it worth getting certified on the ELT platform or is a plain listing enough",
+      "should_trigger": true
+    },
+    {
+      "query": "security questionnaires keep asking about warehouse sync and we have no answer",
+      "should_trigger": true
+    },
+    { "query": "how do I word incremental sync honestly on our marketing site", "should_trigger": true },
+    {
+      "query": "Our competitor shows up in the connector catalog and we don't. What now?",
+      "should_trigger": true
+    },
+    { "query": "would publishing a tap on MeltanoHub be worth it for us", "should_trigger": true },
+    {
+      "query": "data teams want to extract our product data on a schedule into their lake",
+      "should_trigger": true
+    },
+    { "query": "which ELT platform should we target first", "should_trigger": true },
+    { "query": "how many source connectors should we commit to building", "should_trigger": true },
+    {
+      "query": "our product needs to be a source in our customers' data pipelines",
+      "should_trigger": true
+    },
+    { "query": "can we support change data capture out of our REST API", "should_trigger": true },
+    {
+      "query": "the platform's by-request program rejected us as a source, now what",
+      "should_trigger": true
+    },
+    {
+      "query": "we told customers deleted records would sync and they don't, how do we fix the story",
+      "should_trigger": true
+    },
+    {
+      "query": "we need catalog presence before a sales cycle closes in six weeks",
+      "should_trigger": true
+    },
+    { "query": "budgeting connector upkeep for next fiscal year", "should_trigger": true },
+    {
+      "query": "there's no revenue share anywhere in this - how do I justify the spend to finance",
+      "should_trigger": true
+    },
+    {
+      "query": "do they build and maintain it, or do we? trying to work out the trade",
+      "should_trigger": true
+    },
+    {
+      "query": "our object schema changes constantly, will the managed connector path even take us",
+      "should_trigger": true
+    },
+    { "query": "make me a plan for showing up inside our customers' data stacks", "should_trigger": true },
+    {
+      "query": "we want to stop customers writing their own scrapers against our endpoints",
+      "should_trigger": true
+    },
+    {
+      "query": "getting our SaaS into the warehouses our customers already run",
+      "should_trigger": true
+    },
+    { "query": "what SLAs do we owe once we list a connector somewhere", "should_trigger": true },
+    {
+      "query": "what's the clock on promoting a connector from private preview to beta",
+      "should_trigger": true
+    },
+    {
+      "query": "I need a strategy doc for our data-pipeline integration investment",
+      "should_trigger": true
+    },
+    {
+      "query": "are webhooks enough for customers syncing our data, or do they need polling too",
+      "should_trigger": true
+    },
+    { "query": "one platform or several for our data-integration presence?", "should_trigger": true },
+    {
+      "query": "prospects keep saying we don't fit their modern data stack and I'm not sure what that means for us",
+      "should_trigger": true
+    },
+    {
+      "query": "can the connector be a side project for one of the engineers or does it need a real owner",
+      "should_trigger": true
+    },
+    {
+      "query": "support keeps fielding questions about pulling our data out on a schedule",
+      "should_trigger": true
+    },
+    { "query": "we want to become a source connector - where do I start", "should_trigger": true },
+    {
+      "query": "design our own app marketplace so partners can build connectors into our product",
+      "should_trigger": false
+    },
+    {
+      "query": "set up the review and approval process for third-party apps submitted to our marketplace",
+      "should_trigger": false
+    },
+    {
+      "query": "rewrite the listing copy and screenshots for our Salesforce AppExchange page",
+      "should_trigger": false
+    },
+    {
+      "query": "should we ship Parquet exports to customers' S3 buckets as a product surface",
+      "should_trigger": false
+    },
+    {
+      "query": "design a JDBC endpoint so customers can query our data live from their BI tool",
+      "should_trigger": false
+    },
+    { "query": "set up Debezium CDC from our Postgres primary into Kafka", "should_trigger": false },
+    {
+      "query": "configure Airbyte in our infra to ingest Stripe and Zendesk into our Snowflake",
+      "should_trigger": false
+    },
+    {
+      "query": "write dbt models to transform our raw ingested tables into marts",
+      "should_trigger": false
+    },
+    {
+      "query": "our outbound webhook deliveries keep failing - design retries and a dead-letter policy",
+      "should_trigger": false
+    },
+    {
+      "query": "define our API deprecation notice window and the sunset headers we send",
+      "should_trigger": false
+    },
+    {
+      "query": "which integration surfaces should we offer at all - REST, GraphQL, gRPC, SDKs?",
+      "should_trigger": false
+    },
+    {
+      "query": "which technology partners should we integrate with, and how deep should each one go",
+      "should_trigger": false
+    },
+    {
+      "query": "set the rate-limit tiers and 429 headers for our public API",
+      "should_trigger": false
+    },
+    {
+      "query": "design our OAuth2 authorization server and consent screen for third-party apps",
+      "should_trigger": false
+    },
+    {
+      "query": "build a machine learning feature pipeline with scheduled retraining",
+      "should_trigger": false
+    },
+    {
+      "query": "our Airflow DAG keeps failing on the nightly load, help me debug it",
+      "should_trigger": false
+    },
+    {
+      "query": "what take rate and fee stack should our app marketplace charge developers",
+      "should_trigger": false
+    },
+    {
+      "query": "design an MCP server so AI agents can take actions in our product",
+      "should_trigger": false
+    },
+    {
+      "query": "audit our API reference docs for undocumented parameters and missing response codes",
+      "should_trigger": false
+    },
+    {
+      "query": "how do we onboard partner developers into sandbox accounts and certification",
+      "should_trigger": false
+    },
+    {
+      "query": "add idempotency-key support so integrators can retry POSTs safely",
+      "should_trigger": false
+    },
+    {
+      "query": "build a CI/CD deployment pipeline with staged rollouts for our service",
+      "should_trigger": false
+    },
+    {
+      "query": "what should our status page show during a partial outage of one component",
+      "should_trigger": false
+    },
+    {
+      "query": "which languages get official SDKs and in what order should we ship them",
+      "should_trigger": false
+    },
+    {
+      "query": "we're hiring a partner integration engineer - write the interview loop and scorecard",
+      "should_trigger": false
+    },
+    {
+      "query": "design the error-code taxonomy and problem-details envelope for our public API",
+      "should_trigger": false
+    },
+    {
+      "query": "our developer portal's signup-to-first-call path takes way too long, fix the IA",
+      "should_trigger": false
+    },
+    {
+      "query": "set up a test mode with magic values so integrators can build without real charges",
+      "should_trigger": false
+    },
+    {
+      "query": "ingest a folder of PDFs and spreadsheets into our internal knowledge base",
+      "should_trigger": false
+    },
+    {
+      "query": "plan the co-marketing launch cohort for the apps going live on our marketplace",
+      "should_trigger": false
+    },
+    {
+      "query": "write the listing content standards every third-party app on our marketplace must meet",
+      "should_trigger": false
+    },
+    {
+      "query": "how should we store, prefix, and rotate the API keys we issue to customers",
+      "should_trigger": false
+    },
+    {
+      "query": "review our REST resource naming, URI structure, and status-code usage",
+      "should_trigger": false
+    },
+    {
+      "query": "design Relay cursor connections and complexity limits for our public GraphQL schema",
+      "should_trigger": false
+    },
+    {
+      "query": "surface per-integration failure logs with replay to the partners who built against us",
+      "should_trigger": false
+    },
+    {
+      "query": "should we publish a gRPC surface externally or keep it internal behind REST",
+      "should_trigger": false
+    },
+    {
+      "query": "our recruiting pipeline is leaking candidates at the technical screen, diagnose it",
+      "should_trigger": false
+    },
+    {
+      "query": "write an Elasticsearch ingest pipeline to parse and enrich our application logs",
+      "should_trigger": false
+    },
+    {
+      "query": "we're migrating our internal warehouse from Redshift to Snowflake, plan the cutover",
+      "should_trigger": false
+    },
+    {
+      "query": "wire up a Google Calendar connector so our agent can read my schedule",
+      "should_trigger": false
+    },
+    {
+      "query": "I have a developer-platform task and no idea which of these skills covers it",
+      "should_trigger": false
+    },
+    {
+      "query": "build an internal pipeline that moves our product telemetry into our own analytics warehouse",
+      "should_trigger": false
+    }
+  ]
+}

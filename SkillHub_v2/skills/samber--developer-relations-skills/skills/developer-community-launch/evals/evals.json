@@ -1,0 +1,663 @@
+{
+  "skill_name": "developer-community-launch",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Our CTO came back from a conference convinced we need a Discord. We're Kestrel Metrics, an API observability tool, about 40 paying customers. Our support inbox gets maybe 6 tickets a month and honestly none of them repeat, they're all one-off integration questions. Our two biggest competitors both run Discords with thousands of members. There's an ecosystem Discord for the monitoring space where I know at least three of our users hang out already. Nobody on the team owns this - marketing said they'd keep an eye on it. Can you put together what channels we'd need and a rough launch plan?",
+      "expected_output": "A do-not-launch verdict with the five readiness gates scored and evidenced, a recommendation to participate in the existing ecosystem Discord instead, and an observable re-decision trigger. No channel list.",
+      "files": [],
+      "expectations": [
+        "Returns a do-not-launch verdict rather than a launch plan",
+        "Scores all five readiness gates by name - demand, owner, purpose, venue vacuum, seed supply - with a pass, weak or fail mark on each",
+        "Marks the demand gate as failing and cites the 6 tickets a month with no repeats as the evidence",
+        "Marks the venue-vacuum gate as failing because the monitoring ecosystem Discord already hosts part of this audience",
+        "Marks the owner gate as failing and treats \"marketing said they'd keep an eye on it\" as an ownership gap rather than a staffing detail to settle later",
+        "States explicitly that competitors having a Discord is not accepted as evidence of demand",
+        "Notes that the 40 named customers are what the seed-supply gate has to work with, and that coverage rather than headcount is what it tests",
+        "Recommends participating in the existing ecosystem Discord instead of opening a new venue",
+        "Produces no channel list or category tree for a new Discord",
+        "Names an observable re-decision trigger such as a repeat-question volume or users starting to answer each other, rather than a date to revisit",
+        "States the verdict rule applied: three or fewer gates passing means do not launch"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Orbwright makes a distributed task queue library, commercial license, roughly 900 paying teams. We've already signed up for Slack and I've got the workspace created. Context: we get 20-30 configuration questions a month by email, about a third are duplicates, and four of our users regularly answer each other in our GitHub issues. Dario owns this with 6 hours a week protected indefinitely, but he batches it - he's heads-down on the engine most of the week and can realistically look at it two or three afternoons. The answers we give stay correct for a year or more since the config surface barely changes, and honestly a big reason we want this is that people google our error strings and land nowhere right now. We have 60 users we could invite by name across four topic areas and three continents. Help us plan the launch.",
+      "expected_output": "A launch verdict, Slack treated as a hypothesis and the owned real-time chat class deleted with reopen triggers recorded, an owned async forum recommended with the class named before any vendor, and the vendor figures flagged for re-verification.",
+      "files": [],
+      "expectations": [
+        "Treats the already-chosen Slack as a hypothesis and runs the readiness gates before discussing the platform",
+        "Scores all five gates and returns a launch verdict",
+        "Deletes owned real-time chat as a venue class rather than demoting it in a ranking",
+        "Gives at least two distinct reasons real-time chat is deleted here: its archive is not indexed, and the owner cannot be present most days",
+        "Records a reopen trigger for the deleted real-time chat class on the venue line of the brief",
+        "Recommends an owned async forum as the surviving venue class",
+        "Names the venue class before naming any vendor",
+        "States the venue ranking out loud rather than leaving it implied by the order things are listed in",
+        "Notes that Slack's free plan retains only 90 days of message history, which removes the searchable archive the error-string search goal depends on",
+        "Notes that per-seat pricing makes an open community structurally more expensive as it grows, unlike per-instance forum pricing",
+        "Flags that vendor pricing, retention and export claims must be re-verified on the vendor's own page before the recommendation is final",
+        "Does not recommend running Slack and a forum as two primary venues at once"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I'm the founder at Fernbrook, we make a schema-migration CLI, about 2,400 weekly active installs and 150 paying teams. I want to open a community and I want it to do three things: take support load off me, give us a steady stream of roadmap input from the people who actually run migrations in production, and build up a group of vocal users who bring us signups. Demand is there - I get the same four questions constantly by DM and two users already answer each other in our issues. I can give it 8 hours a week, no question, and I've got 45 people I could invite tomorrow. Nobody else serves this niche. Let's get going - what platform and what does week one look like?",
+      "expected_output": "The three goals mapped to SPACES letters, the purpose gate held open until exactly one primary is chosen, the primary converted into a measurable claim, and no venue or channel structure proposed before that.",
+      "files": [],
+      "expectations": [
+        "Names the outcomes using the SPACES vocabulary and maps each of the three stated goals to its letter: Support, Product, and Acquisition and advocacy",
+        "Refuses to accept all three as co-primary and requires exactly one primary outcome",
+        "Marks the purpose gate as not passing while the three outcomes remain unranked",
+        "States that the primary outcome decides the community model, the venue class and the thresholds",
+        "Attributes the one-objective rule to CMX's SPACES model rather than presenting it as the assistant's own preference",
+        "Allows secondary outcomes but requires them stated explicitly and ranked below the primary",
+        "Converts the chosen primary into a measurable claim carrying a number and a timeframe, not a restatement of the goal",
+        "Does not propose a venue, platform or channel structure before the primary outcome is settled",
+        "Asks the user to pick the primary rather than silently choosing one for them",
+        "Notes that if acquisition and advocacy becomes the primary, none of the four named community models (support-driven, product-development, education and enablement, founder-led) applies and the shape has to be designed from the outcome instead"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Quillstack, we build a feature-flag SDK. Getting ready to open a user forum. Where we stand: 40+ repeat setup questions came in last quarter, a dozen of them duplicates, and users answer each other in our repo already. Priya owns it, 7 hours a week signed off by her manager through next year and beyond. Primary goal is support deflection, we've written it as cutting duplicate setup tickets by half in two quarters. No existing space covers us. On invitees I've got 24 people I can name, though realistically only one of them besides Priya is someone I'd trust to actually answer things, and they're all in Central Europe while about 60% of our installs are in North America and APAC. Marketing wants to lock 4 November for the announcement so they can slot it into the quarterly push. Can you confirm the date and write up the plan?",
+      "expected_output": "A launch-on-a-delayed-date verdict with seed supply as the weak gate, a written mitigation the date is gated on instead of the calendar, and the opening sequence gated on observed activity.",
+      "files": [],
+      "expectations": [
+        "Returns a launch-on-a-delayed-date verdict rather than confirming 4 November",
+        "Gates the launch on the mitigation landing rather than on a calendar date",
+        "Writes the mitigation down as a specific named action, such as recruiting a second reliable answerer and adding time-zone coverage",
+        "Marks seed supply as the weak gate and the other four as passing",
+        "States that coverage - one reliable answerer per topic area, and at least two time zones for a global audience - is what the seed-supply gate tests, not headcount",
+        "Does not treat 24 named invitees as an automatic pass merely because it clears 20",
+        "Applies the verdict rule for four gates passing with a written mitigation",
+        "Requires founding members who already behave like contributors or advocates rather than passive newcomers",
+        "Does not recommend padding the invite list with additional names to hit a number",
+        "Keeps the opening sequence - founding cohort, invited beta, public announcement - gated on observed activity rather than on the fixed November date"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Arcmesh here. We opened a Discourse forum for our infrastructure-as-code tool 90 days ago and I need to decide what to do next. We announced it during our keynote at a big conference in month one and got a huge rush - we're at 6,200 members now. Month one was incredible, months two and three feel much flatter but I'm told that's normal. Current numbers: 61% of questions get an answer within 24 hours, 28% of posts are written by someone who isn't on our team, 55% of threads have at least one reply, and our five most active members account for 74% of all engagement. Marketing has budget left and wants to run a paid campaign to push us to 15,000 members this quarter, arguing that more people means more conversation. Thoughts on the plan?",
+      "expected_output": "A refusal of the promotion plan with the reason, every failing signal named against its threshold, the conference month rejected as a comparison baseline, and the fold-back path offered in order with a named decision owner.",
+      "files": [],
+      "expectations": [
+        "Rejects more promotion or paid acquisition as the response, and gives the reason: more joins into a silent room lowers every ratio",
+        "Names each day-90 signal that sits below its pass threshold, alongside the threshold it missed",
+        "Identifies at least four failing signals against the baseline thresholds of over 90% answered within 24 hours, over 50% non-staff posts, over 80% of threads with a reply, and under 50% engagement concentration in the top five members",
+        "States that the 6,200 member count is a joins counter rather than a health signal",
+        "Warns against measuring against the conference-driven launch month and requires a trailing baseline instead",
+        "Names burstiness - the spike-and-decay pattern releases, conferences and media coverage produce - as the reason the launch month is not a valid comparison",
+        "Flags the 74% top-five engagement concentration as fragility: those five leaving takes the community with them",
+        "Offers the fold-back path and states its options in order: archive read-only, then merge into the space the audience already uses, then convert to a plain support channel",
+        "Explains that archiving preserves the answers and their search traffic at near-zero standing effort",
+        "Recommends re-running the shape and seeding work against the specific failing signals rather than a general effort increase",
+        "Names a decision owner for the fold-back call",
+        "Does not propose adding more channels or categories to lift activity"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Vireo Labs. We've had a Slack for our platform users for about 14 months, 1,100 members. It was lively for the first half year and now it's pretty much dead - a few messages a week, mostly us. Leadership is calling it a failed experiment. I want to relaunch it properly: figure out which numbers we should actually be watching, work out whether it's genuinely dying or just seasonal, and come back with something defensible. Where do we start?",
+      "expected_output": "A routing call to the community-health skill in owner/repo@skill form, with the reason, and a stop - no gates scored, no venue recommendation, no seeding plan.",
+      "files": [],
+      "expectations": [
+        "Routes the request to the community-health skill instead of running the launch workflow",
+        "States that this skill does not apply to a community that already exists",
+        "Stops after the routing call rather than half-running the readiness gates",
+        "Produces no launch brief, venue recommendation or founding-cohort plan",
+        "Names the target as samber/developer-relations-skills@developer-community-health, in owner/repo@skill form",
+        "Distinguishes the one case that would keep the work here: deciding whether to shut the community down",
+        "Does not read \"relaunch\" as a request to pick a new platform",
+        "Gives the reason for routing: half-running the workflow on the wrong problem wastes the user's time"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Palebright, we ship an embedded database. We're two weeks from opening a GitHub Discussions space for our users and my VP wants targets written down before we go. What she's proposed: 2,000 members by day 90, and getting the share of members who never post below 40% - she's seen our beta group where about four in five people just read and thinks that's the main thing to fix. She also wants me to just check in at the end of the quarter and see how it went. Can you turn that into a measurement plan?",
+      "expected_output": "Both proposed targets rejected with published anchors, replaced by active-member counts and the six day-90 ratio signals labelled by basis, a 48-hour-window response commitment, and day-30 leading indicators.",
+      "files": [],
+      "expectations": [
+        "Rejects the \"below 40% lurkers\" target and states that around 90% of members never posting is the baseline condition, not a launch defect",
+        "Attributes the 90-9-1 participation-inequality finding to Jakob Nielsen at NN/g rather than presenting it as an unsourced rule of thumb",
+        "Notes that the beta group's four-in-five read-only share is at or better than that baseline rather than a problem to fix",
+        "Rejects the 2,000-member target as a joins counter rather than a health signal",
+        "Sets targets on the number of active members and on ratio signals instead",
+        "Proposes day-90 pass thresholds covering at least: answered within 24 hours, non-staff share of posts, new members posting within 7 days, monthly active share, threads with at least one reply, and top-five engagement concentration",
+        "Labels which thresholds are published findings and which are baselines offered as a starting hypothesis to recalibrate",
+        "Requires the thresholds be written down before launch rather than assessed afterwards, and says why",
+        "Recommends publishing a response-time commitment and places it inside a 48-hour window",
+        "Cites the 48-hour responsiveness evidence as a published finding rather than an invented target"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Northkeep sells a data-pipeline platform to enterprises - 55 customers, contracts between $40k and $300k a year. The people who'd actually use a community are data engineers at those accounts; the people who sign the renewal are VPs of Data who I'm certain would never post anything. A good chunk of our users are at banks and insurers whose security policy flat-out bans pasting code or architecture into anything public. Three of our largest accounts have separately asked us for a dedicated private channel just for their team. Demand is solid - we get the same eight or nine pipeline-tuning questions from different accounts every month, and two customers have swapped notes on a call. Marcus owns it, 10 hours a week. We can name 30 invitees. What should we build?",
+      "expected_output": "A B2B plan: buyer/user split with a separate buyer signal path, public venue classes deleted with reopen triggers, the private-channel requests refused as community and gated as support, and percentage thresholds adjusted with stated reasoning.",
+      "files": [],
+      "expectations": [
+        "Names the buyer and user split explicitly: the room fills with data engineers while renewal depends on VPs of Data who never post",
+        "Requires a separate signal path to the buyer rather than assuming community activity reaches them",
+        "Deletes the rented public space and forge-native discussions as venue classes, because both are public by construction and the bank and insurer users cannot post publicly",
+        "Treats those as deletions rather than demotions, and records the trigger that would reopen each",
+        "Does not grant the three requested private per-customer channels as a community feature",
+        "States that private per-customer channels fragment the community and drift into support contracts",
+        "Gates any per-customer channel on contract value and staffs it as support rather than as community",
+        "Adjusts the day-90 percentage thresholds for a deliberately small, high-value room and proposes absolute counts alongside them",
+        "States the reasoning for that threshold adjustment in the brief instead of silently changing the numbers",
+        "Expects weekday business-hours activity rather than evenings and weekends",
+        "Raises data residency, privacy or moderation obligations as a constraint to check before committing to a venue",
+        "Recommends exactly one primary venue"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Saltmarsh - we make an open-source workflow engine, and the community decision is already made and signed off, all the readiness boxes are ticked. Here's where the plan stands and I'd like you to sharpen it. Launch day is 3 March: we send to our newsletter, 12,000 subscribers, all at once. I've got 11 channels prepped and named: general, announcements, help, showcase, jobs, random, kubernetes, python, go, contributors, off-topic. And I've sent 40 people a message saying \"hey, we're opening a community, come join!\" Anything obviously missing?",
+      "expected_output": "The day-one blast replaced by a three-stage sequence gated on observed activity, the channel tree cut to a small surface, the invitation rewritten as a time-boxed personal ask, 5-10 seeded posts shipped with their answers, a ritual from week one, and a published response-time commitment.",
+      "files": [],
+      "expectations": [
+        "Rejects announcing to the 12,000-subscriber newsletter on day one and gives the reason: it spends the single first impression on an empty room",
+        "Replaces the day-one announcement with a three-stage sequence: founding cohort, then invited beta, then public announcement",
+        "Gates each transition between stages on observed activity rather than on a calendar date",
+        "Cuts the 11 planned channels down to a small opening surface",
+        "States that every empty room signals a dead community, and that rooms get added only when an existing one gets noisy",
+        "Rewrites the \"come join\" invitation into a personal ask naming why that specific person and what is being asked of them",
+        "Time-boxes the founding-member commitment, for example to the first quarter, rather than leaving it open-ended",
+        "Specifies seeding roughly 5-10 posts that model the behaviour wanted",
+        "Requires the seeded questions to ship with their answers, and gives the reason: an unanswered seeded question teaches newcomers that questions go unanswered here",
+        "Installs one recurring ritual from week one",
+        "Publishes a response-time commitment and treats unanswered posts as the primary launch defect",
+        "Targets the member mix rather than the headcount, requiring contributors and advocates in the founding cohort rather than passive newcomers",
+        "Checks coverage across the 40 invitees - a reliable answerer per topic area and time-zone spread - rather than accepting the count"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Duneshift is pre-1.0 developer infrastructure - a runtime for edge functions. We have about 30 design partners and the single thing we need from a community is tight, fast product feedback: we ship breaking changes most weeks and we want to hear within hours when something lands badly. Ines, our founder, is genuinely in the room all day, and we have a named support rota of three people covering Berlin, São Paulo and Singapore so someone is awake basically all the time. Our answers go stale within a few weeks anyway because the API keeps moving, and we have zero interest in search traffic - we're not even indexed yet and don't want to be. All 30 partners are on GitHub and we have a public repo. What venue should we open?",
+      "expected_output": "Owned real-time chat recommended as a deliberate promotion against the efficiency order, with the ranking stated on multiple axes, the two promotion conditions named, the lost archive accepted explicitly, and the class named before any vendor.",
+      "files": [],
+      "expectations": [
+        "Recommends owned real-time chat as the venue class",
+        "States the venue-class ranking out loud on more than one axis - efficiency, effort, value, compliance cost - rather than a single blended order",
+        "Acknowledges that real-time chat sits last on the efficiency ratio and is being promoted here anyway",
+        "Names the two conditions justifying the promotion: the primary outcome is Product (or Engagement), and continuous presence is genuinely staffed by named people",
+        "Cites the named three-person rota across Berlin, São Paulo and Singapore as the staffing evidence behind the promotion",
+        "States that the unindexed archive is an acceptable loss here because the answers go stale within weeks and search traffic is not wanted",
+        "Does not justify the choice with \"that's where developers are\" or with ambition",
+        "Notes that real-time chat carries the highest standing-presence cost and the highest compliance cost of the four classes",
+        "Names the venue class before naming any vendor",
+        "Maps the design-partner feedback goal to the SPACES letter for Product",
+        "Recommends one primary venue, giving any second surface a distinct, non-overlapping job"
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "Tenvale, we do a static-analysis tool for Rust. I ran the numbers and I don't think we're ready for a community but I still need to bring something back to the exec team. Situation: support volume is 5 tickets a month and nothing repeats, and I've never once seen a user answer another user anywhere. The Rust ecosystem Discord has an active channel that covers our problem space and a handful of our users post there. What we actually want out of this is product direction - concretely, about 10 usable roadmap signals a month. Nils owns it with 4 hours a week and we can name 35 users we'd invite. Budget is basically zero, so give me the cheapest thing we can do instead and I'll sell that.",
+      "expected_output": "A do-not-launch verdict, the cheapest option explicitly refused in favour of the alternative returning the most evidence per standing hour, the ordering stated out loud, the feedback loop ruled out despite the Product outcome, and an observable re-decision trigger.",
+      "files": [],
+      "expectations": [
+        "Returns a do-not-launch verdict on three of five gates passing",
+        "Explicitly refuses to pick the cheapest option and states the selection rule: the alternative returning the most evidence per hour of standing presence",
+        "States the ordering of the alternatives out loud rather than presenting an unranked list",
+        "Recommends answering publicly where the audience already is, meaning the Rust ecosystem Discord channel, as the primary alternative",
+        "Explains that answering publicly tests the demand gate and the venue-vacuum gate at the same time",
+        "Rules out the email or issue-based feedback loop despite the Product outcome, because it is one-to-one by construction and structurally cannot produce peer-conversation evidence",
+        "Notes that a troubleshooting or FAQ surface is the cheapest standing commitment but barely moves the demand gate",
+        "Does not promote scheduled office hours here, since seed supply is not the failing gate",
+        "Emits no compliance-cost axis for these alternatives, or states that none of the five makes the team the host of a space",
+        "Names an observable re-decision trigger, such as a repeat-question volume or users starting to answer each other, rather than a review date",
+        "States what evidence each recommended alternative is expected to produce toward the blocked launch decision"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "Should we open a Discord for our API users?",
+      "should_trigger": true
+    },
+    {
+      "query": "We've decided on Discourse, help us plan the November launch.",
+      "should_trigger": true
+    },
+    {
+      "query": "How do we get our new community to critical mass?",
+      "should_trigger": true
+    },
+    {
+      "query": "we should have a Discord",
+      "should_trigger": true
+    },
+    {
+      "query": "Which platform should we pick for our SDK users, Slack or Discord?",
+      "should_trigger": true
+    },
+    {
+      "query": "Is it worth starting a forum for our open source project?",
+      "should_trigger": true
+    },
+    {
+      "query": "How many people do we need lined up before we open the room?",
+      "should_trigger": true
+    },
+    {
+      "query": "We keep getting the same setup questions by email. Should we start a user community?",
+      "should_trigger": true
+    },
+    {
+      "query": "Write me a plan for seeding a developer community from zero.",
+      "should_trigger": true
+    },
+    {
+      "query": "What should the first 90 days look like after we open our community?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our CEO wants a community and I'm not convinced. How do I decide?",
+      "should_trigger": true
+    },
+    {
+      "query": "Do we need our own space or should we just hang out in the ecosystem Discord?",
+      "should_trigger": true
+    },
+    {
+      "query": "Who should we invite first when we open our forum?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do we avoid a ghost town when we launch our Slack?",
+      "should_trigger": true
+    },
+    {
+      "query": "GitHub Discussions or Discourse for our project?",
+      "should_trigger": true
+    },
+    {
+      "query": "What are the go/no-go criteria for starting a user community?",
+      "should_trigger": true
+    },
+    {
+      "query": "We have 30 customers we could invite. Is that enough to start?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're planning to announce our new Discord to the whole newsletter on day one. Sanity check?",
+      "should_trigger": true
+    },
+    {
+      "query": "What would make us shut down a community we just started?",
+      "should_trigger": true
+    },
+    {
+      "query": "What are the cheaper alternatives to running our own community?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we turn on GitHub Discussions for our repo?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do we seed the first conversations so the room isn't empty on day one?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our users keep answering each other in GitHub issues. What should we do with that?",
+      "should_trigger": true
+    },
+    {
+      "query": "Set the thresholds that tell us whether our community launch worked.",
+      "should_trigger": true
+    },
+    {
+      "query": "We want to open a space for our users but nobody really has time to run it.",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I pick between starting a subreddit and running our own forum?",
+      "should_trigger": true
+    },
+    {
+      "query": "Write me a launch brief for a developer community.",
+      "should_trigger": true
+    },
+    {
+      "query": "Is a Discord a good idea for a B2B devtool with 40 enterprise customers?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're pre-launch. When is the right moment to start a community?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we build a place for our users to talk to each other?",
+      "should_trigger": true
+    },
+    {
+      "query": "what's the minimum viable version of this, community-wise",
+      "should_trigger": true
+    },
+    {
+      "query": "My open source project has 4,000 stars and nowhere for users to talk. Suggestions?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do we know if we're ready to run a community?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our support inbox is drowning. Would a community help?",
+      "should_trigger": true
+    },
+    {
+      "query": "Do we start private with a small group or go public straight away?",
+      "should_trigger": true
+    },
+    {
+      "query": "How many channels should we open on day one?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we just run office hours instead of a whole community?",
+      "should_trigger": true
+    },
+    {
+      "query": "Give me a decision framework for starting a developer community.",
+      "should_trigger": true
+    },
+    {
+      "query": "Our competitor has a Discord with 10k members. Should we have one too?",
+      "should_trigger": true
+    },
+    {
+      "query": "We want somewhere our users help each other instead of emailing us.",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I convince my manager we're not ready for this yet?",
+      "should_trigger": true
+    },
+    {
+      "query": "What's a realistic target for the first quarter of a brand new forum?",
+      "should_trigger": true
+    },
+    {
+      "query": "Help me choose a venue for a developer community aimed at platform engineers.",
+      "should_trigger": true
+    },
+    {
+      "query": "We opened a room six weeks ago and it's dead. When do we call it?",
+      "should_trigger": true
+    },
+    {
+      "query": "We have a DevRel hire starting in Q2. Should we wait before opening the community?",
+      "should_trigger": true
+    },
+    {
+      "query": "Talk me out of starting a Slack for our users.",
+      "should_trigger": true
+    },
+    {
+      "query": "How should I structure the founding group for a new online user group?",
+      "should_trigger": true
+    },
+    {
+      "query": "Which of our users should we ask to answer questions once we open the space?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our docs get 50k visits a month and there's nowhere to ask a question. What now?",
+      "should_trigger": true
+    },
+    {
+      "query": "We sell a paid dev tool. Where should our customers talk to each other?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we open a separate announcements channel when we launch?",
+      "should_trigger": true
+    },
+    {
+      "query": "Do we need a community or just better docs?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do we set up a shared Slack space for our enterprise customers?",
+      "should_trigger": true
+    },
+    {
+      "query": "What evidence should I collect before committing to this?",
+      "should_trigger": true
+    },
+    {
+      "query": "Is it too early for us to have a community?",
+      "should_trigger": true
+    },
+    {
+      "query": "Pick a platform for peer-to-peer support for our CLI users.",
+      "should_trigger": true
+    },
+    {
+      "query": "Our Discord has 4,000 members and has gone quiet. Which metrics should I be tracking?",
+      "should_trigger": false
+    },
+    {
+      "query": "Which community health metrics matter for a two-year-old forum?",
+      "should_trigger": false
+    },
+    {
+      "query": "Build me a dashboard for community engagement reporting.",
+      "should_trigger": false
+    },
+    {
+      "query": "Diagnose why contributor numbers are falling in our three-year-old community.",
+      "should_trigger": false
+    },
+    {
+      "query": "Write a code of conduct for our Slack.",
+      "should_trigger": false
+    },
+    {
+      "query": "How do I handle a member who keeps derailing threads?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design an enforcement ladder for our moderators.",
+      "should_trigger": false
+    },
+    {
+      "query": "Recruit and train volunteer moderators for our forum.",
+      "should_trigger": false
+    },
+    {
+      "query": "Someone reported harassment in our community. What's the incident runbook?",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up an ambassador program for our top 20 users.",
+      "should_trigger": false
+    },
+    {
+      "query": "What perks should we give our community heroes?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the selection criteria for an MVP-style recognition program.",
+      "should_trigger": false
+    },
+    {
+      "query": "Start a monthly Rust meetup in Lisbon.",
+      "should_trigger": false
+    },
+    {
+      "query": "Our meetup attendance dropped from 60 to 12. Help.",
+      "should_trigger": false
+    },
+    {
+      "query": "Find speakers for our user group's next in-person event.",
+      "should_trigger": false
+    },
+    {
+      "query": "We're open-sourcing our library next week. Plan the announcement.",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we get onto GitHub Trending on release day?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write a CONTRIBUTING.md so strangers can land a first pull request.",
+      "should_trigger": false
+    },
+    {
+      "query": "Nobody contributes to my project. What's blocking them?",
+      "should_trigger": false
+    },
+    {
+      "query": "Our issue tracker has 800 open issues. Design a triage system.",
+      "should_trigger": false
+    },
+    {
+      "query": "Who decides what gets merged here? Write us a GOVERNANCE.md.",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we donate the project to a foundation?",
+      "should_trigger": false
+    },
+    {
+      "query": "How much of our DevRel budget should go to community versus events?",
+      "should_trigger": false
+    },
+    {
+      "query": "Prove DevRel ROI to my CFO.",
+      "should_trigger": false
+    },
+    {
+      "query": "What should a brand new DevRel program do in its first year?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should DevRel report to marketing or to product?",
+      "should_trigger": false
+    },
+    {
+      "query": "Who are our developers, actually? Cut them into segments.",
+      "should_trigger": false
+    },
+    {
+      "query": "Map the developer journey from first docs visit to first deploy.",
+      "should_trigger": false
+    },
+    {
+      "query": "Which conferences should we sponsor next year?",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan a booth activation for a 4,000-person infrastructure conference.",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan a quarter of blog posts and videos for our developer audience.",
+      "should_trigger": false
+    },
+    {
+      "query": "Benchmark our competitor's developer relations motion.",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the release notes for v3.0.",
+      "should_trigger": false
+    },
+    {
+      "query": "Our quickstart takes 40 minutes. Fix it.",
+      "should_trigger": false
+    },
+    {
+      "query": "Audit our docs structure against Diátaxis.",
+      "should_trigger": false
+    },
+    {
+      "query": "Write a migration guide for the v2 to v3 breaking changes.",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we build in public, and how much do we share?",
+      "should_trigger": false
+    },
+    {
+      "query": "Optimize our GitHub organization profile page.",
+      "should_trigger": false
+    },
+    {
+      "query": "Pick a license for our new library.",
+      "should_trigger": false
+    },
+    {
+      "query": "Open core or hosted open source - how should we make money?",
+      "should_trigger": false
+    },
+    {
+      "query": "What should we charge for our API?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write a CFP submission for our talk on eBPF.",
+      "should_trigger": false
+    },
+    {
+      "query": "Prep me for a podcast interview about our platform.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design a certification program for our platform.",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we open extension points so partners can build integrations?",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we grow our existing subreddit's subscriber count?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write a Reddit post about our tool that won't get downvoted into oblivion.",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a brand community flywheel for our consumer fitness app.",
+      "should_trigger": false
+    },
+    {
+      "query": "Write a Discord bot that welcomes new members to our server.",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up roles and channel permissions on our existing Discord server.",
+      "should_trigger": false
+    },
+    {
+      "query": "Migrate our forum from vBulletin to Discourse - what are the technical steps?",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we run a hackathon for our developer users?",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan a summit for our existing ambassador cohort.",
+      "should_trigger": false
+    },
+    {
+      "query": "What's a good employer brand strategy for hiring backend engineers?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design a referral program for our SaaS.",
+      "should_trigger": false
+    },
+    {
+      "query": "Our community manager is burning out. How do I restructure the role?",
+      "should_trigger": false
+    }
+  ]
+}

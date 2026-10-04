@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "organization": "Tigris Data",
+  "date": "March 2026",
+  "abstract": "Configure access keys, CORS rules, bucket visibility, and presigned URL security for Tigris. Covers access key lifecycle (create, assign, rotate, revoke), Editor vs ReadOnly roles, CORS configuration for development and production, public vs private buckets, presigned URL best practices, environment variable security, audit checklist, and key compromise response.",
+  "references": [
+    "https://www.tigrisdata.com/docs/",
+    "https://www.tigrisdata.com/docs/sdks/tigris/"
+  ]
+}

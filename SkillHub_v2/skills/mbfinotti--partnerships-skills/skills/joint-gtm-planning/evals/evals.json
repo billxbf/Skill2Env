@@ -1,0 +1,596 @@
+{
+  "skill_name": "joint-gtm-planning",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We're Verrata, a payroll-compliance SaaS, 110 people, selling into HR ops. Six weeks ago we signed a technology partnership with Skiplane, an HRIS platform. I need a joint GTM plan I can put in front of our leadership offsite on the 9th. Where things stand: my counterpart there is a marketing manager called Dana. I've emailed her VP twice asking for an intro and got nothing back. Dana was enthusiastic at first but it's been three weeks since her last reply. We both sell into HR ops so honestly the better-together angle writes itself, two logos and one audience. We've got $12k set aside; I have no idea what Skiplane has. Give me the plan.",
+      "expected_output": "A refusal to produce a signable plan, with the readiness gate failures named individually and the specific missing pieces listed as the precondition for restarting.",
+      "files": [],
+      "expectations": [
+        "Declines to produce a finished joint GTM plan and states that the readiness gate failed before any planning happens",
+        "Names the absence of an executive sponsor on the Skiplane side as a disqualifier",
+        "Names the partner's three weeks of silence, or unresponsiveness generally, as a disqualifier",
+        "Names the unknown partner-side budget or capacity as a disqualifier",
+        "Rejects \"we both sell into HR ops, two logos and one audience\" as a joint value proposition and states it fails the neither-alone test",
+        "States that a plan cannot fix an unstaffed partnership, rather than proposing a workaround that proceeds anyway",
+        "Requires a named owner and a named executive sponsor on each side, four names in total, before planning resumes",
+        "Does not invent a launch date, a campaign format, or a budget split for Skiplane",
+        "Does not treat Verrata's $12k as sufficient to proceed on one-sided funding"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Kelvinbase (data observability, 60 people) and Margrove, a BI vendor, both sell to analytics teams. We shipped a two-way connector in July. My CMO wants sourced pipeline from this partnership landing inside the quarter, and the quarter closes in seven weeks. I'm the only person on partner marketing and I can give this maybe six hours a week; our designer is booked solid until December. Margrove's team is about the same size as ours. My shortlist right now is a co-authored benchmark report built from both products' telemetry, or a shared booth at the big analytics conference in February. Which one, and what's the plan?",
+      "expected_output": "Both shortlisted formats deleted for stated reasons, a re-ranked shortlist of remaining formats with trade-offs, and an explicit recommendation naming which constraint moved which format.",
+      "files": [],
+      "expectations": [
+        "Deletes the co-authored benchmark report and states the reason, a quarter-long format against a seven-week results date and a six-hour weekly ceiling",
+        "Deletes the February conference booth and states the reason, the fixed date falls outside the window results must land in",
+        "Removes the ruled-out formats from the menu rather than ranking them last or holding them as fallbacks",
+        "Presents two or three remaining candidate formats with trade-offs instead of a single option",
+        "Identifies the joint webinar as the highest-efficiency B2B format, value bought per unit of two-company coordination, rather than choosing by cost or by audience size",
+        "Says explicitly which answer moved which format, for example that the seven-week results date deleted the quarter-long formats",
+        "Frames effort as coordination across two organizations, whose sign-off chain the format walks, not as money",
+        "Distinguishes the launch date from the date results must land",
+        "Recommends a format carrying a form or registration because the objective is pipeline",
+        "Makes an explicit recommendation and waits for the user's decision instead of drafting the full plan around one format unasked"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Second time around with the same partner. We're Ashgrove, API security, 200 people; the partner is Tillmark, an API gateway vendor. We ran a webinar together last spring, 380 registrants, both sides came out happy, the relationship is solid. Now my VP wants something out of this partnership that's still producing leads eighteen months from now, not another one-hour spike. No fixed date, she said take the time it takes. The thing that's unusual: Ashgrove has three years of anonymized attack-traffic telemetry, Tillmark has gateway-config data from 4,000 deployments, and neither of us can publish anything meaningful from our own half. Budget is already approved on both sides and we have in-house design. What should we run?",
+      "expected_output": "A recommendation of the co-authored research report, explicitly justified as the format the efficiency ordering normally starves, with the promoting conditions named.",
+      "files": [],
+      "expectations": [
+        "Recommends the co-authored research report as the campaign shape",
+        "States that the co-authored research report is the format the efficiency ordering normally starves, high value and high effort, losing every ratio round",
+        "Names the conditions promoting it here: both sides hold data neither can publish alone, the relationship has already survived one campaign, and the deadline is a quarter out or later",
+        "States that the compounding-asset mandate, not cost, is what moved the report above the webinar",
+        "Notes that in-house design capacity and pre-approved budget remove most of the report's effort penalty",
+        "Does not recommend repeating the joint webinar as the primary shape on the grounds that it worked last time",
+        "States that the report passes the neither-alone test because the claim requires both data sets",
+        "Treats the report as a gated format and therefore triggers the lead-sharing agreement in full",
+        "Plans a quarter-scale timeline covering two review chains plus design",
+        "Sets the debrief as a calendar date fixed before launch"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Here's the joint plan my counterpart at Ombrelle sent over. I think it reads well, just a bit flabby. Can you tighten the wording and make it sound sharper for both exec teams?\n\nJOINT MARKETING PLAN - Halvard + Ombrelle\nGoal: grow awareness for both brands and generate leads together\nValue prop: \"Halvard and Ombrelle - better together\"\nAudience: both companies' audiences\nCampaign: co-branded ebook, some social, maybe a webinar\nSplit: both teams collaborate on the content\nBudget: shared marketing budget, TBD\nTimeline: launch in Q2\nLeads: leads will be shared between the teams\nOwners: Halvard growth team + Ombrelle marketing team\nSuccess: engagement, reach, pipeline impact",
+      "expected_output": "A refusal to rewrite the prose, with each line scored against the pass checklist and the specific decision missing behind it named.",
+      "files": [],
+      "expectations": [
+        "Declines to polish the wording and states that the missing content is missing decisions, not missing prose",
+        "Flags the single merged goal and requires each side's criterion stated separately, each with a number and a date",
+        "Flags \"Halvard and Ombrelle - better together\" as failing the neither-alone test because either name could be swapped for any vendor",
+        "Flags \"both companies' audiences\" as lacking a segment, overlap evidence, and explicit exclusions",
+        "Flags \"maybe a webinar\" as no chosen campaign shape, and requires the rejected alternatives with the reason each was rejected",
+        "Flags \"both teams collaborate on the content\" as naming no creator and no approver per asset",
+        "Flags \"shared marketing budget, TBD\" as carrying no per-side spend line",
+        "Flags \"launch in Q2\" as not a date, and requires one agreed launch date with the approval buffer visible in the phase dates",
+        "Flags the leads line as lacking consent basis, transfer mechanism, transfer timing, and a deduplication rule",
+        "Flags the owners line as team names rather than four named people, an owner and an executive sponsor on each side",
+        "Flags \"engagement, reach, pipeline impact\" as unmeasurable without per-party tracking links and a sourced-versus-influenced rule, and notes that no debrief date is scheduled"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "We're co-hosting a webinar in six weeks: us, Norlens, a contract-lifecycle SaaS headquartered in Dublin, with Pellamont, an e-signature vendor out of Denver. Registrations will come off both sides' lists plus some paid promo, and the audience is legal-ops people across the EU and the US. Pellamont's marketing ops wants to host the form in their instance and push everything into our CRM the week after the event. Their head of demand gen said we'll just put one checkbox saying you agree to hear from both of us. I need the lead-sharing and attribution piece nailed down. Write it.",
+      "expected_output": "A lead-sharing and attribution section specifying consent parameters, joint-controller split, testable transfer timing, dedup rule, per-party links and the sourced/influenced rule, stopping short of drafted form copy.",
+      "files": [],
+      "expectations": [
+        "Rejects the single bundled checkbox and requires each company's consent to be separable",
+        "Requires the form to name both companies and state the purpose of each company's processing",
+        "Requires a withdrawal route as easy as giving consent",
+        "Names the legal basis for the transfer explicitly rather than leaving it implied",
+        "Identifies the co-hosted webinar registration as a joint-controller situation and requires the responsibility split to be documented and disclosed",
+        "States that a lead can exercise rights against either company regardless of the internal split",
+        "Treats who owns the form as the control point and assigns the data-subject-request duty to a named side",
+        "Replaces \"the week after the event\" with a testable transfer timing expressed in business days from capture",
+        "Requires a qualified-lead definition agreed jointly for this initiative, noting no cross-company standard exists",
+        "Requires a deduplication and existing-relationship rule chosen from excluded from transfer, transferred but flagged, or counted for attribution only",
+        "Requires per-party tracked links with a shared campaign identifier and source parameters split per company, ruling out a single untagged shared link",
+        "Defines sourced and influenced separately for this initiative and states they are reported separately and never merged",
+        "Decides the lead-ownership pattern explicitly, either each side keeps its own channels' leads or all shared-asset leads go to both, rather than leaving it open",
+        "Delivers consent parameters and mechanics rather than drafted form copy, and states that writing the literal form wording is downstream asset work"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Building the business case for our first co-marketing push with Quorrin. We're Basalt Metrics. Two things I want reflected in the plan's targets. First, I keep seeing that 60-70% of alliances fail, and my CFO wants to know why ours won't. Second, a partnerships-platform report I read says partner-sourced deals close 46% faster and carry 2.3x the deal size, and I want our plan to target that. Also, can you throw in whatever the industry-standard conversion rate is for joint webinars so we've got something to benchmark against?",
+      "expected_output": "Each quoted figure handled by provenance: the failure rate refused as folklore with its real spread, the vendor figures flagged and refused as targets, the non-existent standard named as such, and the user's own history proposed as baseline.",
+      "files": [],
+      "expectations": [
+        "Refuses to present \"60-70% of alliances fail\" as settled fact and identifies it as untraceable folklore",
+        "States that published alliance-failure estimates span roughly 20-80% depending on how failure is defined, and presents that spread rather than one number",
+        "Flags the 46%-faster and 2.3x-deal-size figures as vendor-self-reported wherever they appear",
+        "Explains why such figures are directional marketing claims: self-selected samples, unaudited methodology, incentives pointing one way",
+        "Refuses to set a vendor-reported figure as the target the plan must hit",
+        "Proposes Basalt Metrics' own historical campaign performance as the baseline instead",
+        "States that no industry-standard joint-webinar conversion rate exists to benchmark against",
+        "Does not fabricate a specific conversion-rate figure to satisfy the request",
+        "Requires every benchmark quoted anywhere in the plan to carry a provenance flag"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Our partner Gravenhorst runs their user conference on 14 October. We're Solvex, 90 people, and we want to launch a joint integration campaign timed to it. Today is 11 September. Internally we'd normally turn a campaign like this around in about four weeks end to end: content, page, emails, promo. Both sides have a small budget and an owner assigned. Give me the sequencing, what happens when, so we hit the 14th.",
+      "expected_output": "A backwards-anchored six-phase schedule built on a doubled timeline, with the arithmetic shortfall stated and resolved by cutting scope rather than the buffer.",
+      "files": [],
+      "expectations": [
+        "States that the plan needs roughly double a single-company timeline, about eight weeks against Solvex's four-week solo estimate",
+        "Identifies the surplus as the other organization's approval, legal and brand cycles, and calls it structural to two-company work rather than a contingency",
+        "States that the roughly five weeks between 11 September and 14 October does not fit the doubled estimate",
+        "Cuts scope rather than the approval buffer to make the date fit",
+        "Anchors backwards from 14 October: launch first, then the approval gate, then asset deadlines, then signing",
+        "Lays out the six phases in order: agree terms, build assets, pre-launch, launch, follow-up, debrief",
+        "States that nothing downstream starts until the plan is signed by four named people",
+        "Schedules an explicit feedback buffer between each draft deadline and its review deadline",
+        "Commits both sides to publishing simultaneously on one agreed date, and states that a staggered launch reads as one company promoting another",
+        "Agrees a scope-cut plan upfront naming which asset drops first if the timeline compresses",
+        "Sets the debrief as a calendar date before launch and includes a mid-flight check-in between the two owners at a set date"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Quick one. Us, Perlyn, and our partner Astrolume are doing a joint webinar plus a gated checklist. Astrolume writes both pieces, we design them, and we're buying the LinkedIn promo. My counterpart keeps calling this 50/50 and I think that's fine? Separately, Astrolume mentioned they have about $6k of co-op money from a cloud marketplace they could throw at promotion. Their partner marketer said just spend it and we'll sort the paperwork later. How do I write the budget section?",
+      "expected_output": "A budget section separating money from labor, picking a funding pattern from the ranked three with a recommendation, and recording the co-op fund's terms verbatim with proof, deadline and a named claim owner.",
+      "files": [],
+      "expectations": [
+        "Separates money from labor and states that \"Astrolume writes, Perlyn designs\" is a task split, not a budget split",
+        "Warns that conflating the two breeds resentment when one side's tasks cost more",
+        "Presents the three budget patterns in efficiency order: each side funds its own channels, equal cash lines, then proportional to each side's expected lead share",
+        "Recommends one pattern explicitly rather than accepting \"50/50\" as given",
+        "Notes that the proportional pattern is the fairest and loses every ratio round, and names when to promote it anyway",
+        "Records each side's spend as its own separate budget line",
+        "Rejects \"just spend it and we'll sort the paperwork later\" for the co-op money",
+        "Requires the fund's eligible activities recorded verbatim from the program's terms, including whether an activity plan needs pre-approval before spend",
+        "Requires the proof of execution the claim demands and the claim deadline relative to the activity date, both recorded in the plan",
+        "Names a specific person on a specific side as owner of filing the claim, and states that an unowned claim goes unclaimed"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Consumer side this time. We're Halona, a DTC electrolyte drink brand, around $14M revenue. We want to do something with Fernpost, an outdoor apparel brand with a much bigger Instagram following, aimed at trail runners. Two ideas on the table: a co-branded limited-edition bottle sold through both our stores, or a content series with a trail-running creator both brands already work with. No fixed deadline. We own our DTC store and a warehouse; Fernpost has retail placement. What do we run and how do I plan it?",
+      "expected_output": "A consumer-side format decision using the B2C ordering and brand-fit screen, with disclosure and exclusivity handled as consumer-specific, KPIs swapped off pipeline, and the planning spine kept intact.",
+      "files": [],
+      "expectations": [
+        "Uses the consumer-side format ordering with the creator collaboration as the default, not the B2B ordering",
+        "States that the co-branded product is the consumer format the efficiency ordering starves, highest value and losing every ratio round",
+        "Names the conditions that would promote the co-branded product anyway: a prior successful collab with this partner, secured retail distribution, and an objective needing a durable artifact rather than a reach spike",
+        "Notes that Halona's own store and warehouse plus Fernpost's retail placement remove much of the co-branded product's effort penalty",
+        "Puts brand-fit screening first on the grounds that the association itself is the risk",
+        "States that sponsored-content disclosure is enforced by consumer regulators and puts the disclosure obligation in the creator agreement",
+        "Notes that a missing disclosure is public and unfixable after publication",
+        "Treats category exclusivity as an explicitly negotiated contract tier rather than assuming it",
+        "Warns that brand veto rights can extend past production into published content, unlike the front-loaded B2B approval chain",
+        "Replaces pipeline KPIs with reach, engagement, sell-through or brand lift, and states that attribution here is structurally softer",
+        "Keeps the planning spine unchanged: per-side goals with numbers, a signed agreement before asset work, one agreed launch date, named owners on both sides, and a scheduled debrief"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "We did a joint webinar with Cadmere back in May. 412 registrations, attendance was decent. Three months on, our sales team says they got nothing usable out of it, Cadmere's partner lead is telling their exec team the webinar sourced most of their Q3 pipeline, and neither of us can prove anything because we just used one shared short link across both sides' promo. Their head of marketing wants to run it again in November. I want to say yes but do it properly. What should the debrief have covered, and what changes for round two?",
+      "expected_output": "A statement that the attribution split is unrecoverable, the full debrief agenda that was skipped, and the specific mechanics that must predate results in round two.",
+      "files": [],
+      "expectations": [
+        "States that the sourced-versus-influenced split is unrecoverable after the fact because a single untagged shared link was used, and does not attempt to reconstruct it",
+        "Requires per-party tracked links from day one in round two, with a shared campaign identifier and source parameters split per company",
+        "Traces the attribution dispute to the absence of a lead-ownership rule agreed before the results existed",
+        "Lays out the debrief agenda covering results against each side's own goal side by side, lead quality against the agreed definition, collaboration quality, the neither-alone retrospective, and a recorded decision",
+        "Includes the case where one side hit and the other missed as an explicit debrief output",
+        "Requires a recorded decision of repeat, reshape or stop, and states that an undecided debrief schedules a decision date",
+        "States that \"nothing usable\" and \"sourced most of Q3 pipeline\" are not comparable without a jointly agreed qualified-lead definition",
+        "Requires the round-two debrief date to be booked at the agree-terms phase, before launch",
+        "Sets one attribution window used identically by both sides, and has each side compute its own return on its own spend rather than one blended number"
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "New VP joined and wants us nearbound and ecosystem-led by Q1. Concretely he's asked me for three things: build the joint GTM plan with Vantiq Systems using the standard joint business plan template; set our Tier 1 / Tier 2 / Tier 3 launch criteria so we know how much marketing muscle each partner launch gets; and run account mapping first, since that's the discipline everything else depends on. We're Karst Data, 140 people. Give me all three.",
+      "expected_output": "The vendor-coined vocabulary graded as such, the non-existent template and tier standards named plainly, and the plan built section by section with the user deciding the program-specific parameters.",
+      "files": [],
+      "expectations": [
+        "Identifies \"nearbound\" and \"ecosystem-led growth\" as vocabulary originating with one vendor and its acquired media brands, not as established doctrine",
+        "Treats that vocabulary as usable shared language while refusing to build the plan's logic on it",
+        "Notes that account mapping as a named discipline was popularized by the same vendor",
+        "States plainly that no canonical joint business plan or joint GTM plan template exists",
+        "Presents the plan skeleton as assembled practice to validate section by section rather than as an industry-standard form",
+        "States that Tier 1/2/3 launch criteria are program-specific with no standard, and makes Karst Data decide them explicitly",
+        "Does not invent published thresholds for the launch tiers",
+        "Notes that frameworks borrowed from outside partner marketing, such as RACI, OKRs or phase-gate, are real but not partner-marketing inventions and should not be force-fit",
+        "Presents each section for validation before drafting the next rather than delivering all three artifacts at once"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "Plan the joint GTM motion for our integration launch with Northbeam Analytics",
+      "should_trigger": true
+    },
+    {
+      "query": "We signed a co-marketing agreement with a partner last month - now what do we actually build together?",
+      "should_trigger": true
+    },
+    {
+      "query": "Need a better-together story with our biggest tech partner before their conference",
+      "should_trigger": true
+    },
+    {
+      "query": "How should we split the budget and the leads for a webinar we're running with another vendor?",
+      "should_trigger": true
+    },
+    {
+      "query": "Draft a co-marketing plan for a joint webinar with our CRM partner",
+      "should_trigger": true
+    },
+    {
+      "query": "Our partner and us want to do something together this quarter and nobody has decided what",
+      "should_trigger": true
+    },
+    {
+      "query": "What campaign should we run with a partner if I only have six hours a week?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're co-hosting a webinar with another company across the EU and US - what has to be agreed before the registration form goes live?",
+      "should_trigger": true
+    },
+    {
+      "query": "Both companies want to launch the integration on the same day, help me sequence it",
+      "should_trigger": true
+    },
+    {
+      "query": "Put together the one-pager both CMOs can sign for the campaign we're running with Flowmark",
+      "should_trigger": true
+    },
+    { "query": "joint gtm plan template", "should_trigger": true },
+    {
+      "query": "We want to do a co-branded product drop with a sneaker brand - plan it",
+      "should_trigger": true
+    },
+    {
+      "query": "How do we decide who owns the leads from a webinar we run with a partner?",
+      "should_trigger": true
+    },
+    { "query": "partner co-marketing campaign plan", "should_trigger": true },
+    {
+      "query": "We ran a joint campaign and got nothing. What should the debrief have asked?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our partner has MDF available - how do we build a campaign around it without losing the money?",
+      "should_trigger": true
+    },
+    {
+      "query": "Plan a creator collaboration for our skincare launch with a beauty creator we already work with",
+      "should_trigger": true
+    },
+    {
+      "query": "What should go in the agreement between us and our partner before we start making assets?",
+      "should_trigger": true
+    },
+    {
+      "query": "Two vendors, one audience, one campaign - where do I start?",
+      "should_trigger": true
+    },
+    {
+      "query": "We want to write a research report with our partner. Is that the right move or should we just do a webinar?",
+      "should_trigger": true
+    },
+    {
+      "query": "sequence a joint product launch with a partner",
+      "should_trigger": true
+    },
+    {
+      "query": "Our alliance with Rivetlogic is signed but dormant. Wake it up with a campaign.",
+      "should_trigger": true
+    },
+    {
+      "query": "Help me decide between a newsletter swap and a joint webinar with a partner",
+      "should_trigger": true
+    },
+    {
+      "query": "Need to show my VP what we're doing with our biggest integration partner next quarter",
+      "should_trigger": true
+    },
+    {
+      "query": "How long does a campaign run with another company actually take end to end?",
+      "should_trigger": true
+    },
+    { "query": "co-marketing launch sequencing", "should_trigger": true },
+    {
+      "query": "The partner wants brand awareness, we want pipeline. Can we still run something together?",
+      "should_trigger": true
+    },
+    {
+      "query": "Write the plan for our joint booth and customer dinner at the industry conference with our partner",
+      "should_trigger": true
+    },
+    {
+      "query": "We need tracking set up so we can tell whose audience drove the signups in a campaign with another company",
+      "should_trigger": true
+    },
+    {
+      "query": "joint value proposition for two companies running a campaign together",
+      "should_trigger": true
+    },
+    {
+      "query": "What's a realistic launch date when two marketing teams both have to approve everything?",
+      "should_trigger": true
+    },
+    {
+      "query": "Set up the measurement for a campaign we're running jointly with another vendor",
+      "should_trigger": true
+    },
+    {
+      "query": "Our partner went quiet halfway through the campaign. How should the next plan be structured?",
+      "should_trigger": true
+    },
+    {
+      "query": "Plan an integration launch campaign with a data warehouse partner",
+      "should_trigger": true
+    },
+    {
+      "query": "Two brands, one social moment - how do we plan it so both teams get what they want?",
+      "should_trigger": true
+    },
+    {
+      "query": "We want to bundle our product with a partner's and take it to market together",
+      "should_trigger": true
+    },
+    {
+      "query": "help me plan a partner marketing campaign end to end",
+      "should_trigger": true
+    },
+    {
+      "query": "What does a campaign brief look like when a second company has to sign off on everything?",
+      "should_trigger": true
+    },
+    {
+      "query": "The partner's list is ten times ours. Does that change what we should run together?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're doing a joint customer story with our partner. Plan it out.",
+      "should_trigger": true
+    },
+    {
+      "query": "Before we start building assets with a partner, what do both sides need to agree on?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I tell whether a campaign with a partner actually worked for us and not just for them?",
+      "should_trigger": true
+    },
+    {
+      "query": "co-branding campaign plan with another consumer brand",
+      "should_trigger": true
+    },
+    {
+      "query": "Plan the go-to-market for the new joint offering we're doing with Sablewire",
+      "should_trigger": true
+    },
+    {
+      "query": "We want to do an AMA in our partner's community. Is that worth running?",
+      "should_trigger": true
+    },
+    {
+      "query": "Legal asked what happens to the registration data from the webinar we're co-hosting with another vendor",
+      "should_trigger": true
+    },
+    {
+      "query": "First campaign with a brand new partner - what's the lowest-risk thing to try?",
+      "should_trigger": true
+    },
+    {
+      "query": "gtm plan for two companies launching something together",
+      "should_trigger": true
+    },
+    {
+      "query": "The exec team wants a better-together narrative with our cloud partner by April",
+      "should_trigger": true
+    },
+    {
+      "query": "We're sponsoring a partner's event and also co-authoring a guide with them. Which one first?",
+      "should_trigger": true
+    },
+    {
+      "query": "We've got 14 candidate technology partners and capacity for three. Rank them.",
+      "should_trigger": false
+    },
+    {
+      "query": "Write our deal registration policy - protection window, approval SLA, rejection grounds",
+      "should_trigger": false
+    },
+    {
+      "query": "A direct rep and a reseller are both working the same account. Who gets credit?",
+      "should_trigger": false
+    },
+    {
+      "query": "Build the quarterly scorecard we review each partner against",
+      "should_trigger": false
+    },
+    {
+      "query": "Should our program have three tiers or four, and what unlocks gold?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the certification path our resellers complete before their first deal",
+      "should_trigger": false
+    },
+    {
+      "query": "Model whether this reseller is actually profitable once we account for cost to serve",
+      "should_trigger": false
+    },
+    {
+      "query": "Map every partner type we work with and show me the coverage gaps",
+      "should_trigger": false
+    },
+    {
+      "query": "Which partner category should we add next, MSPs or systems integrators?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we list on AWS Marketplace or Azure Marketplace first?",
+      "should_trigger": false
+    },
+    {
+      "query": "We're building a channel program from scratch - what tier and benefit structure do we need?",
+      "should_trigger": false
+    },
+    {
+      "query": "Set the commission rate for our new affiliate program",
+      "should_trigger": false
+    },
+    {
+      "query": "Audit last month's affiliate payout run before we disburse",
+      "should_trigger": false
+    },
+    {
+      "query": "Draft the terms and conditions affiliates accept when they join",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the welcome sequence for newly approved affiliates",
+      "should_trigger": false
+    },
+    {
+      "query": "How do I spot cookie stuffing in our affiliate traffic?",
+      "should_trigger": false
+    },
+    {
+      "query": "What metrics belong on our affiliate performance dashboard?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the cold email we send to review sites to recruit them as affiliates",
+      "should_trigger": false
+    },
+    {
+      "query": "Check this creator's caption for FTC disclosure compliance before it goes live",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the creative brief for the creator we just signed - deliverables and specs",
+      "should_trigger": false
+    },
+    {
+      "query": "Shortlist creators for our spring launch and score them",
+      "should_trigger": false
+    },
+    {
+      "query": "Prep me to negotiate usage rights and a kill fee with a creator",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the first DM to a creator we want to work with",
+      "should_trigger": false
+    },
+    {
+      "query": "Set the KPIs and attribution method for our influencer campaign",
+      "should_trigger": false
+    },
+    {
+      "query": "How much should we pay for a refer-a-friend reward?",
+      "should_trigger": false
+    },
+    {
+      "query": "People are self-referring with burner emails - what guardrails do we need?",
+      "should_trigger": false
+    },
+    {
+      "query": "How do I break into partnerships from a sales role?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the job description and interview loop for a channel manager",
+      "should_trigger": false
+    },
+    {
+      "query": "I'm starting partnerships work here - which of these tasks should I run first?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write our go-to-market strategy for the new product we're launching",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan the launch strategy for v2 of our app",
+      "should_trigger": false
+    },
+    {
+      "query": "Build the campaign plan for our Q3 demand gen push",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up our user acquisition campaign on TikTok",
+      "should_trigger": false
+    },
+    { "query": "Plan our Product Hunt launch day", "should_trigger": false },
+    {
+      "query": "We're building a Shopify app - how do we get it into the app store?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the landing page headline and subhead for the webinar registration page",
+      "should_trigger": false
+    },
+    {
+      "query": "Draft the three promo emails for the webinar we're co-hosting",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the press release announcing our partnership with Vantiq",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the webinar script and the speaker notes",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the slide deck for the joint webinar",
+      "should_trigger": false
+    },
+    {
+      "query": "Update our cookie consent banner for the new privacy rules",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up UTM naming conventions across all our paid channels",
+      "should_trigger": false
+    },
+    {
+      "query": "Negotiate the distributor margin on our new reseller agreement",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan our own user conference for next year",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the co-op advertising policy our dealers claim funds against",
+      "should_trigger": false
+    },
+    {
+      "query": "How should we price the bundle we're selling with our partner?",
+      "should_trigger": false
+    },
+    {
+      "query": "Build the business case for acquiring the company we currently partner with",
+      "should_trigger": false
+    },
+    {
+      "query": "Which of our integrations drives the most retention?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the MSA and mutual NDA for our new partnership",
+      "should_trigger": false
+    },
+    {
+      "query": "Cut the joint webinar recording into short clips for social",
+      "should_trigger": false
+    }
+  ]
+}

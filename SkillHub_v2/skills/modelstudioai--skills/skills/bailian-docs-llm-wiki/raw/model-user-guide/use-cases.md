@@ -1,0 +1,17 @@
+# 实践教程
+
+-   [Hermes Agent，打造自进化智能体](https://www.aliyun.com/solution/tech-solution/hermes-agent)
+-   [声音克隆：定制你的专属声线](https://www.aliyun.com/solution/tech-solution/voice-cloning)
+-   [告别昂贵摄制，一图生成高清数字人](https://www.aliyun.com/solution/tech-solution/avatar)
+-   [文生文Prompt指南](raw/model-user-guide/use-cases/prompt-engineering-guide.md)
+-   [文生图Prompt指南](raw/model-user-guide/use-cases/text-to-image-prompt.md)
+-   [万相3.0视频生成Prompt指南](raw/model-user-guide/use-cases/wan3-video-generation-prompt-guide.md)
+-   [视频生成Prompt指南](raw/model-user-guide/use-cases/text-to-video-prompt.md)
+-   [基于LlamaIndex构建RAG应用](raw/model-user-guide/use-cases/build-rag-applications-based-on-llamaindex.md)
+-   [自定义模型最佳实践](raw/model-user-guide/use-cases/model-training-best-practices.md)
+-   [借助大模型将文档转换为视频](raw/model-user-guide/use-cases/use-llm-to-convert-document-to-video.md)
+-   [限流应对最佳实践](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)
+-   [显式缓存最佳实践](raw/model-user-guide/use-cases/explicit-cache-guide.md)
+-   [三方模型调用教程](raw/model-user-guide/use-cases/third-party-model-integration-tutorial.md)
+-   [实时音视频接入](raw/model-user-guide/use-cases/realtime-audio-video-integration.md)
+-   [技术解决方案](raw/model-user-guide/use-cases/technical-solutions.md)

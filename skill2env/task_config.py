@@ -20,7 +20,7 @@ from harbor.models.task.config import (
 from pydantic import ValidationError
 
 from .axes import TaskAxes
-from .models import ContractError, CreatorResult, SkillBundle
+from .models import ContractError, CreatorResult, Proposal, SkillBundle
 
 
 TASK_SCHEMA_VERSION = "1.3"
@@ -50,19 +50,19 @@ def build_authoritative_task_config(
     task_name: str,
     bundle: SkillBundle,
     creator_result: CreatorResult,
-    axes: TaskAxes | None = None,
+    proposal: Proposal,
+    axes: TaskAxes,
     base_image_pins: Mapping[str, str] | None = None,
 ) -> TaskConfig:
-    """Build task.toml from the bundle and validated private creator result."""
-    if creator_result.status != "created":
-        raise HarborTaskConfigError("task config requires a created result")
-
+    """Build task.toml from the bundle, proposal, axes, and creator metadata."""
     metadata = {
         "source_skill": f"{bundle.provider}/{bundle.id}",
         "source_bundle_digest": bundle.digest,
+        "proposal_id": proposal.id,
+        "proposal_title": proposal.title,
+        "capability": proposal.capability,
+        **axes.to_dict(),
     }
-    if axes is not None:
-        metadata.update(axes.to_dict())
     if base_image_pins is not None:
         metadata["base_image_pins"] = dict(base_image_pins)
 
@@ -71,7 +71,9 @@ def build_authoritative_task_config(
         task=PackageInfo(
             name=authoritative_task_name(task_name),
             description=creator_result.description,
-            keywords=_task_keywords(bundle, creator_result, axes),
+            keywords=_unique_nonempty(
+                [bundle.id, proposal.id, axes.complexity, *creator_result.required_tools]
+            ),
             authors=[Author(name=TASK_AUTHOR_NAME)],
         ),
         metadata=metadata,
@@ -107,7 +109,8 @@ def write_authoritative_task_toml(
     task_name: str,
     bundle: SkillBundle,
     creator_result: CreatorResult,
-    axes: TaskAxes | None = None,
+    proposal: Proposal,
+    axes: TaskAxes,
     base_image_pins: Mapping[str, str] | None = None,
 ) -> Path:
     """Replace any agent-authored task.toml with the authoritative host version."""
@@ -115,6 +118,7 @@ def write_authoritative_task_toml(
         task_name=task_name,
         bundle=bundle,
         creator_result=creator_result,
+        proposal=proposal,
         axes=axes,
         base_image_pins=base_image_pins,
     )
@@ -132,15 +136,6 @@ def validate_harbor_task_toml(text: str) -> TaskConfig:
     except (ValidationError, ValueError, TypeError) as exc:
         detail = " | ".join(part.strip() for part in str(exc).splitlines() if part.strip())
         raise HarborTaskConfigError(f"Harbor TaskConfig rejected task.toml: {detail}") from exc
-
-
-def _task_keywords(
-    bundle: SkillBundle, creator_result: CreatorResult, axes: TaskAxes | None
-) -> list[str]:
-    axis_keywords = [axes.archetype, axes.complexity] if axes is not None else []
-    return _unique_nonempty([bundle.id, *axis_keywords, *creator_result.required_tools]) or [
-        "skill2env"
-    ]
 
 
 def _unique_nonempty(values: Iterable[str]) -> list[str]:

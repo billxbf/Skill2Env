@@ -1,0 +1,560 @@
+{
+  "skill_name": "sql-jdbc-access-design",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We're Trellisway, HR analytics SaaS, about 180 customers, all our data sits in one Snowflake account. Customers keep asking for direct access so they can join our headcount data with their own finance data. Here's what's on the whiteboard: create one view per customer (v_headcount_acme etc.) with WHERE customer_id = 'acme', plus one catch-all view that filters on CURRENT_USER() so we don't have to maintain 180 of them, then put the views and the base fact table into the share so customers can drill down when the view doesn't have enough detail. Our app has done tenant filtering in the API layer for four years and we've never leaked anything. QA would verify it by querying each view from our own account and eyeballing the customer_id column before we flip it on. Poke holes in this before we build it.",
+      "expected_output": "A review that kills the CURRENT_USER() predicate as NULL across a share, replaces the per-customer views with a single secure view joined to a private entitlement table on the share-aware account identity, keeps base and mapping tables out of the share, rejects the app-layer filter as evidence of safety, and replaces provider-side eyeballing with a consumer-side zero-foreign-rows probe gate.",
+      "files": [],
+      "expectations": [
+        "States that CURRENT_USER() and CURRENT_ROLE() return NULL inside a secure view once it crosses an account-to-account share, so the catch-all view matches nothing or everything depending on the predicate's shape",
+        "Names CURRENT_ACCOUNT() as the share-aware identity function that is safe across a share boundary",
+        "Prescribes a single secure view joining a private base table to a private entitlement or mapping table on the caller's account identity, instead of one view per customer",
+        "States the base fact table and the entitlement mapping table must never enter the share",
+        "Rejects putting the base fact table into the share for drill-down",
+        "Rejects the four-year clean record of the application-layer tenant filter as evidence this design is safe, on the grounds that an external SQL handle leaves no application layer to intercept a query",
+        "States the engine-level policy must make a query that omits the tenant filter return nothing, rather than relying on every query being written correctly",
+        "Rejects verifying isolation by querying the views from the provider's own account",
+        "Requires probing isolation from the consumer side, naming Snowflake's SIMULATED_DATA_SHARING_CONSUMER session parameter or a second test account",
+        "Sets the isolation gate as zero foreign rows across every shared view and policy, as a binary pass/fail check before GA",
+        "Requires the isolation probe to be re-run after every policy or schema change, not only once at launch",
+        "Notes the same NULL-identity trap applies to row-access policies, where IS_DATABASE_ROLE_IN_SESSION() is the equivalent primitive"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Paceline Metrics here, logistics visibility SaaS, everything already lands in BigQuery. Two groups are asking for SQL access. Six enterprise accounts (six figures each) want to park a shipment-performance dashboard on it; each one has roughly 50 people opening it every weekday morning, and the tables behind it run about 300 GB per customer. Then about 40 mid-market accounts who'd run a handful of ad-hoc queries a week against maybe 2 GB each. My instinct is that the enterprises are paying the most so they get dedicated infrastructure, and mid-market shares one pooled setup. Does that hold up? What would you actually build?",
+      "expected_output": "An architecture recommendation that rejects contract value as the gate, ranks the three rungs, keeps the low-frequency mid-market cohort on a zero-copy share, and steps the 50-viewer daily dashboard cohort up to a replicated copy or read endpoint using the scan-frequency tipping heuristic.",
+      "files": [],
+      "expectations": [
+        "States that scan frequency, not customer size, tier, or contract value, is the variable that gates the architecture",
+        "Rejects assigning dedicated infrastructure to the enterprise cohort on the basis of contract value",
+        "Presents three architecture rungs: zero-copy warehouse share, replicated copy or dedicated read endpoint, and per-tenant compute isolation",
+        "Names zero-copy warehouse sharing as the default rung and justifies it by the data already living in a cloud warehouse",
+        "States the zero-copy share is a metadata grant with no data copied, and that live access is paid per query scan plus cross-region egress",
+        "Cites the tipping heuristic of roughly 20 scans per day on a roughly 200 GB table, past which live re-scanning costs more per month than a replicated copy costs per year",
+        "Labels that tipping heuristic as one practitioner's rule of thumb rather than a benchmark or a measured figure",
+        "Places the 50-viewer weekday-morning dashboard cohort past the tipping line and recommends the replicated copy or dedicated read endpoint rung for it",
+        "Keeps the roughly 40 low-frequency mid-market accounts on the zero-copy share rung",
+        "Names the price of the replicated rung: staleness to the last refresh, plus a second copy of the data and its PII to govern",
+        "Names the two conditions that promote per-tenant compute isolation (arbitrary customer-authored SQL at dashboard-or-agent frequency across many tenants, or a shared cluster whose worst-case query already threatens the product) and does not promote it here on contract size",
+        "Warns against pointing the replicated copy at the live operational schema"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Bellcurve Health, clinical ops SaaS. Single Postgres 16 primary, no warehouse anywhere in the stack, about 900 customer orgs sharing one database. Enterprise customers want to point their own analysts at us directly, so we want to stand up a read replica they connect to with psql and Metabase. The plan: turn on RLS across the ~40 tenant tables, policy is USING (tenant_id = current_setting('app.tenant_id')::uuid), and our API sets app.tenant_id from the X-Org-Id header when it opens the connection. We also have four reporting views sitting on top of those tables that we'd expose as-is. Half the team would rather skip all of this and just give each customer its own Postgres schema. Tell me what's wrong here.",
+      "expected_output": "A teardown naming the FORCE RLS gap, the client-supplied tenant identity, the missing WITH CHECK, the OR-composition and view-bypass traps, the per-row function cost, plus rejection of schema-per-tenant at this scale and of exposing the live operational schema, with the zero-copy rung deleted because there is no warehouse.",
+      "files": [],
+      "expectations": [
+        "Requires ALTER TABLE ... FORCE ROW LEVEL SECURITY, explaining that the table owner otherwise bypasses RLS entirely",
+        "Rejects deriving app.tenant_id from the client-supplied X-Org-Id header and requires tenant identity injected server-side from a verified token",
+        "Requires WITH CHECK alongside USING on write-path policies, because USING filters only reads and a USING-only policy lets a tenant write rows attributed to another tenant",
+        "Warns that multiple permissive policies on a table combine with OR, so a single USING (true) policy silently defeats every stricter policy, and requires auditing all of a table's policies together",
+        "Requires WITH (security_invoker = true) on the four reporting views, since a view otherwise runs with its creator's privileges and returns every row regardless of caller",
+        "Warns about infinite policy recursion when a helper function called from a policy reads another RLS-protected table, and prescribes SECURITY DEFINER with SET search_path pinned",
+        "Recommends wrapping a per-row function call in a subquery so the predicate evaluates once per query rather than once per row",
+        "Requires indexing every column a policy predicate references, tenant_id first",
+        "States that RLS does not itself grant SELECT/INSERT/UPDATE/DELETE, so matching GRANTs and column grants are still required",
+        "Rejects schema-per-tenant at roughly 900 tenants, naming connection pooling and DDL migrations as what breaks down",
+        "States that an OLTP-only stack with no warehouse deletes the zero-copy sharing rung entirely rather than demoting it",
+        "Rejects exposing the live operational schema to customers and requires a curated mart layer replicated from the system of record"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Quarrystone, e-commerce ops SaaS. We've had a Snowflake share live for seven months with 30 customers on it, built straight on our production tables because that was the fastest way to ship. Two changes land next sprint: renaming cust_ord_dt to order_placed_at because nobody can read the old name, and changing order_total from NUMBER to a string carrying the currency code now that we're going multi-currency. Plan is to announce both in the changelog two weeks ahead, and cut a 'share v2' next quarter for anything bigger than that. One of our customers has also built a certified Tableau connector against us. How should we actually be managing schema change on this surface?",
+      "expected_output": "A schema-stability contract: additive-only with expand/contract, both proposed changes rejected as in-place, CI enforcement instead of a changelog announcement, a four-part contract, a curated mart layer replacing the production tables, and a warning that the certified connector is a second stability surface.",
+      "files": [],
+      "expectations": [
+        "States that once customers query the tables the schema is an API: columns are fields, tables are endpoints, and their dashboards are clients",
+        "Adopts an additive-only rule: add columns and tables freely, never rename, retype, or drop in place",
+        "Rejects both the in-place rename of cust_ord_dt and the in-place retype of order_total",
+        "Prescribes expand/contract in order: add the new column, deprecate the old one in the docs, migrate consumers, remove only when nothing depends on it",
+        "Rejects a two-week changelog announcement as sufficient governance and requires the contract be enforced in CI rather than by convention",
+        "Names a CI enforcement mechanism such as dbt model contracts failing the run on a breaking column change, or the datacontract CLI validating a contract against a PR before merge",
+        "Specifies the contract in four parts: schema (columns, types, nullability), quality (completeness thresholds), freshness (refresh SLA), and availability (uptime or latency)",
+        "Explains that schema changes are more dangerous than API changes because they often happen accidentally, such as a source-system update or a readability rename, and propagate downstream with no deprecation header",
+        "Rejects serving the live production schema and requires a curated mart layer so internal schema churn stops at the replication boundary",
+        "Names a shipped additive-only precedent such as Amplitude's event schema, which only ever adds tables and columns as new event types arrive",
+        "States the schema gate as zero breaking changes reaching the customer-facing schema past the CI contract check, and that a breaking change that ships is a gate failure even if no customer noticed",
+        "Warns that the customer's certified connector package is a second stability surface: a schema change can break its customization file or expected column typing even when the data contract itself is honored"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Northgate Freight Analytics. We turned on Snowflake Secure Data Sharing last month and provisioned reader accounts for the 12 customers who aren't Snowflake shops themselves. Commercially it's a flat $2,000 per month per customer for SQL access. On the safety side we've set a 10-minute statement timeout on the warehouse the reader accounts use, so worst case a bad query dies after ten minutes. Two of those customers have already attached dashboards that refresh every 15 minutes. Finance asked me to confirm our downside is bounded before they sign off on the next 20 accounts. Is it?",
+      "expected_output": "A clear no: reader-account compute bills to the provider without a cap, the statement timeout bounds one query rather than the month, and the missing controls (resource monitor, queued-statement timeout, concurrency cap) plus the cost gate and the escalation rule are all specified.",
+      "files": [],
+      "expectations": [
+        "States that reader-account warehouses can consume unlimited credits billed to the provider's own account by default",
+        "Requires a resource monitor on every reader account and names it the single most important cost-control step of this surface, not optional hardening",
+        "Distinguishes the statement timeout, which bounds one query, from the spend cap or resource monitor, which bounds the month, and states the 10-minute timeout alone does not bound the downside",
+        "Adds a queued-statement timeout so queries do not wait indefinitely for a slot",
+        "Adds a concurrency cap per tenant or workload so one customer's parallel dashboard refresh cannot occupy shared compute",
+        "States that none of these controls are on by default and each must be configured per external warehouse or engine before GA",
+        "States the cost gate: every external compute handle has a statement timeout, a concurrency cap, and a spend cap before the first customer connects, audited as a pass/fail checklist per handle",
+        "Names the flat-price risk of the unbounded heavy user whose compute cost exceeds the flat price, acceptable only with the caps in place",
+        "Prescribes moving a tenant that regularly queues others or trips monitors onto isolated or larger compute",
+        "Explicitly rejects raising the shared cap for everyone to accommodate one heavy tenant",
+        "Distinguishes capping compute seconds and spend on a long-running engine from counting requests at an API gateway, and requires endpoint-level connection or query-rate limits to stay consistent with the published API rate-limit policy",
+        "Names the consumer-pays alternative at the same rung, where compute bills to the customer's own account, citing HubSpot's Snowflake share gated to its top data tier"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Lattice Rail, fleet telemetry. Customer data volumes are wild: smallest account is about 4 GB, largest is 9 TB, and our own warehouse bill is pure consumption, we pay per byte scanned. The roadmap says SQL access ships free to everyone on Business plan and above, because our CRO thinks it's the stickiest retention feature we could add. If we ever decide to charge for it, the plan is to meter on warehouse credits consumed and pass that through with a markup. There's no hard ship date on this one, and leadership has been explicit that they want it to be a durable asset rather than a quick win. Sanity check the commercial model.",
+      "expected_output": "A pricing recommendation that refuses the free-feature framing, ranks the three shapes out loud, promotes the consumption rung on the two conditions present, and replaces warehouse-credit metering with a business metric the buyer understands.",
+      "files": [],
+      "expectations": [
+        "Rejects shipping SQL access as a free feature and requires it be packaged as a paid tier or an add-on",
+        "States that a price is itself a governance control on a surface that is expensive to over-serve",
+        "Presents three pricing shapes: flat add-on or tier gate, consumption or volume-tiered, and provider-pays-compute passthrough",
+        "Names the flat add-on or tier gate as the default rung because it needs near-zero billing engineering",
+        "Promotes the consumption or volume-tiered rung here and names both triggering conditions present: consumption-based cost exposure of its own, and customer data volumes spanning orders of magnitude",
+        "Rejects metering on warehouse credits because a non-technical buyer cannot predict them",
+        "Requires metering on a business unit the buyer already understands, citing Stripe Sigma tiering on monthly charge volume with queries themselves unmetered",
+        "States the pricing metric is revisable after launch, citing Sigma having changed its own pricing model after shipping",
+        "States the ranking explicitly across efficiency, effort, and value rather than leaving it implied by the order the options are listed in",
+        "Names the consumption rung as the starved option, highest value and highest effort so it loses every efficiency round, and states the condition that promotes it anyway",
+        "Uses the stated compounding-asset mandate and the absence of a ship date to promote the consumption rung, noting that retrofitting a meter under a shipped flat price is a customer-facing repricing"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Vantridge, product analytics SaaS. Everything runs on one shared ClickHouse cluster and our query language is VQL, our own SQL-ish dialect. About 60 customers are asking to point Tableau and Power BI at their event data. Engineering's proposal: write our own Type-4 JDBC driver that speaks VQL, point it straight at the shared cluster, and get it certified with Tableau and Power BI. They've scoped it at a sprint or two and then it's done. Sales wants it live in 6 weeks. What am I signing up for?",
+      "expected_output": "A connectivity design that names the custom dialect as the anti-pattern, routes to a standard wire protocol over per-tenant engines, and prices the certification tax as ongoing engineering with the specific per-tool requirements, while refusing to admit customer SQL onto the shared cluster.",
+      "files": [],
+      "expectations": [
+        "Names the custom VQL dialect as the anti-pattern, since a language not already widely supported makes every BI-tool integration start from zero",
+        "Recommends speaking an existing wire protocol, specifically a Postgres wire-protocol endpoint, as the cheapest connectivity rung, because every BI tool, psql, and every ORM already ships a Postgres driver",
+        "States the cost of the wire-protocol rung: commitment to the Postgres dialect and its type system, and nothing exotic",
+        "Rejects the 'a sprint or two and then it's done' scoping and frames BI-tool support as an ongoing certification tax budgeted as continuing engineering rather than a one-time integration",
+        "Requires accurate SQLSTATEs if a driver is shipped, specifically SQLSTATE 28000 for invalid credentials, warning that a generic error instead can break Tableau connector behavior",
+        "Names signed per-tool connector packages whose signing certificates expire and must be renewed on a schedule",
+        "States that Power BI certification requires documented customer demand via a public ideas-forum thread and submission by pull request to Microsoft's connector repository",
+        "States that certification transfers distribution but not support, with first-line connectivity issues routed back to the data-source owner",
+        "Rejects admitting arbitrary customer SQL onto the shared production ClickHouse cluster, naming the blast radius across the whole application",
+        "Recommends single-tenant or per-organization engine instances fronted by one wire-protocol endpoint as the fix for the isolation and connectivity problems at once",
+        "Names engine drift as a distinct risk: a query engine changing results between releases or depending on enabled settings, which a vendor's own regression suite never covers across arbitrary customer query shapes",
+        "Requires a connection-setup page per supported client covering the URL template, the driver class or download, the auth method, and TLS stated as an explicit requirement rather than left to client defaults"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Orchard Bay, retail ops SaaS. 'Data sharing' is on our quarterly plan and I'm now fairly sure the four people who put it there meant four different things. Sales wants our three biggest partner agencies to see aggregate data across the brands they manage. Engineering wants to stop one customer's monster report from slowing the shared analytics database for everybody else. Twelve customers have asked to point Looker at their own data. And two customers just want a nightly Parquet file dropped into their own S3 bucket. Head of Product wants one project that covers all of it. Where do I even start?",
+      "expected_output": "A disambiguation that splits the request into distinct problems, names which one is customer-facing SQL access, hands the Parquet request to bulk file delivery, and runs the consumer inventory and architecture-gating questions before recommending anything.",
+      "files": [],
+      "expectations": [
+        "Separates the request into distinct problems rather than designing a single surface that covers all four asks",
+        "Labels the partner-agency request as sharing data with partner organizations, which reuses the sharing mechanics but is not the same problem",
+        "Labels the shared-analytics-database contention as isolating compute per tenant inside the product's own analytics, an internal architecture concern, and states the pricing and BI-connectivity work do not apply to it",
+        "Labels the Looker request as giving customers a queryable SQL endpoint to their own data, and identifies it as the one needing the full design",
+        "States the answer to which problem this is must be written down explicitly, because a design that answers the wrong one ships the wrong isolation primitive",
+        "Routes the nightly Parquet drop to bulk file delivery rather than the live SQL surface, drawing the boundary at live queries versus periodic files",
+        "Names the sibling bulk data sharing skill as the handoff target for the Parquet request",
+        "Inventories the concrete consumers with their expected query shape, such as dashboard refresh, ad-hoc exploration, scheduled extract, and agent traffic",
+        "States that a BI-tool consumer needs a certified driver, stable column names, and predictable types, because they never read the docs, only their tool's connection dialog",
+        "Asks where the data lives today and asks for scan-frequency evidence with table sizes before recommending any architecture rung",
+        "States the design targets the most demanding consumer type present rather than the average one"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Ferncroft Labs, lab-instrument telemetry SaaS running on Databricks. We're standing up Delta Sharing for 40 customers. Isolation plan: set a recipient property per customer and rely on partition filtering on tenant_id, since every table is already partitioned that way, so a recipient physically only reads their own partitions. Credentials: issue each customer a database username and password that they paste into Tableau or Power BI, and we rotate them once a year over email. Our own data team's service account has its password inline in the Airflow connection string, which has been fine internally. Review the isolation and credential design.",
+      "expected_output": "A review that demotes partition filtering to a performance optimization and moves isolation into a dynamic view predicate on the recipient identity, then rewrites the credential design up the ladder with key-pair JWTs for automation, OAuth with PKCE for BI tools, a stated degradation path, and self-service revocation.",
+      "files": [],
+      "expectations": [
+        "Rejects recipient-property partition filtering as an access-control mechanism, stating it is documented as a best-effort performance optimization",
+        "Requires hard isolation to come from a dynamic view predicate filtered on current_recipient(), not from partition pruning",
+        "Gives the credential preference order: short-lived token, then managed secret, then static password",
+        "Names the inline credential in the Airflow connection string as the anti-pattern that no documented path should show",
+        "Replaces the service-account password with key-pair authentication signing a short-lived JWT, so no password crosses the network",
+        "Requires marking machine identities as service-type so the engine refuses password auth for them and the password fallback is closed",
+        "Replaces the pasted BI-tool passwords with OAuth, using the authorization-code grant with PKCE for desktop BI tools, so the tool never stores a database password",
+        "States the degradation path: a client that cannot hold and refresh a token falls back to key-pair or a PAT service account, never to a static password, and requires verifying each supported client's refresh capability before promising OAuth everywhere",
+        "Rejects annual rotation over email as the design and requires customer self-service issuance and revocation in the product",
+        "Scopes every credential to one tenant's entitlement mapping by construction and states TLS as an explicit named requirement rather than a client-library default",
+        "Notes the industry trajectory retiring static database passwords, citing a staged deprecation that moves service users onto key-pair, OAuth, PAT, or workload identity"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "Our customers keep asking to plug Tableau into their data in our product. Design the SQL access surface, we're on Snowflake.",
+      "should_trigger": true
+    },
+    {
+      "query": "We want to sell direct SQL access as an Enterprise add-on. What architecture and pricing shape?",
+      "should_trigger": true
+    },
+    {
+      "query": "Review our plan to expose read replicas of our production Postgres to customers. What breaks?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do we give customers a JDBC endpoint into their own data?",
+      "should_trigger": true
+    },
+    {
+      "query": "Customers want to point Power BI at our product data. Where do we start?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we charge for SQL access or just bundle it into the Enterprise tier?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're setting up Snowflake reader accounts for customers who aren't Snowflake shops. Anything we should watch out for?",
+      "should_trigger": true
+    },
+    {
+      "query": "Design a secure view so each customer only sees their own rows through our data share.",
+      "should_trigger": true
+    },
+    {
+      "query": "Our biggest account wants a live connection to query their data instead of the CSV exports we send them.",
+      "should_trigger": true
+    },
+    {
+      "query": "We're thinking about a Delta Sharing surface for our customers. Walk me through the design.",
+      "should_trigger": true
+    },
+    {
+      "query": "What's the right way to isolate tenants when customers can write their own SQL against us?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do we stop a customer's runaway query from taking down the analytics cluster everyone shares?",
+      "should_trigger": true
+    },
+    {
+      "query": "We want to let customers connect Looker to their data in our app. What do we need to build?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our schema keeps changing and it's breaking the dashboards customers built on our tables. How do we lock this down?",
+      "should_trigger": true
+    },
+    {
+      "query": "Is exposing an ODBC endpoint to customers a terrible idea?",
+      "should_trigger": true
+    },
+    {
+      "query": "We promised a customer a database connection string by Q3. What do I actually need in place first?",
+      "should_trigger": true
+    },
+    {
+      "query": "Help me design the pricing for a query add-on on top of our analytics product.",
+      "should_trigger": true
+    },
+    {
+      "query": "Customers want to run their own SQL against our warehouse. How do I make sure nobody sees anyone else's rows?",
+      "should_trigger": true
+    },
+    {
+      "query": "How should we version the tables we expose to customers?",
+      "should_trigger": true
+    },
+    {
+      "query": "What credentials should we hand customers who connect a BI tool to us?",
+      "should_trigger": true
+    },
+    {
+      "query": "We built our own query language and customers want to use Tableau with it. What are our options?",
+      "should_trigger": true
+    },
+    {
+      "query": "Planning a bring-your-own-BI-tool feature. What's the architecture?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we copy each customer's data into its own warehouse or just share it live?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our data team wants to open a read-only Postgres endpoint to enterprise accounts. Sanity check this for me.",
+      "should_trigger": true
+    },
+    {
+      "query": "How do other SaaS companies package direct warehouse access commercially?",
+      "should_trigger": true
+    },
+    {
+      "query": "We need row-level security on the tables our customers query directly. What are the gotchas?",
+      "should_trigger": true
+    },
+    {
+      "query": "Write the connection docs page for customers hooking their BI tool up to us.",
+      "should_trigger": true
+    },
+    {
+      "query": "How many scans a day before it gets cheaper to replicate the data than to share it live?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're on BigQuery. Can we let customers query their own slice through Analytics Hub, and what does that cost us?",
+      "should_trigger": true
+    },
+    {
+      "query": "What should our statement timeout and spend caps be for queries our customers issue?",
+      "should_trigger": true
+    },
+    {
+      "query": "One of our customers is a data team that wants to run dbt straight against us. How do we support that?",
+      "should_trigger": true
+    },
+    {
+      "query": "Give me the design for a hosted query endpoint customers authenticate into.",
+      "should_trigger": true
+    },
+    {
+      "query": "We want to monetize analytics by letting customers query their raw events. Where do we begin?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I get a JDBC driver certified with Tableau and Power BI?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our agent product fires thousands of generated queries at a shared warehouse. Help me think through isolation and cost.",
+      "should_trigger": true
+    },
+    {
+      "query": "Customers hate our export API and just want to query us directly. Is that something we can ship as a product?",
+      "should_trigger": true
+    },
+    {
+      "query": "What goes into a data contract for the tables our customers can see?",
+      "should_trigger": true
+    },
+    {
+      "query": "Product put 'SQL access' on next quarter's roadmap. Help me scope it.",
+      "should_trigger": true
+    },
+    {
+      "query": "We're giving enterprise customers direct access to a mart layer. How do I keep internal refactors from breaking them?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our shared ClickHouse can't take customer queries. What's the alternative architecture?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should each customer get their own query engine, or do they all share one?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do we guarantee a customer's connection can never see another customer's data, even if we write a bad query?",
+      "should_trigger": true
+    },
+    {
+      "query": "What's a sensible trial and tier structure for a warehouse-access add-on?",
+      "should_trigger": true
+    },
+    {
+      "query": "We want customers to be able to join our data with theirs without us shipping them files.",
+      "should_trigger": true
+    },
+    {
+      "query": "Do we need a resource monitor if we're the ones paying for the compute our customers use?",
+      "should_trigger": true
+    },
+    {
+      "query": "Draft the governance rules for customer-authored queries hitting our engine.",
+      "should_trigger": true
+    },
+    {
+      "query": "An enterprise deal is blocked on 'can we query it with our own tools'. What do we have to build?",
+      "should_trigger": true
+    },
+    {
+      "query": "We need to drop nightly Parquet files into our customers' S3 buckets. Design the partitioning and the freshness SLA.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our bulk export product: full dump vs incremental vs CDC, and what cadence we commit to.",
+      "should_trigger": false
+    },
+    {
+      "query": "Who should eat the egress cost on our customer data exports, and how do we meter it?",
+      "should_trigger": false
+    },
+    {
+      "query": "Our EU customers need their exported files to stay in-region. How do we handle residency on bulk delivery?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our public API's rate-limit tiers and which RateLimit headers we return on a 429.",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we meter our REST API on request counts or move to GraphQL cost points?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write our API deprecation policy: notice windows, Sunset headers, and what happens at the cutoff date.",
+      "should_trigger": false
+    },
+    {
+      "query": "URI-path versioning or date-based account pinning for our public API?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our API key format: prefix, checksum, and hashed versus encrypted storage.",
+      "should_trigger": false
+    },
+    {
+      "query": "An engineer just left the company. What's our API key rotation and revocation play?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the scopes and the consent screen for third-party apps on our OAuth server.",
+      "should_trigger": false
+    },
+    {
+      "query": "Do we need PKCE for every client on our authorization server, including confidential ones?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our API error code taxonomy and the RFC 9457 problem+json envelope.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our outbound webhook signing scheme and the retry and dead-letter policy.",
+      "should_trigger": false
+    },
+    {
+      "query": "How should we scope Idempotency-Key per caller, and what do we do on a payload mismatch?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we build a Fivetran source connector ourselves or publish a Singer tap?",
+      "should_trigger": false
+    },
+    {
+      "query": "We want to be listed in Airbyte's connector catalog. What does certification take?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we build our own app marketplace or just list on other people's?",
+      "should_trigger": false
+    },
+    {
+      "query": "What take rate should we charge on paid apps in our marketplace, and how do payouts work?",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we rank higher in AppExchange search and lift our install conversion?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our public GraphQL schema: Relay connections, nullability, and depth limits.",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we expose gRPC publicly or transcode it to JSON at the edge?",
+      "should_trigger": false
+    },
+    {
+      "query": "Review our REST resource naming and help us pick a pagination pattern.",
+      "should_trigger": false
+    },
+    {
+      "query": "Audit our OpenAPI reference for undocumented endpoints and missing error codes.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our developer console's information architecture and cut time to first call.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our sandbox: test key prefixes, magic test values, and simulated webhook events.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our status page components and the incident update cadence.",
+      "should_trigger": false
+    },
+    {
+      "query": "Partners need to see their failed webhook deliveries and replay them. Build that surface.",
+      "should_trigger": false
+    },
+    {
+      "query": "Which language SDKs do we ship first, and generated or handwritten?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the tool surface of our MCP server for AI agents.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our partner developer signup and sandbox provisioning journey.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the review pipeline and permission audit for third-party apps on our marketplace.",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the screenshot and description requirements every listing on our marketplace has to meet.",
+      "should_trigger": false
+    },
+    {
+      "query": "Pick our marketplace launch cohort and plan the reveal.",
+      "should_trigger": false
+    },
+    {
+      "query": "Which technology partners should we integrate with first, and how deep does each one go?",
+      "should_trigger": false
+    },
+    {
+      "query": "We already ship REST and webhooks. Which integration surface belongs on the roadmap next?",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we hire an API product manager for our platform team?",
+      "should_trigger": false
+    },
+    {
+      "query": "I have a platform engineer interview next week. How do I prep?",
+      "should_trigger": false
+    },
+    {
+      "query": "Optimize this slow Postgres report query, the planner keeps choosing a seq scan.",
+      "should_trigger": false
+    },
+    {
+      "query": "Review the schema design for our internal orders table.",
+      "should_trigger": false
+    },
+    {
+      "query": "Write a zero-downtime migration adding a column to our users table.",
+      "should_trigger": false
+    },
+    {
+      "query": "Our Power BI DAX measures are slow. Help me fix the model.",
+      "should_trigger": false
+    },
+    {
+      "query": "Help me write a SOQL query that pulls opportunities by owner.",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up Prisma against a Postgres database for our Next.js app.",
+      "should_trigger": false
+    },
+    {
+      "query": "Our internal BigQuery bill is up 40%. Audit which pipelines are scanning the most.",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up Salesforce sharing rules so the EMEA team only sees EMEA accounts.",
+      "should_trigger": false
+    },
+    {
+      "query": "We need a read replica so our internal reporting stops hammering the primary.",
+      "should_trigger": false
+    }
+  ]
+}

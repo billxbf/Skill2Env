@@ -1,0 +1,419 @@
+{
+  "skill_name": "crm-data-governance",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Meridian Stack here, B2B SaaS, 70 reps on Salesforce. Our opportunity data is a mess - roughly half the records are missing decision maker and loss reason, and the forecast is garbage because of it. My plan for Monday: make decision maker, loss reason, next step, competitor and lead source all required on save, and put \"the RevOps team\" down as the owner of all five in the doc so there's a clear escalation path. Sales leadership pushed back last year when we made next steps required and people just typed a period into it, but I think we just didn't enforce it hard enough that time. Can you help me write this up?",
+      "expected_output": "A refusal to lead with hard-required fields, an enforcement plan worked down a value-per-effort ordering starting at restricted picklists and conditional required-at-stage, hard required deleted from the menu for rep-entered fields and recorded as deleted, and one named individual owner per field.",
+      "files": [],
+      "expectations": [
+        "Declines to make all five fields hard required on save as the first move.",
+        "States an enforcement ordering by value per unit of effort in which restricted picklist and conditional required-at-stage both rank ahead of hard required.",
+        "Recommends conditional required-at-stage validation for loss reason, fired at the closed-lost transition rather than on every save.",
+        "Assigns each of the five fields to one named individual rather than to \"the RevOps team\" or any other team name.",
+        "Reads the earlier episode of reps typing a period as evidence that hard required fails on rep-entered fields, not as evidence that enforcement was too weak.",
+        "Deletes hard required from the menu for rep-entered fields given this sales org's demonstrated workaround, and records the deletion in the spec rather than parking the option at the bottom of a list.",
+        "Recommends a restricted picklist instead of free text for at least loss reason and competitor.",
+        "Warns that the documented outcome of hard-required gates is fill rate up and accuracy down.",
+        "Does not propose a default value as a means of making a required field appear satisfied.",
+        "Proposes an automated source - integration write, enrichment, or default - for at least one field rather than leaving every field dependent on rep entry.",
+        "Notes that a schema-required field typically cannot also be independently permission-gated per role, so required-ness and per-role securability conflict."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Northgate Logistics. Our CRM says Vestal Freight has 2,400 employees, the billing platform says 1,850, and marketing automation says 3,100. It isn't just that one field - account owner flips back and forth between two values every few days on about 60 accounts, and reps keep opening tickets saying \"someone changed my account.\" We run bidirectional sync between CRM and marketing automation, plus a nightly job out of billing. I want one rule we can apply across the board: whichever system wrote most recently wins. Write me the policy.",
+      "expected_output": "A per-field system-of-record map replacing the blanket last-write-wins rule, with blank-never-overwrites-populated, a last-synced conflict detector, risk-tiered conflict resolution, and sync logging.",
+      "files": [],
+      "expectations": [
+        "Rejects last-write-wins as the across-the-board rule.",
+        "Designates a system of record per field rather than per system or per object.",
+        "Uses recency only as a tie-breaker inside the authoritative system, never as the cross-system arbiter.",
+        "States that a blank value never overwrites a populated one regardless of timestamps.",
+        "Attributes the flipping account owner values to two writers with no declared per-field authority, not to user error or a malfunctioning connector.",
+        "Prescribes a last-synced timestamp tracked per record per integration, flagging a conflict whenever both systems changed a record since the last sync.",
+        "Tiers conflict resolution by risk: low auto-resolves, medium resolves and is logged, high - deletions, identity mismatches, governed critical fields - blocks and alerts a human.",
+        "Specifies append or concatenation rather than destructive replacement for free-text fields such as notes.",
+        "Requires logging each sync operation with source, target, fields changed and conflict status so flapping surfaces in the log rather than through user complaints.",
+        "Names one authoritative system for employee count and one for account owner, declaring the other copies explicitly derived.",
+        "States no unattributed figure about how fast CRM data decays annually or what share of CRM data is inaccurate."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Tallow & Finch, B2B, about 9,000 accounts. We just signed an enrichment vendor. Their solutions engineer recommends a full overwrite pass across account and contact records at 0.6 confidence so we \"start from a clean base\" - company name, domain, primary email, HQ country, employee count, funding stage, industry tags, social URLs, and the direct dial numbers our SDRs have been collecting by hand for two years. Then weekly after that. I want to green-light it Thursday. Any reason not to?",
+      "expected_output": "Augment set as the default write mode, the fields sorted into enrichment risk tiers with the identity and downstream-trigger tiers gated on human review, proprietary rep-collected data excluded entirely, and overwrite permitted only as a documented per-field exception with history retained.",
+      "files": [],
+      "expectations": [
+        "Rejects a blanket overwrite across all the listed fields.",
+        "Sets augment - fill blanks only, never replace a populated value - as the default write mode across the governed set.",
+        "Ranks the enrichment write modes by value per unit of effort with augment ahead of append and append ahead of overwrite.",
+        "Places company name, domain and primary email in an identity tier requiring human review because those fields determine entity match.",
+        "Places HQ country, employee count and funding stage in a downstream-trigger tier requiring human approval because a wrong value silently alters automation.",
+        "Excludes the hand-collected direct dial numbers and any rep notes from enrichment writes entirely, as proprietary never-touch data.",
+        "Allows auto-apply only for supplementary fields such as industry tags and social URLs, and only above a confidence threshold in the 0.80-0.95 range.",
+        "Flags the proposed 0.6 confidence threshold as sitting below that range.",
+        "States that overwrite is the only write mode that can correct an already-wrong stored value, rather than banning overwrite outright.",
+        "Permits overwrite on a field only where the provider is the designated authority for that field and the stored value carries no verification stamp.",
+        "Requires retained field history and a provenance stamp before any overwrite, because without history the replaced value is unrecoverable.",
+        "Raises lawful basis or consent for third-party enrichment of personal data as a condition that removes overwrite from the menu for those fields rather than ranking it last."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Cobalt Ridge Software. I have 34 fields I want governed across the CRM, billing, the product usage database and the support desk. My instinct is to wire everything to real-time webhooks so nothing is ever stale. Constraints you should know about: our board reporting cycle locks on 14 November and this has to be in place before then, I have one CRM admin at about 10 hours a week, and zero engineering time - the platform team told me flat out they have nothing for us this year. Give me the sync design.",
+      "expected_output": "Scheduled pull as the default across all 34 fields, real-time push deleted from the menu outright on the zero-engineering constraint with the resulting staleness accepted in writing, reconciliation-only described honestly, and the November date used to promote configuration-only work.",
+      "files": [],
+      "expectations": [
+        "Rejects real-time push as the default across the 34 fields.",
+        "Sets scheduled pull as the default replication pattern for every governed field, on the cadence its freshness SLA demands.",
+        "Deletes real-time push from the menu outright given zero integration engineering capacity, rather than ranking it last.",
+        "Records every field that would otherwise have needed real-time push as an explicitly accepted staleness risk written into the spec.",
+        "States the promotion test for real-time push as one stale sync cycle changing an action rather than changing a report.",
+        "Describes reconciliation-only as the pattern that detects silent divergence rather than preventing it, and notes it buys nothing if nobody reads the diff.",
+        "Notes that reconciliation-only carries a standing human triage job each cycle, which makes it costlier than scheduled pull despite moving no data.",
+        "Uses the 14 November deadline to promote configuration-only mechanisms and to schedule heavier work for a later cycle rather than dropping it.",
+        "Names which specific stated constraint deleted which option, inside the written scope section.",
+        "Invents no integration engineering capacity and proposes no custom middleware as a workaround for the stated zero engineering time.",
+        "States that an event bus or integration platform already running would flip the replication ranking, and confirms this team has none."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Harlow Systems. I need refresh SLAs for about 25 fields - work emails, job titles, phone numbers, HQ location, employee count, industry, funding stage, tech stack, intent signals, plus the open-deal fields (close date, amount, next step). Good news is every record already carries a LastModifiedDate, so we can just alert on anything modified more than 90 days ago and call that our staleness monitor. Average deal cycle is 52 days. Write the SLA table.",
+      "expected_output": "A field-category cadence table with per-category intervals, last-verified introduced as a separate field-level attribute distinct from last modified, trigger-based re-verification alongside the schedule, open-deal SLAs derived from the stated 52-day cycle, and provenance tagged on each threshold.",
+      "files": [],
+      "expectations": [
+        "States that last modified proves only that something changed and does not prove the value is accurate.",
+        "Introduces a separate last-verified attribute recording when the value was confirmed correct.",
+        "Tracks last verified at the field level rather than at the record level.",
+        "Adds verification status - how the value was confirmed - and source confidence as companion attributes.",
+        "Assigns email validity a before-send or 0-7 day cadence.",
+        "Assigns job title and seniority a 30-60 day cadence.",
+        "Assigns phone numbers, location and company size a quarterly cadence, industry semiannual, funding and financial events monthly, technographics 60-90 days, and intent signals weekly or continuous.",
+        "Rejects a single uniform 90-day staleness threshold applied across all 25 fields.",
+        "Adds trigger-based re-verification on events such as hard bounce, job-change signal, ownership change or ICP redefinition, alongside the scheduled cadence.",
+        "Derives the open-deal field SLAs from the stated 52-day cycle and says in the spec that they were derived that way.",
+        "Flags opportunities at 30 or more days without stage progression as stale regardless of when the fields themselves last changed.",
+        "Tags each cadence with its provenance - published practice, practitioner consensus, or derived from this team's own data."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Ashgrove Health, B2B, we sell to clinics. The account object carries 412 custom fields and contact around 180. Anyone with admin rights can spin up a new one and about 30 people do. I ran a report: 210 of those account fields are 100% empty and another 95 sit under 5% populated. I want to bulk-delete everything empty next sprint, then write a governance policy so it doesn't happen again. What's the deletion order?",
+      "expected_output": "A refusal to bulk-delete on emptiness alone, a governed set scoped to revenue-critical fields, dependency and impact analysis ahead of any removal, staged retirement with durations declared self-set, and an intake plus utilization-review loop that makes the cleanup an output rather than the system.",
+      "files": [],
+      "expectations": [
+        "States that a one-time deletion is not governance and that decay resumes the day the cleanup ends.",
+        "Scopes the governed set to revenue-critical fields rather than attempting to govern all 412.",
+        "Rejects bulk-deleting fields purely on the grounds that they are empty.",
+        "Names integration write target, seasonal or periodic use, compliance or audit hold, and reference by inactive-but-not-deleted automation as reasons an empty field must be kept.",
+        "Requires dependency and impact analysis first, covering formulas, automations, validation rules, layouts, record types, reports and external integration mappings.",
+        "Requires consuming-stakeholder sign-off before any field is touched.",
+        "Stages retirement as deprecated label, then read-only, then archive or export, then delete.",
+        "States that the durations of those retirement stages are self-set rather than prescribed by any vendor or governance framework.",
+        "Presents any vendor deletion window it cites as an anchor for the archived-to-deleted leg only, never as a standard for the whole staged model.",
+        "Stands up a field intake process whose first step is a duplicate check against the dictionary.",
+        "Names rejection criteria for a field request, including no demonstrable business value, duplicates an existing field, creates a silo instead of integrating, or fails privacy and security review.",
+        "Sets a utilization review that moves a field into removal review only after two consecutive quarters below the threshold, rather than acting on a single report.",
+        "Targets under one week from field request to published as the approval loop time."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Verano Labs. I wrote a 34-page CRM data standards document last quarter - definitions, naming conventions, the works. It lives in Confluence, everyone was told to read it, and nothing changed. Three people have already added fields that contradict it. My exec sponsor now wants to hand the whole thing to IT since \"they own systems,\" and honestly I'm tempted. What do I do with the document?",
+      "expected_output": "The missing recurring meeting identified as the failure, governance kept with RevOps rather than IT, the owner/steward/custodian split explained, and a council with named seats plus a weekly/monthly/quarterly rhythm and documented decision rights.",
+      "files": [],
+      "expectations": [
+        "Identifies the absent recurring meeting, not the document's content or length, as the reason the standard is not holding.",
+        "Rejects handing governance to IT and keeps it with RevOps as a business function.",
+        "Explains that once definitions live in IT, business consumers stop trusting that they reflect business reality.",
+        "Distinguishes owner, steward and custodian as three separate roles rather than collapsing them into one.",
+        "Places technical implementation of storage and access with the custodian while day-to-day definitions, quality and issue triage stay with a business-facing steward.",
+        "Specifies council seats rather than a headcount: RevOps chairing, one field owner per function, a CRM admin or architect for feasibility, and an executive sponsor for escalations only.",
+        "Sets a weekly triage of roughly 30-45 minutes to approve or reject field requests and rule on active sync conflicts.",
+        "Sets a monthly roadmap session of roughly 60 minutes and a separate quarterly field-owner review.",
+        "Assigns the quarterly review utilization thresholds, system-of-record map re-validation, dictionary reconciliation and the deprecation queue.",
+        "Documents decision rights per change class, with unresolved conflicts escalating to the executive sponsor.",
+        "States that the cadence must sit on a calendar with named attendees, and that a policy document alone fails the bar by definition."
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Brightline Fitness - consumer subscription app, 1.9M members, plus a small B2B corporate-wellness side. Our stack writes into the CRM constantly: app events, workout completions, push-notification opt-in, email marketing consent, SMS consent, device IDs and the customer ID. Each regional marketing team builds its own landing pages and we let them each wire up their own consent checkbox logic so they can move fast. I want the same quarterly refresh cadence we use on the B2B side applied to all of it. Does that work?",
+      "expected_output": "A rejection of the uniform quarterly cadence for continuously-written behavioral fields, consent and preference fields governed as first-class with retention attached and centralized logic, identity keys governed, and the deterministic/probabilistic identity-resolution distinction drawn against the B2B account-level approach.",
+      "files": [],
+      "expectations": [
+        "Rejects applying a quarterly refresh cadence to continuously-written behavioral and event fields.",
+        "States that for behavioral and event fields the governed objects are schema, identity keys and retention, not a refresh cadence.",
+        "Makes consent and preference fields first-class members of the governed field set.",
+        "Attaches a retention schedule to the consent and preference fields as part of their SLA.",
+        "Refreshes consent and preference fields on interaction events and legal-basis changes rather than on a fixed calendar.",
+        "Rejects federated per-region consent checkbox logic and centralizes the consent logic while leaving page creative with the regional teams.",
+        "Splits ownership so consent policy sits with marketing while sync reliability sits with platform operations.",
+        "Treats customer ID, email and device or channel identifiers as governed primary identity keys.",
+        "Distinguishes deterministic exact-identifier matching from probabilistic matching in the B2C identity-resolution design.",
+        "States that the B2B corporate-wellness side resolves identity at the account level through domain matching and has no equivalent to cross-channel identity resolution.",
+        "Promotes consent withdrawal to a real-time write rather than leaving it a batch cycle behind."
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Quick one. Lowen Freight, six months into our CRM governance push and I present to the exec team Friday. Numbers I have: governed-field fill rate went from 41% to 88%, custom fields down from 390 to 301, and our validation-rule failure rate jumped from about 120 a week to 2,400 a week - I was going to show that as proof the rules are biting. I also want an opening line about how much CRM data goes bad every year, to set up why we did this. Help me frame the deck.",
+      "expected_output": "Fill rate refused as a standalone success metric, the validation-failure spike read as friction to investigate before presenting, the annual decay statistic declined in favour of the causal mechanism, and a replacement metric set built on conflict rate, staleness, utilization and a dictionary spot-check.",
+      "files": [],
+      "expectations": [
+        "Refuses to present the fill-rate jump on its own as evidence of success.",
+        "States that fill rate rises while accuracy falls when gates force entries, so fill rate alone is not a success metric.",
+        "Treats the twenty-fold validation-failure spike as a friction signal requiring a check for junk-value workarounds before it is presented as a win.",
+        "Declines to supply an unattributed annual CRM data decay figure or data accuracy percentage as an opening statistic.",
+        "Offers the causal mechanism instead: reality changes underneath stored values, and multi-writer syncs without per-field authority silently overwrite each other.",
+        "Adds cross-system conflict rate per sync run as a reported metric.",
+        "Adds staleness distribution, measured as time since last verified, per field.",
+        "Adds field utilization - consumed in reports or automation - as a metric distinct from merely populated.",
+        "Keeps fill-rate reporting restricted to governed fields rather than all fields.",
+        "Adds time-to-approve a field request, against a target of under one week.",
+        "Reads the custom-field count drop as a trend that should flatten once intake is running, rather than as a number to keep driving down.",
+        "Recommends a quarterly dictionary spot-check of 10-15 governed fields against the live CRM at 95% or better agreement, labelled a working bar rather than a published standard.",
+        "Presents no vendor-coined proprietary composite data-quality score as an industry standard."
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Pellman Group. I'm assigning owners for our governed fields and I have a rule I like: whoever's team types the value into the box owns the field. So lead source goes to our SDR manager since SDRs pick it, opportunity amount goes to the AE manager, health score to whoever runs the CS tooling. Also while you're in here - we've got roughly 4,000 duplicate account records from an acquisition, can you fold the merge rules into the same document? For storage I'll keep the whole dictionary in a Google Sheet the team can edit.",
+      "expected_output": "The populate-it-owns-it rule replaced with consumer ownership and named individuals, deduplication and merge mechanics declared out of scope and handed off, and the spreadsheet dictionary replaced with live-metadata generation plus a quarterly reconciliation treating undocumented fields as intake bypass.",
+      "files": [],
+      "expectations": [
+        "Rejects the populate-it-owns-it rule and assigns each field to the function that consumes it.",
+        "Reassigns lead source ownership to marketing operations, which consumes it in attribution, rather than to the SDR manager who populates it.",
+        "Names a specific individual as owner for each field, not a function or team alone.",
+        "Declines to fold record deduplication and merge mechanics into this field-governance work, and states that boundary explicitly.",
+        "Directs the deduplication and merge work elsewhere rather than improvising merge rules inside the field spec.",
+        "Warns that a standalone spreadsheet dictionary goes stale fast and is invisible to tooling and agents.",
+        "Prefers generating dictionary rows from live CRM metadata wherever the schema is queryable.",
+        "Stores ownership and sensitivity in the CRM's own field descriptions where the platform allows it.",
+        "Lists a dictionary column set covering at least field label and API name, object, type and accepted values, business definition, named owner, populated by, consumed by, system of record, enforcement, refresh SLA, sensitivity, status and last reviewed.",
+        "Defines the Definition column as the business meaning of the field - why it exists - rather than a restatement of its label.",
+        "Makes field description and inline help text mandatory at field-build time even where the platform does not enforce it.",
+        "Schedules a quarterly reconciliation of dictionary against live schema and treats new fields absent from the dictionary as intake-bypass findings rather than clerical gaps."
+      ]
+    }
+  ],
+  "trigger_queries": [
+    { "query": "who should own each field in our CRM?", "should_trigger": true },
+    { "query": "we need a data dictionary for our CRM", "should_trigger": true },
+    {
+      "query": "our CRM and billing system disagree on employee count, which one wins",
+      "should_trigger": true
+    },
+    { "query": "set up field-level governance in HubSpot", "should_trigger": true },
+    {
+      "query": "how do I stop our enrichment provider from wiping the phone numbers our SDRs collected",
+      "should_trigger": true
+    },
+    { "query": "system of record per field", "should_trigger": true },
+    {
+      "query": "we have 400 custom fields on the account object and nobody knows what half of them do",
+      "should_trigger": true
+    },
+    {
+      "query": "someone keeps changing account owner and it flips back every night",
+      "should_trigger": true
+    },
+    {
+      "query": "build refresh SLAs for the fields our forecast depends on",
+      "should_trigger": true
+    },
+    {
+      "query": "how often should we re-verify job titles in the CRM",
+      "should_trigger": true
+    },
+    { "query": "our fields contradict each other across systems", "should_trigger": true },
+    {
+      "query": "I want a process for approving new custom field requests",
+      "should_trigger": true
+    },
+    { "query": "field request intake and approval workflow", "should_trigger": true },
+    { "query": "how do we deprecate a CRM field safely", "should_trigger": true },
+    { "query": "can I just delete every empty field in our CRM?", "should_trigger": true },
+    { "query": "should I make these opportunity fields required?", "should_trigger": true },
+    { "query": "reps keep typing n/a into our required fields", "should_trigger": true },
+    {
+      "query": "what's the right way to enforce data quality without annoying sales",
+      "should_trigger": true
+    },
+    { "query": "picklist values vs free text for loss reason", "should_trigger": true },
+    { "query": "we need a governance council for our CRM data", "should_trigger": true },
+    { "query": "our data standards doc is ignored, now what", "should_trigger": true },
+    {
+      "query": "last modified isn't telling me whether the data is actually right",
+      "should_trigger": true
+    },
+    {
+      "query": "track when a field was last verified, not just last changed",
+      "should_trigger": true
+    },
+    { "query": "who approves a picklist change around here", "should_trigger": true },
+    { "query": "custom field sprawl", "should_trigger": true },
+    { "query": "single source of truth for each CRM field", "should_trigger": true },
+    {
+      "query": "write a policy for when marketing automation is allowed to overwrite CRM values",
+      "should_trigger": true
+    },
+    { "query": "our bidirectional sync keeps overwriting good data", "should_trigger": true },
+    {
+      "query": "consent fields in our CRM, who owns them and how long do we keep them",
+      "should_trigger": true
+    },
+    { "query": "stale data everywhere and nobody owns anything", "should_trigger": true },
+    {
+      "query": "map which system is authoritative for close date, amount and renewal date",
+      "should_trigger": true
+    },
+    {
+      "query": "enrichment vendor wants to overwrite everything, is that safe",
+      "should_trigger": true
+    },
+    {
+      "query": "what confidence threshold should we use to auto-apply enriched values",
+      "should_trigger": true
+    },
+    { "query": "design a field ownership model for revops", "should_trigger": true },
+    { "query": "we can't agree on what lead source actually means", "should_trigger": true },
+    {
+      "query": "how do I document what every field on the opportunity object means",
+      "should_trigger": true
+    },
+    { "query": "put together a governance cadence for our crm data", "should_trigger": true },
+    {
+      "query": "should billing or the CRM be authoritative for contract value",
+      "should_trigger": true
+    },
+    { "query": "our nightly sync blanks out populated fields sometimes", "should_trigger": true },
+    { "query": "how many fields should we actually govern", "should_trigger": true },
+    {
+      "query": "field-level permissions or required, which do I reach for",
+      "should_trigger": true
+    },
+    {
+      "query": "we're migrating CRMs and need rules for which values carry over as authoritative",
+      "should_trigger": true
+    },
+    { "query": "identity fields keep getting clobbered by our data provider", "should_trigger": true },
+    { "query": "need a rulebook for our CRM fields before the audit", "should_trigger": true },
+    { "query": "put a name against every field on the account object", "should_trigger": true },
+    { "query": "measure whether our data quality program is actually working", "should_trigger": true },
+    { "query": "is fill rate a good metric for our data cleanup", "should_trigger": true },
+    { "query": "we did a big cleanup eight months ago and it's dirty again", "should_trigger": true },
+    {
+      "query": "three teams write to the same field and none of them will back down",
+      "should_trigger": true
+    },
+    { "query": "what columns should a CRM data dictionary have", "should_trigger": true },
+    {
+      "query": "marketing changed a picklist value and broke six of our reports",
+      "should_trigger": true
+    },
+    {
+      "query": "how do we keep the data dictionary from drifting away from the actual schema",
+      "should_trigger": true
+    },
+    {
+      "query": "finance and sales report two different ARR numbers, help me fix it",
+      "should_trigger": false
+    },
+    {
+      "query": "which system is source of truth for the account object overall",
+      "should_trigger": false
+    },
+    {
+      "query": "set up GTM data contracts between our producers and consumers",
+      "should_trigger": false
+    },
+    { "query": "where should our revenue metric definitions live org-wide", "should_trigger": false },
+    {
+      "query": "who arbitrates data disputes between finance and revops at the company level",
+      "should_trigger": false
+    },
+    {
+      "query": "build a per-object source of truth designation across our revenue systems",
+      "should_trigger": false
+    },
+    {
+      "query": "design an identity resolution spine across our whole GTM stack",
+      "should_trigger": false
+    },
+    { "query": "run a stale deal audit on this quarter's pipeline", "should_trigger": false },
+    { "query": "clean up the pipeline before our QBR", "should_trigger": false },
+    { "query": "flag the deals whose close date keeps slipping", "should_trigger": false },
+    { "query": "our pipeline is full of junk deals", "should_trigger": false },
+    {
+      "query": "rewrite our stage exit criteria so they're buyer-verifiable",
+      "should_trigger": false
+    },
+    {
+      "query": "our stages are named after rep activity and mean nothing",
+      "should_trigger": false
+    },
+    { "query": "why is everything stuck in the proposal stage", "should_trigger": false },
+    { "query": "design our lead routing rules and territory assignment", "should_trigger": false },
+    {
+      "query": "our round robin is lopsided, some reps get triple the leads",
+      "should_trigger": false
+    },
+    { "query": "leads are sitting unworked in a queue for days", "should_trigger": false },
+    {
+      "query": "our MQL threshold is wrong, sales rejects everything we send them",
+      "should_trigger": false
+    },
+    { "query": "weight fit versus engagement in our lead score", "should_trigger": false },
+    { "query": "add score decay to our scoring model", "should_trigger": false },
+    { "query": "why did we miss the number last quarter", "should_trigger": false },
+    { "query": "our reps are sandbagging the commit", "should_trigger": false },
+    { "query": "diagnose why our forecast is never accurate", "should_trigger": false },
+    { "query": "our green accounts keep churning, fix the health score", "should_trigger": false },
+    { "query": "which usage signals actually predict churn", "should_trigger": false },
+    { "query": "set weights and bands for our customer health score", "should_trigger": false },
+    { "query": "design our funnel stage set from scratch", "should_trigger": false },
+    { "query": "where are we losing deals between MQL and opportunity", "should_trigger": false },
+    { "query": "build a bowtie funnel model for our business", "should_trigger": false },
+    { "query": "build a KPI tree from board level down to IC", "should_trigger": false },
+    { "query": "our board deck reads like a data dump, restructure it", "should_trigger": false },
+    { "query": "which north star metric should we pick", "should_trigger": false },
+    { "query": "we have too many GTM tools, what do we cut", "should_trigger": false },
+    { "query": "run a stack audit ahead of our renewal cycle", "should_trigger": false },
+    { "query": "build our discount approval matrix", "should_trigger": false },
+    { "query": "we need a deal desk for non-standard contracts", "should_trigger": false },
+    { "query": "the CSM starts from zero after every closed-won", "should_trigger": false },
+    { "query": "design our post-close handoff packet", "should_trigger": false },
+    { "query": "am I ready for a revops manager role", "should_trigger": false },
+    { "query": "write a scorecard for our first revops hire", "should_trigger": false },
+    { "query": "which revops newsletters should I subscribe to", "should_trigger": false },
+    { "query": "which revops skill do I need for this project", "should_trigger": false },
+    {
+      "query": "set up a data quality framework for our Snowflake warehouse",
+      "should_trigger": false
+    },
+    {
+      "query": "write a GDPR data processing register for our engineering org",
+      "should_trigger": false
+    },
+    { "query": "design a data catalog for our data lake", "should_trigger": false },
+    { "query": "add field validation to our signup form in React", "should_trigger": false },
+    { "query": "build a Salesforce Apex trigger for opportunity records", "should_trigger": false },
+    {
+      "query": "governance policy for which AI agents can access which tools",
+      "should_trigger": false
+    },
+    {
+      "query": "our Postgres schema has redundant columns, plan a migration",
+      "should_trigger": false
+    },
+    {
+      "query": "master data management strategy for our ERP and supply chain systems",
+      "should_trigger": false
+    },
+    { "query": "document our REST API request fields and response schema", "should_trigger": false },
+    { "query": "set retention policies on our S3 data lake buckets", "should_trigger": false }
+  ]
+}

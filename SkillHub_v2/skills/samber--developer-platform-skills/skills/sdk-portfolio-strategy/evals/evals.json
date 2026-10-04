@@ -1,0 +1,540 @@
+{
+  "skill_name": "sdk-portfolio-strategy",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm head of platform at Ledgerwell. We sell a reconciliation and payments API to mid-market banks and enterprise finance teams. About 40 customers have integrated so far, all of them either Java shops or .NET shops, plus a couple of Ruby ones from our early days. We're finally doing real client libraries instead of the curl examples we have now. I pulled the TIOBE index and last year's Stack Overflow developer survey, and the obvious order out of those is Python, JavaScript, Java, then C++. My VP wants nine languages shipped by the end of the year. Which ones do we actually build, and in what order?",
+      "expected_output": "A language order derived from the fintech/enterprise buyer stack rather than popularity rankings: a small official core front-loading Java and C#, every other language pushed to spec-driven self-service, a self-set add-a-language threshold, and telemetry instrumented to confirm rather than originate the mapping.",
+      "files": [],
+      "expectations": [
+        "Recommends a small official core of roughly 2-5 languages rather than the nine the VP asked for",
+        "Front-loads Java and C# ahead of Python and JavaScript for this buyer base",
+        "Rejects TIOBE, the Stack Overflow developer survey, and GitHub Octoverse as decision inputs, stating that no vendor documents choosing languages from a named popularity ranking",
+        "Uses the integrators' own stack as the primary input to the language order",
+        "Cites Stripe's or Plaid's fintech SDK portfolio by naming its actual languages as the documented precedent",
+        "Places every language outside the official core on spec-driven self-service, pointing the long tail at open-source generators driven by the published spec",
+        "States an add-a-language threshold such as a sustained double-digit share of API traffic or repeated enterprise-deal requests naming that language",
+        "Labels that threshold as self-set rather than a published industry standard",
+        "Recommends instrumenting per-language client telemetry via User-Agent or SDK headers",
+        "States that the telemetry confirms the audience mapping rather than originating the language order",
+        "Names Plaid's cap of five official libraries alongside 40+ languages self-served from its spec",
+        "Ranks the coverage rungs explicitly (official SDK vs community tier vs spec-driven self-service) instead of presenting a flat list of languages"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Northwind Freight here, we run a logistics tracking API with about 1,200 API customers. We've got four engineers on the platform team and we're about to start on client libraries for Python, Node, Java, Go and PHP. My position is that if we're calling them official they have to be hand-written, because generated code always looks like a machine barfed it and customers can tell. Separately, our security org has a hard rule that nothing in our build pipeline may call out to an external SaaS, everything runs inside our own network. We do have an OpenAPI 3.1 spec but honestly it's been drifting from the real API for about six months now. How should we build these five?",
+      "expected_output": "A generated build model that dismantles the official-equals-handwritten assumption, treats the air-gap rule as deleting the hosted commercial option rather than demoting it, fixes spec drift first, and records lock-in guardrails including a written exit plan.",
+      "files": [],
+      "expectations": [
+        "States explicitly that 'official' is a support commitment, not a build method",
+        "Cites Plaid generating its five official SDKs with the free open-source OpenAPI Generator as the counter-example",
+        "Recommends a generated build model rather than hand-writing all five libraries",
+        "Treats the air-gapped/no-external-SaaS requirement as deleting the hosted commercial generator option outright rather than demoting it in a ranking",
+        "Names OpenAPI Generator and/or Speakeasy as options compatible with fully self-hosted, air-gapped generation",
+        "Warns that free OpenAPI Generator output is technically correct but non-idiomatic, and budgets standing curation effort for it",
+        "Applies one build model portfolio-wide, permitting at most one handwritten flagship exception",
+        "Requires the OpenAPI spec, not a vendor configuration DSL, to remain the single source of truth",
+        "Requires a written exit plan naming who regenerates the SDKs if a generator vendor disappears, recorded before any commitment",
+        "Tells the team to fix the six months of spec drift before generating anything from it",
+        "Expresses the cost of hand-maintaining many languages as an order of magnitude (engineer-years of standing effort) rather than a currency budget",
+        "Does not claim that generated SDKs cannot be official or cannot carry a support commitment",
+        "Ranks the build-model options on effort, value and efficiency instead of presenting them as interchangeable"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Bellwether Analytics. We ship API v3 in five weeks and it is a real breaking change: new auth and a new pagination model. We maintain SDKs for Python, Node, Go, Java and Ruby, all currently on 2.4.x. The plan my team likes is to cut 3.0.0 in all five languages the same day the API flips to v3, so the numbers line up and nobody gets confused about which SDK talks to which API. We also want to drop Node 16 and Go 1.21 in that same release. Does this hold up, and what do I write down as the actual policy?",
+      "expected_output": "A refusal to couple SDK majors to the API version, split into three separately written policies (SDK SemVer, API versioning, language-runtime support window), a published SDK-major-to-API-version mapping table, and an explicit release cadence choice.",
+      "files": [],
+      "expectations": [
+        "Refuses to bump SDK majors merely because the API released a new version",
+        "Separates the SDK package version (SemVer) from the API version as two distinct written policies",
+        "Names the language-runtime support window as a third policy, separate from both of the others",
+        "States that an SDK major is warranted only when the SDK's own code surface breaks, such as a renamed method or changed constructor",
+        "Cites Stripe's stated split: SemVer for SDKs, release-date versioning for the API",
+        "Prescribes a published mapping table from SDK major version to the API version(s) it supports",
+        "Identifies that mapping table as an artifact Stripe and/or AWS actually maintain and worth copying",
+        "Ties the runtime support window mechanically to upstream language lifecycles plus a stated grace window",
+        "Cites a concrete runtime-window precedent such as Stripe's four most recent Go versions, Node LTS 18+, or AWS's latest two GA Go versions with a six-month grace",
+        "Leaves ownership of the API-side versioning scheme to the separate API versioning policy, recording only the boundary here",
+        "Offers a cadence choice between a fixed release train and continuous release-on-change",
+        "Carries Azure's own warning not to publish releases just to keep to a regular cadence if a fixed train is proposed",
+        "Frames release cadence as a predictability promise to integrators rather than a productivity metric"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Hartwell Data, I run the SDK team. Our PHP library gets about 180 downloads a month on Packagist. Python does 400k a month and Node does 260k. Our VP of Engineering saw those three numbers in a review and wants the PHP repo archived this sprint so the one engineer maintaining it can move onto Go. I either need to make that case properly or push back with something better than a feeling. What do I do?",
+      "expected_output": "An evidence-gated EOL case that makes exclusive-usage revenue at risk the decisive number rather than download counts, executes final release then announcement then archive in that order, names a successor, and schedules post-archival docs cleanup.",
+      "files": [],
+      "expectations": [
+        "Requires isolating the accounts that use the PHP SDK exclusively, with no other SDK of ours, as the decisive evidence",
+        "Quantifies revenue at risk from that exclusive-usage segment rather than from raw download counts",
+        "Refuses to treat the low download number alone as sufficient justification for retirement",
+        "Attributes the evidence-gated process to Sentry's published SDK deprecation playbook",
+        "Gathers upstream platform health and registry download trends as supporting rather than decisive evidence",
+        "Orders execution as final release, then announcement, then archive",
+        "States the final release must be cut before the deprecation is announced",
+        "Requires a pinned deprecation issue naming the reason, the successor, and the remaining timeline",
+        "Requires naming a specific successor path for affected users rather than issuing a bare end-of-life notice",
+        "Requires registry deprecation markers plus README and docs-site banners",
+        "Requires notifying support and go-to-market teams as part of execution",
+        "Schedules post-archival cleanup 6-12 months later, de-indexing the retired docs while keeping them reachable rather than returning 404, with redirects to the successor",
+        "States an announcement-to-archive window within the observed 6-24 month range",
+        "Rejects archiving within the current sprint or without an announced notice window"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Verity Cloud. We're closing a seven-figure deal and their procurement team sent a question we have to answer in writing: how long will we keep supporting v2 of our client libraries once v3 ships? Their exact wording was 'AWS commits to 12 months of maintenance, we expect the same.' Our legal team wants a published support policy page live before signature. What do we commit to, and how do we word it?",
+      "expected_output": "A published lifecycle policy that surfaces the genuine disagreement between AWS's own documents instead of quoting one number, states the GA-support and announcement-lead floors, describes phased support, and offers Azure's floor as an alternative anchor.",
+      "files": [],
+      "expectations": [
+        "Flags that AWS's own published policies disagree on the maintenance-phase duration",
+        "Names 12 months from the core SDKs-and-Tools maintenance policy and 6 months from the Powertools documentation as the two conflicting figures",
+        "Refuses to quote 'AWS's policy' as a single number without naming which document it comes from",
+        "States AWS's commitment of at least 24 months of general-availability support",
+        "States AWS's maintenance announcement lead time of at least 6 months before maintenance mode begins",
+        "Describes a phased lifecycle (developer preview, GA, maintenance announcement, maintenance, end-of-support) rather than one flat support window",
+        "Notes that the maintenance phase means critical bug fixes and security issues only, with no API updates",
+        "Notes that the maintenance announcement is timed with the successor major version's GA so users have a migration target from day one of the notice",
+        "Cites a worked AWS timeline as evidence the default flexes, such as JavaScript v2 announced September 2024 with end-of-support September 2025, or the .NET v3 window of only about three months",
+        "Offers Azure's floor as an alternative anchor: at least 12 months of critical fixes, or 3 years when breaking changes are involved",
+        "Produces the answer as a published support policy page rather than a verbal or deal-specific commitment",
+        "Does not invent a single industry-standard support duration presented as universal"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Orbital Grid, we do fleet management for industrial IoT. We ship official SDKs in Python, Go and Java. There is a Rust crate named `orbital-grid` built by an independent developer, roughly 60k downloads, and frankly it is better than what we would write ourselves. Our CTO wants to make it official next quarter. I've been handed the job of writing the tier definitions and the promotion policy for the whole portfolio. What goes in it?",
+      "expected_output": "A two-tier policy with an explicit community non-guarantee and support routing, plus a written promotion gate turning on canonical namespace transfer and maintainer cooperation, with any fuller rubric labeled as self-set rather than a published standard.",
+      "files": [],
+      "expectations": [
+        "Makes transfer of the canonical registry package name an explicit condition of promotion",
+        "Makes the original maintainer's cooperation and consent a condition, not a unilateral vendor decision",
+        "Cites the Anthropic Ruby SDK case, where the community maintainer donated the canonical gem name, as the documented promotion precedent",
+        "Includes crediting the original maintainer publicly as part of the promotion",
+        "Labels any fuller promotion rubric (usage volume, feature completeness, support commitment) as inferred or self-set rather than a published standard",
+        "Recommends the two-tier official-plus-community shape as the default",
+        "Attaches an explicit non-guarantee to the community tier covering accuracy, completeness, or being kept up to date",
+        "Routes community-SDK support requests to the community repository rather than the vendor's own ticket queue",
+        "Instructs writing the promotion gate down before it is needed rather than deciding case by case",
+        "Defines what the official tier buys the user (a support commitment) and what the community tier explicitly does not",
+        "Encodes the quality level where users already look, in the version number and package metadata, not only on a docs page",
+        "Cites a concrete metadata precedent such as Google Cloud requiring version 1.0 or higher plus the Production/Stable development-status classifier for GA",
+        "Offers numbered tiers (MCP's Tier 1/2/3 or Azure's named tier-1 languages) as the alternative once 'official' alone stops discriminating",
+        "States that MCP's tiers rank implementation completeness rather than feature ambition"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Tessel Labs, nine people, we run an inference routing API. We're picking a code generation vendor this month for SDKs in TypeScript, Python, Go and Java. I've sat through three demos and I'm leaning toward whichever one has the nicest configuration layer, because writing a clean config file beats maintaining a giant OpenAPI document by hand. Pricing is roughly comparable across all three. Which should we sign, and what should I actually be comparing them on?",
+      "expected_output": "A selection framed on continuity and exit cost rather than demo features: the 2026 consolidation cited by name, the proprietary-DSL sync and non-transferable-config risk spelled out, the spec kept as source of truth, self-hosting preferred, and a written exit plan before signing.",
+      "files": [],
+      "expectations": [
+        "Raises vendor acquisition and continuity risk as a first-order selection criterion, not an afterthought",
+        "Cites Postman's acquisition of Fern in January 2026",
+        "Cites Anthropic's acquisition of Stainless and the wind-down of its hosted SDK generator",
+        "States that Stainless customers kept their already-generated SDKs but lost the pipeline that kept those SDKs in sync with API changes",
+        "Warns that a proprietary configuration DSL is a second artifact that must stay synchronized with the spec",
+        "Warns that investment in a vendor's config DSL does not transfer, deepening the exit cost if the vendor disappears",
+        "Distinguishes OpenAPI-native generators from DSL-interposing ones, naming at least one vendor on each side",
+        "Requires the OpenAPI spec to remain the single source of truth regardless of which vendor is chosen",
+        "Prefers a generator that can run self-hosted",
+        "Requires a written exit plan naming who regenerates the SDKs if the vendor exits, recorded in the decision record before signing",
+        "Notes the vendor landscape is time-sensitive and instructs re-verifying each vendor's current status before committing",
+        "Declines to endorse adopting the vendor's configuration DSL as the source of truth in place of the spec",
+        "Treats the build model as one portfolio-wide decision rather than a per-language vendor choice"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Hey, I'm the new PM on the platform team at Halcyon Ops (workflow automation for ops teams, around 600 paying accounts). Our CEO is presenting to the board on Friday and asked me for a slide listing the six languages we're going to ship SDKs in. Can you just give me the six? I started three weeks ago so I don't really have the background here yet.",
+      "expected_output": "A refusal to hand over a language list cold: an interview run one question at a time, verification that SDKs were actually chosen as an integration surface, 2-3 candidate portfolio shapes with trade-offs and a recommendation, and section-by-section approval toward seven written policies.",
+      "files": [],
+      "expectations": [
+        "Asks clarifying questions before proposing any language list",
+        "Asks one question per message rather than delivering the whole questionnaire in a single block",
+        "Asks which developer vertical the integrators belong to",
+        "Asks whether a machine-readable OpenAPI-style spec exists and what state it is in",
+        "Asks which languages the team can genuinely maintain in-house over years",
+        "Asks whether procurement and security can accept a hosted commercial generator",
+        "Asks whether per-language client traffic telemetry exists today",
+        "Asks whether this is a one-off catch-up or a compounding portfolio policy the team will run for years",
+        "Verifies that SDKs were actually chosen as an integration surface, and defers that decision to the separate integration-surface-strategy skill if it has not been made",
+        "Uses the Friday deadline as an explicit re-ranking input, noting a hard deadline promotes generated coverage over handwritten SDKs",
+        "Presents 2-3 candidate portfolio shapes with trade-offs and a recommendation instead of a single answer",
+        "Names candidate shapes such as a lean core plus self-service long tail, broad generated coverage on one pipeline, or a handwritten flagship plus generated rest",
+        "States that the strategy is complete only when all seven workflow steps end in a written, user-approved policy"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "Which language SDKs should we build first for our new public API?",
+      "should_trigger": true
+    },
+    {
+      "query": "we're launching an API next quarter, do we hand-write the client libraries or generate them?",
+      "should_trigger": true
+    },
+    {
+      "query": "Help me define official versus community support tiers for our client libraries.",
+      "should_trigger": true
+    },
+    {
+      "query": "Should our SDK version numbers track our API version numbers?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our PHP client library has almost no downloads. Should we kill it?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I decide which languages get official libraries and which ones don't?",
+      "should_trigger": true
+    },
+    {
+      "query": "The vendor that generates our client libraries just got acquired and is shutting down the hosted product. What now?",
+      "should_trigger": true
+    },
+    {
+      "query": "Is OpenAPI Generator good enough for libraries we'd call official?",
+      "should_trigger": true
+    },
+    {
+      "query": "write me a policy for retiring one of our client libraries",
+      "should_trigger": true
+    },
+    {
+      "query": "A community member built a Go client for us. Can we adopt it as the official one?",
+      "should_trigger": true
+    },
+    {
+      "query": "We have 11 client libraries and 3 engineers. Which ones do we drop?",
+      "should_trigger": true
+    },
+    {
+      "query": "What's a sensible release cadence for our client libraries across seven languages?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our customers keep asking for a Rust library. How do I decide whether it's worth it?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we pay for a codegen vendor or use the free open-source one?",
+      "should_trigger": true
+    },
+    { "query": "how many client libraries is too many", "should_trigger": true },
+    {
+      "query": "We need a written support commitment for our client libraries to close an enterprise deal.",
+      "should_trigger": true
+    },
+    {
+      "query": "Draft the deprecation timeline for our v2 client libraries.",
+      "should_trigger": true
+    },
+    {
+      "query": "Our Java library is hand-written and the other five are generated. Is that a problem?",
+      "should_trigger": true
+    },
+    {
+      "query": "what languages does a fintech API need client libraries in",
+      "should_trigger": true
+    },
+    {
+      "query": "Which Python and Node versions should our libraries promise to support?",
+      "should_trigger": true
+    },
+    {
+      "query": "we want to add official Kotlin and Swift support, talk me out of it",
+      "should_trigger": true
+    },
+    {
+      "query": "Set up a promotion path so third-party libraries can become official ones.",
+      "should_trigger": true
+    },
+    {
+      "query": "I need to pick a codegen vendor without getting locked in.",
+      "should_trigger": true
+    },
+    {
+      "query": "How do other API companies decide the order they ship client libraries in?",
+      "should_trigger": true
+    },
+    {
+      "query": "our client libraries have drifted apart, each language behaves a bit differently now",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we generate from our OpenAPI spec or from a vendor config DSL?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're an AI infra startup. Python and TypeScript libraries first, then what?",
+      "should_trigger": true
+    },
+    {
+      "query": "Write the non-guarantee wording for our community-maintained libraries.",
+      "should_trigger": true
+    },
+    {
+      "query": "how do i justify killing a library to the exec team",
+      "should_trigger": true
+    },
+    {
+      "query": "Do we need to bump all our libraries to 4.0 when the API goes to v4?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our security team won't allow a hosted SaaS anywhere in the build pipeline for our client libraries.",
+      "should_trigger": true
+    },
+    {
+      "query": "Plan the order we ship client libraries over the next 18 months.",
+      "should_trigger": true
+    },
+    {
+      "query": "What evidence do I need before announcing end of life for a client library?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we archive the repo before or after we announce the deprecation?",
+      "should_trigger": true
+    },
+    {
+      "query": "I want a Tier 1 / Tier 2 / Tier 3 system for our libraries.",
+      "should_trigger": true
+    },
+    {
+      "query": "we support 4 languages officially, should it be more or fewer",
+      "should_trigger": true
+    },
+    {
+      "query": "Is it fine for an officially supported library to be code-generated?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our buyers are all Java and .NET shops but everyone tells me to ship Python first.",
+      "should_trigger": true
+    },
+    {
+      "query": "How long do we have to keep patching an old major version of our libraries?",
+      "should_trigger": true
+    },
+    {
+      "query": "Put together the strategy doc for our client library program.",
+      "should_trigger": true
+    },
+    {
+      "query": "Which of our client libraries should we invest in next year?",
+      "should_trigger": true
+    },
+    {
+      "query": "there are community libraries for our API in six languages, what do we do about them",
+      "should_trigger": true
+    },
+    {
+      "query": "Do we list third-party client libraries on our docs site or ignore them?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're rewriting all our client libraries. What should we decide before we start?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I use client traffic data to decide the next language we support?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our API is the product. Should we hand-roll the flagship library?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we even offer SDKs, or is a great REST API plus webhooks enough?",
+      "should_trigger": false
+    },
+    {
+      "query": "Do we need client libraries at all, or should we invest in a Postman collection and good docs?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our API versioning scheme: header, URL path, or date-based?",
+      "should_trigger": false
+    },
+    {
+      "query": "How long do we support an old API version after we ship a breaking change?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the deprecation notice for the /v1/charges endpoint.",
+      "should_trigger": false
+    },
+    {
+      "query": "Audit our API reference docs for missing code samples in each language.",
+      "should_trigger": false
+    },
+    {
+      "query": "Our docs snippets don't match what the SDKs actually return. Fix the review process.",
+      "should_trigger": false
+    },
+    {
+      "query": "Review our new endpoints for naming consistency before we freeze the API.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the error code taxonomy for our public API.",
+      "should_trigger": false
+    },
+    {
+      "query": "Should our API keys be hashed or encrypted at rest?",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we do zero-downtime API key rotation?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design an idempotency key mechanism for our payments endpoints.",
+      "should_trigger": false
+    },
+    {
+      "query": "What rate limits should we set per plan tier?",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up a status page and incident communication process for our API.",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a sandbox test mode with fake data for our API.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our webhook delivery retries and signature scheme.",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we build an MCP server for our product?",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan the information architecture for our developer portal.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our OAuth 2.0 authorization server and consent screen.",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we expose GraphQL alongside our REST API?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the proto files and streaming semantics for our gRPC API.",
+      "should_trigger": false
+    },
+    {
+      "query": "How should customers bulk-export their data, S3 dumps or a query API?",
+      "should_trigger": false
+    },
+    {
+      "query": "Give customers read-only SQL access to their warehouse data over JDBC.",
+      "should_trigger": false
+    },
+    {
+      "query": "Which data connectors should our pipeline product build first?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we launch a connector marketplace or keep building integrations ourselves?",
+      "should_trigger": false
+    },
+    {
+      "query": "Draft the partnership terms for a technology integration with a CRM vendor.",
+      "should_trigger": false
+    },
+    {
+      "query": "Optimize our listing on a major app marketplace so it converts better.",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the review checklist for third-party apps submitted to our marketplace.",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we take a revenue share or charge a listing fee in our app marketplace?",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan the launch marketing for our new app marketplace.",
+      "should_trigger": false
+    },
+    {
+      "query": "Set the listing quality standards for apps published in our marketplace.",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the onboarding flow for partners building apps on our platform.",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we monitor and alert on failing customer integrations?",
+      "should_trigger": false
+    },
+    {
+      "query": "What does a career path look like for a platform engineer on an API team?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the job description for a developer platform lead.",
+      "should_trigger": false
+    },
+    {
+      "query": "I'm joining a developer platform team next week. Where do I even start?",
+      "should_trigger": false
+    },
+    {
+      "query": "Make our Python SDK feel more idiomatic: better error types and pagination helpers.",
+      "should_trigger": false
+    },
+    {
+      "query": "Improve the developer experience of our TypeScript client: retries, timeouts, logging.",
+      "should_trigger": false
+    },
+    {
+      "query": "How do I publish our Java SDK to Maven Central?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the README for our npm package so it converts on the registry page.",
+      "should_trigger": false
+    },
+    {
+      "query": "Help me install and configure the Sentry Node SDK in our app.",
+      "should_trigger": false
+    },
+    {
+      "query": "Migrate our code from AWS SDK for JavaScript v2 to v3.",
+      "should_trigger": false
+    },
+    {
+      "query": "Upgrade our project from AI SDK v6 to v7.",
+      "should_trigger": false
+    },
+    {
+      "query": "Show me how to stream responses with the Vercel AI SDK.",
+      "should_trigger": false
+    },
+    {
+      "query": "Add the Apify SDK to my scraper project.",
+      "should_trigger": false
+    },
+    {
+      "query": "Build an agent using the Claude Agent SDK.",
+      "should_trigger": false
+    }
+  ]
+}

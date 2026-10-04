@@ -1,0 +1,711 @@
+{
+  "skill_name": "integration-error-observability",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I run the platform team at Freightwise - we do shipment tracking APIs for 3PLs and freight brokers. We push about 4M webhooks a month, and our delivery worker already writes an attempts table with the HTTP response code and the timeout reason for every attempt, but it's internal-only, nobody outside engineering can see it. Support is burning roughly 15 hours a week on integration tickets. Leadership just approved 6 engineering weeks starting next month to build a developer-facing dashboard. Where do we start?",
+      "expected_output": "A build order that starts from a classification of the recent support tickets, separates the three log surfaces, and recommends exposing the delivery-attempt data Freightwise already records as the first rung rather than building everything at once.",
+      "files": [],
+      "expectations": [
+        "Recommends classifying the most recent integration support tickets by failure class (request not found, webhook never arrived, auth or credential failure, rate-limit confusion, silent data mismatch) before choosing what to build",
+        "Names the request log, the event log, and the webhook delivery-attempt log as three distinct surfaces rather than one combined dashboard",
+        "States that the delivery-attempt log answers 'did you tell me about it', the request log answers 'did my call work', and the event log answers 'what did it change'",
+        "Recommends exposing the existing delivery-attempt data as the first surface, on the grounds that it is already recorded and the remaining work is mostly access control and interface",
+        "Does not recommend building all three surfaces simultaneously inside the six-week window",
+        "States that a delivery-attempt row must carry the actual failure reason (timeout, connection refused, TLS failure, or a specific non-2xx status) rather than a generic 'delivery failed'",
+        "Lists the fields a delivery-attempt row carries, including event ID, destination endpoint, attempt number, attempt timestamp, and next scheduled retry time",
+        "Warns that a surface shipping only failure counts with no detail behind it converts a silent failure into a support ticket rather than into a fix",
+        "Asks or establishes what an integrator can see today without contacting Freightwise, as the audit baseline",
+        "Asks whether request and response bodies carry PII, secrets, or another tenant's data, and who signs off on exposing them to a third party",
+        "Asks whether this is a one-off fix after a bad support quarter or a compounding surface Freightwise will run for years, and ties that answer to which rung it recommends",
+        "Requires the dashboard to display the same identifiers Freightwise returns to integrators rather than internal primary keys"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Palmate is a B2B billing API. We return an X-Palmate-Request-Id header on 4xx and 5xx responses. Partners quote it in tickets and our support team tells me that roughly half the time the answer is 'that ID isn't in anything I can search'. Our edge assigns the ID, and then each internal service generates its own one for its own logs. We also call an external tax engine and a card processor on most requests. Fix this properly.",
+      "expected_output": "A correlation-identifier design that echoes one unchanged ID on every response, makes it resolvable in a surface the integrator can reach, and propagates it downstream and across retries.",
+      "files": [],
+      "expectations": [
+        "Identifies that the ID is echoed only on failures, and requires echoing it on every response including 2xx, because a call that returned 200 and did the wrong thing is a real ticket class with no error body to carry the ID",
+        "Identifies per-service regeneration as a defect and requires one identifier to survive unchanged from the edge through every internal hop",
+        "States that echoing the header without an external surface that resolves it leaves integrators quoting a string nobody outside Palmate can look up",
+        "Recommends making the identifier searchable in a developer-facing log the integrator can reach themselves, and pairs that with the header rather than treating either rung as sufficient alone",
+        "Distinguishes a request ID, which identifies one HTTP call and its response, from a correlation ID, which identifies a multi-call transaction spanning several request IDs",
+        "Recommends forwarding the same identifier to the tax engine and the card processor instead of generating new ones at those hops",
+        "Justifies promoting downstream propagation by pointing at Palmate's current inability to see into failures that came from a provider it calls",
+        "Requires Palmate's own internal retries to carry the original identifier rather than generating a fresh one per attempt",
+        "Recommends logging the identifier on both sides of every boundary: inbound at the edge and outbound at each downstream call",
+        "Recommends accepting and echoing a client-supplied identifier when one arrives rather than overwriting it",
+        "Specifies an opaque random value such as a UUIDv4 and rejects sequential or timestamp-derived identifiers because they leak volume or timing and collide under concurrency",
+        "Does not redesign the error response payload shape, or explicitly defers the question of whether the ID rides in the error body to a separate error-design scope",
+        "Recommends documenting the lookup path next to the error documentation rather than on a separate observability page"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Nooklet sends an email to the partner's technical contact every time one of their webhook deliveries fails. We have 340 partner apps. Six of our top ten partners have admitted they filter us into a folder they never open. Our VP wants to add severity levels and route the important ones to Slack instead. Most of our partners reconcile bookings weekly, but two of them are payment-adjacent and lose real money inside an hour when their integration breaks. What should the notification design actually be?",
+      "expected_output": "A notification design that removes per-failure alerting entirely, defaults to a per-integration digest, and promotes threshold alerting with a cooldown only for the two money-losing partners.",
+      "files": [],
+      "expectations": [
+        "Rejects per-failure alerting on error volume as a design option outright rather than ranking it last, naming it as the alert-fatigue failure mode itself",
+        "Recommends a periodic per-integration digest as the default notification rung for the majority of Nooklet's partners",
+        "Recommends threshold alerting with a cooldown specifically for the two payment-adjacent partners, tying that promotion to their losing money within hours",
+        "Specifies a cooldown period during which the same integration cannot alert again, and explains that without it one ongoing incident produces a continuous stream until the recipient mutes the channel permanently",
+        "Advises deriving the cooldown length from Nooklet's own typical incident duration rather than copying a borrowed number",
+        "Treats integration state changes such as revoked credentials, a disabled integration, or a lapsed subscription as a separate immediate rung with no threshold and no cooldown",
+        "Requires a recovery notification when the rate returns to baseline, on the grounds that silence is not an all-clear",
+        "Requires every alert to name the top machine-readable error codes and to link directly into the log filtered to those failures",
+        "Requires a threshold alert to state whether a Nooklet release falls in the window, so the partner knows what the platform has already ruled out",
+        "Requires a threshold alert to state the earliest time the next alert for that integration can arrive",
+        "States that the digest and the threshold alert must not be routed to the same destination at the same cadence",
+        "Recommends tracking the share of alerts partners act on, and treats a sustained decline as the design failing rather than the partners failing",
+        "Specifies an escalation path naming where a repeated unacted-on alert goes and after what interval",
+        "Does not present adding severity levels to the existing per-failure emails as the fix"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Gridwell exposes an HR data API to payroll and benefits vendors. Our partner dashboard shows one number: 'error rate, last 24h'. We page ourselves when any partner crosses 5%. Last week a partner sat at 4.2% all week while 100% of one specific app's calls were failing, and we never noticed. We also don't tag requests by app at the edge - we can join back to the API key afterwards from the auth service logs. And our biggest partner scaled 8x last month and went red purely from throttling. Rebuild the aggregation.",
+      "expected_output": "A per-identity aggregation schema tagged at ingestion, split into separate 4xx/5xx/429 buckets, compared against each integration's own baseline across two detection windows, with deploy markers overlaid.",
+      "files": [],
+      "expectations": [
+        "Requires tagging each request with the integration identity at ingestion, and rejects reconstructing the tag afterwards by joining auth-service logs",
+        "States that retrofitting the identity tag leaves the preceding history unqueryable per integration, which is exactly the period any investigation needs",
+        "Splits the error rate into at least three separately counted buckets: 4xx, 5xx, and 429",
+        "Explains that 429 is isolated because rate-limit rejection is neither party's defect, and that blending it makes a partner scaling successfully look identical to a partner whose code is broken",
+        "Attributes 4xx to the integrator's side and 5xx to Gridwell's side, and states that a blended number cannot say whose problem the errors are",
+        "Replaces the single 5% platform-wide threshold with a comparison of each integration against its own recent baseline",
+        "Explains that one global percentage is either noise for low-traffic integrations or blindness for high-traffic ones",
+        "Requires the aggregate row to carry a success count as the denominator alongside the error counts",
+        "Requires explicit window start and end on each aggregate rather than a floating rate",
+        "Requires the top machine-readable error codes per bucket in the aggregate",
+        "Overlays Gridwell's own deploy or release markers on the error-rate view, and requires checking a 5xx spike against that timeline before telling a partner anything",
+        "Specifies both a short detection window measured in minutes for sudden breaks and a long window of hours to a day for slow degradation, and states that a single window misses half the failure types",
+        "Recommends reading how errors are distributed rather than volume alone, distinguishing a clustered pattern (logic bug or bulk operation) from an evenly spread one (infrastructure)"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Kettleback partners keep asking for two things. First, a button to re-send webhook events their endpoint missed during their own maintenance windows. Second, a 'retry this call' button on failed POST /orders requests in our log viewer. We already retry webhooks automatically 6 times over 12 hours. One partner wants to bulk re-send everything that failed during a 4-hour outage on their side, which is about 90,000 events. Design both features.",
+      "expected_output": "Event replay designed with a stable event ID, a bounded published window, rate-controlled bulk scope, and independence from the automatic retry schedule - plus a refusal to build synchronous request replay.",
+      "files": [],
+      "expectations": [
+        "Refuses to build a replay button that re-issues the failed POST /orders request on the integrator's behalf, and explains that re-issuing it creates side effects nobody authorised",
+        "Recommends instead surfacing the full request detail so the integrator's own client re-issues the call",
+        "Approves event replay for the webhook case and ties the promotion to partners losing events during their own downtime, which is Kettleback's stated situation",
+        "Requires the replayed delivery to carry the same event ID as the original so the consumer can deduplicate",
+        "States that without a stable event ID replay converts a missed event into a duplicated side effect, a worse failure than the one it fixed",
+        "Requires manual replay to run independently of Kettleback's automatic six-attempt retry schedule, without cancelling or resetting it",
+        "Warns that a manual resend issued while automatic retries are still scheduled can produce a duplicate delivery, and addresses that specific overlap",
+        "Defines a bounded window measured from event creation beyond which replay is not offered, and requires publishing it",
+        "Requires rate control on the 90,000-event bulk replay, and states that an unthrottled bulk replay turns the partner's recovery into Kettleback's next incident",
+        "Decides the replay scope explicitly among per-event, per-endpoint, and per-time-range rather than leaving it implicit",
+        "Identifies replay as the highest-effort item on the visibility menu rather than a quick win",
+        "Does not recommend having a manual resend cancel or supersede the in-flight automatic retries"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Tuliphase has a per-customer dashboard where any admin of that customer's account can see every API call their integrations made - full request log, 30 days, searchable, with bodies. We're genuinely proud of it. We have 22 ISV partners whose apps are installed across roughly 6,000 of our customers. Every single time one of those apps breaks, the ISV finds out from their own customers, not from us. Our head of partnerships thinks we need to promote the dashboard harder. Diagnose it.",
+      "expected_output": "A diagnosis that the per-account dashboard is structurally wrong for fleet partners, requiring cross-install aggregation keyed on the app ID plus push notification, and a separate access-model fix.",
+      "files": [],
+      "expectations": [
+        "States the problem is structural rather than a matter of awareness, and rejects promoting the existing dashboard as the fix",
+        "Explains that a per-account dashboard cannot serve an ISV whose app is installed across thousands of accounts, because nobody watches thousands of dashboards",
+        "Requires cross-install aggregation keyed on the app or client ID, spanning every install of one ISV's app, as the missing surface",
+        "Requires push notification to the ISV rather than relying on them to come and look",
+        "Identifies the access model as a distinct gap: the ISV engineer who maintains the integration is typically not a user of the customer's account and therefore cannot open the per-account dashboard at all",
+        "Distinguishes the single-account integrator segment from the ISV-fleet segment, and states that a surface designed for the first does not finish the job for the second",
+        "Recommends an installs-affected against installs-total measure per ISV app, and reads that ratio as the diagnosis",
+        "Interprets a high installs-affected ratio as a partner-side release and a low one as configuration trouble at a few customers",
+        "Does not conclude that Tuliphase's existing per-account request log was the wrong thing to have built",
+        "Recommends deciding explicitly who can read each surface: the account owner, any user of the account, and the partner engineer outside the account",
+        "Scopes the notification audience to the 22 ISVs rather than to the individual customer accounts"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Verandaq's integration health board was all green for eleven days. Then a partner emailed asking why none of their stock syncs had landed since the 3rd. Their scheduler had died on the 3rd and they simply stopped calling us - zero requests, zero errors, board stayed green the whole time. Our SRE lead wants to add a 'no traffic' alert that fires when any integration drops below 10 calls per hour. What's the right design here?",
+      "expected_output": "A volume-drop signal designed as its own item, baselined per integration rather than against a global floor, surfaced in the fleet view and pushed to the partner.",
+      "files": [],
+      "expectations": [
+        "Rejects a single platform-wide floor of ten calls per hour, and explains that integrations differ in traffic shape by orders of magnitude",
+        "Requires comparing each integration's call volume against that integration's own recent baseline instead of a fixed number",
+        "States explicitly that an absence of calls produces no errors and therefore appears nowhere in an error log or error-rate view",
+        "Treats the volume-drop signal as its own design item rather than a side effect of the error logging already in place",
+        "Requires silent integrations to appear in the provider-side fleet view alongside the erroring ones",
+        "Notes that silent failures are frequently the most expensive class precisely because neither side has noticed",
+        "Recommends notifying the partner about the drop rather than waiting for them to ask",
+        "Places the volume-drop signal outside the 4xx, 5xx and 429 status-code buckets rather than inside them",
+        "Uses a long enough comparison window that a single quiet interval does not fire the signal",
+        "Records this failure class as its own row in the visibility audit alongside the error classes",
+        "Does not claim that better error alerting or a lower error threshold would have caught this"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Sablecrest wants two things built. An internal partner error leaderboard: every partner sorted by total errors in the last 24 hours, descending, top 20 on a TV in the partner team's area. And a 0-100 Integration Health Score shown to each partner in their portal, which we'll use to decide who keeps Premier tier next year. Write the spec.",
+      "expected_output": "A fleet view ranked by blast radius with contact ownership and a separate regression queue, plus hard constraints on publishing any partner-facing score that drives commercial tiering.",
+      "files": [],
+      "expectations": [
+        "Rejects sorting the fleet view by raw error count and requires ranking by blast radius instead",
+        "Explains that a partner app failing across many installs outranks a single account throwing more absolute errors, because one conversation fixes many problems",
+        "Requires installs affected against installs total per partner app as a dimension of the view",
+        "Requires a dominant status-code bucket per row so the queue separates the partner's payloads from Sablecrest's own failures from quota rejection",
+        "Requires a named contact owner on each row, on the grounds that a ranked list with no contact becomes a report nobody acts on",
+        "Requires first-seen timestamps aligned against both Sablecrest's release timeline and, where known, the partner's",
+        "Separates integrations broken since Sablecrest's own deploy into a distinct view or tab from the partner-outreach queue, and identifies the first as Sablecrest's own regression queue",
+        "Requires silent integrations whose call volume dropped toward zero to appear in the view",
+        "Warns against publishing a per-partner reliability number Sablecrest cannot defend line by line, because it will be quoted back in commercial conversations",
+        "Requires the inputs behind any partner-facing score to be inspectable by that partner: error counts, install coverage, and the windows used",
+        "Requires a documented recomputation and dispute process before the score can affect Premier tier, rather than after the first complaint",
+        "Rules out showing a partner where they rank against named competitors",
+        "States that volume alone is not health, and that a large partner at a stable low error rate is healthier than a small partner at a high one",
+        "Requires Sablecrest to set and defend its own weights rather than borrowing another product's weighting"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Our new platform director came from an SRE background. She wants each of our 40 integration partners at Marrowpoint to get a 99.9% availability SLO with a monthly error budget, published in the partner portal, and she wants us to explain to partners that because they depend on us plus two other vendors, their achievable availability is capped below 99.7%. She's asked me to write the spec this week. Sanity-check it before I do.",
+      "expected_output": "A separation of which parts of SRE error-budget practice transfer to a provider-side integration view and which do not, with a refusal to publish a per-partner SLO derived from integration health.",
+      "files": [],
+      "expectations": [
+        "States that the published error-budget and SLO literature is written consumer-side, for a team measuring its own dependence on someone else's API, and does not transfer wholesale to a provider publishing numbers for partners",
+        "Rejects presenting the multi-vendor multiplicative availability argument to Marrowpoint's partners, because that arithmetic describes the consumer's position rather than Marrowpoint's",
+        "Warns that an integration measurement includes the partner's own code and their customers' configuration, so committing to a number derived from it is a promise Marrowpoint only partly controls",
+        "Routes formal SLA and uptime publication to a separate status-and-incident-communication scope rather than deriving it from the integration health view",
+        "Keeps per-integration and per-endpoint granularity as a part that does transfer, against a single blended platform number",
+        "Keeps multi-window burn-rate detection as a part that does transfer: a long window confirming the problem is sustained plus a short window confirming it is still active",
+        "States that nothing in the published record establishes what a provider-side integration SLO should contain",
+        "Advises against publishing any per-partner number before Marrowpoint can defend how it is computed",
+        "Frames the goal of being the trustworthy real-time source of integration health as a design intent rather than an industry standard to cite to partners",
+        "Does not simply approve writing the 99.9% per-partner SLO spec as requested",
+        "Recommends an internal prioritisation view first, and distinguishes it from a partner-facing published grade as two different products with different obligations",
+        "Notes that a partner-facing number becomes a contract the moment partners start optimising against it"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Clovermast processes medical claims. Legal has given us a written answer: request and response bodies contain PHI and must never be visible outside our tenancy boundary, no exceptions, not negotiable. Meanwhile about 70% of our support pile is 'my call failed and I don't know why' on synchronous POSTs. Our current log viewer shows timestamp, method, path, and status code, and nothing else. Design what we can actually ship.",
+      "expected_output": "A metadata-only request log treated as the ceiling rather than a compromise, with error codes, identifiers and identity added, and structural tenant isolation plus unconditional credential stripping.",
+      "files": [],
+      "expectations": [
+        "Removes payload-level logging from the option set entirely rather than ranking it lower or proposing a masked version of it",
+        "States that metadata-only logging is the ceiling in Clovermast's case rather than a compromise position",
+        "Adds a machine-readable error code to every row, and states that a bare 400 tells the integrator nothing their own client did not already know",
+        "Adds a request ID to every row, copy-pasteable and searchable by the integrator",
+        "Adds the integration identity and the account it acted on to every row",
+        "Adds latency to the row",
+        "Requires an error detail or reason field naming which field or condition failed, constructed without echoing the payload itself",
+        "Requires credentials, tokens and signing secrets to be stripped unconditionally rather than partially masked, because a prefix plus a length is often enough to attack",
+        "Requires any withheld field to be visibly marked as withheld so the integrator can tell it was suppressed rather than absent",
+        "Requires tenant isolation to be enforced structurally rather than by an application-code filter on account ID",
+        "Treats the redaction rule set as a published contract once integrators build against it, noting that loosening it later is a privacy incident and tightening it later breaks their tooling",
+        "Prioritises the synchronous request log over the other surfaces on the strength of the 70% synchronous share of the support pile",
+        "Does not propose negotiating with legal or seeking an exception as the path forward"
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "Plumridge is a payroll API. Two problems. First, we keep integration logs for 24 hours to keep storage costs down, but our customers reconcile payroll monthly. Second, about 60% of the people building against us aren't engineers - they're ops staff wiring us into no-code automation tools, and their tickets literally say 'it's not working'. Our log viewer today shows raw JSON request and response pairs plus HTTP status codes. What do we change?",
+      "expected_output": "A retention window sized to the monthly reconciliation cycle and published, plus a separate plain-language failure surface for the non-engineer segment that does not replace the detailed one.",
+      "files": [],
+      "expectations": [
+        "States that a 24-hour retention window against monthly reconciliation guarantees the evidence expires before the investigation starts",
+        "Requires the retention window to exceed the time it realistically takes a Plumridge customer to notice a failure, and sizes it against the monthly cycle",
+        "Requires the retention window to be published rather than discovered during an incident",
+        "Identifies the no-code and non-engineer builders as a distinct audience segment with different needs from engineers integrating directly",
+        "Recommends a plain-language failure list scoped to that builder's own flow rather than raw JSON request and response pairs",
+        "Requires a 'what to do about it' line next to each failure entry for that segment",
+        "States that the detail useful to an engineering integrator reads as noise to the no-code segment",
+        "Keeps the detailed surface for the engineering segment rather than replacing it wholesale with the simplified one",
+        "Recommends classifying Plumridge's 'it's not working' tickets by failure class to decide which surface to build first",
+        "Treats the retention change and the audience change as two separate items rather than one",
+        "Names log retention shorter than time-to-notice as a failure mode that generates tickets regardless of how good the log row is"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "How do we show partners what's failing in their integration without them opening a ticket?",
+      "should_trigger": true
+    },
+    {
+      "query": "Design a developer-facing request log for our public API",
+      "should_trigger": true
+    },
+    {
+      "query": "our ISV partners always hear about outages from their own customers before they hear from us",
+      "should_trigger": true
+    },
+    {
+      "query": "We want to expose webhook delivery attempts to the developers who subscribed to them",
+      "should_trigger": true
+    },
+    {
+      "query": "what should a per-integration error dashboard actually show",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we email partners when their error rate spikes?",
+      "should_trigger": true
+    },
+    {
+      "query": "partners quote a request id in tickets and support can't find it anywhere",
+      "should_trigger": true
+    },
+    {
+      "query": "integration support tickets are eating 20 hours a week, how do we cut that down",
+      "should_trigger": true
+    },
+    {
+      "query": "Design proactive partner notification for broken integrations",
+      "should_trigger": true
+    },
+    {
+      "query": "we need a view of which partner apps are breaking across their installs",
+      "should_trigger": true
+    },
+    {
+      "query": "how do I let customers replay failed webhook events",
+      "should_trigger": true
+    },
+    {
+      "query": "our error rate looks fine platform-wide but one app is failing every single call",
+      "should_trigger": true
+    },
+    {
+      "query": "Should 429s be in the same error rate as 400s when we report to partners?",
+      "should_trigger": true
+    },
+    {
+      "query": "what does a good API log row need to contain for an external developer",
+      "should_trigger": true
+    },
+    {
+      "query": "we alert on every failed delivery and everyone has muted us",
+      "should_trigger": true
+    },
+    {
+      "query": "how long should we keep integration logs that partners can see",
+      "should_trigger": true
+    },
+    {
+      "query": "design the cooldown for our partner alerting",
+      "should_trigger": true
+    },
+    {
+      "query": "one of our partners stopped calling us entirely and nothing flagged it",
+      "should_trigger": true
+    },
+    {
+      "query": "can we show request and response bodies to third-party developers",
+      "should_trigger": true
+    },
+    {
+      "query": "Our support team can't resolve the correlation ID integrators send us",
+      "should_trigger": true
+    },
+    {
+      "query": "we want to rank our partners by how broken their integrations are",
+      "should_trigger": true
+    },
+    {
+      "query": "should we give each partner an integration health score",
+      "should_trigger": true
+    },
+    {
+      "query": "how do we tell a partner the errors are on their side and not ours",
+      "should_trigger": true
+    },
+    {
+      "query": "build the spec for a partner-facing failure digest email",
+      "should_trigger": true
+    },
+    {
+      "query": "external devs can't see why their calls are failing",
+      "should_trigger": true
+    },
+    {
+      "query": "what's the cheapest thing we can ship so integrators stop asking us what went wrong",
+      "should_trigger": true
+    },
+    {
+      "query": "we're adding a debug console to our developer portal, what goes in it",
+      "should_trigger": true
+    },
+    {
+      "query": "how should we tag incoming requests so we can aggregate errors per API key",
+      "should_trigger": true
+    },
+    {
+      "query": "Design the notification we send when a partner's credentials get revoked",
+      "should_trigger": true
+    },
+    {
+      "query": "the same incident sends 400 emails to one partner",
+      "should_trigger": true
+    },
+    {
+      "query": "our partner engineers can't log into the customer accounts where their app is installed",
+      "should_trigger": true
+    },
+    {
+      "query": "how do we detect that a partner's integration silently stopped working",
+      "should_trigger": true
+    },
+    {
+      "query": "should a manual resend cancel our automatic retries",
+      "should_trigger": true
+    },
+    {
+      "query": "we return X-Request-Id but nobody outside the company can look it up",
+      "should_trigger": true
+    },
+    {
+      "query": "what do we put on the screen in the partner ops room",
+      "should_trigger": true
+    },
+    {
+      "query": "how do we know whether an error spike was our deploy or their release",
+      "should_trigger": true
+    },
+    {
+      "query": "Design a self-service debugging surface for third-party integrators",
+      "should_trigger": true
+    },
+    {
+      "query": "give integrators a way to see their own failed API calls",
+      "should_trigger": true
+    },
+    {
+      "query": "our webhook consumers keep asking whether we even tried to deliver",
+      "should_trigger": true
+    },
+    {
+      "query": "should we forward our request id to the payment processor we call downstream",
+      "should_trigger": true
+    },
+    {
+      "query": "how do we decide which integration visibility feature to build first",
+      "should_trigger": true
+    },
+    {
+      "query": "we're getting 'the webhook never arrived' tickets constantly",
+      "should_trigger": true
+    },
+    {
+      "query": "what should we alert partners on and what should we leave in a dashboard",
+      "should_trigger": true
+    },
+    {
+      "query": "our 4xx and 5xx sit in one bucket and partners argue about whose fault it is",
+      "should_trigger": true
+    },
+    {
+      "query": "design the fleet view for our partner team",
+      "should_trigger": true
+    },
+    {
+      "query": "how do we stop being the last to know when an integration breaks",
+      "should_trigger": true
+    },
+    {
+      "query": "we want to publish a reliability number per partner",
+      "should_trigger": true
+    },
+    {
+      "query": "what belongs in an event log versus a request log",
+      "should_trigger": true
+    },
+    {
+      "query": "should the partner be able to re-run a failed POST from our dashboard",
+      "should_trigger": true
+    },
+    {
+      "query": "how do we redact PII before showing logs to a third party",
+      "should_trigger": true
+    },
+    {
+      "query": "our log dashboard can only be opened by the account owner",
+      "should_trigger": true
+    },
+    {
+      "query": "what metric tells us whether our developer debugging tools are working",
+      "should_trigger": true
+    },
+    {
+      "query": "we're rebuilding our integrations page, what visibility do partners actually need",
+      "should_trigger": true
+    },
+    {
+      "query": "should we use traceparent or our own request id header",
+      "should_trigger": true
+    },
+    {
+      "query": "how do we avoid alert fatigue with partner notifications",
+      "should_trigger": true
+    },
+    {
+      "query": "design the escalation path when a partner ignores our error alerts",
+      "should_trigger": true
+    },
+    {
+      "query": "we have no idea which of our 200 integrations are healthy right now",
+      "should_trigger": true
+    },
+    {
+      "query": "the no-code people building on our API just say 'it's broken'",
+      "should_trigger": true
+    },
+    {
+      "query": "how do we bound bulk event replay so it doesn't take us down",
+      "should_trigger": true
+    },
+    {
+      "query": "what should our partner error emails actually say",
+      "should_trigger": true
+    },
+    {
+      "query": "design our status page and the incident update cadence",
+      "should_trigger": false
+    },
+    {
+      "query": "write the public postmortem for last week's API outage",
+      "should_trigger": false
+    },
+    {
+      "query": "what should our published uptime SLA say",
+      "should_trigger": false
+    },
+    {
+      "query": "we need to announce a scheduled maintenance window to our API consumers",
+      "should_trigger": false
+    },
+    {
+      "query": "design our error code taxonomy and problem+json envelope",
+      "should_trigger": false
+    },
+    {
+      "query": "should our 400 responses follow RFC 9457",
+      "should_trigger": false
+    },
+    {
+      "query": "how do we word API error messages so they're actionable",
+      "should_trigger": false
+    },
+    {
+      "query": "add a retryable flag and Retry-After to our error responses",
+      "should_trigger": false
+    },
+    {
+      "query": "design our idempotency key storage and TTL",
+      "should_trigger": false
+    },
+    {
+      "query": "what backoff and jitter should our SDK use on retries",
+      "should_trigger": false
+    },
+    {
+      "query": "how do we reject a payload mismatch on a reused idempotency key",
+      "should_trigger": false
+    },
+    {
+      "query": "design the retry schedule and dead-letter policy for our outbound webhooks",
+      "should_trigger": false
+    },
+    {
+      "query": "what HMAC signing scheme should our webhooks use",
+      "should_trigger": false
+    },
+    {
+      "query": "design our webhook event taxonomy and payload envelope",
+      "should_trigger": false
+    },
+    {
+      "query": "how do we version webhook payload schemas without breaking consumers",
+      "should_trigger": false
+    },
+    {
+      "query": "set our rate limit tiers and burst quotas",
+      "should_trigger": false
+    },
+    {
+      "query": "which rate limit headers should we return, X-RateLimit or the IETF RateLimit fields",
+      "should_trigger": false
+    },
+    {
+      "query": "how much notice do we owe a partner before lowering their quota",
+      "should_trigger": false
+    },
+    {
+      "query": "design our API key prefix and checksum format",
+      "should_trigger": false
+    },
+    {
+      "query": "how do we rotate API keys with zero downtime",
+      "should_trigger": false
+    },
+    {
+      "query": "should we store API keys hashed or encrypted",
+      "should_trigger": false
+    },
+    {
+      "query": "design our OAuth consent screen and scope taxonomy",
+      "should_trigger": false
+    },
+    {
+      "query": "should we require PKCE for confidential clients too",
+      "should_trigger": false
+    },
+    {
+      "query": "what should our access token TTL be",
+      "should_trigger": false
+    },
+    {
+      "query": "design our sandbox isolation model and magic test values",
+      "should_trigger": false
+    },
+    {
+      "query": "how do developers reset and reseed their test account data",
+      "should_trigger": false
+    },
+    {
+      "query": "design the information architecture of our developer portal",
+      "should_trigger": false
+    },
+    {
+      "query": "how do we measure time to first call for new signups",
+      "should_trigger": false
+    },
+    {
+      "query": "audit our OpenAPI reference for undocumented endpoints",
+      "should_trigger": false
+    },
+    {
+      "query": "our docs have drifted from the spec, what CI gates do we add",
+      "should_trigger": false
+    },
+    {
+      "query": "when do we cut /v2 and how long should the deprecation window be",
+      "should_trigger": false
+    },
+    {
+      "query": "should we send Sunset and Deprecation headers",
+      "should_trigger": false
+    },
+    {
+      "query": "which languages get official SDKs first",
+      "should_trigger": false
+    },
+    {
+      "query": "should we generate our SDKs or hand-write them",
+      "should_trigger": false
+    },
+    {
+      "query": "should we add a GraphQL layer or stay REST-only",
+      "should_trigger": false
+    },
+    {
+      "query": "design Relay cursor connections for our public schema",
+      "should_trigger": false
+    },
+    {
+      "query": "what query depth and complexity limits should our public GraphQL API have",
+      "should_trigger": false
+    },
+    {
+      "query": "review our REST endpoint naming and status code usage",
+      "should_trigger": false
+    },
+    {
+      "query": "should this operation be a POST or a PATCH",
+      "should_trigger": false
+    },
+    {
+      "query": "design our gRPC proto packages and buf breaking-change gates",
+      "should_trigger": false
+    },
+    {
+      "query": "should we build our own app marketplace or just list on other people's",
+      "should_trigger": false
+    },
+    {
+      "query": "what take rate should our app store charge developers",
+      "should_trigger": false
+    },
+    {
+      "query": "write the review and approval criteria for third-party apps on our marketplace",
+      "should_trigger": false
+    },
+    {
+      "query": "our AppExchange listing isn't converting, fix the screenshots and tagline",
+      "should_trigger": false
+    },
+    {
+      "query": "set the screenshot and demo video specs every listing must meet",
+      "should_trigger": false
+    },
+    {
+      "query": "pick the launch cohort for our marketplace reveal at the keynote",
+      "should_trigger": false
+    },
+    {
+      "query": "design the partner developer signup and sandbox provisioning flow",
+      "should_trigger": false
+    },
+    {
+      "query": "which technology partners should we integrate with next quarter",
+      "should_trigger": false
+    },
+    {
+      "query": "should we build a managed Fivetran connector or ship a Singer tap",
+      "should_trigger": false
+    },
+    {
+      "query": "design the Parquet file drop and partitioning scheme for our bulk export",
+      "should_trigger": false
+    },
+    {
+      "query": "how do we give customers a JDBC endpoint onto their own data",
+      "should_trigger": false
+    },
+    {
+      "query": "which twelve tools should our MCP server expose to agents",
+      "should_trigger": false
+    },
+    {
+      "query": "how do we hire an API product manager",
+      "should_trigger": false
+    },
+    {
+      "query": "am I ready to interview for a partner engineer role",
+      "should_trigger": false
+    },
+    {
+      "query": "where should I start with our new public API program",
+      "should_trigger": false
+    },
+    {
+      "query": "instrument our Go services with OpenTelemetry traces and metrics",
+      "should_trigger": false
+    },
+    {
+      "query": "set up Datadog dashboards and SLO monitors for our Kubernetes cluster",
+      "should_trigger": false
+    },
+    {
+      "query": "my Sentry error rate is spiking in production, help me debug it",
+      "should_trigger": false
+    },
+    {
+      "query": "add structured logging and error wrapping to our Python codebase",
+      "should_trigger": false
+    },
+    {
+      "query": "design query observability for our Postgres cluster",
+      "should_trigger": false
+    }
+  ]
+}

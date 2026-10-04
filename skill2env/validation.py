@@ -21,8 +21,7 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Sequence
 
-from .axes import TaskAxes
-from .models import ContractError, CreatorResult, SkillBundle
+from .models import ContractError, SkillBundle
 from .task_config import HarborTaskConfigError, validate_harbor_task_toml
 
 
@@ -35,6 +34,7 @@ REQUIRED_FILES = (
     "solution/solve.sh",
 )
 REQUIRED_DIRECTORIES = ("environment", "tests", "solution")
+RUBRIC_SECTIONS = ("## Good Signals", "## Negative Signals")
 MIB_BYTES = 1024 * 1024
 DEFAULT_MAX_TASK_SIZE_MIB = 128
 
@@ -75,18 +75,9 @@ class PostCheckReport:
 
 
 class TaskPostChecker:
-    """Check structure, shell syntax, Harbor schema validity, and privacy."""
+    """Check structure, shell syntax, rubric shape, Harbor schema validity, and privacy."""
 
-    def check(
-        self,
-        task_dir: Path,
-        *,
-        expected_name: str,
-        bundle: SkillBundle,
-        creator_result: CreatorResult,
-        axes: TaskAxes | None = None,
-    ) -> PostCheckReport:
-        del expected_name, creator_result, axes  # host authors task.toml itself
+    def check(self, task_dir: Path, *, bundle: SkillBundle) -> PostCheckReport:
         task_dir = task_dir.resolve()
         report = PostCheckReport(ok=False)
         errors: List[str] = []
@@ -107,6 +98,10 @@ class TaskPostChecker:
         self._check_shell(task_dir / "tests" / "test.sh", errors)
         self._check_shell(task_dir / "solution" / "solve.sh", errors)
         report.checks["scripts"] = len(errors) == before
+
+        before = len(errors)
+        self._check_rubric(task_dir / "tests" / "rubric.md", errors)
+        report.checks["rubric"] = len(errors) == before
 
         before = len(errors)
         self._check_privacy(task_dir, dockerfile, bundle, errors)
@@ -170,6 +165,28 @@ class TaskPostChecker:
         else:
             if syntax.returncode != 0:
                 errors.append(f"invalid Bash in {path.name}: {syntax.stderr.strip()}")
+
+    @staticmethod
+    def _check_rubric(path: Path, errors: List[str]) -> None:
+        """Require the two rubric sections, in order, each with at least one bullet."""
+        text = _read_text(path, errors)
+        headings = [
+            (index, line.strip())
+            for index, line in enumerate(text.splitlines())
+            if line.startswith("## ")
+        ]
+        names = [heading for _, heading in headings]
+        if names != list(RUBRIC_SECTIONS):
+            errors.append(
+                f"tests/rubric.md must contain exactly the sections {list(RUBRIC_SECTIONS)} "
+                f"in order; found {names}"
+            )
+            return
+        lines = text.splitlines()
+        bounds = [index for index, _ in headings] + [len(lines)]
+        for (start, heading), end in zip(headings, bounds[1:]):
+            if not any(line.lstrip().startswith(("- ", "* ")) for line in lines[start + 1 : end]):
+                errors.append(f"tests/rubric.md section {heading!r} has no bullet entries")
 
     @staticmethod
     def _check_privacy(

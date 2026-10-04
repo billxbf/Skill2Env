@@ -1,0 +1,392 @@
+{
+  "skill_name": "deal-value-calc",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Selling our claims-automation platform into Northbeam Logistics, 6-person freight claims team. Their champion Dara pulled the numbers off their ops dashboard: 3,100 claims a month, 11 minutes of manual touch time per claim (she ran a stopwatch study on her own team last quarter), and HR confirmed the claims clerks are on $48,000 base. Our quote is $54,000/year plus $12,000 implementation, and Dara reckons her team will burn about 90 hours on rollout. From our other rollouts I'd say touch time drops to about 3 minutes. Our marketing team says companies like them typically cut claim errors by 30%. I don't have anything on what a claim error actually costs them. Build me the ROI case, Dara wants to take it to their VP Finance.",
+      "expected_output": "A math block with a labelled input ledger, a labour-time driver computed with loading and a realization haircut, the error/rework driver dropped for want of a buyer-supplied cost per error, full TCO, ROI with its convention stated, three scenarios conservative first, a rep-assumed disclosure line, and a narrative one-pager alongside the math.",
+      "files": [],
+      "expectations": [
+        "Uses the stated $48,000 base salary and labels it buyer-supplied.",
+        "Converts base salary to a fully loaded cost using a multiplier in the 125-135% range, and labels that multiplier as a benchmark with its source named or as rep-assumed if no source is named.",
+        "Labels the 3-minute post-implementation touch time as rep-assumed.",
+        "Treats the 30% claim-error reduction as rep-assumed rather than a benchmark, because no source is named for it.",
+        "Produces no numeric cost per claim error; either asks the buyer for it or inserts an explicitly labelled placeholder.",
+        "Drops the error/rework driver from the computed case rather than modelling it with an assumed cost per error.",
+        "Applies a realization haircut in the 60-70% range to the labour-time-saved driver and states it.",
+        "Computes total investment including the $12,000 implementation and the 90 internal hours valued at a loaded hourly rate, not the $54,000 subscription alone.",
+        "States which ROI convention the document uses, net-benefit or gross.",
+        "Presents three scenarios with the conservative case first.",
+        "Includes a visible disclosure line stating the headline rests in part on rep-assumed inputs, naming which ones.",
+        "Delivers both a math block with an input ledger carrying value, unit, source and provenance label, and a narrative one-pager, not an ROI figure alone."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Velostrom Utilities, support-automation deal. Their helpdesk export shows 22,000 tickets a year at a 14-minute average handle time across a 14-agent team, and the champion says a fully loaded agent costs them $61,000. I think we deflect about 35% of those tickets. He also shared their approved FY27 hiring plan: 4 more agents budgeted for the same team because ticket volume is growing 30%. So that's $244,000 of hires they don't make, plus all the hours we save them. Add it up for me, they want a number by Friday.",
+      "expected_output": "A case that catches the shared-capacity double count between labour time saved and headcount avoidance, keeps headcount avoidance out of the hard headline, treats $61,000 as already loaded, labels the 35% deflection rate rep-assumed, and runs three unweighted scenarios.",
+      "files": [],
+      "expectations": [
+        "Identifies that labour time saved and headcount avoidance both draw on the same 14-agent support team.",
+        "Does not total the $244,000 headcount avoidance and the full deflected-hours value together at face value; splits the shared capacity between the two drivers or drops one.",
+        "Places headcount avoidance in a soft or cost-avoidance section, excluded from the headline number.",
+        "Bases the headline on hard value only and states that the case was tested on hard value alone.",
+        "Treats the $61,000 as already fully loaded and applies no further loading multiplier to it.",
+        "Labels the 35% deflection rate as rep-assumed.",
+        "Holds the 22,000 annual ticket volume and the 14-minute handle time fixed in the conservative case as buyer-supplied.",
+        "Haircuts the 35% deflection rate hardest in the conservative case.",
+        "Attaches no probability, likelihood or weight to any of the three scenarios.",
+        "States the double-counting rule explicitly: one team's hours back at most one driver."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Need a strong ROI case for Thursday's CFO meeting. Platform is $96,000/year plus $25,000 implementation. The only hard thing the buyer could give me is that they'd retire two tools, one at $19,000/year and one at $12,000/year, and their ops lead said about 200 hours of internal effort at roughly $40/hour loaded, which he pulled out of their finance system. Everything else they talk about is better collaboration across teams and people being less frustrated. Make it compelling.",
+      "expected_output": "A run that computes $31,000 of hard annual value against $96,000 of recurring cost, reports the negative net, declares payback undefined, and warns the user the case fails on hard value before writing any narrative, without inventing a driver to close the gap.",
+      "files": [],
+      "expectations": [
+        "Totals annual hard value at $31,000 from the two retired tools and compares it against the $96,000 annual recurring cost.",
+        "Reports the result as negative annual net value rather than a positive ROI percentage.",
+        "States payback as not paying back within the horizon instead of producing a payback figure.",
+        "Tells the user the case fails on hard value alone before producing any polished narrative one-pager.",
+        "Adds no invented revenue, productivity or efficiency figure to close the gap.",
+        "Keeps better collaboration and reduced frustration in a separate soft-value section, excluded from the headline.",
+        "Counts the 200 internal hours at $40/hour in the Year-1 investment alongside the $25,000 implementation.",
+        "Names which specific buyer-supplied input would have to exist for the verdict to change.",
+        "Does not present the deal as having a compelling ROI for the CFO meeting."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "$310,000 single-year deal, biggest of my career. Buyer is Hal Vreeland, owner-operator of a 40-person plumbing distributor. He signs personally, there's no procurement, no security review, nobody else in the room. He wants an answer by Friday. My VP says build the full enterprise business case with sensitivity analysis and the finance appendix. Where do I start?",
+      "expected_output": "A recommendation that sizes the artifact by complexity rather than deal value, lands on a lighter rung than the enterprise model, and prunes drivers that cannot be sourced before Friday.",
+      "files": [],
+      "expectations": [
+        "States that artifact size is set by deal complexity - stakeholder count, procurement or security in the path, strategic versus tactical spend - not by deal value.",
+        "Explicitly rejects the $310,000 figure as the reason to build the full enterprise model.",
+        "Recommends a lighter artifact than the full enterprise model and names the rung: a payback estimate, or a one-page summary plus light model.",
+        "Notes that this deal crosses no complexity trigger: single decider, no procurement, no security review.",
+        "Drops any value driver requiring a time study or a cohort analysis, given the Friday deadline.",
+        "Promotes drivers readable straight off documents the buyer already holds, such as the contract or renewal list and the hiring plan.",
+        "Asks who the document gets forwarded to, or whether a finance function or lender will review it.",
+        "Still leads with a conservative case rather than a single point estimate.",
+        "Does not recommend producing a separate finance or procurement appendix version for this deal."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Residential solar, Arizona. Met Dana and Rob door-knocking last Tuesday. Their last 12 utility bills add up to $3,480. Our financing is $189 a month for 240 months. Our design tool says 92% offset. Marketing wants every rep leading with 'save 40-70% on your power bill'. Build me the value case to leave with them. Rob is the skeptical one, Dana's the one who called us back.",
+      "expected_output": "A consumer value case that refuses the unsubstantiated savings headline, names the consumer-protection constraints, discloses total financed cost, leads with a conservative offset scenario, and labels the B2B framework mapping as structural analogy.",
+      "files": [],
+      "expectations": [
+        "Refuses to use 'save 40-70% on your power bill' as the headline claim.",
+        "Names the substantiation duty for consumer savings claims under FTC Act Section 5.",
+        "Names at least one further consumer-protection constraint beyond FTC Section 5: the three-business-day cooling-off right on the door-to-door sale, lending-disclosure requirements, or state solar-disclosure statutes.",
+        "Discloses the total financed cost and the financing terms, not the $189 monthly payment alone.",
+        "Presents a payback range with its assumptions disclosed instead of a single savings headline.",
+        "Labels the 92% production offset as installer or vendor data, treated as rep-assumed until substantiated, not as a buyer-supplied figure.",
+        "Uses the $3,480 of actual utility bills as the buyer-supplied baseline.",
+        "Leads with a conservative case built on a lower offset and no assumed utility-price inflation.",
+        "Does not headline the optimistic case.",
+        "Labels the mapping of B2B business-case roles onto this household purchase as a structural analogy rather than established practice.",
+        "Identifies Rob as the skeptical household member the document must convince without the salesperson present, and the lender whose approval gates the purchase."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Tessera Robotics deal, warehouse scheduling software. Their WMS export shows 120,000 pick-hours a year across 3 sites, and payroll says $27/hour loaded for pickers. I figure we take 4% off that. Our price is $88,000/year plus $20,000 implementation, and their ops manager says 150 hours of internal effort. For the board slide I want expected value: weight the three cases 20/60/20 and give me one blended ROI number.",
+      "expected_output": "A refusal to produce a probability-weighted blended ROI, three unweighted cases with the conservative first, one-at-a-time sensitivity on the inputs that move the result, and full TCO.",
+      "files": [],
+      "expectations": [
+        "Declines to produce a single probability-weighted or blended ROI number.",
+        "States that the three cases are defensibility bands, not a probability distribution.",
+        "Attaches no 20%, 60% or 20% weight, nor any other likelihood, to the three cases.",
+        "Presents the conservative case first.",
+        "Adds one-at-a-time sensitivity analysis naming the two or three inputs the result is most sensitive to.",
+        "Shows the swing in annual value when the top input moves between a stated low and a stated high.",
+        "Labels the 4% pick-hour reduction as rep-assumed.",
+        "Haircuts the 4% reduction hardest in the conservative case while holding the 120,000 hours and $27/hour fixed as buyer-supplied.",
+        "Applies and states a realization haircut on the labour-time driver.",
+        "Includes the 150 internal effort hours, valued at a loaded rate, in total investment alongside the $20,000 implementation."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Lumen Freight Systems. Our marketing deck says customers see 3.5x ROI with payback under 6 months, and their CFO asked for the math behind it. What I've got from the buyer is 5 route planners, each spending about 6 hours a week on manual rework, which came from their ops lead. Price is $72,000/year. Their CFO told my champion anything over a 12-month payback doesn't get approved, so I want the model to land right at 12 months.",
+      "expected_output": "A case that refuses to reuse vendor deck figures as the prospect's expected result, refuses to engineer the payback to 12 months, treats the CFO's bar as a hurdle to confirm, and leaves the loaded hourly cost as a labelled gap.",
+      "files": [],
+      "expectations": [
+        "Does not present the 3.5x ROI or the sub-6-month payback from the marketing deck as this prospect's expected result.",
+        "Labels the deck figures as vendor data rather than as a benchmark or an expected outcome.",
+        "Refuses to back-solve the model so payback lands at 12 months.",
+        "States that a benefit stream landing exactly on a clean threshold reads as manufactured to a finance reviewer.",
+        "States no payback threshold as a universal rule.",
+        "Treats the CFO's 12-month bar as the buyer's own hurdle to be confirmed with them, not as a target to engineer toward.",
+        "Invents no fully loaded hourly cost for the route planners; asks for it or inserts a labelled placeholder.",
+        "Shows the raw arithmetic from 5 planners x 6 hours/week through to annual value rather than a rounded headline.",
+        "Computes investment as full TCO rather than the $72,000 subscription alone."
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Buyer says our tool takes their win rate from 22% to 26%. They close about $14M of new business a year. They won't give me gross margin, said it's confidential. Their churn is 9% and they reckon we'd get it to 6%. Build the case and lead with the revenue number, it's by far the biggest thing here.",
+      "expected_output": "A case that deletes both revenue lift and churn outright because gross margin is withheld, refuses a top-line model and any substituted margin, and redirects to hard drivers with the specific inputs needed.",
+      "files": [],
+      "expectations": [
+        "Does not model the revenue lift on top-line revenue.",
+        "Removes the revenue-lift driver from the case entirely because gross margin is withheld, rather than demoting it or parking it as soft value.",
+        "Removes the churn or retention driver for the same reason.",
+        "Substitutes no industry-average or otherwise assumed gross margin.",
+        "Produces no annual value figure of the $560,000 kind derived from $14M multiplied by 4 percentage points.",
+        "Declines to lead the headline with the revenue number.",
+        "Names attribution as the objection finance uses to discount both revenue lift and churn.",
+        "States that supplying a gross-margin figure, even as a range, is what would bring those drivers back into the case.",
+        "Redirects to hard drivers the buyer can actually feed and asks for the specific inputs those need."
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Math's done and the champion signed off on the assumptions. Hard annual value $184,000, conservative case $121,000, Year-1 investment $63,500, payback 6.3 months conservative. Their FY27 cost-to-serve program is called Project Clearwater. Now write the one-pager. Make it pop: our logo at the top, list the five features that drive the savings, and address it to Priya since she's the one who asked for it. Their CFO Marcus will see it after her.",
+      "expected_output": "An unbranded five-part one-page case written through Priya to Marcus, tied to Project Clearwater, carrying the conservative figure, the cost of inaction, both sides' investment, and next steps - with no feature list.",
+      "files": [],
+      "expectations": [
+        "Produces all five parts: priority-driven headline, problem statement, recommended approach, target outcomes, required investment.",
+        "Ties the headline to Project Clearwater.",
+        "Contains no feature list; the recommended-approach section describes the shift in practice instead.",
+        "Strips the vendor logo and branding from the document.",
+        "Writes the document through Priya to Marcus rather than addressing it to Priya.",
+        "Produces a document self-explanatory to a reader who never met the rep.",
+        "States the cost of doing nothing in the buyer's own units.",
+        "Leads the value statement with the $121,000 conservative figure rather than the $184,000 figure.",
+        "Aims the page at costs, time to value, and confidence in the initiative.",
+        "States required investment from both sides, vendor and buyer, with a timeline.",
+        "Ends with next steps that include champion edit rounds and written assumption sign-off."
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Deal's at proposal, verbal yes, legal's reviewing the MSA. My manager wants an ROI one-pager as a leave-behind for the signature meeting next week. He also read somewhere that getting the buyer to edit the business case three times triples your win rate. Is that real? And what should I be tracking on this stuff?",
+      "expected_output": "A correction of the tripling claim as unreplicated, a flag that the case is arriving late-stage as a leave-behind, a usable path for this deal anyway, and a concrete KPI set including the no-decision baseline.",
+      "files": [],
+      "expectations": [
+        "States that the claim about three edit rounds tripling win rates is unreplicated, and does not present it as established.",
+        "Recommends counting edit rounds completed as the metric instead of promising a win-rate lift.",
+        "Flags that producing the case at proposal stage as a leave-behind is late, and that it belongs right after the first discovery call.",
+        "Still gives a usable path for this specific deal rather than only criticising the timing.",
+        "Names concrete KPIs including the buyer correcting an input, edit rounds completed, written assumption sign-off, and the champion forwarding the document.",
+        "Cites the 40-60% no-decision rate for qualified B2B deals with its source, Dixon and McKenna, HBR 2022 / The JOLT Effect.",
+        "Includes the forward ask: asking the champion whether they are willing to forward a short summary.",
+        "States no specific win-rate uplift percentage as an expected outcome."
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "Enterprise deal: 9 stakeholders, procurement running a formal evaluation against two competitors, security review in flight. Their finance team wants NPV over three years. Is 10% the standard discount rate to use? Also what exactly do I hand procurement versus what I hand the SVP who sponsors this?",
+      "expected_output": "A refusal to assume the discount rate, an instruction to ask the buyer's finance for their own hurdle rate, two distinct document versions, a three-year cash-flow view with NPV, and driver weighting tuned to a procurement-led evaluation.",
+      "files": [],
+      "expectations": [
+        "Does not adopt 10% as the discount rate to use.",
+        "Instructs asking the buyer's finance function for their own hurdle rate or cost of capital.",
+        "Notes that a 10% default exists in one commercial methodology but is not this buyer's number.",
+        "Produces two distinct documents: an economic-buyer summary for the SVP sponsor and a separate finance or procurement version with an assumption appendix.",
+        "States the NPV calculation as the sum of discounted net cash flows per year minus the initial investment.",
+        "Shows per-year value and cost across the three-year horizon plus the cumulative net.",
+        "Weights direct cost and TCO comparison hardest, given the procurement-led evaluation.",
+        "Gives soft drivers roughly no weight in the procurement-facing version.",
+        "Includes sensitivity analysis and a documented source for every input in the procurement version.",
+        "Recommends engaging a value engineer or business-value consultant if the selling organisation has one."
+      ]
+    }
+  ],
+  "trigger_queries": [
+    { "query": "Build the business case for the Meridian deal", "should_trigger": true },
+    { "query": "What's the ROI on this deal?", "should_trigger": true },
+    {
+      "query": "The CFO wants to see the math before Thursday, help me make this defensible",
+      "should_trigger": true
+    },
+    { "query": "How long until it pays for itself?", "should_trigger": true },
+    {
+      "query": "I need a TCO comparison for the proposal, not just our license price",
+      "should_trigger": true
+    },
+    {
+      "query": "Put together a one-pager my champion can forward to their exec team",
+      "should_trigger": true
+    },
+    { "query": "Their finance team wants NPV over three years", "should_trigger": true },
+    {
+      "query": "help me justify the price to their CFO with actual numbers",
+      "should_trigger": true
+    },
+    { "query": "quantify what their manual process is costing them", "should_trigger": true },
+    {
+      "query": "$30k/year subscription, they say it saves each rep 4 hours a week, show me the math",
+      "should_trigger": true
+    },
+    { "query": "The buying committee asked for the financial impact", "should_trigger": true },
+    {
+      "query": "Model the savings from consolidating their three tools into ours",
+      "should_trigger": true
+    },
+    { "query": "What's the cost of doing nothing here?", "should_trigger": true },
+    {
+      "query": "They want to see three scenarios before they'll sign anything",
+      "should_trigger": true
+    },
+    {
+      "query": "Build the value case for the solar quote I'm leaving with the homeowners tonight",
+      "should_trigger": true
+    },
+    { "query": "my champion needs ammo for the budget committee", "should_trigger": true },
+    { "query": "sanity check my savings calculation before I send it", "should_trigger": true },
+    { "query": "Write the economic justification section of the proposal", "should_trigger": true },
+    { "query": "Is this actually worth it for them?", "should_trigger": true },
+    { "query": "They said prove it. now what", "should_trigger": true },
+    { "query": "break down what this actually costs them in year one", "should_trigger": true },
+    {
+      "query": "Should I include the morale improvement in the number I show them?",
+      "should_trigger": true
+    },
+    { "query": "Help me show the cost of waiting another year", "should_trigger": true },
+    {
+      "query": "what's a defensible payback estimate for a $120k enterprise software purchase",
+      "should_trigger": true
+    },
+    {
+      "query": "Their controller is reviewing our proposal, what does she need to see?",
+      "should_trigger": true
+    },
+    { "query": "Turn these discovery notes into a financial argument", "should_trigger": true },
+    { "query": "how do I show this saves them money", "should_trigger": true },
+    { "query": "My rep built a savings model with made-up numbers, fix it", "should_trigger": true },
+    {
+      "query": "Procurement wants the full cost breakdown, not just the subscription",
+      "should_trigger": true
+    },
+    { "query": "Draft the value summary for the renewal QBR baseline", "should_trigger": true },
+    { "query": "Their VP asked what the return looks like over three years", "should_trigger": true },
+    { "query": "I need numbers that survive a finance review", "should_trigger": true },
+    { "query": "Can you check my business case before it goes to the CFO?", "should_trigger": true },
+    {
+      "query": "What assumptions do I need to get from the buyer to build this?",
+      "should_trigger": true
+    },
+    { "query": "Work out what their downtime is costing them per year", "should_trigger": true },
+    { "query": "Give me the hard vs soft savings split for this deal", "should_trigger": true },
+    { "query": "The homeowner wants to know if the panels pay for themselves", "should_trigger": true },
+    { "query": "I need a leave-behind that works when I'm not in the room", "should_trigger": true },
+    { "query": "Build the financial story for this deal", "should_trigger": true },
+    { "query": "How much will they actually save, conservatively?", "should_trigger": true },
+    { "query": "payback period for this purchase?", "should_trigger": true },
+    {
+      "query": "Help me build the finance appendix for the enterprise proposal",
+      "should_trigger": true
+    },
+    { "query": "They want hard numbers, not another demo", "should_trigger": true },
+    { "query": "what should go in the investment section of the one-pager", "should_trigger": true },
+    {
+      "query": "12 hours a week saved across 40 people, what's that worth to them?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our champion got burned last time because our numbers didn't hold up, how do I avoid that?",
+      "should_trigger": true
+    },
+    {
+      "query": "Make the case for why they should buy now instead of next fiscal year",
+      "should_trigger": true
+    },
+    {
+      "query": "Their CFO said anything over a year doesn't get approved, what do I do with that?",
+      "should_trigger": true
+    },
+    {
+      "query": "The prospect says we're too expensive compared to Coralline, what do I say on the call?",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan my discount ladder for the renewal, what can I give and what do I get back?",
+      "should_trigger": false
+    },
+    { "query": "Score this deal against MEDDPICC", "should_trigger": false },
+    { "query": "Who's the economic buyer in the Halcyon account?", "should_trigger": false },
+    { "query": "What's the TAM for warehouse robotics in the Nordics?", "should_trigger": false },
+    {
+      "query": "Design the accelerator curve for our AE comp plan next year",
+      "should_trigger": false
+    },
+    {
+      "query": "How much pipeline do I need to hit a $4M quota at a 23% win rate?",
+      "should_trigger": false
+    },
+    { "query": "Set FY27 quotas for my six reps", "should_trigger": false },
+    {
+      "query": "Write me discovery questions to uncover the cost of their manual process",
+      "should_trigger": false
+    },
+    { "query": "Review this call transcript and score the rep", "should_trigger": false },
+    { "query": "Here are my notes on the Tarrant deal, is it at risk?", "should_trigger": false },
+    {
+      "query": "Write the recap email with next steps from yesterday's call",
+      "should_trigger": false
+    },
+    { "query": "Our cold emails are all landing in spam", "should_trigger": false },
+    { "query": "Give me 10 subject line variants for this campaign", "should_trigger": false },
+    { "query": "What do I say in the first ten seconds when they pick up?", "should_trigger": false },
+    {
+      "query": "Build me a 12-touch outbound cadence across email and LinkedIn",
+      "should_trigger": false
+    },
+    {
+      "query": "Find me a personalization angle from this prospect's funding round",
+      "should_trigger": false
+    },
+    { "query": "Define our ICP from last year's closed-won data", "should_trigger": false },
+    { "query": "Where should the tier cutoffs sit for our named accounts?", "should_trigger": false },
+    { "query": "Should we go product-led or sales-led?", "should_trigger": false },
+    { "query": "Restructure my sales team into pods", "should_trigger": false },
+    { "query": "How do I get promoted from SDR to AE?", "should_trigger": false },
+    { "query": "Design the interview loop for an enterprise AE hire", "should_trigger": false },
+    {
+      "query": "Which sales podcasts and newsletters should I be following?",
+      "should_trigger": false
+    },
+    { "query": "Price our new enterprise tier", "should_trigger": false },
+    { "query": "Write the value proposition for our homepage", "should_trigger": false },
+    { "query": "Estimate our monthly Azure spend for this architecture", "should_trigger": false },
+    { "query": "Run a DCF on this stock and tell me if it's undervalued", "should_trigger": false },
+    {
+      "query": "Set purchasing-power-parity pricing for our app across 40 countries",
+      "should_trigger": false
+    },
+    { "query": "What's our CAC payback period as a company?", "should_trigger": false },
+    { "query": "Calculate LTV to CAC for our self-serve segment", "should_trigger": false },
+    { "query": "Model our net revenue retention for the board deck", "should_trigger": false },
+    { "query": "Forecast this quarter's revenue off my current pipeline", "should_trigger": false },
+    { "query": "How do I justify three more headcount to my VP?", "should_trigger": false },
+    { "query": "Calculate the commission owed on this closed-won deal", "should_trigger": false },
+    { "query": "Should I give 15% off to close by end of quarter?", "should_trigger": false },
+    { "query": "Handle the 'no budget until next year' objection", "should_trigger": false },
+    { "query": "Draft the MSA redlines for their procurement team", "should_trigger": false },
+    { "query": "Which accounts should I prioritize this quarter?", "should_trigger": false },
+    {
+      "query": "Write a customer case study about the results Fenwick got",
+      "should_trigger": false
+    },
+    {
+      "query": "Build the feature-by-feature comparison slide against Coralline",
+      "should_trigger": false
+    },
+    { "query": "Our win rate dropped 8 points last quarter, diagnose it", "should_trigger": false },
+    { "query": "Route this inbound lead to the right rep", "should_trigger": false },
+    {
+      "query": "What should we charge for a professional services implementation?",
+      "should_trigger": false
+    },
+    { "query": "Score my resume for an enterprise AE role", "should_trigger": false },
+    { "query": "Summarize this 40-page RFP and pull out the requirements", "should_trigger": false },
+    { "query": "Plan the QBR agenda for our biggest account", "should_trigger": false },
+    { "query": "Draft the mutual action plan dates with the buyer", "should_trigger": false }
+  ]
+}

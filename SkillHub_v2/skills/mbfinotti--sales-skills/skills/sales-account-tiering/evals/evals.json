@@ -1,0 +1,464 @@
+{
+  "skill_name": "sales-account-tiering",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I run revenue ops at Brindle Analytics - B2B SaaS, average contract value about $55K, 8 quota-carrying AEs, and a qualified list of 940 accounts that all carry a maintained 0-100 fit score from our segmentation model. We're going with the standard bands: 80 and above is Tier 1, 50-79 is Tier 2, below 50 is Tier 3. That puts 310 accounts in Tier 1, which works out to roughly 39 each across the 8 reps. Seems workable to me. Can you write up the tiering plan so I can take it to our VP on Thursday?",
+      "expected_output": "A tiering charter that refuses the 310-account Tier 1, sets the per-rep Tier-1 capacity cap first, then raises the composite cutoff above 80 until the Tier-1 count fits the resulting slot count, with per-tier firmographic gates, a bounded override budget, published sub-scores and SLA-encoded coverage differences.",
+      "files": [],
+      "expectations": [
+        "Sets the Tier-1 capacity cap before the cutoff, and calibrates the cutoff to fit the cap rather than the reverse.",
+        "Rejects leaving 310 accounts in Tier 1 and names tier collapse as the failure mode.",
+        "Places the $55K ACV in the $50K-$500K capacity band of roughly 20-50 accounts per rep, on a 1:few motion.",
+        "Proposes a Tier-1 cap per rep inside roughly 5-25 accounts.",
+        "Multiplies the chosen Tier-1 per-rep cap by the 8 reps and states the resulting total Tier-1 slot count.",
+        "States the composite cutoff moves above 80 until the Tier-1 count fits under that slot count.",
+        "Treats the 80/50 banding as a starting convention rather than a fixed rule.",
+        "Adds firmographic gates per tier, with Tier-1 gates tighter than Tier-2 gates.",
+        "Bounds the manual strategic-override channel to a stated share of Tier-1 slots, each override logged and reviewed at the tier review.",
+        "Requires publishing per-dimension sub-scores so reps can see why an account landed in its tier.",
+        "Requires at least one coverage difference encoded as an SLA per tier, not tier labels alone."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Calloway Telemetry here. Our account tiers have been live two quarters. The board dashboard shows 3.4x pipeline coverage company-wide so coverage looks fine, but the enterprise team keeps missing - they're at 34% quota attainment while SMB is over 90%. Historical win rates: SMB 58%, mid-market 31%, enterprise 17%. My instinct is to raise enterprise activity targets and add a weekly pipeline blitz. What do you think, and what should I be watching on the tier health side?",
+      "expected_output": "A diagnosis that recomputes required coverage per segment as 1 divided by win rate, shows the blended 3.4x is masking a starved enterprise segment, reads 34% attainment as an oversized-book signal calling for smaller books rather than more activity, and specifies per-segment, per-tier health metrics.",
+      "files": [],
+      "expectations": [
+        "Computes required pipeline coverage as 1 divided by the segment's historical win rate rather than applying a flat multiplier.",
+        "Gives SMB required coverage of roughly 1.7x from the 58% win rate.",
+        "Gives mid-market required coverage of roughly 3.2x from the 31% win rate.",
+        "Gives enterprise required coverage of roughly 5.9x from the 17% win rate.",
+        "States the 3.4x blended number hides a starved enterprise segment.",
+        "Declines to recommend raising enterprise activity targets or a pipeline blitz as the fix.",
+        "Reads 34% enterprise quota attainment as an oversized-book signal and recommends shrinking books rather than pushing reps harder.",
+        "Names roughly 40% segment quota attainment as the threshold that forces a redesign rather than a routine review.",
+        "Requires every tier-health metric to be computed per segment and per tier, never blended.",
+        "Names by-tier outcome metrics - pipeline created, win rate, ACV, retention - rather than engagement metrics.",
+        "Recommends pre-defining the response to each coverage band instead of deciding under pressure."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Marlowe & Sons is a direct-to-consumer skincare brand - we sell entirely through our own site, about 412,000 customers on file, and a CX team of 9. Leadership wants us to tier the customer base into Tier 1 / Tier 2 / Tier 3 'accounts', set accounts-per-rep caps for the CX team, and run quarterly business reviews with the top tier. Can you build that out for us?",
+      "expected_output": "A refusal to force account-tiering machinery onto a direct-to-consumer base, naming customer-value segmentation on spend or lifetime-value bands as the structurally different exercise, and distinguishing this case from B2C sold through key accounts.",
+      "files": [],
+      "expectations": [
+        "States that direct-to-consumer has no accounts to tier.",
+        "Names customer-value segmentation on spend or lifetime-value bands as the structural analog.",
+        "Declines to produce accounts-per-rep capacity caps for the 412,000 customers.",
+        "Declines to produce a per-tier quarterly business review cadence for individual consumers.",
+        "States the analog is a different exercise with different math rather than renamed account tiering.",
+        "Does not apply the ACV-to-accounts-per-rep capacity bands to this case.",
+        "Distinguishes this from B2C sold through key accounts - retail chains, distributors, franchise groups - where account tiering does transfer.",
+        "States the B2B or B2C scope of the answer explicitly rather than leaving it implicit."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "I'm head of sales at Vaughn Pantry Co., a snack manufacturer. We sell through 4 national grocery chains, 26 regional chains, and roughly 1,900 independent stores, with 5 key-account managers on the team. Everything I read about account tiering is B2B SaaS - buying committees, employee counts, tech stacks. Does any of it apply to us, and if so how would you actually cut our list?",
+      "expected_output": "Confirmation that account tiering transfers nearly unchanged to a B2C key-account motion, with national chains as Tier 1 under named key-account managers, regional chains as Tier 2, independents routed through distributors or telesales as Tier 3, joint business planning replacing the QBR, and the changed fit-score inputs placed upstream.",
+      "files": [],
+      "expectations": [
+        "States account tiering transfers to a B2C key-account motion rather than being B2B-only.",
+        "Places the 4 national chains in Tier 1 with named key-account managers.",
+        "Places the 26 regional chains in Tier 2.",
+        "Routes the roughly 1,900 independents through distributors or telesales as Tier 3.",
+        "Names joint business planning as the retail-channel equivalent of the QBR.",
+        "States the capacity caps, the score-to-tier bridge, the coverage-lever ordering and the governance cadence all transfer unchanged.",
+        "Names store count, shelf or category position, and geography as the fit-score inputs that replace firmographics and technographics.",
+        "Places those changed inputs upstream in the fit-scoring layer rather than inside the tiering exercise.",
+        "Bounds Tier 3 by what the distributor or automation machinery can serve rather than by a per-rep cap."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Ardent Ridge Software. We've got 1,150 accounts sitting in the CRM, no scoring model of any kind, and honestly no agreed definition of who our best-fit customer is - reps just pick whatever looks big. Territory carve is Monday. Can you rank all 1,150 into Tier 1, Tier 2 and Tier 3 by revenue potential so we have something to hand the team?",
+      "expected_output": "A redirect upstream: with neither a fit score nor an agreed ICP, the fit-scoring and ICP layers must be built before tiering, because tiering an unqualified list collapses two layers and no cutoff repairs it.",
+      "files": [],
+      "expectations": [
+        "States that having neither a fit score nor an agreed ICP routes the work upstream before tiering starts.",
+        "Names the account fit-scoring layer as the prerequisite that must exist first.",
+        "Names ICP definition as the layer beneath that score.",
+        "Declines to build the fit score or the ICP inside this tiering exercise.",
+        "Names layer collapse as the failure mode of tiering a list that was never qualified.",
+        "States tiering ranks qualified survivors and never rescues or disqualifies misfits.",
+        "Distinguishes the three layers - scoring or qualification, segmentation, tiering - and states their order.",
+        "Does not substitute revenue potential alone for a fit score.",
+        "Warns that without the upstream qualification bar, Tier 3 fills with accounts that should have been disqualified."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Kestrel Logistics Software. Our Tier 1 currently holds 140 accounts spread across 6 AEs. The CRO wants three things for next quarter: every Tier 1 account paired with an executive sponsor (we have 3 VPs plus the CEO who are up for it), a new Tier 0 for the 9 logos we've decided are must-wins, and a watchlist tier. We don't buy intent data today, no plans to. Can you spec all three?",
+      "expected_output": "A response that blocks the sponsorship program until Tier 1 is re-cut under cap, does the sponsor-capacity arithmetic against a 4-accounts-per-sponsor ceiling, allows Tier 0 only with a committed sponsor per logo, and rejects the watchlist tier for lack of a signal feed.",
+      "files": [],
+      "expectations": [
+        "States executive sponsorship is promoted only once the Tier-1 book is at or under its capacity cap.",
+        "Flags 140 Tier-1 accounts across 6 AEs as over cap and requiring a re-cut before the sponsorship program.",
+        "Applies a cap of roughly 4 accounts per executive sponsor.",
+        "States that 3 VPs plus the CEO yields about 16 sponsored accounts, far short of 140.",
+        "Requires a one-year sponsor commitment and annual selection.",
+        "Requires named governance for the sponsorship program rather than informal executive help on big deals.",
+        "Allows the Tier-0 overlay only for must-win logos that each carry a committed executive sponsor.",
+        "Rejects the watchlist tier because no signal or intent data feeds a promotion path.",
+        "Names an overlay added without its precondition as governance theater.",
+        "Ranks executive sponsorship below capacity caps and SLA-encoded coverage differentiation on efficiency.",
+        "Recommends shipping capacity caps and SLA-encoded coverage differentiation together before the sponsorship program."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "RevOps lead at Pell & Vance. We just switched on an intent platform and I want to wire it straight into our tiering: recompute every account's tier automatically every Monday morning from the intent feed, my RevOps team owns all the promote/demote calls so sales leadership doesn't slow it down, and we judge the whole thing after six weeks on Tier 1 email click-through rate. Sanity check this for me before I build it.",
+      "expected_output": "A correction on all three counts: quarterly reviews with an annual redesign and a churn cap instead of weekly recomputation, tier-change decisions owned by sales leadership while RevOps owns model and calendar, and by-tier outcome metrics judged on a two-quarter lift test instead of click-through.",
+      "files": [],
+      "expectations": [
+        "Rejects weekly automatic re-tiering as whipsawing accounts before any coverage level can take effect.",
+        "Sets a quarterly tier review for promote and demote decisions.",
+        "Sets an annual full redesign.",
+        "Caps list churn at roughly 20% per quarter.",
+        "Explains the churn cap as giving an account time to experience its new coverage level before being re-scored.",
+        "Assigns the model, the data and the calendar to RevOps.",
+        "Assigns tier-change decisions to sales leadership rather than RevOps.",
+        "Rejects Tier-1 email click-through as the success metric.",
+        "Names by-tier outcome metrics - pipeline created, win rate, ACV, retention - as the replacement.",
+        "Schedules a two-quarter test of whether Tier-1 lift exceeds Tier 2 and Tier 3.",
+        "States that a failed two-quarter lift test means redesigning the system rather than re-running it.",
+        "Keeps the slow-moving fit score as the tier anchor while signal points decay on a timer."
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "VP Sales at Thistlewood CRM. I'm writing the justification section of a board memo asking for headcount to run our account tiering program. I want it to say tiered accounts are 2.3x more likely to hit targets, that ABM delivers 208% higher ROI, that 20-50 named accounts per enterprise AE is the industry benchmark, and that optimized territory planning yields 2-7% revenue gains. Draft that section for me - make it as strong as you can.",
+      "expected_output": "A drafted justification that attributes the vendor statistics instead of adopting them, demotes the 20-50 figure to a rule-of-thumb convention, and rests the case on the capacity math, with a confidence grade on every figure.",
+      "files": [],
+      "expectations": [
+        "Attributes the 2.3x claim to its vendor source rather than stating it as established fact.",
+        "Attributes the 208% higher ROI claim to its vendor source rather than stating it as established fact.",
+        "States the 20-50 named accounts figure is a rule-of-thumb convention rather than a measured, audited benchmark.",
+        "Declines to present the 20-50 figure to the board as evidence.",
+        "Rests the memo's argument on the capacity math rather than on the vendor statistics.",
+        "Cites roughly 1,500 selling hours per rep per year as the anchor behind the caps.",
+        "Attributes the 2-7% territory-planning revenue gain to its research source rather than presenting it unattributed.",
+        "Assigns every figure in the drafted section a confidence grade - published research, directional convention, or vendor claim."
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Junipero Labs, 4 AEs, average deal about $14K a year, 2,600 qualified accounts on the list. Our founder came back from a conference set on running the full five-type ABM model - strategic, scenario, segment, programmatic, pursuit - and wants each rep to hold 25 named accounts in the top tier. We have no marketing team beyond one generalist doing demand gen. Can you lay out how we'd stand that up?",
+      "expected_output": "A recommendation against the five-type structure absent a dedicated ABM marketing function, a two-tier structure given four reps, the $10K-$50K capacity band applied to the $14K ACV, and 2-3 candidate structures with an explicit recommendation before any cutoff is set.",
+      "files": [],
+      "expectations": [
+        "Recommends against the five-type ABM structure for this org.",
+        "States the five-type structure is promoted only when a dedicated ABM marketing function owns account-level marketing.",
+        "Recommends a two-tier focus / everything-else structure given 4 reps.",
+        "Names roughly five reps or founder-led as the threshold below which a third tier governs coverage nobody can differentiate.",
+        "Names the condition for promoting to three tiers: a genuine mid-touch motion such as SDR-supported cluster campaigns.",
+        "Places the $14K ACV in the $10K-$50K band of roughly 50-150 accounts per rep on a 1:many motion.",
+        "Flags 25 named accounts per rep as inconsistent with that capacity band.",
+        "States the efficiency ordering puts three-tier and two-tier structures above five-type ABM.",
+        "Presents 2-3 candidate tier structures with trade-offs and one explicit recommendation before setting any cutoff."
+      ]
+    }
+  ],
+  "trigger_queries": [
+    { "query": "How should we tier our accounts?", "should_trigger": true },
+    {
+      "query": "Every single account somehow ended up in Tier 1 and nobody trusts the list anymore",
+      "should_trigger": true
+    },
+    {
+      "query": "How many named accounts should each enterprise AE actually carry?",
+      "should_trigger": true
+    },
+    {
+      "query": "Design our 1:1, 1:few and 1:many ABM coverage",
+      "should_trigger": true
+    },
+    {
+      "query": "We need cutoffs for strategic, growth and long-tail accounts",
+      "should_trigger": true
+    },
+    {
+      "query": "Our reps completely ignore the tiers we published last year",
+      "should_trigger": true
+    },
+    {
+      "query": "What should a Tier 1 account get that a Tier 3 account doesn't?",
+      "should_trigger": true
+    },
+    { "query": "Set accounts-per-rep caps for each tier", "should_trigger": true },
+    {
+      "query": "Should we add a Tier 0 for our must-win logos?",
+      "should_trigger": true
+    },
+    {
+      "query": "We already have a fit score on every account - now what do we actually do with it?",
+      "should_trigger": true
+    },
+    {
+      "query": "How often should we re-shuffle which accounts count as strategic?",
+      "should_trigger": true
+    },
+    {
+      "query": "Build a key account program for our national retail chains",
+      "should_trigger": true
+    },
+    { "query": "Who gets a QBR and who doesn't?", "should_trigger": true },
+    {
+      "query": "Our top tier has 400 accounts in it, is that normal?",
+      "should_trigger": true
+    },
+    {
+      "query": "What's a sensible book size for reps selling a $700K product?",
+      "should_trigger": true
+    },
+    {
+      "query": "We want to pair executives with our biggest accounts - how many each?",
+      "should_trigger": true
+    },
+    {
+      "query": "Help me decide how much effort each account deserves",
+      "should_trigger": true
+    },
+    { "query": "Coverage model per account tier please", "should_trigger": true },
+    { "query": "Should we run two tiers or three?", "should_trigger": true },
+    {
+      "query": "Write the governance for promoting and demoting accounts each quarter",
+      "should_trigger": true
+    },
+    {
+      "query": "Our KAMs cover the big grocery chains and telesales handles the independents - is that structure right?",
+      "should_trigger": true
+    },
+    {
+      "query": "Everything's labelled A, B, C but every account gets the exact same cadence",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I turn our 0-100 account score into actual coverage levels?",
+      "should_trigger": true
+    },
+    {
+      "query": "We just doubled the sales team, do we need to recut the account lists?",
+      "should_trigger": true
+    },
+    {
+      "query": "What's the right split between named accounts and pooled accounts?",
+      "should_trigger": true
+    },
+    {
+      "query": "My VP wants 60 strategic accounts per rep and I think that's insane",
+      "should_trigger": true
+    },
+    {
+      "query": "Draft a charter for how we allocate sales effort across the account base",
+      "should_trigger": true
+    },
+    {
+      "query": "Which accounts should get bespoke content and which get the nurture track?",
+      "should_trigger": true
+    },
+    {
+      "query": "Rank our qualified account list into coverage bands",
+      "should_trigger": true
+    },
+    {
+      "query": "The board wants to know if our account prioritization is actually working",
+      "should_trigger": true
+    },
+    {
+      "query": "Our Tier 1 accounts aren't outperforming Tier 2 - is any of this earning its keep?",
+      "should_trigger": true
+    },
+    {
+      "query": "We bought intent data, should accounts move up automatically when intent spikes?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I stop leadership hand-picking their favourites into the top group?",
+      "should_trigger": true
+    },
+    {
+      "query": "What does a five-type ABM structure look like versus just three tiers?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're a beverage brand, how do we prioritize the retailers we sell through?",
+      "should_trigger": true
+    },
+    {
+      "query": "Territory carve is Monday and we still haven't decided who gets what level of service",
+      "should_trigger": true
+    },
+    {
+      "query": "Give me a hard ceiling on how many logos one rep can genuinely work",
+      "should_trigger": true
+    },
+    {
+      "query": "Our account managers all say they're at capacity - how do I check whether that's true?",
+      "should_trigger": true
+    },
+    {
+      "query": "Which of our customers deserve a dedicated CSM versus the pooled team?",
+      "should_trigger": true
+    },
+    {
+      "query": "Which firmographic and technographic signals should feed our account fit score?",
+      "should_trigger": false
+    },
+    {
+      "query": "Calibrate a weighted fit score from our last 12 months of closed-won deals",
+      "should_trigger": false
+    },
+    {
+      "query": "Map the whitespace and expansion opportunity across our install base",
+      "should_trigger": false
+    },
+    {
+      "query": "Should fit and readiness be one score or two separate axes?",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we encode the account scoring model in the CRM and re-score it monthly?",
+      "should_trigger": false
+    },
+    {
+      "query": "Who should we actually be selling to? Our targeting is way too broad",
+      "should_trigger": false
+    },
+    {
+      "query": "Write our ideal customer profile with explicit disqualifiers",
+      "should_trigger": false
+    },
+    {
+      "query": "What's our B2C demographic and psychographic buyer profile?",
+      "should_trigger": false
+    },
+    {
+      "query": "We missed quota with 4x coverage - model the pipeline gap for next quarter",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a stage-weighted pipeline coverage model with seasonality indexing",
+      "should_trigger": false
+    },
+    {
+      "query": "How much new pipeline do we need to create this month to hit the number?",
+      "should_trigger": false
+    },
+    {
+      "query": "How much quota should an enterprise AE carry next year?",
+      "should_trigger": false
+    },
+    {
+      "query": "Model ramped rep equivalents and set the over-assignment cushion",
+      "should_trigger": false
+    },
+    {
+      "query": "Pods versus assembly line - how should we structure the sales team?",
+      "should_trigger": false
+    },
+    {
+      "query": "What SDR-to-AE ratio and span of control should we run?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the accelerator curve and pay mix for our AE comp plan",
+      "should_trigger": false
+    },
+    {
+      "query": "Score our inbound leads so SDRs know which contacts to call first",
+      "should_trigger": false
+    },
+    {
+      "query": "Estimate TAM, SAM and SOM for the European mid-market",
+      "should_trigger": false
+    },
+    {
+      "query": "Product-led or sales-led? We're layering sales onto self-serve",
+      "should_trigger": false
+    },
+    {
+      "query": "When do we hire our first salesperson out of founder-led selling?",
+      "should_trigger": false
+    },
+    {
+      "query": "Score this opportunity against MEDDPICC and tell me the biggest gap",
+      "should_trigger": false
+    },
+    {
+      "query": "Read these call notes and tell me whether this deal is real",
+      "should_trigger": false
+    },
+    {
+      "query": "Who's the economic buyer on this deal and where are we single-threaded?",
+      "should_trigger": false
+    },
+    {
+      "query": "Build the ROI and payback case the champion can forward to their CFO",
+      "should_trigger": false
+    },
+    {
+      "query": "Buyer wants 20% off - plan my give-gets before the call",
+      "should_trigger": false
+    },
+    {
+      "query": "Write rebuttals for 'we already use a competitor'",
+      "should_trigger": false
+    },
+    {
+      "query": "How many touches should our outbound cadence have and on which days?",
+      "should_trigger": false
+    },
+    {
+      "query": "Our cold emails are landing in spam - check our DMARC setup",
+      "should_trigger": false
+    },
+    {
+      "query": "Generate and score subject line variants for this campaign",
+      "should_trigger": false
+    },
+    {
+      "query": "What do I say in the first 10 seconds when they pick up?",
+      "should_trigger": false
+    },
+    {
+      "query": "Find me a reason to reach out to this prospect this week",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a discovery question set for a 30-minute first call",
+      "should_trigger": false
+    },
+    {
+      "query": "Turn these messy notes into a recap email with next steps",
+      "should_trigger": false
+    },
+    {
+      "query": "Grade this call transcript against a rubric and give me one focus behaviour",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the interview loop and scorecard for hiring an SDR",
+      "should_trigger": false
+    },
+    {
+      "query": "How do I go from SDR to AE in 18 months?",
+      "should_trigger": false
+    },
+    {
+      "query": "Which sales podcasts and newsletters should I be following?",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up tiered pricing for our SaaS plans - starter, pro, enterprise",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the partner tier structure for our reseller program - silver, gold, platinum",
+      "should_trigger": false
+    }
+  ]
+}

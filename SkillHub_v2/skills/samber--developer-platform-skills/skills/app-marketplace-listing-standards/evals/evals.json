@@ -1,0 +1,571 @@
+{
+  "skill_name": "app-marketplace-listing-standards",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I run platform partnerships at Loomside, a workflow automation SaaS. We're opening our integrations directory to third-party vendors in March and I need the media requirements page written. Our installs get approved by customer IT admins before anyone on their team can add an app, and two of our largest accounts run a formal vendor-review committee. We'll take screenshots, an icon, and an optional demo video. Just give me the standard screenshot dimensions and the standard video length everybody uses so we're consistent with the rest of the industry.",
+      "expected_output": "A media-spec section that refuses to supply an industry-standard geometry, picks and publishes one geometry per asset type for Loomside, sets a short function-proof video ceiling justified by the admin/committee evaluation mode, and adds content and accessibility rules on top of the pixel rules.",
+      "files": [],
+      "expectations": [
+        "States explicitly that no industry-standard screenshot geometry exists across app marketplaces",
+        "Names at least two mutually incompatible screenshot aspect ratios in production use (for example 16:9 and 8:5, or approximately 3:2)",
+        "Instructs Loomside to pick its own geometry and publish it rather than adopting a borrowed number as an industry constant",
+        "Specifies exactly one published geometry per visual asset type, not a menu of acceptable alternatives presented as equally valid",
+        "Sets the demo-video ceiling at roughly 30 seconds, justified by the admin and committee evaluation mode rather than by a market average",
+        "Bans marketing or promotional footage in the video given the diligence-oriented buyer",
+        "Does not compute or recommend an average of other marketplaces' video ceilings",
+        "Requires captions on video",
+        "Requires at least one screenshot showing the actual application UI",
+        "Bans personally identifiable information in screenshots",
+        "Bans pricing claims or review and rating claims baked into screenshot images",
+        "Names an off-topic, distorted, or wrong-ratio image as an explicit rejection trigger the submitter can self-check before submitting",
+        "Recommends an accessibility floor covering descriptive alt text on informative images, captioned video, and contrast or legibility minimums, referencing WCAG 2.2 AA"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Parcelwise is a shipping-ops platform and we're writing the content rules for our app directory. Two things I keep going back and forth on. First, a vendor just submitted under the name 'Parcelwise Label Printer' and I can't decide whether that's fine. Second, here are two candidate description openers from that same vendor - which one should the rulebook accept? (a) 'Our sync engine uses a persistent WebSocket channel to reconcile carrier manifests with sub-second latency.' (b) 'Know which shipments are stuck before your customers call you.' Also, the only support surface they gave us is a PDF on Google Drive, and their description quotes 'a warehouse manager in Ohio' saying we cut their costs 40%. Give me the description quality bar and the rejection triggers.",
+      "expected_output": "A description quality bar plus an enumerated rejection-trigger list that rejects the submitted app name on naming-order grounds, accepts opener (b) over (a) with the outcome-before-mechanism rule, flags the anonymous testimonial, and rejects the PDF as an off-listing trust surface.",
+      "files": [],
+      "expectations": [
+        "Rejects the app name 'Parcelwise Label Printer' on trademark naming-order grounds",
+        "States the accepted naming shape as the descriptor first and the platform name after (for example 'Label Printer for Parcelwise'), and gives the rejected mirror form",
+        "Accepts option (b) and rejects option (a) as the description opener",
+        "States the rule as leading with the customer outcome rather than the feature's technical mechanism, and connecting each feature claim to a measurable result",
+        "Names keyword spam as a rejection trigger defined numerically - a stated repetition count, or lists of brands, sites, or regions adding no value - never as an unquantified 'do not stuff keywords'",
+        "Names unattributed or anonymous testimonials as their own rejection trigger",
+        "Flags the 'a warehouse manager in Ohio' quote specifically as failing attribution",
+        "Rejects the PDF as a valid landing or support surface, stating that a PDF or a code repository does not satisfy the requirement",
+        "Requires a publicly accessible landing page reachable without login",
+        "Requires a support channel with a stated response-time commitment",
+        "Requires a privacy policy meeting a stated minimum-coverage checklist covering data collected, use, retention, the access or deletion request process, and a real contact channel",
+        "States that these off-listing trust surfaces gate approval independently of how good the marketing copy is",
+        "Names misrepresentation, including undisclosed third-party account dependencies and their cost, as a content violation"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Northsend's app directory has 340 listings and is growing fast. Vendors complain that nobody finds them, so the product team's plan is to let each vendor pick up to eight categories plus unlimited free-text tags so they turn up in more places. I'm not convinced. We also have roughly 40 listings whose category hasn't matched what the app actually does since we rewrote the taxonomy last year. Browsing is still how most buyers find apps, but search usage is climbing month over month. What taxonomy should we ship?",
+      "expected_output": "A capped taxonomy design that refuses the uncapped multi-select outright, sets a hard per-listing cap, resolves the 40 drifted listings with a staleness downgrade instead of delisting, and names the promotion paths to structured tags and to operator-curated layers with their conditions.",
+      "files": [],
+      "expectations": [
+        "Rejects the unlimited free-text tag proposal outright rather than keeping it as a lower-ranked option to cap later",
+        "Gives the reason: an uncapped multi-select degenerates into every listing claiming every plausible tag until categories stop discriminating",
+        "Rejects the eight-category self-selection and recommends a hard per-listing cap of roughly one or two categories",
+        "Recommends a small fixed cross-functional category list rather than a vendor-extensible one",
+        "Handles the 40 drifted listings with a staleness downgrade - marking them uncategorized and dropping them off browse and filter surfaces - rather than delisting them",
+        "Describes that downgrade as soft, self-correcting because the vendor can fix it at any time, and automatable",
+        "Offers structured tags layered on top of categories as the promotion path once search overtakes browsing as the discovery route",
+        "Caps those tags and requires one idea per search term",
+        "Names operator-curated layers such as editorial collections, 'works with' labels, or persona groupings as the high-discovery-value, high-standing-effort option that loses the efficiency ranking",
+        "States the condition that promotes curated layers anyway: a compounding mandate and a catalog that has outgrown browsing",
+        "States that curated placement must never be purchasable, because sellable curation stops being a discovery signal and becomes ad inventory"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Cadenza is an HR platform with a partner app directory, about 600 listings. An audit found 41% carry at least one dead link or a screenshot from a UI we shipped over two years ago. Leadership's take is that we already charge partners a $200 annual listing fee, so they have skin in the game and this should sort itself out. Separately: we cut a new platform API version every six months and deprecate the old one on a published schedule. Design the staleness policy - and I really don't want to delist a third of the catalog in one go.",
+      "expected_output": "A decay-enforcement policy that removes the listing fee from the freshness mechanism entirely, promotes version-currency enforcement because Cadenza ships versioned releases, stacks a staleness downgrade underneath, and phases in with a notice runway rather than a mass delisting.",
+      "files": [],
+      "expectations": [
+        "Rejects the annual listing fee as a freshness mechanism",
+        "Gives the reason: a fee renews the billing relationship, not the listing content, and nothing about paying it checks a stale screenshot",
+        "Assigns listing fees to marketplace monetization and revenue design rather than to the decay policy",
+        "Recommends version-currency enforcement as the strongest available rung, explicitly because Cadenza already ships versioned releases with scheduled deprecations",
+        "States that the platform's own release cadence performs the freshness detection, which is what makes this rung affordable for Cadenza specifically",
+        "Includes a stated migration window for existing listings rather than immediate enforcement against already-listed apps",
+        "Rejects new submissions built on unsupported platform versions",
+        "Puts a staleness downgrade in place as the always-on floor beneath whatever policy runs, with a browse-surface consequence rather than removal",
+        "Names 'out-of-date listing content' as an explicit, rejectable violation in the published policy",
+        "Adds an operator-side calendar review sweep aligned to Cadenza's own release cycle",
+        "States that no benchmarked marketplace operator publishes a hard numeric update-or-be-removed cadence",
+        "Labels any cited 12-month auto-removal rule as coming from an adjacent marketplace ecosystem and treats it as an internal worst-case freshness SLA rather than an external requirement",
+        "Avoids recommending a mass delisting of the 41%",
+        "Requires a notice runway before any new content requirement takes effect on already-listed apps, on the grounds that retroactive enforcement without runway burns the partner trust the standard exists to build"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Tidewell runs an app marketplace for field-service software. Marketing wants 'Certified Listings' on the homepage and is asking me which certification body we should get audited by - ISO or something equivalent - so the claim holds up. We do run our own security review that awards a badge, and we're debating whether to also hand vendors a badge they can put on their own websites. Where should all of this show up on a listing, and what do we do when a vendor's badge lapses?",
+      "expected_output": "A refusal of the external-certification claim with the compositional alternative, plus badge display rules: a dedicated trust surface separate from marketing copy, a written currency rule with a grace period, the inline chip as complement, and a brand-usage rulebook for the off-marketplace badge.",
+      "files": [],
+      "expectations": [
+        "States that no ISO, IAB, or equivalent external body certifies marketplace listing quality",
+        "Refuses the 'Certified Listings' claim as written, because it implies an external certification that does not exist",
+        "Offers the compositional alternative naming three components and naming it as Tidewell's own program: WCAG for accessibility, recognized security attestations for security posture, and Tidewell's own published rubric for content",
+        "Separates badge eligibility from badge display, assigning eligibility to the app-review process and display to the listing rulebook",
+        "Recommends a dedicated trust surface - a listing tab or section physically separate from the marketing copy",
+        "Specifies what that surface carries: data-storage location, earned badges, and compliance certifications",
+        "Pairs it with a written currency rule: a lapsed badge comes down, with a stated grace period",
+        "Describes an inline badge chip in search results as a complement to the trust surface rather than a substitute, because it asserts trust without the substantiating detail a diligence buyer needs",
+        "Names renewal-linked display automation - display wired to eligibility data so a lapsed badge disappears without human intervention - as the highest-effort option that loses the efficiency ranking",
+        "States the condition that promotes it: badges carrying quantitative, lapsable thresholds on a renewal cycle",
+        "Classifies the vendor-embeddable off-marketplace badge as marketing reach rather than listing trust",
+        "Requires a brand-usage rulebook for that badge covering use-as-provided, minimum clear space, size parity with competing badges, and a mandatory link back to the listing",
+        "Notes that running no badge program at all is a legitimate architecture rather than an oversight"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Halyard's marketplace is English-only today. We're opening sales offices in Japan, Germany and Brazil next year and the catalog has to follow. We already run a machine-translation pipeline in-house for our product docs, so spinning it up for listings is basically free for us. Our enterprise buyers in Japan have twice asked whether an app 'supports Japanese' before signing. What localization posture should the rulebook take?",
+      "expected_output": "A localization posture that promotes auto-translate with vendor override because Halyard already owns the pipeline, states the trust cost, and separately handles the Japanese enterprise language-capability question with the all-or-nothing declaration.",
+      "files": [],
+      "expectations": [
+        "Recommends auto-translate with vendor override as the posture, explicitly because Halyard already owns the machine-translation pipeline",
+        "Names which piece of context moved the ranking - the already-owned asset re-ranking the menu - rather than presenting the default as fixed",
+        "States the trust cost of machine translation plainly: the output carries the operator's own name",
+        "Requires a documented path for a vendor to replace any single language's translation",
+        "Warns that removing an override reverts that field to machine output",
+        "Names opt-in per market as the cheaper default posture that applies while only one primary market exists",
+        "Distinguishes a translated listing page from a runtime language-capability claim",
+        "Recommends the all-or-nothing capability declaration for the Japanese enterprise buyers who treat language support as purchase-blocking, because it is the only posture where the listing's language claim is guaranteed true in the product",
+        "Notes that the all-or-nothing posture carries the highest vendor effort and the least listing reach, which is why it loses the efficiency ranking as a default",
+        "States that a region-locked posture should only be adopted together with region-based visibility gating, never on its own",
+        "Flags that visual and promotional assets may not localize alongside text fields, and instructs Halyard to check its own asset pipeline for that gap"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Brightpier's marketplace has about 1,200 listings, all vendor-maintained, and three of us rotate content review. Our current rule sheet says listings must 'demonstrate clear value and establish trust with the buyer', plus four similar lines. Partners dispute maybe one rejection in five, usually arguing that another reviewer approved something identical - and honestly they're often right. We already built a partner submission console in-house last year. Rewrite the field rules.",
+      "expected_output": "A field-spec rewrite that deletes the principles-only rules rather than demoting them, promotes exact per-field limits because the catalog is vendor-self-maintained at volume, and promotes the normally starved completion-tracked console because Brightpier already owns one.",
+      "files": [],
+      "expectations": [
+        "Removes the principles-only rules such as 'demonstrate clear value and establish trust' from the rulebook rather than keeping them as a lower tier or fallback",
+        "Gives the reason: two reviewers reading the same principles reject different listings, and the gap surfaces as appeal noise",
+        "States that parking principles at the bottom instead of deleting them lets 'we'll use judgment' reappear as scope whenever writing a real trigger feels like work",
+        "Recommends exact per-field limits across the board, explicitly because the 1,200 listings are vendor-self-maintained at volume",
+        "States that consistency then depends on the spec rather than on which of the three reviewers reads the listing",
+        "Puts numeric caps at minimum on the load-bearing fields: app name, hook string, body, and media geometry",
+        "Enumerates named rejection triggers for the remaining fields, including misleading or out-of-date metadata, numerically defined keyword spam, and unattributed testimonials",
+        "Requires every trigger to be self-checkable by the submitter before submitting",
+        "Promotes the completion-tracked submission console - normally the starved, highest-effort option - because Brightpier already owns the console",
+        "Specifies shipping the rules as validation logic inside that existing console, with a completion floor that blocks publication",
+        "Names which piece of the user's context moved which rung",
+        "States the efficiency ordering explicitly rather than leaving it implied by the order the options are listed in",
+        "Recommends tracking the rejection-reason distribution, and reads a rising 'unclear content' share as spec ambiguity rather than submitter failure"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Drafting the listing standards doc for Quillrock's marketplace. My draft currently has a section on auditing which OAuth scopes an app requests and when we force a re-review after an app update - security asked me to put it in the same document so partners only have one page to read. Separately, our search is ranked, and we want listings without a demo video to rank lower so vendors get the hint, but we'd rather not advertise that we're doing it. Sanity-check this before I publish.",
+      "expected_output": "A correction that moves the permission-audit and re-review material out to the review process with a cross-reference, and refuses the undisclosed ranking penalty, requiring it be published if used at all.",
+      "files": [],
+      "expectations": [
+        "Moves OAuth-scope and permission auditing out of the listing-content rulebook",
+        "Moves re-review-on-update triggers out of the listing-content rulebook",
+        "Assigns both to the app-review process and cross-references them instead of duplicating them",
+        "Gives the reason: content standards and safety gates kept in one document drift apart and contradict each other",
+        "States that content triggers fire independently of security and functionality - a blurry screenshot or a keyword-stuffed description is rejected regardless of whether the app is secure and works",
+        "Rejects the undisclosed ranking penalty",
+        "Requires the penalty to be published in the policy if Quillrock applies it at all",
+        "Gives the reason: an unannounced down-ranking reads as arbitrary once vendors discover it",
+        "Notes that a ranking-penalty lever presupposes ranked search infrastructure, which is why it loses the efficiency ranking as a general default, and names the condition that promotes it: an asset that should be encouraged rather than required",
+        "Requires a notice runway before the new ranking rule takes effect for already-listed apps"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Before I take our new listing rulebook to Fernway's exec team, they want two things: a pass/fail bar that proves the rulebook is any good, and a number we can promise partners about how many listing views turn into trials. I found a marketplace-software vendor's page citing a 30% click-through from listing to free trial against a 2-3% baseline - can we commit to that? What should I put in the deck?",
+      "expected_output": "A refusal to promise the vendor-reported conversion figure, plus a set of self-set rulebook gates flagged as self-set and a list of operating KPIs.",
+      "files": [],
+      "expectations": [
+        "Refuses to commit to the 30% click-through figure as a target",
+        "Labels that figure as vendor-reported and unaudited, from a party that sells marketplace software and is therefore a motivated source",
+        "States that no industry pass-standard for a listing rulebook exists, and flags the gates it supplies as self-set",
+        "States that no external certification body exists to borrow a pass bar from",
+        "Supplies a gate requiring every required field to carry an objective reject criterion a submitter can self-check before submitting",
+        "Supplies a gate requiring exactly one published geometry per visual asset type",
+        "Supplies a gate requiring the taxonomy to carry a hard per-listing cap, an operator-curated layer, or both",
+        "Supplies a gate requiring every listing to have a decay trigger with a named owner and a stated consequence",
+        "Supplies a gate requiring every displayable badge to have a display location and a currency rule",
+        "Proposes operating KPIs including first-pass content-approval rate, listing completion rate, and the share of the catalog stale beyond the freshness SLA"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "Write the listing requirements page for our app marketplace",
+      "should_trigger": true
+    },
+    {
+      "query": "What should our marketplace require in a third-party app listing?",
+      "should_trigger": true
+    },
+    {
+      "query": "We need a rubric our reviewers can use to reject listings consistently",
+      "should_trigger": true
+    },
+    {
+      "query": "Half the listings in our directory have outdated screenshots - what do we do about it?",
+      "should_trigger": true
+    },
+    {
+      "query": "How many categories should we let vendors pick for their app?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our partners keep arguing about rejections because our content rules are too vague",
+      "should_trigger": true
+    },
+    {
+      "query": "What screenshot dimensions should we require from app submitters?",
+      "should_trigger": true
+    },
+    {
+      "query": "How long should we let vendors' demo videos run on our directory?",
+      "should_trigger": true
+    },
+    {
+      "query": "Design a staleness policy for our integrations directory",
+      "should_trigger": true
+    },
+    {
+      "query": "Can we advertise that our listings are industry-certified?",
+      "should_trigger": true
+    },
+    {
+      "query": "Where on a listing should a partner's security badge show up?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we auto-translate every app listing into all our supported languages?",
+      "should_trigger": true
+    },
+    {
+      "query": "A vendor submitted an app called 'Acme Invoice Sync' on our platform - is that name acceptable?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our app directory has 400 entries and browsing it has become useless",
+      "should_trigger": true
+    },
+    {
+      "query": "What counts as keyword stuffing in an app description on our store?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're opening our platform to third-party apps next quarter and need content rules",
+      "should_trigger": true
+    },
+    {
+      "query": "Write the quality bar for the descriptions vendors submit to our app store",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we remove apps from our catalog that haven't been updated in a year?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do other operators handle stale app listings in their catalog?",
+      "should_trigger": true
+    },
+    {
+      "query": "What makes a submitted app listing rejectable on content grounds?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our reviewers disagree with each other constantly on listing approvals",
+      "should_trigger": true
+    },
+    {
+      "query": "We need a content policy for our partner directory",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we require a privacy policy link on every listing we publish?",
+      "should_trigger": true
+    },
+    {
+      "query": "Is a PDF acceptable as a vendor's landing page for their listing with us?",
+      "should_trigger": true
+    },
+    {
+      "query": "How should we cap tags so search still returns something meaningful in our app directory?",
+      "should_trigger": true
+    },
+    {
+      "query": "Set the rules for what vendors are allowed to put in their screenshots on our store",
+      "should_trigger": true
+    },
+    {
+      "query": "Can we quietly rank listings without a demo video lower to nudge vendors?",
+      "should_trigger": true
+    },
+    {
+      "query": "We want a certified program for our listings - what do we display, and where?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our category assignments have drifted from what the apps actually do",
+      "should_trigger": true
+    },
+    {
+      "query": "Build a self-check checklist partners can run before they submit to our directory",
+      "should_trigger": true
+    },
+    {
+      "query": "What belongs on a listing's trust tab?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're rewriting our app store content guidelines now that we're at scale",
+      "should_trigger": true
+    },
+    {
+      "query": "How prescriptive should our per-field limits be for submitted listings?",
+      "should_trigger": true
+    },
+    {
+      "query": "The same submission gets approved by one of my reviewers and rejected by another",
+      "should_trigger": true
+    },
+    {
+      "query": "What do we do when a partner's certification lapses but their badge is still showing?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do we stop vendors from claiming every category we offer?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our integration catalog looks abandoned - dead links everywhere",
+      "should_trigger": true
+    },
+    {
+      "query": "Define what 'out of date listing' means precisely enough that we can enforce it",
+      "should_trigger": true
+    },
+    {
+      "query": "Should accessibility be part of what we require from submitted listings?",
+      "should_trigger": true
+    },
+    {
+      "query": "Do we need to make submitters supply alt text for the screenshots they upload?",
+      "should_trigger": true
+    },
+    {
+      "query": "We charge partners an annual directory fee - doesn't that keep their listings current?",
+      "should_trigger": true
+    },
+    {
+      "query": "Draft the media spec sheet for our partner app gallery",
+      "should_trigger": true
+    },
+    {
+      "query": "How many screenshots should we require, and what do they have to show?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our copy rules for the app store are one paragraph of principles and it isn't working",
+      "should_trigger": true
+    },
+    {
+      "query": "What KPIs tell us whether our listing rulebook is actually working?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should vendors be allowed to put our product name first in their app's name?",
+      "should_trigger": true
+    },
+    {
+      "query": "We want partners to put an 'available on our marketplace' badge on their own sites - what rules do we publish?",
+      "should_trigger": true
+    },
+    {
+      "query": "Write the rules for taking an app listing down for content reasons",
+      "should_trigger": true
+    },
+    {
+      "query": "Help me optimize our AppExchange listing so we get more installs",
+      "should_trigger": false
+    },
+    {
+      "query": "How do I rank higher in the HubSpot app marketplace search results?",
+      "should_trigger": false
+    },
+    {
+      "query": "Rewrite our Shopify App Store title and tagline for keywords",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we get more reviews on our Atlassian Marketplace listing?",
+      "should_trigger": false
+    },
+    {
+      "query": "Which marketplace badge should we pursue to boost our listing's rank?",
+      "should_trigger": false
+    },
+    {
+      "query": "Our marketplace listing gets plenty of views but nobody installs - fix the funnel",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we reorder the screenshots on our Slack app listing?",
+      "should_trigger": false
+    },
+    {
+      "query": "Is Built for Shopify worth pursuing for our app?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our app review pipeline for third-party submissions",
+      "should_trigger": false
+    },
+    {
+      "query": "What permission scopes should trigger a manual security review of a submitted app?",
+      "should_trigger": false
+    },
+    {
+      "query": "When should an app update force a full re-review?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the appeal process for developers whose apps we rejected",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we revoke a malicious app across every tenant that installed it?",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up automated pre-screening before a human reviews an app submission",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we harden our publish channel against a compromised developer account?",
+      "should_trigger": false
+    },
+    {
+      "query": "What revenue share should we take on paid apps in our marketplace?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we be merchant of record for marketplace transactions?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the payout cadence and hold window for our app store developers",
+      "should_trigger": false
+    },
+    {
+      "query": "How do marketplace facilitator VAT rules apply to our app sales?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we waive our marketplace fee for a partner's first year?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we build our own app marketplace or just list on other vendors' marketplaces?",
+      "should_trigger": false
+    },
+    {
+      "query": "Open admission or curated - which model should our integration marketplace run?",
+      "should_trigger": false
+    },
+    {
+      "query": "Are we ready to launch a two-sided developer ecosystem at all?",
+      "should_trigger": false
+    },
+    {
+      "query": "What take-rate makes an integration marketplace viable for us?",
+      "should_trigger": false
+    },
+    {
+      "query": "Pick the launch partners for our marketplace debut",
+      "should_trigger": false
+    },
+    {
+      "query": "How should featured placement work on our marketplace homepage?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our app-of-the-month spotlight program",
+      "should_trigger": false
+    },
+    {
+      "query": "How much MDF should we allocate to each partner tier?",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan the keynote announcement for our app store launch",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the signup flow for partner developers joining our platform",
+      "should_trigger": false
+    },
+    {
+      "query": "Should partner registration be self-service or application-gated?",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we provision sandbox tenancies for partner developers?",
+      "should_trigger": false
+    },
+    {
+      "query": "Redesign the information architecture of our developer portal",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we cut time to first API call on our developer console?",
+      "should_trigger": false
+    },
+    {
+      "query": "Audit our API reference for undocumented endpoints and error codes",
+      "should_trigger": false
+    },
+    {
+      "query": "Our OpenAPI docs keep drifting from the implementation",
+      "should_trigger": false
+    },
+    {
+      "query": "Which technology partners should we integrate with first?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our ISV partner tier ladder and graduation gates",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we build a Fivetran source connector for our product?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the consent screen third-party apps show when requesting scopes on our API",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we ship an MCP server for our product?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the product description standards for our ecommerce catalog",
+      "should_trigger": false
+    },
+    {
+      "query": "ASO for our iOS app - improve the App Store screenshots and keywords",
+      "should_trigger": false
+    },
+    {
+      "query": "Optimize our Amazon product listing images and bullet points",
+      "should_trigger": false
+    },
+    {
+      "query": "Set content standards for postings on our jobs board",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the submission guidelines for our conference CFP",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the quality bar for articles submitted to our content marketplace",
+      "should_trigger": false
+    },
+    {
+      "query": "Standardize how we photograph products for our online store",
+      "should_trigger": false
+    }
+  ]
+}

@@ -13,8 +13,8 @@ import string
 from pathlib import Path
 from typing import Any, Dict, Iterable
 
-from .axes import AxisPreference
-from .models import CreatorResult
+from .axes import TaskAxes
+from .models import CreatorResult, Proposal
 
 
 def write_creator_state(
@@ -24,14 +24,15 @@ def write_creator_state(
     result: CreatorResult,
     transcript: str,
     prompt: str,
-    axes: AxisPreference | None = None,
+    proposal: Proposal,
+    axes: TaskAxes,
 ) -> Path:
     """Persist private creator outputs outside the publishable task tree."""
     attempt = state_dir / "attempts" / task_name
     attempt.mkdir(parents=True, exist_ok=True)
     _write_json(attempt / "creator-result.json", result.to_dict())
-    if axes is not None:
-        _write_json(attempt / "axes.json", axes.to_dict())
+    _write_json(attempt / "proposal.json", proposal.to_dict())
+    _write_json(attempt / "axes.json", axes.to_dict())
     (attempt / "creator-transcript.jsonl").write_text(transcript, encoding="utf-8")
     (attempt / "creator-prompt.md").write_text(prompt + "\n", encoding="utf-8")
     return attempt
@@ -58,7 +59,16 @@ def write_corpus_manifest(output_dir: Path, attempts: Iterable[Dict[str, Any]]) 
     for raw in attempts:
         entry = {
             key: raw.get(key)
-            for key in ("task_name", "variant", "status", "reason_code", "path", "digest", "axes")
+            for key in (
+                "task_name",
+                "variant",
+                "proposal_id",
+                "status",
+                "reason_code",
+                "path",
+                "digest",
+                "axes",
+            )
         }
         path = raw.get("path")
         if isinstance(path, str) and path:
@@ -69,7 +79,7 @@ def write_corpus_manifest(output_dir: Path, attempts: Iterable[Dict[str, Any]]) 
                 entry["path"] = None
         entries.append(entry)
     path = root / "_corpus_manifest.json"
-    _write_json(path, {"schema_version": "1.0", "attempts": entries})
+    _write_json(path, {"schema_version": "2.0", "attempts": entries})
     return path
 
 

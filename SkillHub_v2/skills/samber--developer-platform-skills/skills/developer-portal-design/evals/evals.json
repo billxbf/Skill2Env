@@ -1,0 +1,459 @@
+{
+  "skill_name": "developer-portal-design",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I run the platform team at Ledgerwell, we sell a bank reconciliation API. Last quarter we had 1,840 developer signups and only 212 of them ever made a successful API call. Our auth is OAuth2 and settlement events come back over webhooks, so an integration isn't trivial. Docs, the catalog and pricing are already fully public, no login needed. The board wants movement by the March 15 review, so about six weeks, and I can borrow two engineers part-time. What do we fix, and in what order?",
+      "expected_output": "A prioritized friction-removal plan governed by an explicit time-to-first-call target set for a complex OAuth-plus-webhooks API, with funnel instrumentation, the already-ungated rung skipped, and personalized onboarding demoted on deadline grounds.",
+      "files": [],
+      "expectations": [
+        "Names time to first call (TTFC) as the governing metric for this work and sets an explicit target figure for Ledgerwell.",
+        "Anchors that target to the API's complexity class - OAuth plus webhooks - landing near an hour rather than a sub-15-minute figure.",
+        "States that no universal TTFC benchmark exists, instead of presenting one number as an industry standard.",
+        "Recommends instrumenting TTFC in increments, at minimum landing-to-signup and signup-to-first-call, rather than as a single end-to-end number.",
+        "States that the funnel data, once instrumented, outranks the default ordering of fixes: whichever stage stalls gets its fix promoted.",
+        "Recognizes that docs, catalog and pricing are already ungated, so the ungated-exploration rung is already satisfied and the work starts further up the ladder.",
+        "Recommends shipping an importable, forkable, ready-to-run collection of working example calls.",
+        "Recommends auto-provisioned sandbox keys injected into quickstart snippets and try-it calls as the fix for a stall sitting between signup and first call.",
+        "Explicitly demotes or defers role-and-use-case personalized onboarding intake, tying that to the six-week deadline and the part-time engineering capacity.",
+        "Any first-call acceleration figure attributed to a ready-to-run collection is expressed as a ratio of roughly 1.7x, labeled vendor-reported, with no baseline minute count carried over.",
+        "Warns that TTFC is a leading indicator only, and names downstream activation or retention as a trend to watch alongside it."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "We already run Backstage internally - around 90 services in the catalog, our platform team maintains it and knows it well. Leadership now wants our 40 contracted integration partners to get self-serve API keys and technical docs, and the obvious move seems to be opening that same Backstage instance up to them with an external auth layer in front. Can you sketch the plugin architecture and the partner-facing navigation we'd need?",
+      "expected_output": "A refusal to design the requested external surface on the internal framework, with the threat-model reason, and a recommendation to stand up a separate external portal with partner-grade access controls.",
+      "files": [],
+      "expectations": [
+        "Declines to produce the requested plugin architecture and partner-facing navigation built on the internal service-catalog framework.",
+        "Gives the security reason: that framework's threat model assumes untrusted external actors have no access to it.",
+        "States that this option is ruled out entirely, not merely ranked lower, deferred, or made conditional on extra hardening.",
+        "Recommends running a separate external developer portal alongside the internal instance rather than converting or exposing the internal one.",
+        "Distinguishes an internal developer portal (service catalog, infrastructure provisioning for a company's own engineers) from an external API-consumer portal as different disciplines with different security models.",
+        "Identifies the self-service credential lifecycle - sign up, create, rotate and revoke keys without filing a ticket - as what the external partner surface must deliver.",
+        "Names partner-specific requirements the external portal needs, including at least two of: approval-gated signup, team-owned applications, page-level visibility control, SSO/SCIM provisioning.",
+        "Does not present exposing the internal instance as a viable path if the external auth layer is strong enough."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Kestrel Freight is launching a public shipment-tracking API in Q3. Today developers get a PDF spec emailed to them. I need to know what the developer section of kestrelfreight.com should actually look like. Our buyers are logistics ops directors who compare us against two competitors before anyone technical is involved, and then either their in-house devs or an outside systems integrator does the build. Give me the page structure.",
+      "expected_output": "Proto-personas for both audiences, two or three candidate architectures with a recommendation and an explicit section-by-section validation gate, then a depth-layered navigation tree with a first-class solution layer and ungated decision-making content.",
+      "files": [],
+      "expectations": [
+        "Builds distinct proto-personas for the business evaluator (logistics ops director) and the integrating engineer or systems integrator, covering what each must accomplish on the portal.",
+        "Presents at least two candidate portal architectures with trade-offs rather than a single structure, and names one as the recommendation.",
+        "States that the chosen skeleton will be validated with the user section by section before any final deliverable, rather than treating the structure as settled.",
+        "Recommends a structure layered by depth, with visual and marketing richness decreasing as pages get more technical.",
+        "Includes a distinct solution or use-case layer connecting business problems to APIs, sitting between the marketing-rich pages and the technical reference.",
+        "Treats that solution layer as first-class rather than optional filler.",
+        "States that pricing, use cases and competitive/decision-making material must be readable before login.",
+        "Names gating decision-making information behind a login wall as a sales-enablement failure, not merely a content or UX shortcoming.",
+        "Keeps marketing chrome off the technical reference and console pages.",
+        "Keeps the portal distinct from the top-of-funnel marketing site while linking the two in both directions, rather than folding portal content into the marketing site's IA.",
+        "Delivers the structure as a navigation tree naming every top-level item and what sits beneath it.",
+        "Labels each node with the audience and/or the layer it serves."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Our developer portal at Nimbus Telemetry has been live about three years. It has an OpenAPI reference, a key dashboard, a getting-started guide and a support email address. No changelog, no status page, and honestly nobody owns it - docs get updated when an engineer happens to notice something wrong. My VP wants to know 'where we stand' before she approves headcount for it. Score it and tell her what it would take to reach the next level.",
+      "expected_output": "A three-dimension assessment placed on the project/product/infrastructure progression, a six-focus-area diagnostic, and a Priority 1/2/3 roadmap that refuses to collapse into a single score, with the missing owner and trust signals as Priority 1 gaps.",
+      "files": [],
+      "expectations": [
+        "Scores the portal along three named dimensions covering authoring-workflow quality (operational excellence), journey friction (developer experience), and intentional interface strategy (business alignment).",
+        "Places the portal on a three-stage progression running portal-as-a-project, portal-as-a-product, portal-as-critical-business-infrastructure.",
+        "Refuses to reduce the assessment to a single maturity score or a fixed 1-to-5 level, and says why.",
+        "Delivers the output as a prioritized Priority 1 / Priority 2 / Priority 3 roadmap.",
+        "Runs a focus-area diagnostic spanning discovery, decision-making, onboarding, go-live, maintenance and troubleshooting, and community.",
+        "Flags the absent changelog or release notes and the absent status page as missing maintained-platform trust signals.",
+        "Recommends visible last-updated or last-change timestamps on portal content as a further trust signal.",
+        "Names the absent owner as a Priority 1 gap and ties an unowned portal to rapid decay.",
+        "Checks whether each authoring persona - engineers pushing specs through CI/CD, business-side authors, technical writers as editors - has a workable workflow, instead of assuming one authoring workflow serves all of them.",
+        "Describes the benchmarking framework's structure rather than inventing a numeric scoring formula or enabler weightings for it.",
+        "Does not substitute an internal-developer-platform or platform-engineering maturity model for the external-portal assessment."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Halcyon Payroll. We're deciding how to stand up the API developer site for our public API. Our head of design is adamant we control every pixel and don't end up looking like a templated vendor site. Separately, our content marketing team lives in our existing CMS and wants to publish integration guides and customer stories without filing an engineering ticket every time. We run everything through a single API gateway across all four of our products. I have two contractors available for a 10-week window. Do we build it ourselves or buy something?",
+      "expected_output": "Managed platform as the stated default with the ranking made explicit, branding rejected as a promotion reason, CMS authoring accepted as one, the single-gateway fact weakening the custom case, and a named permanent owner demanded before any build is approved.",
+      "files": [],
+      "expectations": [
+        "States that the default recommendation is buying a managed platform - a gateway-bundled portal or a hosted docs/portal product - rather than building.",
+        "States the ranking across the options explicitly as a value, effort and efficiency ordering instead of leaving it implied by the order of discussion.",
+        "Rejects branding and pixel-level control on its own as a sufficient reason to promote a custom build.",
+        "Identifies the content team's CMS authoring need as a genuine promotion condition for the custom path.",
+        "Names the full set of custom-build promotion conditions: compliance or data-residency requirements no managed platform meets, business-side authors needing a real CMS alongside spec-driven docs, and a multi-gateway API portfolio no single vendor portal unifies.",
+        "Points out that Halcyon runs a single gateway across all products, so that gateway's bundled portal comes nearly free and the multi-gateway argument does not apply here.",
+        "Names the assembled-stack middle option: a docs platform for content composed with the gateway for credentials under one navigation.",
+        "Requires a named, ongoing owner as a precondition before any custom build is approved.",
+        "Flags that two contractors on a 10-week window do not constitute that permanent owner.",
+        "Warns that an unowned portal decays rapidly.",
+        "Frames the decision by platform category rather than resolving it to one specific named vendor product."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Docs team at Verdanta Analytics. We take roughly 400 support tickets a month and my rough read is 60% are 'how do I' questions already answered somewhere in our docs. Leadership greenlit an AI chat widget for the docs site and asked me to put a number in the business case for how many tickets it removes. We have about 900 docs pages and a working search box already. What do I tell them, and how should we build the thing?",
+      "expected_output": "A refusal to forecast a deflection percentage, with the vendor-reported range framed as directional, a pre-assistant baseline captured first, and an assistant spec requiring citations, an explicit I-don't-know fallback, and a gap-detection loop.",
+      "files": [],
+      "expectations": [
+        "Declines to commit a specific deflection percentage as a forecast in the business case.",
+        "States that published deflection figures around the 20-40% range are vendor-reported and directional only.",
+        "Requires measuring against Verdanta's own pre-assistant ticket baseline before claiming ROI, and recommends capturing that baseline before launch.",
+        "Keeps the existing classic full-text or semantic search rather than replacing it with the assistant.",
+        "Co-locates the Ask AI widget with the search box.",
+        "Requires every assistant answer to cite a linkable source page.",
+        "Requires the assistant to say it does not know rather than guess when the docs do not cover a question.",
+        "Routes unanswered and low-confidence questions into the documentation backlog, using the assistant as a content-gap detector.",
+        "Treats support-ticket deflection as a watched trend rather than a gate the project passes or fails on."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Sable Grid sells an energy-metering API. Two groups use it: about 2,000 self-serve developers who come through our public signup, and 35 contracted utility partners whose legal teams require SSO and whose access we have to approve before it's granted. Right now everyone gets one login with a role of either 'admin' or 'member', and one API key per account. Customers keep asking for separate test credentials, and for their finance people to be able to see spend without being able to see keys. Design the account model for us.",
+      "expected_output": "A two-level organization-to-project hierarchy with credentials and usage scoped to the project, bundled roles that split credential management from billing visibility, first-class test/live separation, partner-grade access controls, and the one-portal-versus-two question raised as an architectural decision.",
+      "files": [],
+      "expectations": [
+        "Proposes a two-level hierarchy of organization to project (or workspace).",
+        "Scopes credentials, usage and environments to the project or workspace level rather than to the account or organization level.",
+        "Bundles permissions into named roles rather than assigning permissions to users individually.",
+        "Separates at minimum who manages credentials, who views billing and usage, and who invites teammates - answering the finance-visibility request without granting key access.",
+        "Makes test-versus-live environment separation a first-class portal concept rather than a naming convention on keys.",
+        "Makes the environment marker visible on log and usage surfaces, not only on the credential list.",
+        "Adds approval-gated signup for the contracted utility partners.",
+        "Adds SSO and SCIM provisioning for the enterprise partner tenants.",
+        "Adds partner-side controls beyond the public tier, including at least one of: team-owned or team-shared applications, page-level visibility permissions, a viewer-versus-consumer role split.",
+        "Raises the one-portal-versus-two question explicitly for the public and partner audiences, noting separate portals can share one API backend.",
+        "Frames that separate-portal question as an architectural decision rather than a licensing or vendor-packaging one."
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Orrery Labs, transactional email API. Our docs live on one subdomain, the dashboard where you get a key is on a different one, and if a customer wants to know why a send failed they email support and someone on our side greps logs for them. We're consolidating all of it into one place over the next two quarters. Here's my list so far: reference docs, quickstart, key management, sandbox. What am I missing, and where does everything go?",
+      "expected_output": "A placement pass that gives integration logs a self-service home, adds the four unowned surfaces (usage/quota, billing, changelog, support escalation), places the status link, error catalog, sandbox toggle and try-it console, and keeps its scope at placement rather than per-surface content design.",
+      "files": [],
+      "expectations": [
+        "Gives request, event or delivery logs a first-class self-service home in the portal instead of leaving failure investigation to a support handoff.",
+        "Names usage metering and quota visibility as a surface needing a deliberate home.",
+        "Names billing or plan management as a surface needing a deliberate home.",
+        "Names a changelog or release-notes surface.",
+        "Names a support escalation path as a placed surface.",
+        "Places a status-page link in the portal and frames it as a trust signal.",
+        "Places the published error-code catalog in the portal as what error responses' documentation_url fields point at.",
+        "Places the sandbox entry point together with a visible test-versus-live mode toggle.",
+        "Puts the try-it console on the endpoint page itself rather than as a separate tool the developer leaves the docs to open, with the signed-in developer's own key injected into it and into the code snippets.",
+        "Requires the API reference to be generated from the spec rather than hand-maintained as a parallel copy that drifts.",
+        "Scopes its own answer to placement, entry points and navigation, deferring the internal content design of individual surfaces rather than specifying it here."
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "Our developer portal reads like a documentation site - help me redesign it",
+      "should_trigger": true
+    },
+    {
+      "query": "How should we lay out the developer console for our new public API?",
+      "should_trigger": true
+    },
+    {
+      "query": "Signups look healthy but almost nobody ever makes their first API call",
+      "should_trigger": true
+    },
+    {
+      "query": "What should time to first call be for a payments API with OAuth and webhooks?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we build our developer hub ourselves or buy one?",
+      "should_trigger": true
+    },
+    {
+      "query": "We want an Ask AI box next to search on our docs and console",
+      "should_trigger": true
+    },
+    {
+      "query": "Design the information architecture for the part of our site where customers get API keys",
+      "should_trigger": true
+    },
+    {
+      "query": "Audit our API developer experience against a maturity model and tell us where we stand",
+      "should_trigger": true
+    },
+    {
+      "query": "Our API pricing page sits behind the login wall - is that actually a problem?",
+      "should_trigger": true
+    },
+    {
+      "query": "Do we need one portal for public developers and a second one for contracted partners?",
+      "should_trigger": true
+    },
+    {
+      "query": "Where should request logs live for the people integrating with us?",
+      "should_trigger": true
+    },
+    {
+      "query": "Plan the journey from signup to first successful call",
+      "should_trigger": true
+    },
+    {
+      "query": "What's a realistic TTFC target for a simple REST API with token auth?",
+      "should_trigger": true
+    },
+    {
+      "query": "our developer experience site has no owner and no roadmap, what do I do",
+      "should_trigger": true
+    },
+    {
+      "query": "We're launching a public API next quarter - what pages do developers actually need?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I organize the self-serve area where devs create, rotate and revoke keys?",
+      "should_trigger": true
+    },
+    {
+      "query": "customers tell us they can't work out what our API even does before they sign up",
+      "should_trigger": true
+    },
+    {
+      "query": "give me a prioritized roadmap for our API developer site",
+      "should_trigger": true
+    },
+    {
+      "query": "What org and project hierarchy should our API console use?",
+      "should_trigger": true
+    },
+    {
+      "query": "Is Backstage a reasonable base for the site our external partners log into?",
+      "should_trigger": true
+    },
+    {
+      "query": "What belongs on the landing page for developers versus on the reference pages?",
+      "should_trigger": true
+    },
+    {
+      "query": "We want AI agents to be able to read and navigate our API docs and console on a customer's behalf",
+      "should_trigger": true
+    },
+    {
+      "query": "how do we shorten the gap between landing on our site and a working API call",
+      "should_trigger": true
+    },
+    {
+      "query": "Our API is solid but integrations still take customers three weeks",
+      "should_trigger": true
+    },
+    {
+      "query": "Should the sandbox and live toggle sit in the global nav or on each page?",
+      "should_trigger": true
+    },
+    {
+      "query": "Design the console our API customers log into",
+      "should_trigger": true
+    },
+    {
+      "query": "benchmark our developer hub against best-in-class and tell me the gaps",
+      "should_trigger": true
+    },
+    {
+      "query": "Where do we surface usage and quota information for API customers?",
+      "should_trigger": true
+    },
+    {
+      "query": "we keep getting support tickets from customers just asking for API keys",
+      "should_trigger": true
+    },
+    {
+      "query": "Map out the developer onboarding path for our new platform",
+      "should_trigger": true
+    },
+    {
+      "query": "what does a mature API developer site look like compared to ours",
+      "should_trigger": true
+    },
+    {
+      "query": "Restructure the developer-facing part of our SaaS product",
+      "should_trigger": true
+    },
+    {
+      "query": "our partners need us to approve them before they get access - how should that part of the site work?",
+      "should_trigger": true
+    },
+    {
+      "query": "what's a good time to first hello world metric for our API and who owns it",
+      "should_trigger": true
+    },
+    {
+      "query": "Developers land on our reference and bounce - what's missing in between?",
+      "should_trigger": true
+    },
+    {
+      "query": "help me argue internally that the developer-facing site is a product, not a one-off project",
+      "should_trigger": true
+    },
+    {
+      "query": "should we put a try-it button on every endpoint page and where does the key come from?",
+      "should_trigger": true
+    },
+    {
+      "query": "how do we structure a developer hub that serves both buyers and engineers",
+      "should_trigger": true
+    },
+    {
+      "query": "What key format should we use - prefix plus checksum, and hashed or encrypted storage?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our zero-downtime key rotation mechanics and least-privilege scoping rules",
+      "should_trigger": false
+    },
+    {
+      "query": "Write our error-code taxonomy using the RFC 9457 problem-details envelope",
+      "should_trigger": false
+    },
+    {
+      "query": "How should we signal which errors are retryable, and set Retry-After?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design idempotency-key storage TTL and our replay window",
+      "should_trigger": false
+    },
+    {
+      "query": "Which integration surface should we build first, GraphQL or an MCP server?",
+      "should_trigger": false
+    },
+    {
+      "query": "Set our rate-limit tiers, burst allowance and the headers we publish",
+      "should_trigger": false
+    },
+    {
+      "query": "Audit every endpoint in our reference for missing response codes and snippet parity",
+      "should_trigger": false
+    },
+    {
+      "query": "How granular should the components on our status page be, and what does 'degraded' mean?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design magic test values and simulated events for our sandbox",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we use date-based account-pinned versioning or a URI path version?",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan the founding launch cohort and partner embargoes for our app marketplace",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the screenshot specs and description quality bar third-party listings must meet",
+      "should_trigger": false
+    },
+    {
+      "query": "What revenue share and program fees should our app marketplace charge?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the security review and approval pipeline for third-party apps on our marketplace",
+      "should_trigger": false
+    },
+    {
+      "query": "Parquet file drops on object storage or Delta Sharing for our bulk exports?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we build our own integration marketplace or just join other people's?",
+      "should_trigger": false
+    },
+    {
+      "query": "What does an API product manager earn and how do I move into that track?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the interview loop and scorecard for a partner integration engineer",
+      "should_trigger": false
+    },
+    {
+      "query": "Which language SDKs should we ship first, and generated or handwritten?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our outbound webhook signing scheme and dead-letter policy",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up PKCE and refresh-token rotation on our OAuth authorization server",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our JDBC endpoint with row-level security and per-tenant compute isolation",
+      "should_trigger": false
+    },
+    {
+      "query": "Curate the tool surface for our MCP server instead of mirroring every endpoint",
+      "should_trigger": false
+    },
+    {
+      "query": "Review our REST URI naming, status codes and pagination pattern",
+      "should_trigger": false
+    },
+    {
+      "query": "Set depth and complexity ceilings on our public GraphQL schema",
+      "should_trigger": false
+    },
+    {
+      "query": "Should our gRPC surface be public, or transcoded to JSON at the gateway?",
+      "should_trigger": false
+    },
+    {
+      "query": "Restructure the content hierarchy inside our documentation site - concepts, guides, reference",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the zero-to-first-success quickstart page itself",
+      "should_trigger": false
+    },
+    {
+      "query": "Find and rank the keywords our developer blog should target",
+      "should_trigger": false
+    },
+    {
+      "query": "Map our developer journey from first awareness through to advocacy",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we get our documentation pages ranking in search results?",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan the launch of our developer Discord and its moderation rules",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the troubleshooting docs for the ten integration errors we see most",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up an internal service catalog so our own engineers can find and own services",
+      "should_trigger": false
+    },
+    {
+      "query": "Design golden paths and scaffolding templates for our platform engineering team",
+      "should_trigger": false
+    },
+    {
+      "query": "Improve the view-to-install conversion on our Salesforce AppExchange listing",
+      "should_trigger": false
+    },
+    {
+      "query": "Design per-partner failure alerting with cooldowns so we don't spam them",
+      "should_trigger": false
+    }
+  ]
+}

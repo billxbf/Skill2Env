@@ -1,0 +1,400 @@
+{
+  "skill_name": "deal-red-flags",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Notes from my one and only call with Tressler Dynamics. $140K ARR routing deal, I moved it to Best Case last week and now I'm second-guessing myself. This is the whole record, nothing else exists:\n\n'Mar 3 - 45 min discovery w/ Priya Raghunathan (VP Supply Chain). Said their WMS reporting is \"genuinely painful.\" Asked sharp questions about the API. Told me she's the one driving this internally. Mentioned they're growing fast. Ended with \"let me look at the numbers and I'll come back to you.\"'\n\nIs this deal real or am I kidding myself?",
+      "expected_output": "A review that refuses to convert a one-call record into confirmed risks: stakeholder coverage and every engagement trend flag resolve to Unknown with one diagnostic question each, the one quotable weakness (surface-level pain) is graded with its verbatim fragment, and the chase starts at the one-question rung because a desk check on a single-call record returns only Unknowns.",
+      "files": [],
+      "expectations": [
+        "Grades stakeholder coverage / single-threading as Unknown rather than Red, Amber, or Watch, on the stated ground that one call's notes evidence one call",
+        "Never asserts that the deal is single-threaded",
+        "Grades every engagement trend flag (response latency, meetings shrinking or rescheduled, notes thinning) Unknown because trend flags need notes spanning multiple touches",
+        "Raises pain stated at surface level only, quoting the verbatim fragment \"genuinely painful\"",
+        "Attaches a verbatim quote from the pasted notes to every finding graded Verified or Assumed",
+        "Contains a Gaps section in which each entry carries exactly one diagnostic question",
+        "Attaches no remediation play to any Gap entry",
+        "States that a desk check would return only Unknowns on a single-call record and starts the chase at the one-question rung",
+        "Includes a Timeline section that states the record covers a single date",
+        "Outputs no win probability, percentage likelihood to close, or numeric deal score",
+        "Distinguishes in the verdict what is evidenced from what is merely absent",
+        "States that the review grades the notes rather than the deal, and names the thin record as itself a finding about note hygiene"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I sell whole-home solar, average ticket around $34,000, deals normally close in three to six weeks. My manager wants every open deal run through a risk check. Here's the Ferreira one:\n\n'Jun 4 - site assessment, met Camila Ferreira. South-facing roof, great production numbers. She's really into it, said the last two summer electric bills were over $480 each and it \"has to stop.\" Said her husband Renato handles the money stuff but he'd be fine with whatever she decides.\nJun 11 - sent design + pricing. She replied \"wow ok, looks good, let me sit with it.\"\nJun 18 - texted her. Still talking about it.\nJun 25 - texted again, no reply.'\n\nWhat am I missing here?",
+      "expected_output": "A B2C-calibrated review: no single-threading flag, the co-decider graded Assumed on a relayed deference quote rather than Cleared, ability to pay Unknown, the Process group collapsed to the agreed dated next step, and the $480 figure clearing the quantified-impact flag.",
+      "files": [],
+      "expectations": [
+        "Raises no single-threading or multi-threading flag, and states that it does not apply in a single-stakeholder motion",
+        "Raises co-decider unconsulted for Renato in place of the stakeholder-coverage group's B2B flags",
+        "Grades the Renato deference as Assumed at most, neither Cleared nor Verified, because it is Camila's relay rather than Renato's own words",
+        "Quotes \"he'd be fine with whatever she decides\" as the evidence behind that grade",
+        "Raises ability to pay unverified and grades it Unknown, since the notes say nothing about financing, credit, or payment terms",
+        "Places that flag in Gaps with exactly one diagnostic question about how they plan to pay",
+        "Raises no procurement, legal, security, or mutual-action-plan flag",
+        "States that the Process group collapses in this motion to whether an agreed, dated next step exists",
+        "Marks no quantified impact as Cleared, citing the buyer's own $480 figure",
+        "Includes a Cleared section in the report",
+        "Treats the compelling event as personal or seasonal rather than fiscal, and raises no compelling event since no dated trigger is quoted",
+        "Justifies severity against a roughly $34,000 three-to-six-week transactional motion rather than a fixed severity table"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Reviewing Kesterline Analytics before my forecast call. $210K, enterprise, four months in, stage Negotiation, and it's sitting on my commit.\n\n'Aug 1 - call with Damon Whitfield (Dir. Data Platform). He said \"we lose about six engineer-days a month stitching these reports together, I've got the ticket count to prove it.\"\nAug 8 - Damon says the CFO already approved the number, he heard it in their planning meeting. Says there's no need for us to meet her.\nAug 14 - security review kicked off.\nAug 21 - Damon: \"legal is queued behind security, that's just how we do it here.\"\nAug 29 - Damon confirmed procurement starts after legal signs.'\n\nGive me the risk picture.",
+      "expected_output": "A review that grades the unmet economic buyer Assumed on a second-hand relay and therefore reports it as Amber rather than Red despite High severity, raises the sequential paper process as its own finding, clears quantified impact on the six-engineer-days quote, and keeps severity and confidence as two visible axes.",
+      "files": [],
+      "expectations": [
+        "Grades economic buyer never met as Assumed rather than Verified, because the only evidence is Damon's second-hand relay of the CFO's approval",
+        "Quotes the fragment about the CFO already approving the number as that finding's evidence",
+        "Reports that finding under Amber, not Red, applying the rule that an Assumed risk at High severity is Amber",
+        "Reports no Assumed finding under Red anywhere in the output",
+        "Raises procurement, legal, or security surfaced late or sequentially as its own separate finding",
+        "Quotes \"legal is queued behind security\" as that finding's evidence",
+        "Marks no quantified impact as Cleared and cites the six-engineer-days-a-month figure",
+        "Keeps severity and confidence visible as two separate labels on every finding, never merged into a single number or grade",
+        "Outputs no numeric risk score, win probability, or MEDDPICC-style methodology score",
+        "Recommends a first-hand conversation with the budget owner rather than accepting the relayed approval",
+        "Attaches exactly one remediation play to each Red and Amber finding and names the response rung that play belongs to",
+        "Includes a Risk check section answering both the risk in HOW past stage criteria were cleared and the risk in the PLAN for the next ones"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "My manager thinks I'm being too optimistic about Brandvold Freight. $95K, B2B mid-market, ten weeks in, stage Proposal. Poke holes in it:\n\n'May 6 - call with Ines Okonkwo (Ops Director) and Terrence Blau (IT Director). Ines walked me through how they decide: she recommends, Terrence signs off on the integration, then it goes to Marguerite Tell (CFO) who owns the budget line.\nMay 15 - Marguerite joined the second call. Her words: \"we're carrying about $18K a month in detention fees, if you can cut half of that this pays for itself.\"\nMay 22 - Terrence sent me their security questionnaire unprompted and completed his own section first.\nJun 3 - their 3PL contract with Ovanti expires Nov 30 and they will not renew it. Marguerite said that on the call.\nJun 10 - Ines built the rollout plan with me, she owns 4 of the 7 steps, first one (pulling 12 months of detention data) done Jun 9.\nJun 17 - proposal sent, review call booked Jun 26.'",
+      "expected_output": "A review that runs the disconfirming-evidence check before recording any risk, so most catalog flags land in a populated Cleared section with their clearing quotes, and the few genuine unknowns are graded Unknown with one question each rather than manufactured into risks.",
+      "files": [],
+      "expectations": [
+        "Includes a Cleared section carrying at least five flags",
+        "Marks no compelling event Cleared and quotes the Nov 30 Ovanti contract expiry",
+        "Marks economic buyer never met Cleared, citing Marguerite's logged attendance and her own first-hand $18K statement",
+        "Marks no quantified impact Cleared with the $18K-a-month detention figure",
+        "Marks no mutual action plan Cleared, citing that the buyer owns 4 of 7 steps and completed the first one",
+        "Marks single-threaded deal Cleared on three engaged contacts across different functions, each with a logged interaction",
+        "Marks decision process undocumented Cleared with the recommend / sign-off / CFO sequence and the named owners",
+        "Grades none of the cleared flags as Red, Amber, or Watch",
+        "States that each flag's disconfirming evidence is checked before the flag is recorded as a risk",
+        "Resolves every catalog group to a state rather than reporting only the problems",
+        "Lists any remaining risk as Unknown with one diagnostic question rather than asserting it as confirmed",
+        "Routes the unanswered close-date-history question to the desk-check rung, since that answer sits in records the rep already holds"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Forecast call is Thursday and Ostrander Medical is on my commit for this quarter. $180K, B2B, five-month cycle, stage Proposal. I have six open questions on it and exactly one shot at my contact before Thursday.\n\n'Jul 2 - Lenore Kaczmarek (Dir. Clinical Ops): \"we have to get this live before the accreditation audit in November.\"\nJul 16 - Lenore: \"I'll see if I can get you time with Dr. Achebe\" (CMO, controls the budget). Same line again Jul 30 and Aug 13.\nAug 20 - demo #2, Lenore plus one analyst.\nAug 27 - Lenore replies same day, she always has.\nSep 2 - proposal sent. Lenore: \"the decision meeting is Sept 18, Dr. Achebe and the exec team.\"'\n\nWhat do I chase first?",
+      "expected_output": "A chase-order answer that promotes the access ask to first because the deal is on commit and the next gate is the decision meeting, declares the second-data-point rung worthless with the forecast call on Thursday, refuses to bundle the six questions into one re-discovery call, and raises the failed escalations as a Red finding.",
+      "files": [],
+      "expectations": [
+        "Names the access ask as the first rung to chase, ahead of the desk check and the one-question rung",
+        "Names the deal sitting on commit, or the Sept 18 decision meeting being the next gate, as the fact that promoted the access ask",
+        "States that the second-data-point rung is worthless here because the forecast call lands Thursday",
+        "Proposes no single re-discovery call bundling the six open questions together",
+        "Routes any request for a full discovery question set to a discovery-question skill rather than producing one",
+        "Emits at most one diagnostic question per Unknown flag",
+        "Notes that Lenore's same-day reply cadence collapses the one-question rung's latency, promoting it above the desk check",
+        "Raises champion cannot reach power and quotes the recurring \"I'll see if I can get you time with Dr. Achebe\"",
+        "Marks no compelling event Cleared, citing the November accreditation audit as dated and buyer-owned",
+        "Recommends exactly one next action for the single available touch",
+        "Names a response rung for each Red and Amber finding",
+        "Lists the Gaps in chase order rather than in catalog order",
+        "Outputs no win probability or numeric deal score"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "I counted seven red flags on Vantauer Systems and I'm ready to kill it. $65K, B2B, seven months in, stage Proposal, I'm carrying 29 other deals and quarter-end is in 11 days.\n\n'Feb-Apr: every meeting with Silas Brandt (IT Manager), nobody else.\nApr 9 - Silas: \"procurement here is brutal, honestly I don't know how long it takes.\"\nApr 30 - Silas: \"our CISO Hedda flagged your data residency, she's not a fan.\" Never came up again.\nMay 14 - I asked Silas twice for an intro to his VP. Both times: \"let me see.\"\nJun 5 - Silas: \"we're doing fine with the spreadsheets honestly, this is a nice-to-have.\"\nJul 1 - close date moved Jun 30 -> Aug 31. Then Aug 31 -> Sep 30 on Aug 12.\nAug 20 - Silas replies about once every 10 days now. It was one day back in February.'\n\nShould I disqualify?",
+      "expected_output": "A response that refuses the flag count as a decision rule, names escalation as promoted above trade and work because all three access-blocker conditions are met, offers re-forecasting as the near-equal alternative to disqualifying that differs only in reversibility, and grades the latency change as a widening pattern.",
+      "files": [],
+      "expectations": [
+        "Refuses to treat the count of seven flags as a disqualification decision rule, stating that a count collapses the two axes",
+        "If disqualification is recommended at all, names one specific unrecoverable flag as the reason rather than the total number of flags",
+        "Promotes escalate it above trade it and work it for the VP-access flag",
+        "Names the promotion conditions as met: the blocker is access rather than information, the champion has been asked at least twice, and the stage gate lands inside the current period",
+        "Quotes the twice-asked VP introduction line as the evidence for that promotion",
+        "Offers re-forecasting the deal out of the committed period, naming the flag that moved it",
+        "States that re-forecasting and disqualifying cost the rep near-identical effort and differ only in reversibility",
+        "States that the second close-date push with no new external cause downgrades the forecast category",
+        "Raises blocker mentioned but never addressed for the data-residency objection, quoting \"she's not a fan\"",
+        "Grades response latency as a widening pattern rather than a single silence, citing the one-day to ten-day change",
+        "Recommends no bare concern-raising touch that tells the buyer the deal looks at risk without an ask attached",
+        "Uses the rep's 29 other deals as a stated constraint holding the Unknown chase to the first two rungs",
+        "Attaches exactly one remediation play to each Red and Amber finding"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Honest answer: my CRM notes are a disaster and I know it. My manager pulled Kilbrenner Foods in a deal review and I couldn't answer half her questions. $48K, B2B, stage Discovery, maybe six weeks in. This is literally everything in the system:\n\n'Apr 8 - intro call, went well\nApr 22 - follow up, they're interested\nMay 6 - call\nMay 19 - sent pricing'\n\nI don't just want this deal fixed, I want to stop showing up to deal reviews like this.",
+      "expected_output": "A review that grades the record rather than the deal: record repair promoted from last to first in the chase order on the stated habit goal, nearly every flag Unknown with one question each, happy-ears language the one quotable finding, and a backfill-then-re-run recommendation.",
+      "files": [],
+      "expectations": [
+        "Promotes record repair from last to first in the chase order",
+        "Names the user's stated goal of fixing the habit as the fact that moved record repair",
+        "States that the review grades the notes rather than the deal",
+        "Reports that Unknowns dominate this record and that note hygiene, not deal quality, is the problem to fix first",
+        "Grades no flag Verified or Assumed without a verbatim fragment drawn from the four logged lines",
+        "Raises happy-ears language, quoting \"went well\" or \"they're interested\"",
+        "Places the stakeholder, budget, process, and urgency flags in Gaps as Unknown rather than as confirmed risks",
+        "Attaches exactly one diagnostic question to each Gap",
+        "Recommends backfilling the record with the user and re-running the review on the completed record",
+        "States that a rising Unknown count across reviews of the same deal signals note hygiene rather than deal quality",
+        "Ends with a carry-forward list of flags and their states for the next review"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Pretty sure I'm getting ghosted by Mardell County Health Authority and I want confirmation before I tell my manager. Public sector, $320K, this thing has been running nine months, stage Evaluation. Recent notes:\n\n'Jul 9 - steering committee meeting, six attendees including their CIO Abasiama Etuk.\nJul 30 - Abasiama: \"our procurement calendar means nothing moves in August, everyone's out.\"\nAug 5 - emailed the committee chair. No reply.\nAug 19 - emailed again. No reply.\nSep 2 - reply from the chair: \"back now, we're re-convening the committee Sept 23, you're on the agenda.\"'\n\nConfirm it for me.",
+      "expected_output": "A review that tests the ghosting suspicion instead of confirming it, clears the latency flag on the quoted August-calendar explanation plus the re-engagement that followed, clears the next-step flag on Sept 23, and warns against judging a nine-month committee cycle by transactional response-speed norms.",
+      "files": [],
+      "expectations": [
+        "Treats the user's ghosting suspicion as a hypothesis tested against the evidence rather than a conclusion to confirm",
+        "Marks response latency growing as Cleared, citing the buyer's quoted explanation plus the re-engagement that followed it",
+        "Quotes \"our procurement calendar means nothing moves in August\" as the clearing evidence",
+        "States that a single silence is noise and that only a widening pattern of gaps counts as evidence",
+        "Warns that judging a nine-month public-sector cycle by transactional response-speed standards manufactures ghosting flags that are not real",
+        "Reports no ghosting or disengagement finding as Red",
+        "Marks no agreed next step with a date as Cleared, citing the Sept 23 re-convening with the user on the agenda",
+        "Weighs cadence against this segment's own norm rather than a universal one",
+        "Resolves the remaining catalog flags to states, with each Unknown carrying one diagnostic question",
+        "Justifies severity against a $320K nine-month committee-driven motion",
+        "Outputs no win probability or numeric score",
+        "States plainly in the verdict what is evidenced versus what is merely absent"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Pasting the notes for Tolliver & Reach below. Two things I need: give me a score out of 10 on how qualified this deal is, and map out who the real decision makers probably are based on their titles. My guess is the CFO is the actual buyer and the ops guy is just a gatekeeper. $125K, B2B, stage Discovery.\n\n'Sep 1 - call with Bertrand Nsofor (Head of Operations). Said the current vendor's SLA misses are \"a weekly conversation now.\" Asked what our onboarding looks like.\nSep 9 - Bertrand: \"I'll need to loop in whoever owns the contract, probably Finance.\"\nSep 15 - sent case study, Bertrand: \"useful, sharing internally.\"'",
+      "expected_output": "A refusal to produce either the numeric qualification score or the title-inferred stakeholder map, with both requests routed to the sibling skills that own them, plus the actual note review in the report shape with evidence-graded findings.",
+      "files": [],
+      "expectations": [
+        "Produces no qualification score out of 10 or any equivalent overall numeric grade for the deal",
+        "Produces no MEDDPICC or other methodology score",
+        "Builds no stakeholder map and names no likely persona inferred from titles",
+        "Does not confirm the user's guess that the CFO is the buyer and the ops contact is a gatekeeper",
+        "Routes the stakeholder-map request to a stakeholder-mapping skill and the qualification-score request to a qualification-scoring skill",
+        "Grades economic buyer never met from the quoted \"probably Finance\" fragment rather than from title inference",
+        "Raises pain stated at surface level only, quoting \"a weekly conversation now\", because no cost, incident, or prior fix attempt is recorded",
+        "Treats \"sharing internally\" as stated intent rather than a logged act of internal advocacy",
+        "Delivers the review in the report shape - snapshot, timeline, graded findings, gaps, verdict - rather than as a score sheet",
+        "Emits exactly one diagnostic question per Unknown flag",
+        "Ends on one named next action and no win probability"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Need a gut check on Wrenhalder Textiles before I recommit it. $88K, B2B, four months in, stage Proposal.\n\n'Jun 2 - Ottoline Sparre (Plant Manager): \"yeah we'd like to get something in place this year sometime.\"\nJun 20 - I asked about timing. \"Q4 works for us if it works for you.\"\nJul 15 - moved close date Aug 31 -> Sep 30. Reason logged: \"need a few more weeks.\"\nAug 22 - moved close date Sep 30 -> Oct 31. Reason logged: \"still need a few more weeks.\"\nSep 5 - Ottoline: \"nothing's changed on our end, still interested.\"'\n\nI want to put this back on commit for Q4.",
+      "expected_output": "A review that tests the timeline against the four ranked levers, finds none, raises the seller-owned timeline and the repeated pushes, refuses the commit request, and assigns re-forecasting as the response rung rather than coaching manufactured urgency.",
+      "files": [],
+      "expectations": [
+        "Names the four timeline levers - hard deadline, commercial terms, cost of inaction, soft deadline - and states that at least two, one of them a hard deadline or dated commercial term, are needed before a timeline counts as real",
+        "Reports that none of the four levers is evidenced in these notes",
+        "Raises timeline owned by the seller, not the buyer, quoting \"Q4 works for us if it works for you\"",
+        "Raises close date pushed repeatedly on the two moves with a repeating internal reason",
+        "States that a second push with no new external cause downgrades the forecast category",
+        "Does not recommend putting the deal back on commit for Q4",
+        "Assigns re-forecast it as the response rung for the urgency finding",
+        "States that re-forecasting buys forecast truth rather than deal progress",
+        "Recommends no manufactured urgency, invented deadline, or discount-driven deadline as the fix",
+        "Quotes \"nothing's changed on our end\" as evidence rather than treating continued interest as progress",
+        "Raises no compelling event and pairs it with probing the cost of inaction against a real date",
+        "Keeps severity and confidence visible as two separate axes on every finding"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    { "query": "review my deal notes for red flags", "should_trigger": true },
+    { "query": "is this deal real or am I wasting my time", "should_trigger": true },
+    {
+      "query": "here are six weeks of call notes on my biggest deal, what am I missing",
+      "should_trigger": true
+    },
+    { "query": "my deal keeps slipping, what's actually wrong with it", "should_trigger": true },
+    { "query": "the prospect went quiet after the proposal, is this dead", "should_trigger": true },
+    { "query": "forecast call is tomorrow, help me inspect this opportunity", "should_trigger": true },
+    { "query": "am I being ghosted", "should_trigger": true },
+    { "query": "I need to know if I should keep working this account", "should_trigger": true },
+    { "query": "poke holes in this deal for me", "should_trigger": true },
+    {
+      "query": "what risks do you see in this opportunity's activity log",
+      "should_trigger": true
+    },
+    { "query": "stress test my top deal before I commit it", "should_trigger": true },
+    { "query": "single threaded check on this deal", "should_trigger": true },
+    {
+      "query": "everything I have on this deal is in this email thread, sanity check it",
+      "should_trigger": true
+    },
+    {
+      "query": "read these call notes and tell me what could kill this deal",
+      "should_trigger": true
+    },
+    {
+      "query": "my manager says this deal isn't real, prove her right or wrong",
+      "should_trigger": true
+    },
+    { "query": "why has this opportunity stalled", "should_trigger": true },
+    { "query": "the buyer stopped replying, what does that mean", "should_trigger": true },
+    { "query": "is there anything in these notes that should worry me", "should_trigger": true },
+    { "query": "deal inspection before the pipeline review", "should_trigger": true },
+    { "query": "I think this one's slipping again, third close date push", "should_trigger": true },
+    { "query": "should I keep this in commit or move it out", "should_trigger": true },
+    { "query": "red flags in this opportunity", "should_trigger": true },
+    { "query": "qualification risks on this account", "should_trigger": true },
+    { "query": "help me figure out whether this prospect is serious", "should_trigger": true },
+    {
+      "query": "they asked for a proposal on the first call, is that a good sign",
+      "should_trigger": true
+    },
+    {
+      "query": "our champion left the company, how bad is that for this deal",
+      "should_trigger": true
+    },
+    {
+      "query": "nobody from finance has ever been on a call, does that matter",
+      "should_trigger": true
+    },
+    { "query": "reviewing my notes before I forecast this one", "should_trigger": true },
+    {
+      "query": "can you look at this activity log and tell me what's missing",
+      "should_trigger": true
+    },
+    {
+      "query": "I've only ever spoken to one person at this account, is that a problem",
+      "should_trigger": true
+    },
+    { "query": "what's the risk on this deal", "should_trigger": true },
+    { "query": "the close date has moved twice, should I be worried", "should_trigger": true },
+    {
+      "query": "gut check on whether this opportunity is going to close",
+      "should_trigger": true
+    },
+    { "query": "here's the CRM notes dump on this account, anything jump out", "should_trigger": true },
+    { "query": "buyer said budget shouldn't be a problem, do I believe them", "should_trigger": true },
+    { "query": "I want an honest read on this opportunity before the QBR", "should_trigger": true },
+    { "query": "kickoff call went great but nothing since, thoughts", "should_trigger": true },
+    { "query": "diagnose why this deal isn't moving", "should_trigger": true },
+    {
+      "query": "solar deal, customer says her husband is fine with it, anything I should check",
+      "should_trigger": true
+    },
+    {
+      "query": "high ticket coaching sale, prospect loves it but there's no date, what now",
+      "should_trigger": true
+    },
+    { "query": "tell me what I can't see in these notes", "should_trigger": true },
+    {
+      "query": "we're four months in and I still haven't met the decision maker, how do I handle that",
+      "should_trigger": true
+    },
+    { "query": "what should I chase first on this account", "should_trigger": true },
+    {
+      "query": "IT raised a concern two months ago and I never followed up, how much does that hurt",
+      "should_trigger": true
+    },
+    { "query": "which of these gaps is worth spending one email on", "should_trigger": true },
+    { "query": "should I disqualify this one", "should_trigger": true },
+    { "query": "am I kidding myself about this opportunity", "should_trigger": true },
+    { "query": "run a risk review on this deal's written record", "should_trigger": true },
+    {
+      "query": "our contact keeps saying she'll get us to the VP and never does",
+      "should_trigger": true
+    },
+    {
+      "query": "no mutual action plan on a six month deal, how serious is that",
+      "should_trigger": true
+    },
+    { "query": "I need evidence for why this deal is at risk, not vibes", "should_trigger": true },
+    {
+      "query": "everything looks fine on paper but my gut says no, check my notes",
+      "should_trigger": true
+    },
+    {
+      "query": "review the written record on this opportunity and grade the risks",
+      "should_trigger": true
+    },
+    { "query": "score this deal against MEDDPICC", "should_trigger": false },
+    { "query": "run a MEDDIC scorecard on my opportunity", "should_trigger": false },
+    { "query": "BANT qualify this lead for me", "should_trigger": false },
+    {
+      "query": "give me a qualification score out of 10 for this account",
+      "should_trigger": false
+    },
+    { "query": "build me a power map of the buying committee", "should_trigger": false },
+    {
+      "query": "who is the economic buyer at this account based on their org chart",
+      "should_trigger": false
+    },
+    { "query": "map the stakeholders on this deal and label each one", "should_trigger": false },
+    { "query": "draw the deal org chart from these CRM contact roles", "should_trigger": false },
+    {
+      "query": "write me a discovery question set for a VP of Operations",
+      "should_trigger": false
+    },
+    { "query": "what should I ask on my first call with this prospect", "should_trigger": false },
+    { "query": "build a SPIN question ladder for a security buyer", "should_trigger": false },
+    { "query": "build the ROI case for this deal", "should_trigger": false },
+    { "query": "calculate the payback period for this customer", "should_trigger": false },
+    { "query": "justify our price to their CFO", "should_trigger": false },
+    { "query": "turn these call notes into a recap email", "should_trigger": false },
+    {
+      "query": "write the follow up email with next steps after this meeting",
+      "should_trigger": false
+    },
+    { "query": "draft a mutual action plan document for this buyer", "should_trigger": false },
+    { "query": "score this call transcript against our rubric", "should_trigger": false },
+    {
+      "query": "how did this rep do on the call, here's the Gong recording transcript",
+      "should_trigger": false
+    },
+    { "query": "grade my discovery call", "should_trigger": false },
+    {
+      "query": "here's our pipeline export, which deals should we scrub",
+      "should_trigger": false
+    },
+    { "query": "we have 4x coverage and still missed, what's wrong", "should_trigger": false },
+    { "query": "how much pipeline do we need for next quarter's quota", "should_trigger": false },
+    { "query": "clean up stale opportunities across the whole pipeline", "should_trigger": false },
+    { "query": "build a forecast roll-up for the whole team", "should_trigger": false },
+    { "query": "the buyer says we're too expensive, what do I say", "should_trigger": false },
+    {
+      "query": "write me a rebuttal for 'we already use a competitor'",
+      "should_trigger": false
+    },
+    { "query": "they want 20% off, what do I trade for it", "should_trigger": false },
+    { "query": "plan my concessions before the procurement call", "should_trigger": false },
+    { "query": "design a 12 touch outbound cadence", "should_trigger": false },
+    { "query": "why are my cold emails landing in spam", "should_trigger": false },
+    { "query": "write me three subject lines for this campaign", "should_trigger": false },
+    { "query": "find a personalization angle for this prospect", "should_trigger": false },
+    { "query": "write a cold call opener for a CTO", "should_trigger": false },
+    { "query": "define our ideal customer profile", "should_trigger": false },
+    { "query": "which accounts belong in tier 1", "should_trigger": false },
+    { "query": "build an account fit score from our closed won data", "should_trigger": false },
+    { "query": "how much quota should an AE carry next year", "should_trigger": false },
+    { "query": "design the accelerator curve for our comp plan", "should_trigger": false },
+    { "query": "should we move from PLG to sales led", "should_trigger": false },
+    { "query": "how many reps per manager is right", "should_trigger": false },
+    { "query": "what should I ask in an AE interview", "should_trigger": false },
+    { "query": "how do I break into tech sales", "should_trigger": false },
+    { "query": "recommend some sales podcasts worth following", "should_trigger": false },
+    {
+      "query": "why is our forecast always wrong at the company level",
+      "should_trigger": false
+    },
+    { "query": "audit our pipeline stage definitions", "should_trigger": false },
+    { "query": "build a lead scoring model", "should_trigger": false },
+    { "query": "which customers are at risk of churning this quarter", "should_trigger": false },
+    { "query": "set up a deal desk approval workflow", "should_trigger": false },
+    { "query": "what are the red flags in this job offer letter", "should_trigger": false },
+    { "query": "review this commercial lease for red flags", "should_trigger": false },
+    {
+      "query": "code review this pull request and flag anything risky",
+      "should_trigger": false
+    },
+    {
+      "query": "due diligence red flags on this startup before we invest",
+      "should_trigger": false
+    }
+  ]
+}

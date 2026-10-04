@@ -1,0 +1,578 @@
+{
+  "skill_name": "revops-stack-rationalization",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I run RevOps at Verlane Analytics, 320 people, B2B sales-led. Our CFO pulled a seat-activity export off our SaaS admin console and sorted it ascending. Bottom of the list: a record dedupe/merge service, 4 seats, 8% of its features touched, $9K a year. Next up: a conversation-intelligence tool, 60 seats, $52K, and managers stopped reviewing calls about two quarters ago. Also on the list, a sales-engagement platform, 45 seats, $88K a year, 12% of seats logged in during the last 90 days, and honestly it overlaps the email module in our marketing automation platform for everyone outside the one team of three that uses it. CFO's instruction was literally \"cut the bottom three by utilization.\" Give me the cut list I can take back to him.",
+      "expected_output": "A verdict per tool anchored on business value rather than seat activity: the dedupe service kept despite being lowest on the utilization sort, the 45-seat sales-engagement platform identified as the stronger cut, enablement proposed for the conversation-intelligence tool, and every verdict carrying a business-value line plus a renewal window.",
+      "files": [],
+      "expectations": [
+        "Recommends keeping the 4-seat record dedupe/merge service rather than cutting it, despite it ranking lowest on the utilization sort",
+        "Names what breaks if the dedupe service is removed - duplicate records corrupting routing, attribution, or forecast rollups - as the business-value justification for keeping it",
+        "Identifies the 45-seat, $88K sales-engagement platform as a stronger cut candidate than the 4-seat, $9K dedupe service",
+        "States explicitly that utilization is a diagnostic input and never the cutoff for a cut decision",
+        "Recommends enablement rather than a cut for the conversation-intelligence tool, on the grounds that managers stopped reviewing calls",
+        "Keeps \"do nothing\" available as a valid verdict for at least one low-utilization flag",
+        "Does not deliver a cut list ordered by utilization percentage",
+        "Attaches a one-line business-value justification to every cut or downgrade verdict it proposes",
+        "Attributes the value-over-utilization principle to Scott Brinker / chiefmartec rather than stating it unattributed",
+        "Declines to cut exactly three tools merely because the CFO asked for three",
+        "Flags the missing renewal date and notice window per tool as required before any cut verdict is final",
+        "Does not treat the dedupe service's low seat count as evidence of low value"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Northvale Robotics, I'm the sales ops lead. Today is March 1. Four contracts I need to deal with: (1) sales-intelligence database, $140K/yr, term ends May 31, 90-day notice, auto-renews - we're pretty sure we want to replace it; (2) ABM display platform, $60K/yr, term ends June 30, 60-day notice, auto-renews - nobody has run a campaign on it in eight months; (3) conversation intelligence, $34K/yr, term ended Feb 28 and it already rolled over, 30-day notice, auto-renews - usage is low but our sales manager wants it; (4) dedupe service, $9K/yr, term ends Dec 15, 30-day notice, no auto-renew, works fine. Rank these by urgency and tell me what to do with each. Cost is the CFO's main concern so I assume we start with the $140K one and work down.",
+      "expected_output": "The four contracts ordered by notice-window-opens date rather than annual cost, with the window date computed per contract, an action deadline set back from it by a stakes-scaled negotiation lead time, and a scheduled future action for the contract whose window already closed.",
+      "files": [],
+      "expectations": [
+        "Orders the four contracts by notice-window-opens date rather than by annual cost",
+        "States explicitly that urgency comes from the notice window, not the cost column",
+        "Computes the sales-intelligence database's notice window as opening March 2 (May 31 term end minus 90 days)",
+        "Computes the ABM display platform's notice window as opening May 1 (June 30 term end minus 60 days)",
+        "Flags the sales-intelligence contract as effectively out of time because its window opens the next day, and recommends a bridge term or renegotiation instead of assuming a clean migration inside the window",
+        "Treats the conversation-intelligence contract's window as closed for this term and schedules a re-score plus recertification ahead of the next window rather than proposing action now",
+        "Gives the $9K dedupe service a low-urgency action despite it being the cheapest contract, noting it does not auto-renew",
+        "Sets each action deadline earlier than that contract's window-opens date, backing off a negotiation lead time",
+        "Varies negotiation lead time by stakes - days for an elimination, a quarter or more for a replacement or renegotiation - rather than applying one fixed lead time to all four",
+        "Does not rank the four contracts by annual cost as the user assumed",
+        "Attaches a dated action deadline to all four contracts, including the one whose window has closed",
+        "Carries the auto-renew flag per contract as its own field, distinct from the notice window"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I'm writing the board memo for our stack consolidation at Brightmoor Devices and I've collected the stats. Here's what I have: 70% of CRM implementations fail; the average B2B team relies on tools from 23 separate vendors; a Forrester 2025 B2B marketing benchmark found companies with 5 or fewer core tools report 23% higher marketing-attributed pipeline per headcount; and Gartner says reducing the GTM stack by 30% yields 15-25% more revenue per rep within 12 months. Tighten this into a one-page case for going from 41 tools down to about 12. Punchy, numbers up front.",
+      "expected_output": "A memo that refuses all four supplied figures as untraceable, replaces them with sourced benchmarks carrying source and edition, keeps the unquantified directional claim about adoption-driven consolidation failure, and reframes the goal away from a target tool count toward removing duplicate spend per function.",
+      "files": [],
+      "expectations": [
+        "Refuses to repeat the \"70% of CRM implementations fail\" figure and states it has no traceable original source in any variant",
+        "Refuses the \"23 separate vendors\" figure as a benchmark, at most attributing it as one vendor blog's unattributed claim",
+        "Rejects the \"Forrester 2025 ... 23% higher marketing-attributed pipeline per headcount\" claim as unlocatable",
+        "Rejects the \"Gartner ... 30% stack reduction yields 15-25% more revenue per rep\" claim as not traceable to Gartner",
+        "Keeps the underlying direction that consolidations fail on adoption and behavior rather than data, stated without any failure percentage attached",
+        "Substitutes at least one sourced benchmark and names both its source and its edition or survey date",
+        "Warns that repetition of a precise figure across many sites is not corroboration in this domain",
+        "Declines to endorse \"41 tools down to about 12\" as a goal expressed in tool count",
+        "Reframes the target as eliminating duplicate spend on the same function rather than reaching a smaller number",
+        "Does not invent a replacement statistic or a precise savings percentage to fill the gap left by the rejected figures",
+        "Names the edition or survey date alongside every benchmark figure it does cite"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Kestrel Freight here. IT pulled our corporate card expense report and found 14 GTM tools bought outside procurement, about $210K a year in total. Our VP of Ops wants all 14 cancelled inside the month and a standing policy that any tool not bought through procurement gets cut the moment it's discovered. One wrinkle I noticed while looking at the data: the CRM add-on procurement bought us 18 months ago sits at around 40% engagement, and a prospecting tool the SDR team expensed on a card is at about 55%. Write me the cancellation plan and the policy language.",
+      "expected_output": "A response that treats the 14 card-bought tools as evidence of unmet need before waste, refuses \"bought outside procurement\" as a standalone cut criterion, runs each through the same value and overlap test as sanctioned tools, and designs an intake gate with a fast SLA instead of a blanket cancellation.",
+      "files": [],
+      "expectations": [
+        "Treats the 14 shadow-bought tools as evidence of unmet need before treating them as waste",
+        "Cites the Productiv engagement comparison - roughly 54% for self-selected tools versus roughly 40% for IT-issued ones - and names the source",
+        "Points out that the proposed policy contradicts the company's own usage data, where the card-bought prospecting tool outperforms the procurement-bought CRM add-on",
+        "Rejects \"bought outside procurement\" as a cut criterion on its own",
+        "Puts each of the 14 tools through the same business-value and function-overlap test applied to sanctioned tools",
+        "Recommends an intake gate with an approval SLA of roughly 3-5 business days",
+        "States that a slow approval gate produces the shadow IT it exists to prevent",
+        "Lists the intake gate's required fields: business justification, intended users, data types, and expected duration",
+        "Includes an automated duplicate-check against the tool registry as part of the intake gate",
+        "Does not recommend cancelling all 14 tools within the month as asked"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Ambleside Health, 1,400 employees, I'm the RevOps director. I exported our contract repository this morning: 62 GTM tools with costs and end dates. That's the full inventory as far as I'm concerned. Finance also has AP data but pulling it is a hassle and it'll just be the same list with more steps. Separately, I know for a fact people across marketing and sales have been signing up for AI writing and research tools on their own since about January - not sure that matters for this. Let's skip ahead to scoring the 62 and producing verdicts.",
+      "expected_output": "A response that refuses the repository export as the working inventory, builds the union of four discovery channels, and promotes network/CASB telemetry out of its default position because unsanctioned AI usage is suspected at enterprise scale.",
+      "files": [],
+      "expectations": [
+        "States that the contract repository undercounts by construction, because it only holds what already cleared procurement",
+        "Builds the working inventory as the union of four discovery channels rather than from one export",
+        "Names all four channels: contract repository, AP/expense export, SSO logs, and network/CASB telemetry",
+        "Ranks network/CASB telemetry highest on tools surfaced that no other channel sees",
+        "Notes that the contract repository and the AP/expense export are the lowest-effort channels because finance already holds both",
+        "Promotes network/CASB telemetry above its default position, citing the suspected unsanctioned AI usage and the enterprise scale",
+        "States that network telemetry is the only channel that sees unsanctioned AI tools",
+        "Cites Zylo's 2026 AI-visibility figures - 60% of IT leaders lacking visibility into generative-AI tools in use, 77% finding AI running without IT's awareness - with the source named",
+        "Recommends interviewing finance specifically about expense-channel purchases",
+        "Does not accept the 62-tool repository export as the working inventory",
+        "Runs a dedicated AI-tool discovery pass as its own step rather than folding it into the general inventory"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Torvale Systems, 900 employees, B2B sales-led, I'm head of RevOps. Our CRM vendor has offered a three-year deal at 28% off list if we move sales engagement, conversation intelligence, CPQ and forecasting onto their suite and drop the four point tools we use for those. Their forecasting and conversation-intelligence modules aren't shipping yet - they're on the roadmap for next year with AI agents built in - but the rep says the discount only holds if we sign before quarter end. Our CRO also wants to take the opportunity to redo lead scoring and the territory rules during the same cutover so we only disrupt the team once. Build me the consolidation plan.",
+      "expected_output": "A consolidation plan conditioned on a preserved alternative vendor and a risk owner per failure mode, scoped to capabilities the suite ships today rather than roadmap ones, with process logic frozen during cutover and a parity walkthrough plus adoption ownership before migration.",
+      "files": [],
+      "expectations": [
+        "Requires a named alternative vendor to be kept under active evaluation as a condition of the consolidation verdict",
+        "States that full consolidation transfers pricing power to the suite vendor",
+        "Refuses to treat suite versus point solutions as settled, citing Gartner's near-parity capability utilization of 57% suite versus 59% point",
+        "Flags that consolidating onto forecasting and conversation-intelligence modules shipping \"next year\" is a bet on a roadmap rather than a purchase",
+        "Cites the Gartner mid-2025 survey (n=413) finding that 45% of martech leaders running AI agents say vendor agent capabilities miss promised performance",
+        "Scopes the mandate to what the suite covers at parity today and keeps a named specialized tool where the suite's version is materially worse",
+        "Warns that an over-reaching single-platform mandate drives reps to route around it and rebuild a shadow stack, leaving the org paying for both",
+        "Refuses to change lead scoring and territory logic during the platform cutover window",
+        "States that process logic must be frozen during cutover and changed separately, before or after the migration",
+        "Names a risk owner per consolidation failure mode",
+        "Names an adoption owner and an enablement plan before the migration rather than after it",
+        "Requires a workflow-level parity walkthrough with the heaviest users of each point tool before the verdict is finalized"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "I do growth ops at Dunmara Goods - direct-to-consumer, 140 people, we sell through our own storefront plus two marketplaces. No SDRs, no AEs, nobody does outbound. We're carrying 31 tools: an email/SMS platform, two separate analytics tools, three attribution tools, a CDP, loyalty, reviews, a helpdesk, a subscription manager, and a pile of smaller things. My CFO wants this cut down. Every consolidation writeup I read assumes a CRM sitting at the middle of everything and a sales team using it, which is not us at all. Can you still run a proper review on a stack like ours?",
+      "expected_output": "The review adapted to a B2C/e-commerce motion: no sales-engagement layer assumed, the centering on a data or engagement layer offered as an inference, benchmark transferability flagged, overlap search aimed at analytics/attribution/messaging, with the four-channel inventory, renewal cadence, TIME scoring, and value-over-utilization rule applied unchanged.",
+      "files": [],
+      "expectations": [
+        "Confirms the review runs on a B2C/e-commerce stack that has no sales-engagement layer",
+        "States that the stack likely centers on the data/warehouse or engagement layer rather than on a CRM",
+        "Labels that centering as a reasonable inference rather than a benchmarked finding",
+        "Warns that this domain's published benchmarks are B2B-SaaS-centric, instead of implying they transfer to a DTC stack",
+        "Directs the overlap search at the analytics, attribution, and messaging categories where duplicates cluster",
+        "Applies the four-channel inventory union without modification for this motion",
+        "Applies the renewal-triggered cadence without modification for this motion",
+        "Applies TIME scoring without modification for this motion",
+        "Applies the value-over-utilization rule without modification for this motion",
+        "Does not map an SDR or sales-engagement layer onto the stack"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Ferrolane Media. We finished the review last quarter - killed 9 tools, $340K in annualized savings, everyone's happy. Now the CEO wants a standing quarterly dashboard for this. Her words: the headline number is tools cut, we started at 44, we're at 35, and she wants 25 by year end. Build me the dashboard spec: metrics, definitions, targets.",
+      "expected_output": "A dashboard spec that refuses \"tools cut\" as the headline metric and replaces it with spend per workflow, redundant-function count, pre-window renewal review rate, and re-sprawl rate, plus honesty checks on realized savings and post-consolidation adoption.",
+      "files": [],
+      "expectations": [
+        "Refuses \"tools cut\" as the headline success metric",
+        "States that counting tools cut rewards cutting count instead of redundancy, inverting the goal of the review",
+        "Includes spend per workflow served, tracked as a trend",
+        "Includes redundant-function count, tracked as a trend",
+        "Includes the share of renewals reviewed before their notice window opened, with a target near 100%",
+        "Includes net new tools entering outside the intake gate as a re-sprawl rate, with a target near zero",
+        "Includes realized savings measured against the verdict register's original projections",
+        "Includes surviving-tool adoption after each consolidation as an honesty check",
+        "States that a consolidation whose adoption drops has failed regardless of what the spend line shows",
+        "Declines to endorse \"25 tools by year end\" as a target expressed in tool count"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Halvorsen Logistics. I am the entire RevOps team - one person. We have 38 GTM tools. Board meeting is in seven weeks and the CFO wants decisions on the table by then. There is no engineering capacity I can draw on, no dedicated systems admin, and no IT function at all - I'd be doing every hour of this myself. This is a one-off cost cut for this fiscal year, not the start of a standing program; leadership has been clear about that. What do we actually do in seven weeks, and what's the highest-value play?",
+      "expected_output": "A plan that deletes internal build and platform consolidation from the register with the constraint that removed each one named, recommends downgrades and duplicate eliminations timed to windows opening inside seven weeks, states the ranking basis aloud, and names the conditions that would promote consolidation in a later cycle.",
+      "files": [],
+      "expectations": [
+        "Deletes internal build from the option register and names the constraint that deleted it - no engineering capacity",
+        "Deletes platform consolidation migrations from this cycle and names the constraints that deleted them - the analyst-only effort ceiling and the seven-week deadline",
+        "Removes the ruled-out options rather than parking them at the bottom of a ranked list",
+        "Recommends seat/tier downgrades and duplicate eliminations as this cycle's actions",
+        "States the ranking basis explicitly rather than leaving it implied by the order of rows",
+        "States that platform consolidation is the highest long-run value option even though the constraints rule it out here",
+        "Names the conditions that would promote platform consolidation in a later cycle",
+        "Promotes tools whose notice windows open inside the seven-week horizon to the front of the working order",
+        "Notes that the one-off mandate demotes the intake gate, renewal-triggered cadence, and governance work relative to a compounding mandate",
+        "Names which stated constraint moved which option in the ranking",
+        "Does not propose a full portfolio migration as a deliverable inside the seven weeks"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Wrenmoor Software, B2B, I'm the RevOps manager. Here's our list, 22 tools with annual cost: CRM $120K, marketing automation $74K, sales engagement $46K, conversation intelligence $38K, CPQ $41K, e-signature $16K, enrichment vendor A $30K, enrichment vendor B $22K, scheduling $8K, CDP $60K, BI $35K, reverse ETL $24K, a CSV-to-CRM sync utility $18K (no public API, support takes a week to answer, we mostly use it for one nightly file drop), a gifting platform $12K, an intent data provider $55K, a call-routing tool $9K, a chat widget $14K, a survey tool $6K, a contract repository $11K, a commissions tool $28K, a QBR deck builder $7K, and a competitive-intel subscription $19K. The gifting platform and the QBR deck builder don't really attach to anything we do anymore, honestly. We have two GTM engineers on staff. Just give me the cut list - we've already discussed this internally to death.",
+      "expected_output": "A run that refuses to jump to a cut list: interview questions asked one at a time, revenue workflows mapped before tools, orphan tools flagged as findings, two to three review designs proposed with a recommendation tied to an interview answer, a buy-vs-build checkpoint on the sync utility with no invented capability threshold, and section-by-section validation.",
+      "files": [],
+      "expectations": [
+        "Does not produce a cut list before running the interview",
+        "Asks interview questions one at a time rather than delivering a block of questions at once",
+        "Maps the revenue workflows first and the tools onto them second",
+        "Flags the tools serving no workflow on the map - the gifting platform and the QBR deck builder - as a finding in their own right",
+        "Proposes two to three candidate review designs with trade-offs before building any deliverable",
+        "Names the one-time portfolio sweep with renewal overlay as the default recommendation for a first cycle",
+        "States which interview answer drove the review design it recommends",
+        "Runs a buy-vs-build checkpoint on the thin, integration-hostile CSV-to-CRM sync utility",
+        "States the GTM-engineering hiring trend - roughly 205% year-over-year growth in postings, per Bloomberry - rather than inventing a capability threshold",
+        "Does not state a numeric threshold of engineers, hours, or team size above which building beats buying",
+        "Tags tools as system-of-record versus system-of-engagement and holds those writing to the record system to a stricter standard",
+        "Validates the deliverable section by section with the user rather than emitting the whole thing at once"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "We're carrying something like 45 GTM tools and finance wants a rationalization plan before the budget cycle closes.",
+      "should_trigger": true
+    },
+    {
+      "query": "Our CRO thinks half the sales stack overlaps. Run a stack review and tell us what to consolidate or cut.",
+      "should_trigger": true
+    },
+    {
+      "query": "Renewals keep auto-firing before anyone looks at the tool - I want a review that runs off the renewal calendar.",
+      "should_trigger": true
+    },
+    { "query": "revops stack audit", "should_trigger": true },
+    { "query": "GTM tool consolidation plan", "should_trigger": true },
+    {
+      "query": "We have way too many sales and marketing tools and I can't defend any of them to the board.",
+      "should_trigger": true
+    },
+    {
+      "query": "Help me decide platform versus point solutions across our whole revenue stack.",
+      "should_trigger": true
+    },
+    {
+      "query": "SaaS sprawl is out of control on the go-to-market side.",
+      "should_trigger": true
+    },
+    {
+      "query": "New CRO started and wants to know what every tool in the revenue org does and whether we keep it.",
+      "should_trigger": true
+    },
+    {
+      "query": "I need a keep, consolidate, replace or cut verdict for each of our 30 martech and sales tools.",
+      "should_trigger": true
+    },
+    {
+      "query": "Post-merger we now run two of everything on the GTM side. Where do we start?",
+      "should_trigger": true
+    },
+    {
+      "query": "Can you help me build a redundant-tool map across marketing and sales?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our software spend went up 40% and nobody can say which tools actually drive revenue.",
+      "should_trigger": true
+    },
+    {
+      "query": "Run a TIME assessment across our revenue tooling portfolio.",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I figure out which of our GTM tools are duplicates of each other?",
+      "should_trigger": true
+    },
+    {
+      "query": "Finance wants 20% off the martech line by Q1. What's the process?",
+      "should_trigger": true
+    },
+    {
+      "query": "We bought three enrichment vendors over four years and I only found out last week.",
+      "should_trigger": true
+    },
+    {
+      "query": "Set up a recurring review so tools don't pile back up after we clean house.",
+      "should_trigger": true
+    },
+    { "query": "annual gtm tech stack review", "should_trigger": true },
+    {
+      "query": "Board efficiency push - they want a story about tooling discipline in the revenue org.",
+      "should_trigger": true
+    },
+    {
+      "query": "Half our tools were bought on somebody's credit card. How do I even build the real inventory?",
+      "should_trigger": true
+    },
+    {
+      "query": "What do I do with tools nobody logs into but that we can't obviously kill?",
+      "should_trigger": true
+    },
+    {
+      "query": "I want to stop paying for the same capability twice across marketing and sales.",
+      "should_trigger": true
+    },
+    {
+      "query": "Our CRM vendor is pitching us on moving everything onto their suite - how do I evaluate that across the whole stack?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're being asked to justify every line of the revenue tech budget before renewal season.",
+      "should_trigger": true
+    },
+    {
+      "query": "how to cut saas spend in the revenue org",
+      "should_trigger": true
+    },
+    {
+      "query": "Is there a framework for deciding what to keep versus rip out across a whole tool portfolio?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our marketing ops lead and our sales ops lead each bought a scheduling tool. This keeps happening.",
+      "should_trigger": true
+    },
+    {
+      "query": "I inherited a stack I didn't build and I need to form an opinion on all of it.",
+      "should_trigger": true
+    },
+    {
+      "query": "We're a DTC brand with about 25 marketing tools and I suspect a lot of overlap.",
+      "should_trigger": true
+    },
+    {
+      "query": "Nobody owns the renewal dates for our revenue tools and we keep getting surprised.",
+      "should_trigger": true
+    },
+    {
+      "query": "What governance stops the tool count creeping back up after a cleanup?",
+      "should_trigger": true
+    },
+    {
+      "query": "Give me a defensible cut list for our revenue tech stack.",
+      "should_trigger": true
+    },
+    {
+      "query": "Our stack grew faster than our revenue and the CFO noticed.",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we consolidate onto one platform or keep best-of-breed across the GTM stack?",
+      "should_trigger": true
+    },
+    {
+      "query": "We need to reduce redundant spend across sales, marketing and CS tooling.",
+      "should_trigger": true
+    },
+    { "query": "portfolio review of revenue tooling", "should_trigger": true },
+    {
+      "query": "Every team bought their own AI tool this year and I have no idea what we're paying for.",
+      "should_trigger": true
+    },
+    {
+      "query": "How often should we review the whole go-to-market tool portfolio?",
+      "should_trigger": true
+    },
+    {
+      "query": "I want a per-tool decision with a deadline attached, not just a spreadsheet of costs.",
+      "should_trigger": true
+    },
+    {
+      "query": "We're doing a tech stack rationalization for the revenue org next quarter.",
+      "should_trigger": true
+    },
+    {
+      "query": "My CEO asked why we pay for 38 tools and I need a real answer.",
+      "should_trigger": true
+    },
+    {
+      "query": "Which of our revenue tools are we merely tolerating versus actually investing in?",
+      "should_trigger": true
+    },
+    {
+      "query": "Layoffs cut the team in half and the tool count didn't move.",
+      "should_trigger": true
+    },
+    {
+      "query": "Time to decide what stays in the revenue stack for next fiscal year.",
+      "should_trigger": true
+    },
+    {
+      "query": "Can you help me map our revenue workflows to the tools that serve them and find the orphans?",
+      "should_trigger": true
+    },
+    {
+      "query": "After we consolidate, how do we keep people from buying shadow tools all over again?",
+      "should_trigger": true
+    },
+    {
+      "query": "Usage reports say 60% of our sales tools sit idle. What do I do with that?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're spending $1.2M a year on go-to-market software and I need to bring that down without breaking anything.",
+      "should_trigger": true
+    },
+    {
+      "query": "Who should own the lead source field in our CRM and how often does it need refreshing?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design a field dictionary with write-precedence rules for our CRM.",
+      "should_trigger": false
+    },
+    {
+      "query": "Which product usage events predict churn about 90 days out?",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a weighted customer health score banded red, yellow and green.",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up a discount approval matrix for deals going over 30% off list.",
+      "should_trigger": false
+    },
+    {
+      "query": "Our round-robin is assigning enterprise leads to SMB reps - fix the routing rules.",
+      "should_trigger": false
+    },
+    {
+      "query": "Our MQL threshold is producing garbage. Recalibrate the lead scoring model.",
+      "should_trigger": false
+    },
+    {
+      "query": "Audit our pipeline stage exit criteria against buyer-verifiable milestones.",
+      "should_trigger": false
+    },
+    {
+      "query": "Which system is source of truth for subscription objects across our data estate?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our funnel stage set and decide the unit of analysis.",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a metric tree from board level down to IC with an owner per branch.",
+      "should_trigger": false
+    },
+    {
+      "query": "Deals are vanishing between demo and proposal - where's the leak and what's it worth?",
+      "should_trigger": false
+    },
+    {
+      "query": "Structure the monthly board revenue deck so the miss doesn't blindside anyone.",
+      "should_trigger": false
+    },
+    {
+      "query": "I'm a sales ops analyst - how do I get to a director-level RevOps role?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the scorecard and interview loop for our first RevOps hire.",
+      "should_trigger": false
+    },
+    {
+      "query": "Which RevOps newsletters and podcasts should I be following?",
+      "should_trigger": false
+    },
+    {
+      "query": "Our forecast is off by 30% every quarter - diagnose why.",
+      "should_trigger": false
+    },
+    {
+      "query": "Flag every stale deal in this quarter's pipeline and give me a disposition per deal.",
+      "should_trigger": false
+    },
+    {
+      "query": "What has to be in the packet when sales hands a closed-won account over to CS?",
+      "should_trigger": false
+    },
+    {
+      "query": "Route my RevOps task to the right skill and set up the project context.",
+      "should_trigger": false
+    },
+    {
+      "query": "We're choosing between two conversation-intelligence vendors - build me an evaluation scorecard for the purchase.",
+      "should_trigger": false
+    },
+    {
+      "query": "Negotiate down our CRM renewal quote - what levers do I have with the vendor?",
+      "should_trigger": false
+    },
+    {
+      "query": "Review the auto-renewal clause in this vendor MSA and tell me whether it's enforceable.",
+      "should_trigger": false
+    },
+    {
+      "query": "Pick a tech stack for our new internal web app - React or Svelte?",
+      "should_trigger": false
+    },
+    {
+      "query": "Generate a blueprint document of our codebase's technology stack.",
+      "should_trigger": false
+    },
+    {
+      "query": "Our AWS bill doubled this quarter - find the waste.",
+      "should_trigger": false
+    },
+    {
+      "query": "Rank our observability vendors by cost and tell me which two to cut.",
+      "should_trigger": false
+    },
+    {
+      "query": "Consolidate the engineering team's project management tools.",
+      "should_trigger": false
+    },
+    {
+      "query": "Define ARR, NRR and magic number for our SaaS metrics dashboard.",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we launch a free tier to drive acquisition?",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a free tool that attracts developers to our site.",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up Terraform stacks for our multi-environment infrastructure.",
+      "should_trigger": false
+    },
+    {
+      "query": "Migrate our app from React Query to TanStack Query v5.",
+      "should_trigger": false
+    },
+    {
+      "query": "Audit our Chrome extension's devtools integration.",
+      "should_trigger": false
+    },
+    {
+      "query": "Which CRM should a 20-person startup buy?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the implementation plan for migrating off our old marketing automation platform onto the new one.",
+      "should_trigger": false
+    },
+    {
+      "query": "Train the sales team on the new sequencer we just rolled out.",
+      "should_trigger": false
+    },
+    {
+      "query": "Build the business case for buying an ABM platform we don't have yet.",
+      "should_trigger": false
+    },
+    {
+      "query": "How much should we budget for martech next year as a share of marketing spend?",
+      "should_trigger": false
+    },
+    {
+      "query": "Our CRM has 400 unused custom fields - which ones do we delete?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design the org chart for a revenue operations team of six.",
+      "should_trigger": false
+    },
+    {
+      "query": "Run a security review of our vendors for SOC 2 compliance.",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a data warehouse schema for our revenue reporting.",
+      "should_trigger": false
+    },
+    {
+      "query": "Which marketing channel should we cut - paid search or paid social?",
+      "should_trigger": false
+    },
+    {
+      "query": "We're renewing our office productivity licenses - Microsoft or Google?",
+      "should_trigger": false
+    },
+    {
+      "query": "Find the duplicate contact records in our database and merge them.",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the RFP for a new CPQ vendor.",
+      "should_trigger": false
+    },
+    {
+      "query": "How do I get my team to actually use the CRM we already pay for?",
+      "should_trigger": false
+    },
+    {
+      "query": "Compare the pricing tiers of the three sales engagement platforms on our shortlist.",
+      "should_trigger": false
+    }
+  ]
+}

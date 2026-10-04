@@ -1,0 +1,32 @@
+/*
+ * No webfont import.
+ *
+ * This UI runs on localhost — as a desktop app and as `seomator serve` — and
+ * fetching a stylesheet from Google to render text means the dashboard needs
+ * the internet to look right, leaks a request to a third party on every open,
+ * and would need a hole in the dashboard's Content-Security-Policy.
+ *
+ * The family names stay in --font-sans / --font-mono, so anyone who has IBM
+ * Plex installed still sees it; everyone else gets the platform's own UI font,
+ * which is what the native-feeling toolbar wants anyway.
+ */
+@import 'tailwindcss';
+@import './globals.css';
+
+/* ─── Tailwind v4 theme extension via CSS ──────────────────────────────── */
+@theme {
+  --color-pass: var(--color-pass);
+  --color-pass-bg: var(--color-pass-bg);
+  --color-warn: var(--color-warn);
+  --color-warn-bg: var(--color-warn-bg);
+  --color-fail: var(--color-fail);
+  --color-fail-bg: var(--color-fail-bg);
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-light: var(--color-accent-light);
+  --color-surface: var(--color-bg-elevated);
+  --color-muted: var(--color-text-muted);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}

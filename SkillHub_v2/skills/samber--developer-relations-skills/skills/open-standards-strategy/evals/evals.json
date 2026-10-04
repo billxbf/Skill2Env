@@ -1,0 +1,641 @@
+{
+  "skill_name": "open-standards-strategy",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm VP Platform at Corvado, a B2B logistics SaaS, about 180 people. Our CTO put \"open standards strategy\" on my H1 OKRs and wants a strategy document for the exec team by next Friday. Can you write it? I want something that covers our overall approach to open standards and commits us to being good ecosystem citizens across the board.",
+      "expected_output": "A refusal to write the company-wide strategy document, plus a single scoping question naming the missing unit of decision: which specification, over what horizon, owned by whom.",
+      "files": [],
+      "expectations": [
+        "Declines to produce the general, company-wide open standards strategy document the user asked for",
+        "States that the unit of decision is one named specification, not a company-wide posture",
+        "Asks which specification or protocol the decision concerns before proposing anything",
+        "Names a single time horizon and a single owner as part of that decision unit, alongside the named spec",
+        "Treats \"we support open standards\" as a value rather than a strategy, explicitly",
+        "Recommends no posture (ignore, consume, conform, extend, contribute, co-found or drive) while no spec is named",
+        "Produces no decision record, KPI table or venue recommendation in this response",
+        "Asks what triggered the question, offering options such as a customer or procurement request, a competitor announcement, a recurring integration cost, a regulator, or an internal proposal",
+        "Poses a single question and waits, rather than delivering the whole interview as one block",
+        "Offers to run the full analysis once the user names one specification"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Helvar Systems here, we sell fleet-orchestration software for warehouse robots. A EUR 1.4M renewal with our largest customer closes in 11 weeks and their procurement team added a hard requirement that we support FleetLink 2.1, an interop message format maintained by a robotics industry consortium (membership is EUR 48k a year). Our VP Engineering wants to join that consortium's technical committee so we get a say in FleetLink 3.0, which is due in roughly two years. We have two engineers free starting next week. How should we play this?",
+      "expected_output": "A short-horizon answer that removes the consensus-venue postures from the menu entirely, presents two or three fast postures, and recommends conforming or consuming to clear the renewal, with the committee seat handled as a separate decision.",
+      "files": [],
+      "expectations": [
+        "Removes Contribute, Co-found and Drive from the options presented, rather than listing them as lower-ranked alternatives",
+        "States that consensus venues work in years and cannot produce a result inside the 11-week window",
+        "Presents at least two and at most three candidate postures before recommending one",
+        "Draws every surviving candidate from Consume, Conform and Extend",
+        "Recommends Consume or Conform as the action that clears the renewal requirement",
+        "Names the test or interview answer that eliminated each rejected posture",
+        "Treats the technical-committee seat as a separate decision on a separate horizon, not as the answer to the renewal",
+        "Checks whether FleetLink 2.1 has a conformance suite and a certification mark before treating \"support\" as a checkable claim",
+        "States that procurement naming the requirement promotes Conform above the other rungs, because its value becomes market access rather than preference",
+        "Counts the named renewal as demand evidence instead of asserting general market demand",
+        "Recommends neither publishing nor driving a competing fleet message format",
+        "Carries both the 11-week deadline and the two-year FleetLink 3.0 horizon through the reasoning that deletes the consortium seat"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Tessral. We sell an anomaly-scoring engine for industrial telemetry; the entire product is the scoring model and the score API around it. A group of six historian and SCADA vendors has invited us to help standardize an \"anomaly score exchange\" interface covering the request shape, score normalization, and the explanation payload. Our CEO wants us to chair the effort so we're seen as the category leader. I can commit one senior engineer for 18 months. Should we take the chair?",
+      "expected_output": "A refusal of the chair on commoditization grounds: the interface being standardized is the company's own differentiator, so the posture ceiling is Extend.",
+      "files": [],
+      "expectations": [
+        "Applies the commoditization test by name and identifies the layer the proposed standard would commoditize",
+        "Identifies the anomaly score exchange interface as Tessral's own differentiator rather than a neighbouring or commodity layer",
+        "Caps the posture at Extend and refuses Contribute, Co-found and Drive on that basis",
+        "Declines the chair position",
+        "Names the product whose demand would rise if this layer got cheaper, and finds it is not Tessral's",
+        "States that a standard commoditizes the layer it covers by design",
+        "Justifies nothing on visibility, category leadership or ecosystem-citizenship grounds",
+        "Warns that standardizing score normalization hands the six vendors interchangeability with Tessral",
+        "Presents two or three candidate bundles rather than a bare yes or no",
+        "Names what each candidate bundle forecloses within two years",
+        "If engaging at all, specifies implementation plus documented extensions, with public documentation and graceful degradation as the obligation owed",
+        "Decides on the commoditization test rather than on whether the 18-month engineer commitment is affordable"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "There are nine of us at Brindle. We built a config-sync protocol for edge devices and we want to publish it as an open standard and get the whole ecosystem onto it. The incumbent is Aurelen's proprietary EdgeSync: roughly 80% of deployed gateways speak it, Aurelen also owns the two fleet-management products everyone buys alongside, and they've been shipping for 11 years. We have one very large pilot customer, a utility with 40,000 gateways, who loves our approach and can't stand Aurelen. Seed money covers maybe 14 months. How do we win this?",
+      "expected_output": "A control-test scoring against the seven key assets showing Brindle holds almost none, a recommendation of Contribute over Drive, and recruitment of the 40,000-gateway utility as a co-combatant.",
+      "files": [],
+      "expectations": [
+        "Names Shapiro and Varian's seven key assets as the control test's scoring frame",
+        "Scores Brindle against all seven assets rather than a subset: installed base, intellectual property rights, ability to innovate, first-mover advantage, manufacturing or operating-cost capability, strength in complements, and brand and reputation",
+        "Finds explicitly that Brindle holds few or none of the seven",
+        "States that no single asset is decisive",
+        "Counts the 40,000-gateway utility as a controllable asset, because a large customer controls part of the installed base",
+        "Recommends recruiting that customer as a co-combatant rather than only as a reference or logo",
+        "Does not recommend Drive as the posture",
+        "Names Contribute as the ladder's answer for a team holding none of the seven assets, because it buys influence over the same spec without requiring them to win it",
+        "Classifies the fight by which side is backward-compatible with what is already installed, before choosing tactics",
+        "Prices the 14-month runway against the venue's real pace instead of assuming the spec can be won inside it",
+        "Notes that penetration pricing or giving the technology away is hard to fund when building a coalition around an open standard, because no single supplier carries the losses without a sponsor's control to recoup them",
+        "Does not recommend a feature-superiority push as the route to displacing an 80% installed base"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Okay, so: Nordhall. We publish the OpenLedgerFeed spec for accounting-system event streams, 6 independent implementations. Our competitor Marrowcast published LedgerWire eight months ago, 5 implementations. Both do exactly the same job. Since April every enterprise deal has stalled on \"we're waiting to see which one wins.\" Our board wants us to out-ship them: three new features next quarter plus a big marketing push on our adoption numbers. Worth knowing: Marrowcast's format reads the legacy CSV drop convention that every existing ERP integration already emits, and ours requires a rewrite. Give me the plan to win.",
+      "expected_output": "A classification of the battle as Revolution versus Evolution with Nordhall on the incompatible side, followed by a merge proposal on named terms rather than a feature race.",
+      "files": [],
+      "expectations": [
+        "Classifies the situation as the fragmentation case rather than a feature race",
+        "Classifies the battle type by backward compatibility with the technology already installed",
+        "Names the classification as Revolution versus Evolution, with Marrowcast compatible and Nordhall incompatible",
+        "States that absent compelling performance the compatible side wins slowly by default",
+        "Recommends proposing a merge or truce rather than a faster Drive or the three-feature push",
+        "Cites Shapiro and Varian, \"The Art of Standards Wars\", by name as the source of the truce argument",
+        "Notes that an early truce can benefit consumers as well as vendors, and can therefore pass antitrust muster",
+        "Recommends building the position before opening truce talks, because strength in battle is the currency at the table",
+        "Specifies bridges preserving backward compatibility with both predecessor specs as a merge term",
+        "Specifies a dated end to parallel development as a merge term",
+        "Positions the merged spec as the next major version of both, not as a third option",
+        "Seats a governance body with both sides from day one",
+        "States what the merge costs Nordhall, including roadmap control and the \"we won\" narrative, against the unblocked adoption it buys"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "We're past the should-we stage. Caldmere, data-pipeline vendor, 60 people. We're co-founding a spec for dataset lineage handoff with two peer vendors, each of whom has committed a named engineer for two years. We hold no patents and we have never licensed IP to anyone. No browser has to implement this, it's a server-to-server manifest format. Nobody here sells to government. One of the two peers, Tarn Systems, told us in writing that they will not implement a spec that lives in Caldmere's GitHub org. Our lawyer wants to know by Thursday which body we're using and what the patent terms are. Internally the options on the table are: our own repo, a foundation, joining OASIS, IETF, W3C, or going for an ISO number.",
+      "expected_output": "A venue recommendation that starts from a Git-based spec, moves exactly one step right because of the named refusal, lands on a foundation host, defaults to royalty-free, and states the two charter-time irreversible decisions.",
+      "files": [],
+      "expectations": [
+        "States a Git-based community specification as the default venue",
+        "Moves exactly one venue to the right because Tarn Systems stated in writing it will not implement a spec in Caldmere's repository",
+        "Recommends a foundation-hosted venue as the resulting choice",
+        "Identifies that named refusal, not a general preference for formal process, as what neutrality is being bought to answer",
+        "Deletes ISO from the list because no tender, regulator or public buyer requires a standard number here",
+        "Deletes or deprioritizes W3C because no browser has to implement the surface",
+        "Removes the RAND branch because Caldmere holds no monetizable patents",
+        "Makes royalty-free the default patent-licensing mode",
+        "States that IETF outranks a paid-membership consortium on both efficiency and neutrality, because participation is individual and free and no membership tier gates who is in the room",
+        "States that an industry consortium leads compliance cost because its IPR mode cannot change without closing the technical committee and re-chartering",
+        "Names the two decisions fixed at charter time and not quietly revisable later: the patent-licensing regime and who owns the trademark",
+        "States that a royalty-bearing regime would put the spec out of reach of most open-source implementers",
+        "Refers the patent-portfolio and contributor-agreement specifics to counsel instead of giving legal advice",
+        "Presents the venue orderings explicitly across more than one axis rather than implying a single blended rank"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Vantefor ships v1 of our device-provisioning spec in six weeks. Plan so far: we hand anyone who asks a \"Vantefor Compatible\" logo, we write the test suite in Q3 once we see who actually implements, and we're thinking $5,000 per certification with our solutions architects observing each run over screen share so we can vouch for the quality. The goal is 20 implementations in year one, mostly small hardware shops plus two funded OEMs. Sanity-check this for me.",
+      "expected_output": "A conformance plan reordered by efficiency: version the mark and stand up the registry first, ship the suite with v1, drop witnessed testing, and make passing free against the 20-implementation goal.",
+      "files": [],
+      "expectations": [
+        "Works the four conformance decisions in efficiency order, starting with the versioned mark",
+        "Requires the mark to state which spec version it certifies and when it expires, decided before any implementation carries it",
+        "States that the versioned mark and the public registry are the two decisions that cannot be retrofitted",
+        "Rejects deferring the test suite to Q3 and requires it shipped with v1",
+        "Names the paper-standard failure mode: with no test suite every vendor claims support and buyers find the gaps in production",
+        "Specifies one maintained public registry page of certified implementations, and notes that buyers consult the registry rather than the claim",
+        "Rejects witnessed testing for this market and deletes it rather than leaving it on the menu as an option",
+        "States that self-service testing scales while witnessed testing is a standing job",
+        "Recommends free certification over the $5,000 fee, given the 20-implementation goal",
+        "States that the fee decision is made against the adoption goal, not against cost recovery",
+        "Notes that self-service and free tie on compliance cost, because neither obliges Vantefor to anything beyond publishing the result",
+        "Warns that gating the patent licence on conformance cannot be unwound once implementers hold licences under it",
+        "Cites the Khronos Adopters Program as the programme pairing a passed test with both name and logo rights and a licence to members' essential patents"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Draft the KPI section and the stop condition for our standards decision record. Here's what I have so far: \"Industry standard is two independent interoperating implementations, and the accepted benchmark is that you need them within 12 months of v1 with at least one implementer who isn't a customer.\" Add conformance pass rate too. Context: the spec is HarborLink, we drive it, v1 published last month, review in a year, I own it. Six vendors have told us they're interested.",
+      "expected_output": "A KPI table tagging each threshold sourced or baseline, correcting the 12-month figure's provenance, plus a kill rule carrying an obligation to existing implementers.",
+      "files": [],
+      "expectations": [
+        "Tags the two-independent-interoperating-implementations threshold as sourced",
+        "Attributes that threshold to RFC 6410 section 2.2, the IETF's maturity bar for promoting a Proposed Standard to Internet Standard",
+        "Corrects the user's claim that the 12-month window is an industry standard or an accepted benchmark",
+        "Tags the 12-month clock and the non-customer-implementer condition as a baseline the user is expected to replace",
+        "States that RFC 6410 sets no deadline",
+        "Suggests replacing the baseline horizon with one drawn from the market's own cycle, such as the segment's buying cycle or the release cadence of the frameworks that must adopt it",
+        "Produces a KPI table with a column marking each threshold sourced or baseline",
+        "Uses independent implementations the company does not control as the headline KPI for a Drive posture",
+        "Includes conformance pass rate across implementations and the share of the target integration surface the standard covers",
+        "Treats \"six vendors have told us they're interested\" as uncounted demand and asks for named implementers instead",
+        "Writes a kill rule stating what happens when the threshold is missed, with a concrete action such as de-escalating to a lower posture, donating the spec, or withdrawing",
+        "States the obligation owed to existing implementers inside the kill rule: a notice period, a bridge or documented successor, and a migration path",
+        "States why the kill rule must be written at the decision: standards programmes are rarely cancelled, because withdrawal reads as defeat"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Short one. We're Pellmoor, a mid-market HR analytics tool. Three deals this quarter came with a procurement questionnaire asking \"is your product certified against the SecureExchange 4 profile?\" and we've been answering \"we're compatible.\" Our CTO says certification is bureaucratic theatre and wants to keep saying compatible. What do I tell him?",
+      "expected_output": "A scoped conform-or-not answer covering the fee, the version certified and the registry entry, promoting Conform because procurement named the mark.",
+      "files": [],
+      "expectations": [
+        "Scopes the answer to the landscape work and the conformance decision only, without running the full seven-rung posture ladder",
+        "Produces a conform-or-not recommendation rather than a general standards strategy",
+        "Names the certification fee, the spec version certified, and the registry entry as the three things the answer needs",
+        "Establishes whether SecureExchange 4 has a conformance suite and a certification mark before advising",
+        "Promotes Conform above the other rungs because a procurement questionnaire naming the mark turns it into market access rather than a preference",
+        "States that Conform buys a checkable claim, and that \"we're compatible\" is not one",
+        "Names re-certification per spec version as the standing obligation Conform creates",
+        "Counts the three named deals as demand evidence",
+        "Checks whether passing conformance also conveys a patent licence",
+        "Recommends neither joining a working group, nor contributing spec text, nor publishing a rival profile",
+        "Notes that which spec version the mark certifies matters, because an unversioned or expired mark ends up attached to implementations of a spec nobody uses any more"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Halcyon Grid owns the Streamvane spec, published three years ago, about 40 implementations out there. Over time we added roughly a dozen fields to our own implementation that were never in the spec, because customers asked and we shipped fast and nobody wrote them down. Now we want to cut over to Streamvane 2, which drops half of them. The plan is a blog post giving everyone 60 days, then we turn off v1 support in our cloud and archive the v1 repo. Separately, a much bigger vendor, Calderwood, has started shipping their own extra fields and their version is quietly becoming what integrators mean when they say \"Streamvane\". I need two things written: the sunset announcement and a response to Calderwood.",
+      "expected_output": "A refusal of the 60-day sunset plan with a proper migration obligation, plus a conformance-and-trademark counter to Calderwood and a cleanup of Halcyon Grid's own undocumented extensions.",
+      "files": [],
+      "expectations": [
+        "Names embrace, extend, extinguish as the pattern Calderwood is executing against Streamvane",
+        "Recommends a conformance suite and a trademark as the counter to Calderwood's dialect",
+        "Recommends spec text defining the required behaviour for unknown extensions",
+        "Identifies Halcyon Grid's own dozen undocumented fields as the same move committed by the spec owner, stranding their customers on a dialect only Halcyon Grid implements",
+        "Requires those fields to be namespaced and documented, with the useful ones proposed upstream",
+        "Rejects the 60-day blog-post sunset as the plan",
+        "States that whoever owns a spec owns the migration off it",
+        "Requires the replacement to be shipped and proven before v1 is withdrawn, not alongside it",
+        "States that implementers depend on the spec's undocumented behaviour as much as on its text",
+        "Requires a notice period, a bridge, and a documented successor before withdrawal",
+        "Rejects archiving the v1 repository as part of the 60-day cutover",
+        "Requires a versioning and migration path published with the new version, before there is an installed base to defend"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "Should we join the working group standardizing agent tool-calling, or ship our own format?",
+      "should_trigger": true
+    },
+    {
+      "query": "A competitor just published a rival spec to ours and buyers are stalling.",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we donate our protocol to a neutral foundation?",
+      "should_trigger": true
+    },
+    {
+      "query": "Procurement keeps asking whether we're certified against their interop profile.",
+      "should_trigger": true
+    },
+    {
+      "query": "What posture should we take toward this new protocol?",
+      "should_trigger": true
+    },
+    {
+      "query": "Is it worth sending an engineer to IETF meetings for the next two years?",
+      "should_trigger": true
+    },
+    {
+      "query": "We want to make our wire format the standard for this category.",
+      "should_trigger": true
+    },
+    {
+      "query": "Every customer wants a different integration format and we're drowning in adapters.",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we build a conformance test suite for the protocol we publish?",
+      "should_trigger": true
+    },
+    {
+      "query": "RAND or royalty-free for the spec we're about to charter?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our biggest competitor sits on the technical committee and we don't. Does that matter?",
+      "should_trigger": true
+    },
+    {
+      "query": "A partner says they won't implement our spec while it lives in our GitHub org.",
+      "should_trigger": true
+    },
+    {
+      "query": "Do we need an ISO number to win public tenders?",
+      "should_trigger": true
+    },
+    {
+      "query": "Is there any point standardizing our plugin interface?",
+      "should_trigger": true
+    },
+    {
+      "query": "Write us an open standards strategy.",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we certify against their profile or just keep claiming support?",
+      "should_trigger": true
+    },
+    {
+      "query": "We keep paying for one-off integrations. Is a shared format worth building?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our spec has no test suite and three vendors claim they support it. Now what?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we add our own fields to the protocol or propose them upstream?",
+      "should_trigger": true
+    },
+    {
+      "query": "The consortium wants $60k a year for membership. Is that worth it?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do we stop a bigger vendor from forking our format into their own dialect?",
+      "should_trigger": true
+    },
+    {
+      "query": "Who ends up owning the trademark if we hand the spec to a neutral host?",
+      "should_trigger": true
+    },
+    {
+      "query": "Two specs exist for the same job and neither is winning. What should we do?",
+      "should_trigger": true
+    },
+    {
+      "query": "Can we change the patent licensing terms after the charter is signed?",
+      "should_trigger": true
+    },
+    {
+      "query": "We want to own the roadmap of this protocol. What does that actually cost us?",
+      "should_trigger": true
+    },
+    {
+      "query": "Is it better to co-found a spec with two peers or publish ours alone?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we implement the draft now or wait until it's finalized?",
+      "should_trigger": true
+    },
+    {
+      "query": "When do we kill a standards effort that isn't landing?",
+      "should_trigger": true
+    },
+    {
+      "query": "How many independent implementations does a spec need before it's real?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our CEO wants us to lead on open standards next year. Where do I even start?",
+      "should_trigger": true
+    },
+    {
+      "query": "A regulator now references a spec we don't implement.",
+      "should_trigger": true
+    },
+    {
+      "query": "we shipped a bunch of extensions nobody documented and now customers are stuck on our flavour",
+      "should_trigger": true
+    },
+    {
+      "query": "should we open up our file format so other tools can read it",
+      "should_trigger": true
+    },
+    {
+      "query": "The framework everyone uses already has a format that's about 80% of what we need.",
+      "should_trigger": true
+    },
+    {
+      "query": "W3C or IETF for a brand new protocol?",
+      "should_trigger": true
+    },
+    {
+      "query": "What do we owe implementers if we retire v1 of our spec?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do we decide between joining an existing effort and starting our own?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our integration surface is nine frameworks times three per customer. Is there a smarter way?",
+      "should_trigger": true
+    },
+    {
+      "query": "They announced a spec before shipping anything. Should we respond?",
+      "should_trigger": true
+    },
+    {
+      "query": "Do we charge for conformance certification or make it free?",
+      "should_trigger": true
+    },
+    {
+      "query": "Who should own the certification mark?",
+      "should_trigger": true
+    },
+    {
+      "query": "What's the risk of standardizing the exact layer our product sits on?",
+      "should_trigger": true
+    },
+    {
+      "query": "we want to be seen as the neutral option in this space",
+      "should_trigger": true
+    },
+    {
+      "query": "The spec we depend on is controlled by a single vendor. How exposed are we?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should engineering spend a quarter writing drafts for that protocol?",
+      "should_trigger": true
+    },
+    {
+      "query": "Is a Git-based spec good enough or do we need a real standards body?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I write this up so legal and product both sign off on it?",
+      "should_trigger": true
+    },
+    {
+      "query": "I need a one-pager on where we land on this protocol.",
+      "should_trigger": true
+    },
+    {
+      "query": "Someone has to decide whether we adopt their format or fight it.",
+      "should_trigger": true
+    },
+    {
+      "query": "our roadmap keeps getting hijacked by interop requests",
+      "should_trigger": true
+    },
+    {
+      "query": "Can we keep charging for the connector layer if it gets standardized?",
+      "should_trigger": true
+    },
+    {
+      "query": "What happens to us if we do nothing about this protocol for twelve months?",
+      "should_trigger": true
+    },
+    {
+      "query": "Should we pass their certification or build our own?",
+      "should_trigger": true
+    },
+    {
+      "query": "Their format is backward compatible with the old one and ours isn't. How bad is that?",
+      "should_trigger": true
+    },
+    {
+      "query": "Who decides what gets merged in our project?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write a GOVERNANCE.md for our repo.",
+      "should_trigger": false
+    },
+    {
+      "query": "We need a maintainer promotion path and a succession plan.",
+      "should_trigger": false
+    },
+    {
+      "query": "Our project has a bus factor of one. How do we fix that?",
+      "should_trigger": false
+    },
+    {
+      "query": "How should we run a maintainer vote on a contested decision?",
+      "should_trigger": false
+    },
+    {
+      "query": "MIT or Apache-2.0 for our new library?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we require a CLA or a DCO sign-off from contributors?",
+      "should_trigger": false
+    },
+    {
+      "query": "Does AGPL actually protect us from cloud providers?",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we relicense to BUSL without triggering a fork?",
+      "should_trigger": false
+    },
+    {
+      "query": "Which SPDX identifier goes in our file headers?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we let third parties build integrations on top of our API?",
+      "should_trigger": false
+    },
+    {
+      "query": "Why does nobody build on our platform?",
+      "should_trigger": false
+    },
+    {
+      "query": "How much of the value should complementors get to keep?",
+      "should_trigger": false
+    },
+    {
+      "query": "Open core or managed cloud for our developer tool?",
+      "should_trigger": false
+    },
+    {
+      "query": "Where should the free-versus-paid line sit in our devtool?",
+      "should_trigger": false
+    },
+    {
+      "query": "Adoption is high but revenue is flat. What's wrong?",
+      "should_trigger": false
+    },
+    {
+      "query": "What should we open source and what stays closed?",
+      "should_trigger": false
+    },
+    {
+      "query": "Who signs off internally on open sourcing a component?",
+      "should_trigger": false
+    },
+    {
+      "query": "Which registries and awesome lists should we target for our project?",
+      "should_trigger": false
+    },
+    {
+      "query": "Adoption flattened after launch. How do people keep finding the project?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the migration guide for our v3 breaking changes.",
+      "should_trigger": false
+    },
+    {
+      "query": "How do we tell users about the v2 API cutover?",
+      "should_trigger": false
+    },
+    {
+      "query": "What should our deprecation timeline look like for the old endpoints?",
+      "should_trigger": false
+    },
+    {
+      "query": "Turn these 80 commits into release notes.",
+      "should_trigger": false
+    },
+    {
+      "query": "What goes in the GitHub release body for this tag?",
+      "should_trigger": false
+    },
+    {
+      "query": "How does our docs quality compare to our main competitor's?",
+      "should_trigger": false
+    },
+    {
+      "query": "What is our competitor doing in developer relations right now?",
+      "should_trigger": false
+    },
+    {
+      "query": "We're launching the repo next month. What's the launch plan?",
+      "should_trigger": false
+    },
+    {
+      "query": "Our quickstart takes 40 minutes. Fix it.",
+      "should_trigger": false
+    },
+    {
+      "query": "Restructure our documentation site's information architecture.",
+      "should_trigger": false
+    },
+    {
+      "query": "Should our API version live in the URL or in a header?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design idempotency keys for our payments endpoint.",
+      "should_trigger": false
+    },
+    {
+      "query": "Set coding standards for our TypeScript monorepo.",
+      "should_trigger": false
+    },
+    {
+      "query": "What SOC 2 controls do we need before the audit?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write our security policy so we can get ISO 27001 certified.",
+      "should_trigger": false
+    },
+    {
+      "query": "Draft a data retention standard for our warehouse tables.",
+      "should_trigger": false
+    },
+    {
+      "query": "Standardize our error codes across all microservices.",
+      "should_trigger": false
+    },
+    {
+      "query": "Review this patent application for our compression algorithm.",
+      "should_trigger": false
+    },
+    {
+      "query": "Negotiate the patent cross-licence with our competitor's counsel.",
+      "should_trigger": false
+    },
+    {
+      "query": "Write a press release about us joining the foundation.",
+      "should_trigger": false
+    },
+    {
+      "query": "Draft a conference CFP submission about our protocol.",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan the sponsorship tiers for the standards summit we're backing.",
+      "should_trigger": false
+    },
+    {
+      "query": "How should we staff our devrel team next year?",
+      "should_trigger": false
+    },
+    {
+      "query": "What metrics prove devrel ROI to the CFO?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write a blog post explaining how our new protocol works.",
+      "should_trigger": false
+    },
+    {
+      "query": "Build the partner certification steps for apps listed in our marketplace.",
+      "should_trigger": false
+    },
+    {
+      "query": "Set up automated conformance tests in CI for our REST API.",
+      "should_trigger": false
+    },
+    {
+      "query": "Which HTTP status code should a rate-limited request return?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the customer email announcing our v1 API deprecation.",
+      "should_trigger": false
+    },
+    {
+      "query": "Standardize the interview loop for hiring backend engineers.",
+      "should_trigger": false
+    },
+    {
+      "query": "Benchmark our protocol's throughput against gRPC.",
+      "should_trigger": false
+    },
+    {
+      "query": "Migrate our internal RPC layer from Thrift to gRPC.",
+      "should_trigger": false
+    },
+    {
+      "query": "Choose a serialization format for our internal microservices.",
+      "should_trigger": false
+    },
+    {
+      "query": "Write a CONTRIBUTING.md for our repository.",
+      "should_trigger": false
+    }
+  ]
+}

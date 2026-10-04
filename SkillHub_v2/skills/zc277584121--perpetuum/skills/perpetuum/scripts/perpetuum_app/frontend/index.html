@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Perpetuum</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="project-sidebar">
+      <div class="brand">
+        <span class="brand-mark">∞</span>
+        <div>
+          <h1>Perpetuum</h1>
+          <p>Story boards</p>
+        </div>
+      </div>
+
+      <div class="sidebar-heading">
+        <span>项目</span>
+        <button id="refresh-button" class="icon-button" type="button" title="刷新">↻</button>
+      </div>
+      <nav id="project-list" class="project-list" aria-label="项目列表"></nav>
+
+      <div class="runner-status">
+        <span id="service-dot" class="status-dot"></span>
+        <div>
+          <strong id="service-status">正在连接</strong>
+          <span id="service-detail">Runner</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <header class="workspace-header">
+        <div class="project-identity">
+          <div class="project-title-line">
+            <h2 id="project-name">请选择一个项目</h2>
+            <span id="project-state-chip" class="state-chip hidden">未知</span>
+          </div>
+          <div class="project-subline">
+            <span id="project-path"></span>
+            <span id="project-updated"></span>
+            <span id="project-next-run" class="project-next-run"></span>
+          </div>
+        </div>
+
+        <div id="project-actions" class="project-actions hidden">
+          <button id="new-story-button" class="button primary" type="button">新建 Story</button>
+          <button data-action="run" class="button" type="button">立即运行</button>
+          <button data-action="pause" id="pause-button" class="button" type="button">暂停</button>
+          <button data-panel="inbox" class="button quiet" type="button">输入</button>
+          <button data-panel="attention" class="button quiet attention-button" type="button">
+            待处理
+            <span id="attention-count" class="notification-count hidden">0</span>
+          </button>
+          <button data-panel="documents" class="button quiet" type="button">资料</button>
+          <button data-panel="settings" class="icon-button settings-button" type="button" title="项目设置">•••</button>
+        </div>
+      </header>
+
+      <section id="empty-state" class="empty-state">
+        <span>∞</span>
+        <h3>选择一个项目看板</h3>
+        <p>Story 会在这里从候选流向完成。</p>
+      </section>
+
+      <section id="project-view" class="board-workspace hidden">
+        <div class="board-heading">
+          <div>
+            <h3>Stories</h3>
+            <p id="board-status-line">正在读取看板……</p>
+          </div>
+          <div class="board-summary">
+            <span><strong id="open-story-count">0</strong> 未完成</span>
+            <button id="archived-button" data-panel="archive" class="archive-button" type="button">
+              <strong id="archived-story-count">0</strong> 已归档
+            </button>
+          </div>
+        </div>
+        <div id="story-board" class="story-board" aria-label="Story 看板"></div>
+      </section>
+
+      <div id="toast" class="toast"></div>
+    </main>
+  </div>
+
+  <div id="project-drawer" class="drawer hidden" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+    <button class="drawer-backdrop" type="button" data-close-drawer aria-label="关闭"></button>
+    <aside class="drawer-panel">
+      <header class="drawer-header">
+        <div>
+          <span id="drawer-kicker">项目</span>
+          <h3 id="drawer-title">项目详情</h3>
+          <p id="drawer-description"></p>
+        </div>
+        <button class="icon-button" type="button" data-close-drawer aria-label="关闭">×</button>
+      </header>
+
+      <section id="drawer-view-attention" class="drawer-view hidden">
+        <article id="question-card" class="drawer-section">
+          <div class="section-title-row">
+            <div>
+              <span class="section-kicker business">业务判断</span>
+              <h4>需要你的决定</h4>
+            </div>
+            <span id="question-state" class="pending-state clear">无待办</span>
+          </div>
+          <div id="question-content" class="markdown-view compact-document"></div>
+          <div id="question-response-form" class="response-form hidden">
+            <label for="question-response">你的决定</label>
+            <textarea id="question-response" rows="5" placeholder="写清决定、原因和必要约束……"></textarea>
+            <button class="button primary response-submit" data-channel="questions" data-input="question-response" type="button">提交决定</button>
+          </div>
+        </article>
+
+        <article id="escalation-card" class="drawer-section">
+          <div class="section-title-row">
+            <div>
+              <span class="section-kicker control">管控异常</span>
+              <h4>需要你的处理</h4>
+            </div>
+            <span id="escalation-state" class="pending-state clear">无待办</span>
+          </div>
+          <div id="escalation-content" class="markdown-view compact-document"></div>
+          <div id="escalation-response-form" class="response-form hidden">
+            <label for="escalation-response">你的处理意见</label>
+            <textarea id="escalation-response" rows="5" placeholder="说明允许的处理方式、限制或补充信息……"></textarea>
+            <button class="button control-button response-submit" data-channel="escalations" data-input="escalation-response" type="button">提交处理意见</button>
+          </div>
+        </article>
+      </section>
+
+      <section id="drawer-view-inbox" class="drawer-view hidden">
+        <div class="drawer-section compose-section">
+          <label for="inbox-text">给项目补充方向</label>
+          <p>可以补充目标、优先级、资源、边界或新的业务要求。</p>
+          <textarea id="inbox-text" rows="10" placeholder="例如：优先验证召回质量；暂时不要扩大数据规模……"></textarea>
+          <button id="send-inbox" class="button primary full" type="button">写入项目 Inbox</button>
+        </div>
+      </section>
+
+      <section id="drawer-view-documents" class="drawer-view hidden">
+        <div id="document-tabs" class="document-tabs"></div>
+        <div id="document-meta" class="document-meta"></div>
+        <div id="document-content" class="markdown-view document-view"></div>
+      </section>
+
+      <section id="drawer-view-settings" class="drawer-view hidden">
+        <article class="drawer-section">
+          <div class="section-title-row">
+            <div>
+              <span class="section-kicker control">运行安排</span>
+              <h4>运行计划</h4>
+            </div>
+          </div>
+          <div class="schedule-overview">
+            <strong id="schedule-description">正在读取运行计划……</strong>
+            <span id="schedule-next-run">正在计算下次启动时间……</span>
+          </div>
+
+          <div class="schedule-mode-switch" role="tablist" aria-label="运行计划编辑方式">
+            <button class="selected" type="button" data-schedule-mode="simple">易读设置</button>
+            <button type="button" data-schedule-mode="cron">Cron 表达式</button>
+          </div>
+
+          <label for="schedule-timezone">时区</label>
+          <input id="schedule-timezone" type="text" list="timezone-options" placeholder="Asia/Shanghai">
+          <datalist id="timezone-options">
+            <option value="Asia/Shanghai"></option>
+            <option value="UTC"></option>
+            <option value="America/Los_Angeles"></option>
+            <option value="America/New_York"></option>
+            <option value="Europe/London"></option>
+          </datalist>
+
+          <div id="schedule-simple-panel" class="schedule-editor-panel">
+            <p id="simple-mode-note" class="helper-text hidden"></p>
+            <label for="simple-kind">运行方式</label>
+            <select id="simple-kind">
+              <option value="window">每天在时间窗口内循环</option>
+              <option value="fixed">每天固定时间启动一次</option>
+            </select>
+
+            <div id="simple-fixed-fields" class="schedule-fields hidden">
+              <label>
+                <span>启动时间</span>
+                <input id="simple-fixed-time" type="time" step="300" value="00:00">
+              </label>
+            </div>
+
+            <div id="simple-window-fields" class="schedule-fields three-fields">
+              <label>
+                <span>开始时间</span>
+                <input id="simple-start-time" type="time" step="300" value="00:00">
+              </label>
+              <label>
+                <span>结束时间</span>
+                <input id="simple-end-time" type="time" step="300" value="06:00">
+              </label>
+              <label>
+                <span>启动间隔</span>
+                <select id="simple-interval">
+                  <option value="5">每 5 分钟</option>
+                  <option value="10">每 10 分钟</option>
+                  <option value="15">每 15 分钟</option>
+                  <option value="20">每 20 分钟</option>
+                  <option value="30">每 30 分钟</option>
+                  <option value="60">每 60 分钟</option>
+                </select>
+              </label>
+            </div>
+            <p class="helper-text">结束时间不包含在运行窗口内；跨过午夜时会自动按“次日”理解。</p>
+          </div>
+
+          <div id="schedule-cron-panel" class="schedule-editor-panel hidden">
+            <label for="cron-text">Cron 表达式</label>
+            <textarea id="cron-text" rows="5" placeholder="*/5 0-5 * * *"></textarea>
+            <p class="helper-text">每行一个标准五字段 Cron。适合工作日、指定月份等更复杂的计划。</p>
+          </div>
+          <button id="save-schedule" class="button control-button full" type="button">保存运行计划</button>
+        </article>
+
+        <article class="drawer-section">
+          <div class="section-title-row">
+            <div>
+              <span class="section-kicker control">运行状态</span>
+              <h4>Agent 与 Session</h4>
+            </div>
+          </div>
+          <dl id="runtime-details" class="detail-list"></dl>
+        </article>
+      </section>
+
+      <section id="drawer-view-archive" class="drawer-view hidden">
+        <div id="archive-list" class="archive-list"></div>
+      </section>
+    </aside>
+  </div>
+
+  <div id="story-drawer" class="drawer hidden" role="dialog" aria-modal="true" aria-labelledby="story-title">
+    <button class="drawer-backdrop" type="button" data-close-story aria-label="关闭"></button>
+    <aside class="drawer-panel story-panel">
+      <header class="drawer-header">
+        <div>
+          <span id="story-id">Story</span>
+          <h3 id="story-title">Story</h3>
+          <p id="story-summary"></p>
+        </div>
+        <button class="icon-button" type="button" data-close-story aria-label="关闭">×</button>
+      </header>
+
+      <div class="story-fields">
+        <label class="wide-field">
+          <span>标题</span>
+          <input id="story-title-input" type="text">
+        </label>
+        <label class="wide-field">
+          <span>摘要</span>
+          <textarea id="story-summary-input" rows="3"></textarea>
+        </label>
+        <label>
+          <span>状态</span>
+          <select id="story-status-select">
+            <option value="candidate">候选</option>
+            <option value="ready">待开始</option>
+            <option value="in_progress">进行中</option>
+            <option value="waiting">等待</option>
+            <option value="done">已完成</option>
+            <option value="cancelled">已取消</option>
+          </select>
+        </label>
+        <label>
+          <span>优先级</span>
+          <select id="story-priority-select">
+            <option value="P0">P0</option>
+            <option value="P1">P1</option>
+            <option value="P2">P2</option>
+            <option value="P3">P3</option>
+          </select>
+        </label>
+        <label class="wide-field">
+          <span>标签</span>
+          <input id="story-labels-input" type="text" placeholder="benchmark, data, research">
+        </label>
+      </div>
+
+      <div id="story-updated" class="story-updated"></div>
+      <div id="story-body" class="markdown-view story-body"></div>
+
+      <footer class="drawer-actions">
+        <button class="button" type="button" data-close-story>取消</button>
+        <button id="story-save" class="button primary" type="button">保存 Story</button>
+      </footer>
+    </aside>
+  </div>
+
+  <div id="create-story-drawer" class="drawer hidden" role="dialog" aria-modal="true" aria-labelledby="create-story-title">
+    <button class="drawer-backdrop" type="button" data-close-create aria-label="关闭"></button>
+    <aside class="drawer-panel create-panel">
+      <header class="drawer-header">
+        <div>
+          <span>新卡片</span>
+          <h3 id="create-story-title">创建 Story</h3>
+          <p>写清一个完整、可以独立验证的成果。</p>
+        </div>
+        <button class="icon-button" type="button" data-close-create aria-label="关闭">×</button>
+      </header>
+
+      <div class="create-form">
+        <label>
+          <span>标题</span>
+          <input id="create-title" type="text" placeholder="例如：完成双模型质量对比">
+        </label>
+        <label>
+          <span>摘要</span>
+          <textarea id="create-summary" rows="4" placeholder="说明完成后会得到什么可信成果"></textarea>
+        </label>
+        <div class="two-fields">
+          <label>
+            <span>状态</span>
+            <select id="create-status">
+              <option value="ready">待开始</option>
+              <option value="candidate">候选</option>
+            </select>
+          </label>
+          <label>
+            <span>优先级</span>
+            <select id="create-priority">
+              <option value="P0">P0</option>
+              <option value="P1" selected>P1</option>
+              <option value="P2">P2</option>
+              <option value="P3">P3</option>
+            </select>
+          </label>
+        </div>
+        <label>
+          <span>标签</span>
+          <input id="create-labels" type="text" placeholder="benchmark, research">
+        </label>
+        <button id="create-story-submit" class="button primary full" type="button">创建 Story</button>
+      </div>
+    </aside>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

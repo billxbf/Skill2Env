@@ -1,0 +1,45 @@
+# Cargo configuration for cass
+# https://doc.rust-lang.org/cargo/reference/config.html
+
+[build]
+rustflags = ["-Z", "threads=4"]
+# NOTE: do NOT set `jobs` here. A repo .cargo/config.toml outranks
+# ~/.cargo/config.toml, so pinning it overrides whatever the host decided.
+# This file previously carried `jobs = -1` ("all cores minus one"); on a
+# 128-thread build host that is 127 parallel rustc, each forking a ~1GB
+# rust-lld. The same pattern wedged trj for hours on 2026-08-28 (202GB of
+# linkers, RAM and swap exhausted, 100% disk utilization). Parallelism is a
+# property of the MACHINE, not the project -- let the host set
+# CARGO_BUILD_JOBS (which outranks every config file) or its own
+# ~/.cargo/config.toml.
+
+[env]
+# fsqlite 0.3.x builds very large debug-mode futures; a single statement poll
+# can overflow the default 2 MiB test-thread stack even with dependencies at
+# opt-level 1 (see the [profile.dev.package."*"] note in Cargo.toml). 128 MiB
+# is a reservation, not a commitment — Linux commits pages lazily — and it
+# applies only to processes cargo launches from this repo, so the shipped
+# binary is unaffected.
+RUST_MIN_STACK = "134217728"
+
+# Coverage exclusion patterns for cargo-llvm-cov
+# These paths are excluded from coverage reports
+CARGO_LLVM_COV_EXCLUDE = "tests/*,**/test*.rs,benches/*"
+
+[target.x86_64-unknown-linux-gnu]
+# Linux x86_64: Use LLD for faster linking (available in CI)
+rustflags = ["-Z", "threads=4", "-C", "link-arg=-fuse-ld=lld"]
+
+# Note: Linux ARM64 (aarch64-unknown-linux-gnu) uses default linker
+# The ubuntu-24.04-arm GitHub runner does not have LLD installed
+
+# macOS targets use the default ld64 linker from Xcode
+# LLD is not available by default on macOS and causes build failures
+# [target.aarch64-apple-darwin] - uses default linker
+# [target.x86_64-apple-darwin] - uses default linker
+
+# Alias for coverage command
+[alias]
+cov = "llvm-cov --workspace --ignore-filename-regex tests/ --ignore-filename-regex benches/"
+cov-html = "llvm-cov --workspace --ignore-filename-regex tests/ --ignore-filename-regex benches/ --html --open"
+cov-json = "llvm-cov --workspace --ignore-filename-regex tests/ --ignore-filename-regex benches/ --json"

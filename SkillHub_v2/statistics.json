@@ -1,0 +1,43 @@
+{
+  "snapshot_date": "2026-09-30T12:15:34.067743+00:00",
+  "directory_skills_displayed": 1502669,
+  "index_candidates": 11194,
+  "candidate_sources": 1341,
+  "leaderboard_candidates": 9648,
+  "additional_candidates": 1546,
+  "sitemap_urls": 20000,
+  "source_listings_fetched": 4504,
+  "decision_counts_before_deduplication": {
+    "eligible": 6750,
+    "excluded_dependency": 2512,
+    "excluded_license": 1826,
+    "excluded_bundled_license": 14,
+    "unavailable_source": 54,
+    "unresolved_skill": 38
+  },
+  "eligible_before_deduplication": 6750,
+  "duplicates_removed": 73,
+  "eligible_after_deduplication": 6677,
+  "removed_non_standalone": 139,
+  "retained_skills": 6538,
+  "owner_profiles_checked": 7479,
+  "owner_repositories_seen": 17258,
+  "owner_profile_errors": 55,
+  "source_listing_errors": 52,
+  "retained_source_repositories_or_sites": 807,
+  "retained_snapshot_groups": 1216,
+  "licenses": {
+    "MIT": 4824,
+    "Apache-2.0": 1568,
+    "CC-BY-4.0": 121,
+    "CC0-1.0": 25
+  },
+  "skill_payload_files": 64352,
+  "skill_payload_bytes": 1437887582,
+  "sample_skills": 5,
+  "historically_recovered_candidates": 859,
+  "retained_historical_skills": 429,
+  "downloaded_archive_snapshots": 2181,
+  "downloaded_archive_bytes": 14262125401,
+  "collection_regular_file_bytes": 1449596538
+}

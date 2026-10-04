@@ -1,0 +1,187 @@
+{
+  "skill_name": "partnerships-hiring",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm the CEO at Brackwell, a seed-stage B2B SaaS company (18 people, 3 AEs, sales-led). I've personally been spending about 15 hours a week on partner inbound and outbound for the past year, and partner-led deals have brought in roughly $310k in ARR so far. Neither of my co-founders has any partnerships background. I want to open a req for a VP of Partnerships who can own the whole thing so I can get out of it. Can you write me the role scorecard and the job posting? We'd post it on LinkedIn next week.",
+      "expected_output": "A calibrated first-dedicated-hire recommendation that pushes back on the VP title, names the two startup-hire failure modes, surfaces the founder-led revenue timing signal against the stated $310k, resolves the shape of the work, points sourcing inside the existing sales org first, and delivers a scorecard with quantified outcomes.",
+      "files": [],
+      "expectations": [
+        "Recommends against a VP-level title for this first dedicated seat and names the 'too senior' failure mode: a hire who expects to set strategy and lead a team when the actual need is hands-on execution",
+        "Names the second failure mode explicitly: too generalist with no real go-to-market reps, so the hire cannot prioritize which early motions will actually work",
+        "Describes the first dedicated hire as a versatile generalist who can build the program from scratch and cover every partner type at once, rather than a specialist",
+        "Notes a sales or account-management background as a plus because it buys credibility with the sales team and fluency in the deal-to-close process",
+        "Surfaces the founder-led revenue signal for formalizing the seat (the ~$500k+ figure cited) and compares it against Brackwell's stated $310k",
+        "Resolves or asks whether the intended work is a few deep, high-touch integrations versus many light-touch partnerships before writing the req",
+        "Directs sourcing to the existing sales/BD organization first, identifying whoever already fields partner inquiries informally, before posting externally",
+        "Every scorecard outcome is a quantified measurable outcome, with no vague responsibility such as 'build partnerships' or 'grow the ecosystem'"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Halvora (Series B, ~140 people, B2B analytics) is opening a Director of Partnerships req. Our comp committee meets Thursday and the board member chairing it wants one number from me: the market rate for this title in the US. He does not want a range with caveats, he wants the figure we're going to anchor the band on. What do I tell him?",
+      "expected_output": "A refusal to produce a single settled market-rate figure, with the 2-3x source disagreement demonstrated using named sources and their populations, a pointer to the field's own specialist compensation database, and a warning against comparing incomparable populations.",
+      "files": [],
+      "expectations": [
+        "Refuses to supply a single blended figure as the market rate for the title",
+        "States that published benchmarks for partnerships titles disagree by roughly 2-3x on the same title",
+        "Cites Salary.com's Director of Partnerships figure at roughly $206-215k",
+        "Cites PayScale's roughly $74k average for the same title, with a 10th-90th percentile base range of about $44k-$142k",
+        "Explains the gap as methodology and population: Salary.com skewing toward tech/VC-backed self-reports at the senior end, PayScale's sample skewing wider and including smaller and non-tech employers under the same title",
+        "Points to Partnership Leaders' compensation database/calculator as the field's own practitioner-submitted benchmark and advises checking it live before publishing a range",
+        "Warns against quoting Levels.fyi total-comp figures (around $226k median for tech-sector partner managers, including equity) against Salary.com base-salary figures as if the two were comparable",
+        "Attaches a named source to every compensation figure presented"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "We're at Tindrel, a B2B SaaS company that just crossed 400 active affiliates, and we're hiring our first dedicated Affiliate Manager. We already run a loop for channel hires that works well and I'd rather not reinvent it. Here it is: (1) recruiter screen, (2) hiring manager round, (3) a case study where we hand the candidate a deal-registration clash between a partner and a direct rep and ask how they'd resolve it, (4) a CRM and analytics round, (5) panel. Just swap in an affiliate-flavored version of the case study in stage 3 and give me the question bank. Also tell me how to structure the offer.",
+      "expected_output": "A refusal to reuse the channel-manager case studies for this hire, an explicit statement that no comparably documented loop pattern exists for affiliate manager roles, a loop rebuilt from the role's own outcome metrics, and the three-part affiliate compensation structure with its bonus bands.",
+      "files": [],
+      "expectations": [
+        "Declines to reuse the channel-conflict / deal-registration case study for the affiliate hire, on the grounds that the day-to-day differs enough that it would test the wrong thing",
+        "States plainly that no comparably documented interview-loop pattern exists for affiliate manager roles, rather than presenting an invented one as established",
+        "Builds the loop from the role's own outcome metrics instead of importing the channel-manager pattern",
+        "Assesses program performance the candidate has personally owned",
+        "Assesses commission-economics literacy",
+        "Assesses affiliate network and tooling fluency",
+        "Proposes a three-part compensation structure for the affiliate role: base salary, a performance bonus, and commission tied to revenue managed through the program",
+        "States the performance-bonus band as roughly 10-30% of base at junior/mid level and 30-50% at senior level"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Orlenda is a Series C infrastructure company. Our Head of Alliances left and we're backfilling at a senior level - this person will own three named technology alliances and sit in front of our exec team monthly. I've got a full panel available, sales and product both want in, and there's no rush on the timeline. Design the interview loop end to end with the actual questions and exercises, and tell me how to score it.",
+      "expected_output": "The documented channel/alliance loop stage by stage, including both named judgment probes verbatim with their scoring logic, a two-sided negotiation role-play with hidden constraints scored on structure rather than outcome, and independent-then-mechanical scoring.",
+      "files": [],
+      "expectations": [
+        "Opens the loop with a recruiter/HR screen and includes hiring-manager round(s) with cross-functional stakeholders from sales, marketing and product sitting in",
+        "Includes a technical/tooling round covering CRM, KPI and analytics fluency",
+        "Includes, at this senior level, a multi-department panel built around a mock 30/60/90-day plan or a mock partner business review",
+        "States that the senior panel stage should evaluate cross-functional, general-manager-style leadership rather than deal execution alone",
+        "Includes the judgment probe asking whether the candidate would close a deal in January the exact same way they closed it in December just to finish the quarter on target",
+        "States the strong answer to that probe is no, and scores for whether the candidate treats the relationship rather than the quarter as the unit being optimized",
+        "Includes the probe asking the candidate to walk through the last partner they de-prioritized and how that conversation went, noting that no answer signals the candidate has never operated with real prioritization discipline",
+        "Specifies the negotiation role-play as a two-sided simulation with hidden constraints or interests the candidate must surface through questioning, briefed short rather than fully scripted",
+        "States the role-play is scored on how the candidate structures terms, handles objections and finds a rational walk-away point, never on whether they 'won' the simulated negotiation"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Calmwood Systems, about 4,200 employees, enterprise software. We currently have three alliance managers - one each for AWS, Azure and GCP - plus a fourth covering two GSI relationships. We just finished rolling out a PRM platform with account-mapping built in, and our CFO's position is that the tooling should let us consolidate down to one alliance manager covering all three hyperscalers plus a coordinator. I need to either write that consolidated req or make the case against it by Friday. Draft whichever is right.",
+      "expected_output": "A rejection of the consolidation, distinguishing administrative headcount from named-relationship headcount, justifying the per-hyperscaler split by program mechanics, and calibrating the enterprise scorecard to depth rather than breadth.",
+      "files": [],
+      "expectations": [
+        "Rejects consolidating the three named hyperscaler relationships into a single alliance-manager seat",
+        "States that a platform investment such as a PRM or account-mapping tooling substitutes for administrative headcount, not for named-relationship headcount",
+        "Justifies per-hyperscaler headcount by each hyperscaler running its own program mechanics, tier ladder and certification/compliance load",
+        "Names certified-headcount tracking as an explicit director-level job responsibility at this tier",
+        "Calibrates the enterprise scorecard to screen for depth against one hyperscaler or partner tier rather than for generalist breadth",
+        "Does not reuse a startup-generalist scorecard template with the numbers changed for these enterprise seats"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Quick one. Nesport is a Series B sales-led B2B company. We're opening a Senior Partner Manager req. On the org chart the role reports to our CMO, because that's where the headcount budget sits and the CMO fought for it. But the whole point of the hire is partner-sourced revenue - I want the scorecard to read like a standalone revenue function, because that's what it really is in spirit. Write me the scorecard and the posting, and tell me what to put in the comp section.",
+      "expected_output": "A scorecard written to the actual reporting line rather than the aspirational one, with the marketing-reporting measurement consequence and the staffing-imbalance risk named in both directions, quantified outcomes, and an explicit attribution-model decision behind variable pay.",
+      "files": [],
+      "expectations": [
+        "Writes the scorecard mission naming the actual reporting line (the CMO / marketing) and its real metric, rather than the aspirational standalone framing the user asked for",
+        "States that a role's real measurement follows its reporting line, not its title, and that a partnerships role under marketing gets measured like a campaign function",
+        "Names the staffing-imbalance risk of reporting into marketing: business development gets over-rotated toward campaign and asset work and under-rotated on deal structuring",
+        "Names the mirror risk of reporting into sales: program work gets crowded out by deal-sized work",
+        "Tells the user to answer the reporting-line question honestly rather than aspirationally, or to move the reporting line if partner-sourced revenue is the non-negotiable metric",
+        "Every outcome on the scorecard is quantified rather than written as a responsibility",
+        "Names explicitly which attribution model - sourced, influenced, attached, or delivered - triggers any variable pay, and states it must be decided before the posting publishes"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Dravnik Networks sells network security hardware and software through MSPs, VARs and two distributors. We're hiring a Channel Manager to own that reseller base - fully remote, open to anywhere in North America. My plan is to blast it out to the five biggest partnerships job boards and a couple of the affiliate marketing communities I'm in, then let the applications roll in. Give me the sourcing plan and a list of where to post.",
+      "expected_output": "A sourcing plan correcting the board-spray assumption, routing the reseller/VAR req to the right community for its sub-discipline, raising the board's geography question, and replacing title-only search with function-keyword search.",
+      "files": [],
+      "expectations": [
+        "States that the Partnership Leaders Job Board is the field's one dedicated board and that no second equivalent board exists, so the 'five biggest boards' plan has nothing to spread across",
+        "Explains that a partnerships req gets proportionally less benefit from board-spray and more from community and referral channels than a req in a field with multiple dedicated boards",
+        "Routes this reseller/VAR/distributor-facing req toward the traditional IT-channel community side, naming CompTIA/GTIA and ChannelCon",
+        "Warns against posting this reseller/VAR req into affiliate-focused communities, since a req posted to a community matched to the wrong sub-discipline under-returns",
+        "Raises the job board's Canadian candidate-pool question, advising a decision on whether the remote posting welcomes Canadian candidates before it goes live",
+        "Recommends combining title keywords with function keywords such as deal registration, co-sell or MDF, because title fragmentation makes a title-only search under-return",
+        "Names Partnership Leaders as a place to cross-reference a candidate's visibility in the field against their resume claims"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Bellhaven is a consumer budgeting app, about 900k users. We're hiring a Referral Program Manager to own our refer-a-friend program. For the final stage I want a take-home: give the candidate our real Q3 relaunch problem, have them come back with three incentive options, full payback projections against our actual CAC, a rollout plan, and present it to our exec team for an hour. That doubles as a work sample and gets us real thinking on a live problem. Design the full loop around that, plus the scoring rubric.",
+      "expected_output": "A rejection of the take-home as unpaid client-style work with a bounded replacement, a warning about the title collision with employee-referral recruiting, a loop built from the referral role's own outcome metrics, and independent-then-mechanical scoring.",
+      "files": [],
+      "expectations": [
+        "Rejects the proposed take-home as unpaid client-style work on a live business problem and replaces it with a reasonable, bounded exercise",
+        "Warns that the Referral Program Manager title is shared with the employee-referral recruiting track, and confirms candidates are applying to the customer/growth track rather than the recruiting one",
+        "Builds the loop around incentive-design decisions the candidate has previously made and the measured effect of those decisions",
+        "Assesses cross-team coordination with marketing as part of the loop",
+        "Declines to import the channel-manager case studies (deal registration, partner conflict) into this referral hire's loop",
+        "Requires each interviewer to score independently with a written evidence note before any debrief happens",
+        "Combines interviewer scores mechanically against the scorecard's pre-set competency weights rather than by group discussion"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    { "query": "how do I hire a partner manager", "should_trigger": true },
+    { "query": "write a job description for a channel manager role", "should_trigger": true },
+    { "query": "need to design an interview loop for our first alliance hire", "should_trigger": true },
+    { "query": "what should we pay a Director of Partnerships", "should_trigger": true },
+    { "query": "we're hiring someone to run our affiliate program, what do I ask them in the interview", "should_trigger": true },
+    { "query": "our founder is drowning in partner emails, when do we hire someone for this", "should_trigger": true },
+    { "query": "build me a scorecard for a VP of Partnerships role", "should_trigger": true },
+    { "query": "where do people who do co-sell and MDF work actually look for jobs", "should_trigger": true },
+    { "query": "first partnerships hire at a seed startup, should we go senior or junior", "should_trigger": true },
+    { "query": "draft a req for someone to own our AWS relationship end to end", "should_trigger": true },
+    { "query": "interview questions that test whether a candidate can say no to a partner", "should_trigger": true },
+    { "query": "what's a fair comp structure for an affiliate marketing manager", "should_trigger": true },
+    { "query": "our channel lead just quit, what does the backfill loop look like", "should_trigger": true },
+    { "query": "should our new partnerships person report to sales or marketing", "should_trigger": true },
+    { "query": "how many alliance managers do we need to cover three hyperscalers", "should_trigger": true },
+    { "query": "posting a creator partnerships role, what should the take-home exercise be", "should_trigger": true },
+    { "query": "help me source candidates for an ecosystem role", "should_trigger": true },
+    { "query": "we keep hiring the wrong people into partner roles, what are we missing", "should_trigger": true },
+    { "query": "job posting for a referral program manager", "should_trigger": true },
+    { "query": "what does a good partner manager scorecard actually look like", "should_trigger": true },
+    { "query": "designing a negotiation role play to run on a candidate", "should_trigger": true },
+    { "query": "is 180k reasonable for a head of partnerships", "should_trigger": true },
+    { "query": "our partnerships job post got almost no applicants, what's wrong with it", "should_trigger": true },
+    { "query": "who should I put on the panel for a senior alliance manager interview", "should_trigger": true },
+    { "query": "hiring bar for partnerships at a PLG company versus an enterprise", "should_trigger": true },
+    { "query": "when should we split affiliate and reseller hiring into two separate roles", "should_trigger": true },
+    { "query": "need a 30/60/90 exercise for a partner leadership candidate", "should_trigger": true },
+    { "query": "what background should our first BD hire have", "should_trigger": true },
+    { "query": "how do I break into partnerships as a career", "should_trigger": false },
+    { "query": "review my resume for a partner manager role", "should_trigger": false },
+    { "query": "am I ready to apply for a Director of Partnerships job", "should_trigger": false },
+    { "query": "design the commission structure for our affiliate program", "should_trigger": false },
+    { "query": "recruit more affiliates into our program", "should_trigger": false },
+    { "query": "onboarding sequence for a newly approved affiliate", "should_trigger": false },
+    { "query": "write the terms and conditions affiliates accept when they join", "should_trigger": false },
+    { "query": "audit our affiliate payout run before we send the money", "should_trigger": false },
+    { "query": "our partner tiers need a redesign, registered silver gold", "should_trigger": false },
+    { "query": "build the enablement and certification track for new resellers", "should_trigger": false },
+    { "query": "write our channel conflict rules of engagement", "should_trigger": false },
+    { "query": "how do we score and review individual partners each quarter", "should_trigger": false },
+    { "query": "which cloud marketplaces should we list on first", "should_trigger": false },
+    { "query": "model the unit economics of this reseller relationship", "should_trigger": false },
+    { "query": "rank our candidate alliance targets by expected value", "should_trigger": false },
+    { "query": "plan a joint gtm launch with our new partner", "should_trigger": false },
+    { "query": "deal registration policy for our co-sell motion", "should_trigger": false },
+    { "query": "shortlist influencers for our spring campaign", "should_trigger": false },
+    { "query": "negotiate rates and usage rights with a creator", "should_trigger": false },
+    { "query": "what rewards should we give for refer-a-friend", "should_trigger": false },
+    { "query": "stop people gaming our referral program", "should_trigger": false },
+    { "query": "check this sponsored post against FTC disclosure rules", "should_trigger": false },
+    { "query": "which partner categories should we add to the ecosystem next", "should_trigger": false },
+    { "query": "map our whole partner ecosystem and find the coverage gaps", "should_trigger": false },
+    { "query": "hire a developer advocate for our API team", "should_trigger": false },
+    { "query": "design the interview loop for an enterprise account executive", "should_trigger": false },
+    { "query": "set up an employee referral bonus program for recruiting", "should_trigger": false },
+    { "query": "build a commission plan for our sales reps", "should_trigger": false }
+  ]
+}

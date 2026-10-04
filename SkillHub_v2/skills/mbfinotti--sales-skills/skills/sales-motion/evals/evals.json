@@ -1,0 +1,610 @@
+{
+  "skill_name": "sales-motion",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm the founder/CEO at Kestrelboard - shift-scheduling software for mid-size manufacturers. We just crossed $2.8M ARR and I've been closing every deal myself for two years. My board wants me to hire a VP Sales in the next 60 days so I can get back to product. I've closed 9 deals this year: 4 came through people I worked with at my last company or intros from our seed investor, the rest were inbound. Pricing has been all over the place - one customer got 40% off for being our first automotive logo, another paid list plus a services fee. Write me the plan for making this hire.",
+      "expected_output": "A run that refuses to treat $2.8M ARR as the trigger, tests the company against the repeatability gate, finds it failing, and delivers a path to repeatability plus a pioneer-AE hire profile instead of a VP Sales search.",
+      "files": [],
+      "expectations": [
+        "Gates the hire decision on repeatability rather than on the $2.8M ARR figure, and says so explicitly",
+        "States the repeatability gate as 3-5 deals won at standard origin, price and scope",
+        "Requires 3 of 4 core metrics - win rate, cycle length, ACV, conversion - stable for 90 days",
+        "Excludes the 4 deals sourced from former colleagues and investor intros from the repeatability count, on the grounds that idiosyncratic wins are not repeatability",
+        "Applies a readiness checklist covering 10-20+ unaffiliated customers closed personally, more than 20% of founder time booked with customers, and a specific repeatable pattern in how deals closed",
+        "Flags the 40% discount and the non-standard pricing as failing the standard-deal test",
+        "Concludes the gate fails and delivers a path to repeatability rather than a motion choice",
+        "Recommends hiring sales executors - roughly 2 pioneer sellers - rather than the VP Sales the board proposed",
+        "Names hiring a sales leader instead of executors as a failure mode, explaining that a leader scales an existing motion while only executors can originate one that does not exist yet",
+        "Names premature delegation as a risk and explains it breaks the founder's market-feedback loop",
+        "Describes the pioneer AE archetype as entrepreneurial, breaking new ground, working deals personally and feeding insight back to the roadmap",
+        "Includes month-by-month validation gates for a first hire, with month 2 requiring 10-20 first meetings and 50%+ converting to second meetings",
+        "Does not name an ARR threshold as the trigger for the first sales hire"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Quick one. Northvale Labs, B2B SaaS, automated expense categorization. Average contract value is $6,200 a year, we have about 3,100 paying customers, and the addressable market is basically every SMB with a corporate card - a very long tail. New customers reach first value in about 15 minutes with no help from us, and it's usually the office manager who signs up and pays on a company card herself. Our new CRO wants to hire 4 field AEs at $180K OTE each to go get bigger logos, and I've been asked to write the GTM plan that supports it. Help me build it.",
+      "expected_output": "A run that builds the five-axis constraint map, shows the axes deleting field sales, places $6,200 in the light-touch band, and refuses to produce the field-AE hiring plan that was requested.",
+      "files": [],
+      "expectations": [
+        "Rejects the field-sales hire on ACV grounds, stating that below roughly $10K initial ACV a sales-led motion does not pencil",
+        "Places the $6,200 ACV in the $5K-$10K light-touch / PQL-outreach band rather than the field-sales band",
+        "States that the ACV-to-motion mapping is a heuristic aggregated from operator experience, not the output of a study or survey",
+        "Builds a constraint map naming all five axes: ACV band, time-to-value, buyer-vs-user separation, TAM shape, procurement friction",
+        "Says which motions each axis deleted rather than presenting the motions as a ranked list",
+        "Notes that 15-minute unassisted time-to-value sits under the ~30-minute threshold and keeps PLG available",
+        "Notes that the office manager being both user and buyer keeps PLG available",
+        "Notes that the long-tail TAM shape favors self-serve rather than field sales",
+        "Frames the constraint axes as deleting motions rather than demoting them",
+        "Names high-touch under low ACV as a failure mode, describing deals that can never repay CAC",
+        "States that self-serve checkout stays in place in the $5K-$10K band",
+        "Does not produce a hiring plan, territory plan, or ramp schedule for the 4 field AEs"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "We're Tuckerbox, project tracking for creative agencies. Around 40,000 free-trial signups a month, traffic growing steadily, top of funnel is genuinely healthy. Trial-to-paid sits at 1.9%. Four things are on the table for next quarter and I can realistically fund one: rebuild the activation onboarding, add PQL scoring and route hot trials to a sales rep, retarget our signup ads at higher-intent segments, or switch the free trial to a reverse trial. Which one do I do first, and why?",
+      "expected_output": "A run that emits separate efficiency, value and effort orderings for the four levers, then promotes activation rework above the efficiency ordering because conversion sits below the free-trial median with healthy traffic.",
+      "files": [],
+      "expectations": [
+        "Produces three separate orderings of the four levers - efficiency, value and effort - rather than one blended ranking",
+        "States the efficiency ordering as reverse-trial packaging > PQL-routed sales assist > higher-intent signup targeting > activation rework",
+        "States the value ordering as PQL-routed sales assist > activation rework > reverse-trial packaging > higher-intent signup targeting",
+        "States the effort ordering with activation rework as the most expensive lever, costing a full product quarter",
+        "Recommends activation rework first despite it sitting last on the efficiency ordering",
+        "Justifies that promotion by the 1.9% conversion sitting below the ~4-6% free-trial median while traffic is healthy",
+        "States that no downstream lever fixes a product that does not activate",
+        "Names reverse-trial packaging as the default lever absent that condition, citing roughly 2x conversion versus freemium",
+        "Identifies activation rework as the only lever whose payoff compounds",
+        "Gates PQL-routed sales assist on PQL volume being large enough for a rep to clear the 4x floor",
+        "Cites PQL-to-close at 20-30% against roughly 3-10% for MQLs as the economic case for a sales-assist layer",
+        "Labels the three orderings a default to re-rank against the company's own situation, not a law",
+        "Checks whether a seamless in-product upgrade and billing path exists, noting roughly 2.5x better free-to-paid conversion when it does"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Board deck is due Friday and I'm getting killed on the benchmark slide. We're Parlyn - PLG, self-serve, average contract about $8K a year, almost entirely SMB. Our numbers: NRR 94%, win rate on the deals our two AEs touch is 21%, CAC payback 16 months. Our lead investor's associate pasted in 'industry benchmarks' of 118% NRR, 23% win rate and 14-month CAC payback, and wrote 'materially underperforming' next to all three. Help me respond.",
+      "expected_output": "A run that identifies each pasted figure as either a different segment's band or a superseded pre-2022 number, supplies the dated current counterpart with source and sample, and concludes the company is at or near current median.",
+      "files": [],
+      "expectations": [
+        "Rejects comparing Parlyn's 94% NRR to the ~118% figure, identifying ~118% as the enterprise (>$100K ACV) band",
+        "Supplies the SMB band of roughly 97% NRR as the correct comparison for an $8K ACV motion",
+        "States that lower SMB NRR is a segment effect, not a motion-quality signal",
+        "Rejects grading a PLG funnel against sales-led win-rate medians, naming it the most common benchmarking error in this field",
+        "Replaces the 23% win rate with the current figure of roughly 19% and dates it to 2024",
+        "Replaces the 14-month CAC payback with the current median of roughly 18 months and dates it to 2024",
+        "Attaches a named source and a sample size to at least two of the corrected benchmark figures",
+        "States that no pre-2022 figure should appear without its current counterpart",
+        "Concludes the 16-month CAC payback is inside, not outside, the current median",
+        "Names 24 months as the CAC payback threshold that triggers fixing motion economics before further spend",
+        "Distinguishes new-only from fully-loaded CAC payback scope before comparing two cited figures",
+        "Names anchoring on pre-2022 benchmarks as a failure mode and explains that efficiency metrics drifted worse after 2022",
+        "Does not blend PLG conversion metrics and sales-led win rates into a single figure"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Halversen Systems - warehouse robotics software, ACV around $240K. We ran a 6-partner pilot for two quarters through systems integrators. Results: $3.1M in partner-sourced bookings against roughly $950K all-in program cost including margin given up. Our VP Partnerships wants to go from 6 partners to 40 next year, and our direct team is already calling into some of the same logos. Give me the plan to scale this.",
+      "expected_output": "A run that holds the scale-up behind two separate channel gates the pilot has not demonstrated, requires swim lanes before scaling, and separates sourced from influenced contribution at this deal size.",
+      "files": [],
+      "expectations": [
+        "Refuses to authorize scaling on the pilot's margin result alone",
+        "Requires partner CAC to run 20-40% below direct CAC before scaling",
+        "Requires a 3:1 revenue-to-cost ratio as a second, separate scaling gate",
+        "States explicitly that a positive-margin pilot alone does not clear the gates",
+        "Requires explicit account, segment or vertical swim lanes agreed before scaling either motion",
+        "Rejects adjudicating direct-versus-partner conflicts deal by deal after they start",
+        "Names channel cannibalization as the failure mode the swim lanes prevent",
+        "Separates partner-sourced from partner-influenced contribution as two distinct metrics rather than one number",
+        "Notes that at $200K+ enterprise deal sizes partners mostly accelerate rather than originate, citing roughly 15-28% sourced",
+        "Distinguishes VAR margin of 20-30% from referral-partner margin of a one-time 15-30% of first-year contract value",
+        "Notes that VAR margin is granted in perpetuity for SaaS so the partner protects the renewal",
+        "States that pure resellers handling transaction processing only take roughly 5-10%, a separate band from VARs",
+        "Writes review triggers and a next re-evaluation date for the channel decision into the plan"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "I'm the new CRO at Bramwell - compliance workflow SaaS, $19M ARR, SMB-heavy, $14K average deal. Board meeting is 22 January and they want to see the enterprise motion working by then; today is 12 September. Two constraints I can't move: all 14 engineers are locked on a replatform through Q2 and I cannot claim a single sprint, and our CFO has frozen comp plan changes until the new fiscal year starts in July. Build me the plan to move us to enterprise sales.",
+      "expected_output": "A run that deletes the enterprise shift outright on the effort ceiling rather than demoting it, explains the deadline makes a motion switch impossible, and substitutes layering levers that act inside a quarter.",
+      "files": [],
+      "expectations": [
+        "States that a real motion transition runs 12-24 months and therefore cannot show revenue effect inside the roughly 4-month window",
+        "Names the January board date as the answer that demoted the motion switch",
+        "Deletes the enterprise shift outright rather than demoting it, on the strength of the effort ceiling",
+        "States explicitly what was struck and why, rather than silently omitting it",
+        "Names the dual-track product gate - SSO, SOC 2, audit-logging-class governance features - as a prerequisite the frozen engineering capacity cannot supply",
+        "States that a half-funded upmarket push is the most expensive way to fail",
+        "Names re-comp as a prerequisite that the comp freeze blocks",
+        "Promotes layering levers that act inside a quarter instead of the switch",
+        "Recommends at least one specific lever that can land before the January board meeting",
+        "States that the post-chasm narrative shift - selling a concrete solution to a recognized problem rather than a shared belief - is a further prerequisite for the enterprise motion",
+        "Writes review triggers and a next re-evaluation date into the output",
+        "Does not deliver an enterprise transition plan with enterprise AE hiring and territory detail"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Founder here, Sedgewick - open-source observability, about 31K GitHub stars, $2.4M ARR from our cloud offering. My co-founder and I have a rule: we never hire salespeople. Atlassian got to a multi-billion-dollar IPO with no sales team, and Cursor went from $100M to $2B ARR without reps. That's the model we're copying. Our investors keep pushing back on it. Write up the GTM strategy that proves we're right so I can send it to them.",
+      "expected_output": "A run that corrects both cases on the record, refuses to design the motion by copying another company, and reframes the strategy around Sedgewick's own constraints with the survivorship caveat stated.",
+      "files": [],
+      "expectations": [
+        "States that the claim Atlassian never had a sales team is false",
+        "Gives the correction that Atlassian hired its first commissioned salespeople in summer 2014",
+        "Notes the no-sales-team description held only for roughly the company's first 12 years",
+        "Notes Atlassian served enterprise through a large channel and partner ecosystem with explicit swim lanes rather than direct sales",
+        "Cites Atlassian deferring sales until a $4,000 deal had become a $48,000 one",
+        "Labels the Cursor ARR figures as press reporting around funding rounds rather than audited disclosures",
+        "States that Cursor hired no enterprise sales reps until well past the $200M ARR mark, as the actual shape of that case",
+        "Rejects copying another company's motion and states that a route to market is designed from this company's own product, market and customer",
+        "Cites the finding that 98% of PLG companies either already have a sales team or plan to hire one",
+        "Warns that the case record is asymmetric - PLG adding sales is heavily documented while retreats are barely documented - and attributes this to survivorship and publication bias",
+        "States that named cases illustrate mechanisms and cannot prove a direction is safe",
+        "Grounds any recommendation in a named, sourced case carrying its caveat rather than an invented example",
+        "Does not present a permanent no-sales-team end state as validated by these two cases"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Running GTM at Sunhaul - residential solar installs across Arizona and Nevada. Average job is $24,000. We get about 1,800 web leads a month from paid search and our own content. Right now leads sit in a shared inbox and someone picks them up when they get to them; median time to first contact is roughly 19 hours. Leadership is asking whether we should go self-serve like a SaaS company and let people configure and buy a system online. What motion should we run?",
+      "expected_output": "A run that keeps the price-to-touch logic but drops the B2B-specific axes and benchmark tables, concludes sales-led fits high-consideration B2C, and fixes speed-to-lead with the correctly attributed study.",
+      "files": [],
+      "expectations": [
+        "States that the B2B SaaS benchmark tables do not transfer to this B2C motion",
+        "Directs validation against Sunhaul's own funnel history and says so in the plan",
+        "Concludes sales-led is structurally correct for a $24,000 high-consideration consumer purchase",
+        "Grounds that conclusion in price-to-touch economics - human sales exists only where order value or LTV covers rep cost",
+        "Drops the buyer-vs-user and procurement-friction axes from the constraint map because the B2C decision unit is a single buyer or household",
+        "States that B2C cycles run minutes to days rather than months",
+        "Cites the speed-to-lead finding as roughly 100x more likely to connect and 21x more likely to qualify when contacting within 5 minutes versus 30",
+        "Attributes the speed-to-lead finding to the Oldroyd / InsideSales.com Lead Response Management Study of 2007",
+        "Does not attribute the 5-minute speed-to-lead finding to a 2011 Harvard Business Review article",
+        "If the HBR piece appears at all, cites it separately as an audit that found a 42-hour average response time",
+        "States that lifecycle automation - cart-abandonment flows, financing or credit qualification, in-product upgrade paths - replaces the B2B sales-assist layer",
+        "Keeps the time-to-value axis in the constraint map as one that transfers to B2C",
+        "Does not quote a SaaS NRR, CAC payback or trial-conversion band as a target for this business"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Maddox Grove - team wiki product, PLG with a self-serve base. We added 3 sales-assist reps 11 months ago. The numbers: each of those 3 reps touched $1.1M in closed revenue over the period, and fully loaded cost is about $260K per rep including benefits and tooling. That's 4.2x. My head of growth wants to hire 6 more reps next quarter on that basis. Reps currently pick which accounts to work off a list sorted by company size from our enrichment vendor. Sign off on the plan or tell me what to change.",
+      "expected_output": "A run that refuses the 4.2x as passing the 4x test because the revenue is coincident rather than incremental, demands an incrementality measurement, and replaces size-sorted account picking with product-signal routing.",
+      "files": [],
+      "expectations": [
+        "Refuses to accept the 4.2x figure as passing the 4x test because touched revenue is coincident rather than incremental",
+        "Names incrementality - whether assisted deals would have converted anyway - as the test these numbers have not passed",
+        "States the 4x test as a rep returning roughly 4x fully loaded cost in incremental revenue, and treats it as a go/no-go floor",
+        "Warns that efficient-looking sales-assisted deals can mask a team that is a net drain in aggregate",
+        "Asks for or specifies a holdout or comparison group that isolates incremental conversions from assisted volume",
+        "Labels the $260K fully loaded rep cost a modeled estimate and notes that no surveyed benchmark for fully loaded AE cost exists",
+        "Models the 4x test as an explicit chain running from rep meeting capacity through opportunity budget, cost per opportunity, win rate and deal value to ROI",
+        "Rejects routing accounts by company size alone and requires product-qualification signals",
+        "Names the product-qualification signals: multi-player use on one domain, usage growth over time, use-case fit for assistance, and role fit against ICP",
+        "Applies a two-axis routing matrix that sends low-observable accounts to tech-touch only with no human",
+        "Checks the expansion against the two economically justified reasons to add sales to self-serve - penetration/expansion, and conversion assist",
+        "Does not approve the 6 additional hires on the strength of the stated 4.2x ratio"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Wrenfield Analytics, $27M ARR, pure PLG so far - self-serve, credit card, no sales team beyond 2 people doing onboarding. We're getting real enterprise pull now. Here's the plan I drafted: Q1 hire a VP of Enterprise Sales, Q2 they build out the AE team and territories, Q3 we redo the comp plan once we see how they actually sell, Q4 we add PQL scoring so marketing can feed them leads. Poke holes in this.",
+      "expected_output": "A run that inverts the sequence so PQL scoring and pricing flexibility precede the first enterprise sales leader, moves the comp change ahead of the org change, and attaches dated gates.",
+      "files": [],
+      "expectations": [
+        "Inverts the proposed sequence, requiring PQL scoring and pricing/packaging flexibility before the first enterprise sales leader is hired",
+        "Sequences the layer on the six-tactic order: end-users driving top-of-funnel enterprise pipeline, mining PQLs to guide direct sales, heuristics to triage and scale accounts, pricing and packaging flexibility, architecture supporting expand-and-extend, then cohesive hiring and comp",
+        "Notes the roughly $25M ARR mark as the point around which this enterprise layer is introduced, and that $27M sits in that window",
+        "Moves the comp change ahead of the org change, stating re-comp before re-org",
+        "Explains that keeping sales-led comp while flipping toward PLG is what makes AEs gate or sabotage the self-serve motion",
+        "Names the concrete re-comp moves: pull AEs off sub-$25K deals, shrink base 15-25%, expand variable",
+        "Specifies 1.5x-2x accelerators on expansion ARR from PQL-crossed accounts",
+        "Hands detailed compensation plan mechanics to the compensation skill rather than designing the full plan here",
+        "Names comp changed after the org chart as a failure mode",
+        "Warns that operationalizing upmarket too early carries execution risk while waiting too long carries opportunity cost",
+        "Attaches dated gates to the transition sequence rather than quarter labels alone",
+        "Requires the self-serve upgrade and billing path to stay open through the transition",
+        "Does not leave the enterprise sales leader hire in the first quarter of the plan"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    { "query": "Should we be PLG or sales-led?", "should_trigger": true },
+    {
+      "query": "We're a $4M ARR dev tool - when do I hire my first salesperson?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our self-serve product has 12,000 free users. Should we add a sales team?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I know if my founder-led selling is repeatable enough to hand off?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our enterprise motion isn't working and the board wants an answer next week",
+      "should_trigger": true
+    },
+    {
+      "query": "Is our $7K average deal size too small to justify inside sales reps?",
+      "should_trigger": true
+    },
+    { "query": "We want to go upmarket. What actually has to change?", "should_trigger": true },
+    {
+      "query": "Should we sell through partners or build a direct team?",
+      "should_trigger": true
+    },
+    {
+      "query": "Product-led growth versus sales-led growth for a $30K ACV analytics product",
+      "should_trigger": true
+    },
+    {
+      "query": "Everyone tells me to copy Atlassian and never hire sales. Is that real?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're an open-source infra company with 40k stars and no revenue engine. What's the path?",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I decide which segment gets reps and which stays self-serve?",
+      "should_trigger": true
+    },
+    {
+      "query": "What blend of go-to-market should a $12M ARR hybrid company run?",
+      "should_trigger": true
+    },
+    {
+      "query": "We keep losing big deals because nobody can walk procurement through the security review",
+      "should_trigger": true
+    },
+    { "query": "Do we need a demo, or can people just swipe a card?", "should_trigger": true },
+    {
+      "query": "Our free-to-paid conversion is 1.9% and I don't know what to fix first",
+      "should_trigger": true
+    },
+    {
+      "query": "Advise me on layering an enterprise sales engine onto our PLG funnel",
+      "should_trigger": true
+    },
+    {
+      "query": "I'm a CRO inheriting a go-to-market that grew by accident. Where do I start?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our reps are gatekeeping the self-serve checkout and I think it's the comp plan",
+      "should_trigger": true
+    },
+    {
+      "query": "Should the first GTM hire be a VP Sales or two senior AEs?",
+      "should_trigger": true
+    },
+    {
+      "query": "How long does it actually take to change the way a company sells?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're B2C solar, $22K jobs, mostly web leads. How should we be selling?",
+      "should_trigger": true
+    },
+    { "query": "Is a channel program worth it at our size?", "should_trigger": true },
+    { "query": "Our partner pilot worked. Can we scale it?", "should_trigger": true },
+    {
+      "query": "What's the right route to market for a product that takes three weeks to implement?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our users and our buyers are completely different people. Does PLG still work?",
+      "should_trigger": true
+    },
+    {
+      "query": "Which acquisition motion should own accounts above $100K?",
+      "should_trigger": true
+    },
+    { "query": "Help me design swim lanes between direct and partners", "should_trigger": true },
+    {
+      "query": "We're thinking of killing the free tier and going all sales-led",
+      "should_trigger": true
+    },
+    {
+      "query": "How do I tell the board our CAC payback isn't actually broken?",
+      "should_trigger": true
+    },
+    { "query": "Bottom-up or top-down for a developer tool?", "should_trigger": true },
+    {
+      "query": "My investors want a PLG story. Do our constraints even support one?",
+      "should_trigger": true
+    },
+    {
+      "query": "We have a long tail of tiny accounts and five whales. What covers both?",
+      "should_trigger": true
+    },
+    {
+      "query": "When is a company ready to stop the founder doing every demo?",
+      "should_trigger": true
+    },
+    {
+      "query": "Do we hire an enterprise sales leader now or build PQL scoring first?",
+      "should_trigger": true
+    },
+    {
+      "query": "What would have to be true for us to justify a rep working $8K deals?",
+      "should_trigger": true
+    },
+    {
+      "query": "Design the go-to-market for a usage-priced API product",
+      "should_trigger": true
+    },
+    {
+      "query": "Our sales cycle is 4 months on a $15K deal. Is that a structural problem?",
+      "should_trigger": true
+    },
+    {
+      "query": "How should a Series A company sequence the move from founder selling to a team?",
+      "should_trigger": true
+    },
+    {
+      "query": "We're getting pulled upmarket by customers we never targeted. What now?",
+      "should_trigger": true
+    },
+    {
+      "query": "Is hybrid product-led sales a real thing or just a compromise state?",
+      "should_trigger": true
+    },
+    {
+      "query": "I need to decide whether to build self-serve checkout or hire two more AEs",
+      "should_trigger": true
+    },
+    { "query": "Our approach worked at $5M and is stalling at $20M", "should_trigger": true },
+    {
+      "query": "What's the case for adding a concierge tier to a consumer subscription?",
+      "should_trigger": true
+    },
+    {
+      "query": "Rank the ways we could lift trial conversion by what we get per unit of effort",
+      "should_trigger": true
+    },
+    {
+      "query": "We have no idea whether to invest in community or in outbound reps",
+      "should_trigger": true
+    },
+    {
+      "query": "Give me a plan I can take to the board with gates and dates for changing how we sell",
+      "should_trigger": true
+    },
+    {
+      "query": "Do we need SOC 2 before we can sell to enterprise, or is that a later problem?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our AEs and our self-serve funnel are fighting over the same accounts",
+      "should_trigger": true
+    },
+    {
+      "query": "Two of our products need totally different ways of selling. How do I split it?",
+      "should_trigger": true
+    },
+    {
+      "query": "What should trigger us to re-evaluate how we sell?",
+      "should_trigger": true
+    },
+    {
+      "query": "We sell to engineers who can expense $500 but not $50,000. What does that imply?",
+      "should_trigger": true
+    },
+    { "query": "Is it too late to add sales, or too early?", "should_trigger": true },
+    {
+      "query": "How do I stop copying our competitor's GTM and design our own?",
+      "should_trigger": true
+    },
+    {
+      "query": "Our magic number has been 0.4 for two quarters. Is that structural?",
+      "should_trigger": true
+    },
+    {
+      "query": "Advise a bootstrapped team on whether to ever hire a salesperson",
+      "should_trigger": true
+    },
+    {
+      "query": "What does it cost us to stay purely self-serve for another year?",
+      "should_trigger": true
+    },
+    { "query": "What SDR-to-AE ratio should we run at 40 reps?", "should_trigger": false },
+    {
+      "query": "Should we organize the sales team into pods or an assembly line?",
+      "should_trigger": false
+    },
+    {
+      "query": "What's a healthy span of control for a mid-market sales manager?",
+      "should_trigger": false
+    },
+    {
+      "query": "How do I split the team into hunters and farmers?",
+      "should_trigger": false
+    },
+    { "query": "Set next year's quotas for 22 AEs", "should_trigger": false },
+    {
+      "query": "How much over-assignment cushion should I build into the quota plan?",
+      "should_trigger": false
+    },
+    {
+      "query": "Model ramped rep equivalents for a team hiring 8 reps in Q1",
+      "should_trigger": false
+    },
+    {
+      "query": "What base-to-variable pay mix should an enterprise AE have?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design an accelerator curve above 100% attainment",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we run a SPIF on multi-year deals this quarter?",
+      "should_trigger": false
+    },
+    {
+      "query": "What pipeline coverage ratio do we need to hit a $6M quarter?",
+      "should_trigger": false
+    },
+    {
+      "query": "Our stage-weighted coverage says 2.8x - is that enough?",
+      "should_trigger": false
+    },
+    {
+      "query": "Define our ICP for a compliance automation product",
+      "should_trigger": false
+    },
+    {
+      "query": "Estimate TAM and SAM for restaurant point-of-sale in Germany",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a weighted account fit score from our closed-won data",
+      "should_trigger": false
+    },
+    {
+      "query": "Where should the cutoffs sit between Tier 1 and Tier 2 accounts?",
+      "should_trigger": false
+    },
+    {
+      "query": "How many accounts per rep in our Tier 2 coverage model?",
+      "should_trigger": false
+    },
+    {
+      "query": "Write an interview loop and scorecard for hiring two AEs",
+      "should_trigger": false
+    },
+    {
+      "query": "Design a 30-60-90 ramp plan with certification gates for a new rep",
+      "should_trigger": false
+    },
+    { "query": "I'm an SDR - how do I get promoted to AE?", "should_trigger": false },
+    { "query": "Score this deal against MEDDPICC", "should_trigger": false },
+    {
+      "query": "Who is the champion in this opportunity based on the call notes?",
+      "should_trigger": false
+    },
+    {
+      "query": "Review these deal notes for qualification red flags",
+      "should_trigger": false
+    },
+    { "query": "Build the ROI business case for this $400K deal", "should_trigger": false },
+    {
+      "query": "Write a cold call opener for a VP of Engineering",
+      "should_trigger": false
+    },
+    {
+      "query": "Is our SPF and DKIM setup going to hurt deliverability?",
+      "should_trigger": false
+    },
+    {
+      "query": "Generate ten subject line variants and a split-test plan",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan a 12-touch outbound cadence across email and LinkedIn",
+      "should_trigger": false
+    },
+    {
+      "query": "Turn these prospect signals into personalization angles",
+      "should_trigger": false
+    },
+    {
+      "query": "Write discovery questions for a 30-minute first call",
+      "should_trigger": false
+    },
+    {
+      "query": "How do I handle 'we already use a competitor' on a live call?",
+      "should_trigger": false
+    },
+    {
+      "query": "Score this call transcript against our rubric",
+      "should_trigger": false
+    },
+    {
+      "query": "Draft the recap email with next steps from these meeting notes",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan my concessions before the pricing negotiation on Thursday",
+      "should_trigger": false
+    },
+    {
+      "query": "Which sales podcasts and newsletters should I be following?",
+      "should_trigger": false
+    },
+    {
+      "query": "Where does sales sit in our overall revenue funnel stage model?",
+      "should_trigger": false
+    },
+    {
+      "query": "Design our partner tiering and enablement program",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the reseller agreement terms for a new VAR",
+      "should_trigger": false
+    },
+    { "query": "How should we price the enterprise plan?", "should_trigger": false },
+    {
+      "query": "Write the pricing page headline and feature comparison table",
+      "should_trigger": false
+    },
+    {
+      "query": "Rewrite the in-app onboarding checklist copy for new signups",
+      "should_trigger": false
+    },
+    {
+      "query": "Write the positioning statement for our new product line",
+      "should_trigger": false
+    },
+    {
+      "query": "Build a referral incentive program for existing customers",
+      "should_trigger": false
+    },
+    {
+      "query": "What should our territory map look like by geography?",
+      "should_trigger": false
+    },
+    { "query": "How do we forecast the quarter more accurately?", "should_trigger": false },
+    { "query": "Design the lead routing rules in our CRM", "should_trigger": false },
+    {
+      "query": "Set up lead scoring thresholds for marketing qualified leads",
+      "should_trigger": false
+    },
+    {
+      "query": "Our CRM pipeline stages are a mess - redefine them",
+      "should_trigger": false
+    },
+    {
+      "query": "How do I animate the hero section transitions on our marketing site?",
+      "should_trigger": false
+    },
+    {
+      "query": "Create motion graphics for our product launch video",
+      "should_trigger": false
+    },
+    { "query": "What's a good commission clawback policy?", "should_trigger": false },
+    { "query": "Write a job description for a Head of Sales", "should_trigger": false },
+    { "query": "How do I run a QBR with a Tier 1 account?", "should_trigger": false },
+    {
+      "query": "Build a customer health score to predict churn",
+      "should_trigger": false
+    },
+    {
+      "query": "Plan the sales kickoff event agenda for January",
+      "should_trigger": false
+    },
+    {
+      "query": "Which of your sales skills should I use for this task?",
+      "should_trigger": false
+    },
+    {
+      "query": "Should we discount this deal to get it closed this quarter?",
+      "should_trigger": false
+    }
+  ]
+}

@@ -1,0 +1,972 @@
+# SEOmator SEO Audit Tool & Skill
+
+[![npm version](https://img.shields.io/npm/v/@seomator/seo-audit.svg)](https://www.npmjs.com/package/@seomator/seo-audit)
+[![npm downloads](https://img.shields.io/npm/dm/@seomator/seo-audit.svg)](https://www.npmjs.com/package/@seomator/seo-audit)
+[![node](https://img.shields.io/node/v/@seomator/seo-audit.svg)](https://www.npmjs.com/package/@seomator/seo-audit)
+[![license: MIT](https://img.shields.io/npm/l/@seomator/seo-audit.svg)](./LICENSE)
+
+**SEOmator is a comprehensive SEO audit tool that scans any website against 373 rules across 20 categories** — technical SEO, Core Web Vitals, structured data, accessibility, security headers, and AI/GEO search readiness — and returns a prioritized, actionable report. It ships as a **command-line tool**, an **Electron desktop app**, and a **Claude Code skill**, so you can run an SEO audit from a terminal, a visual dashboard, or directly inside an AI coding agent.
+
+> **Prefer a web interface?** Try our [Free SEO Audit Tool](https://seomator.com/free-seo-audit-tool) for a visual, browser-based SEO analysis.
+
+## Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Desktop App](#desktop-app)
+- [Quick Start (CLI)](#quick-start-cli)
+- [Commands](#commands)
+- [Categories & Rules](#categories--rules-373-total)
+- [Configuration](#configuration)
+- [Output Formats](#output-formats)
+- [CI/CD Integration](#cicd-integration)
+- [Programmatic Usage](#programmatic-usage)
+- [Claude Code Skill](#claude-code-skill)
+- [FAQ](#faq)
+- [Requirements](#requirements)
+
+## Features
+
+- **373 SEO Audit Rules** across 20 categories
+- **Desktop App** - Visual audit dashboard with real-time progress, interactive results, score history, and light/dark theme
+- **CLI Tool** - Single page & crawl mode with 5 output formats
+- **Core Web Vitals** - LCP, CLS, FCP, TTFB, INP measurement via Playwright
+- **JavaScript Rendering Analysis** - Compare raw vs rendered DOM for SPA/CSR sites
+- **Per-Asset Checks** - Cache policy, text compression, image sizing, and redirect chains for every subresource loaded during render
+- **5 Output Formats** - Console, JSON, HTML, Markdown, and LLM-optimized XML
+- **Actionable Reports** - Every rule ships a specific fix suggestion; unmeasurable checks report as "not measured" instead of fake passes
+- **AI/GEO Readiness** - Check semantic HTML, AI bot access, and llms.txt
+- **Redirect Chain Detection** - Loops, broken redirects, meta/JS redirects
+- **HTML Validation** - Doctype, charset, head structure, lorem ipsum detection
+- **Cross-Page Analysis** - Sitemap URLs cross-checked against status/canonical/robots.txt, canonical chains & loops, hreflang target validation and reciprocity, duplicate content & H1s, orphan & isolated pages, inbound link quality
+- **Concurrent Crawling** - Fast multi-page audits with configurable concurrency
+- **SQLite Storage** - Persistent crawl data with compression and audit history
+- **CI/CD Ready** - Exit codes, JSON output, GitHub Actions & GitLab CI examples
+- **TOML Configuration** - Project-level settings with presets and inheritance
+
+## Installation
+
+### From npm (recommended)
+
+```bash
+# Install globally
+npm install -g @seomator/seo-audit
+
+# Run audit
+seomator audit https://example.com
+```
+
+> **Note:** The CLI automatically uses your system Chrome, Chromium, or Edge browser for Core Web Vitals measurement. No additional browser installation is required if you have Chrome installed.
+
+### From source
+
+```bash
+git clone https://github.com/seo-skills/seo-audit-skill.git
+cd seo-audit-skill
+npm install
+npm run build
+
+# Run directly
+./dist/cli.js audit https://example.com
+
+# Or link globally
+npm link
+seomator audit https://example.com
+```
+
+## Desktop App
+
+The desktop app provides a visual audit dashboard with real-time progress streaming, interactive results, score history, and light/dark theme support.
+
+### Running
+
+```bash
+# From source
+git clone https://github.com/seo-skills/seo-audit-skill.git
+cd seo-audit-skill
+npm install
+npm run rebuild:electron   # Compile native module for Electron
+npm run electron:dev                          # Launch with hot reload
+```
+
+### Building
+
+```bash
+npm run electron:build    # Production build
+npm run electron:pack     # Build + package distributable
+```
+
+### Desktop App Features
+
+- **Real-time progress** - Live category-by-category progress as the audit runs
+- **Score dashboard** - Overall score circle, category grid, and issues summary table
+- **Interactive results** - Expandable rule cards with rule descriptions, affected items, page URL badges, and inline fix suggestions
+- **Filter & navigate** - Filter by status (All/Failures/Warnings/Passed), click issues to jump to details
+- **Score history** - Track audit scores over time per domain with trend charts
+- **Light/dark theme** - Follows your system preference or toggle manually
+
+## Quick Start (CLI)
+
+```bash
+# Basic audit
+seomator audit https://example.com
+
+# Skip Core Web Vitals (faster)
+seomator audit https://example.com --no-cwv
+
+# Audit specific categories
+seomator audit https://example.com -c core,security,perf
+
+# JSON output (for CI/CD or parsing)
+seomator audit https://example.com --format json
+
+# HTML report
+seomator audit https://example.com --format html -o report.html
+
+# LLM-optimized output (pipe to Claude)
+seomator audit https://example.com --format llm --no-cwv | claude "analyze and prioritize fixes"
+
+# Crawl multiple pages
+seomator audit https://example.com --crawl --max-pages 20
+
+# Full options
+seomator audit https://example.com --crawl -m 50 --concurrency 5 --timeout 60000 --format json -o results.json
+```
+
+## Commands
+
+### `seomator audit <url>`
+
+Run SEO audit on a URL.
+
+| Option | Alias | Description | Default |
+|--------|-------|-------------|---------|
+| `--format <type>` | `-f` | Output format: console, json, html, markdown, llm | console |
+| `--output <path>` | `-o` | Output file path | - |
+| `--categories <list>` | `-c` | Comma-separated categories to audit | All |
+| `--json` | `-j` | Output as JSON (deprecated, use --format json) | false |
+| `--crawl` | - | Enable crawl mode for multiple pages | false |
+| `--max-pages <n>` | `-m` | Maximum pages to crawl | 10 |
+| `--concurrency <n>` | - | Concurrent requests | 3 |
+| `--timeout <ms>` | - | Request timeout in milliseconds | 30000 |
+| `--no-cwv` | - | Skip Core Web Vitals measurement | false |
+| `--mobile` | - | Second render at a mobile viewport + mobile-first parity checks (single-page) | false |
+| `--simulate-interaction` | - | Scroll and click the page so INP can be measured (reported as synthetic, unscored) | false |
+| `--verbose` | `-v` | Show progress | false |
+| `--config <path>` | - | Config file path | - |
+| `--no-save` | - | Do not store this audit in your history | - |
+| `--json-report` | - | Also write the legacy JSON report to .seomator/reports/ | false |
+
+Audits are stored in `~/.seomator/audits.db` by default, which is what
+`seomator report`, `seomator compare` and the desktop app read. Set
+`SEOMATOR_HOME` to keep that data elsewhere, or `[output] save = false` in
+`seomator.toml` to opt a project out.
+
+### `seomator serve`
+
+Run the local dashboard: every audit you have run, in your browser.
+
+```bash
+seomator serve                   # opens http://127.0.0.1:7360
+seomator serve --port 0          # pick a free port
+seomator serve --no-open         # do not open a browser
+```
+
+It reads the same `~/.seomator/audits.db` the CLI writes, binds to loopback
+only, and makes no outbound requests. Every `/api` request needs the per-launch
+token, which is printed once and written to `~/.seomator/serve.json` for agents:
+
+```bash
+TOKEN=$(jq -r .token ~/.seomator/serve.json)
+curl -s -H "X-SEOmator-Token: $TOKEN" http://127.0.0.1:7360/api/audits | jq
+```
+
+Full reference: [docs/WEB-DASHBOARD.md](docs/WEB-DASHBOARD.md).
+
+### `seomator init`
+
+Create a `seomator.toml` config file.
+
+```bash
+seomator init                    # Interactive setup
+seomator init -y                 # Use defaults
+seomator init --preset blog      # Blog preset
+seomator init --preset ecommerce # E-commerce preset
+seomator init --preset ci        # Minimal CI config
+```
+
+### `seomator crawl <url>`
+
+Crawl website without running analysis. Saves data for later analysis with `seomator analyze`.
+
+```bash
+seomator crawl https://example.com -m 20
+```
+
+### `seomator analyze [crawl-id]`
+
+Run rules on stored crawl data.
+
+```bash
+seomator analyze                           # Analyze latest crawl
+seomator analyze --latest                  # Stored in your history by default
+seomator analyze 2026-01-23-abc123         # Specific crawl
+```
+
+### `seomator report [query]`
+
+View and query past audits. Reads your history, falling back to the legacy
+JSON reports under `.seomator/reports/`.
+
+```bash
+seomator report --list                     # List stored audits
+seomator report --project mysite           # Filter by project
+seomator report 2026-09-02-a1b2c3          # Show one audit
+```
+
+### `seomator compare [domain]`
+
+Compare the latest audit of a site against a previous one, so you can see what
+a deploy changed. Requires at least two stored audits of the same domain.
+
+```bash
+seomator audit https://example.com           # run before the deploy
+seomator audit https://example.com           # run after
+
+seomator compare example.com                 # diff the two most recent runs
+seomator compare example.com --trend         # score history for the domain
+seomator compare example.com --against 2026-08-31-a1b2c3
+seomator compare example.com --json          # machine-readable diff
+seomator compare example.com --fail-on-regression   # exit 1 if worse (for CI)
+```
+
+Rules are diffed by ID, so a rule that broke and a different one that got fixed
+are reported separately rather than cancelling out in a count.
+
+### `seomator config [key] [value]`
+
+View or modify configuration.
+
+```bash
+seomator config --list                     # Show all config
+seomator config crawler.max_pages 50       # Set value
+seomator config validate                   # Validate config
+```
+
+### `seomator db`
+
+Database management.
+
+```bash
+seomator db migrate              # Migrate JSON to SQLite
+seomator db migrate --dry-run    # Preview migration
+seomator db stats -v             # Database statistics
+seomator db restore              # Rollback migration
+```
+
+### `seomator self doctor`
+
+Check system setup and dependencies.
+
+```bash
+seomator self doctor -v          # Verbose diagnostics
+```
+
+## Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| 0 | Audit passed (score >= 70) |
+| 1 | Audit failed (score < 70) |
+| 2 | Error occurred |
+
+## Categories & Rules (373 total)
+
+### Core (24 rules) - 11% weight
+
+| Rule | Description |
+|------|-------------|
+| `core-title-present` | `<title>` tag exists |
+| `core-title-length` | Title should be 30-60 characters |
+| `core-description-present` | Meta description exists |
+| `core-description-length` | Description should be 120-160 characters |
+| `core-canonical-present` | Canonical URL exists |
+| `core-canonical-valid` | Canonical URL is valid absolute URL |
+| `core-viewport-present` | Viewport meta tag exists |
+| `core-favicon-present` | Favicon link exists |
+| `core-h1-present` | At least one H1 exists |
+| `core-h1-single` | Only one H1 exists |
+| `core-canonical-header` | HTML canonical and Link header match |
+| `core-nosnippet` | Detects nosnippet/max-snippet:0 directives |
+| `core-robots-meta` | Checks noindex/nofollow directives |
+| `core-title-unique` | Titles should be unique site-wide |
+| `core-canonical-conflicting` | HTML and header canonicals should not conflict |
+| `core-canonical-to-homepage` | Canonical should not always point to homepage |
+| `core-canonical-http-mismatch` | Canonical protocol should match page protocol |
+| `core-canonical-loop` | Detects circular canonical chains |
+| `core-canonical-to-noindex` | A noindexed page should not also canonicalize to a different URL |
+| `core-canonical-outside-head` | No canonical element outside the `<head>` |
+| `core-canonical-attributes` | Canonical elements carry only rel and href attributes |
+| `core-canonical-multiple` | Multiple canonical elements should agree |
+| `core-canonical-external` | Canonical pointing to a different host (worth verifying) |
+| `core-robots-directive-mismatch` | Robots directives in meta tags and X-Robots-Tag header should be consistent |
+
+### Performance (28 rules) - 10% weight
+
+| Rule | Description |
+|------|-------------|
+| `cwv-lcp` | Largest Contentful Paint (<2.5s pass, >4s fail) |
+| `cwv-cls` | Cumulative Layout Shift (<0.1 pass, >0.25 fail) |
+| `cwv-inp` | Interaction to Next Paint (<200ms pass, >500ms fail) |
+| `cwv-ttfb` | Time to First Byte (<800ms pass, >1800ms fail) |
+| `cwv-fcp` | First Contentful Paint (<1.8s pass, >3s fail) |
+| `perf-dom-size` | DOM under 800 nodes passes; over 1500 nodes fails |
+| `perf-css-file-size` | CSS files should be reasonably sized |
+| `perf-font-loading` | Font-display: swap should be used |
+| `perf-preconnect` | Preconnect hints for third-party origins |
+| `perf-render-blocking` | Scripts should use async/defer |
+| `perf-lazy-above-fold` | Above-fold images should not be lazy-loaded |
+| `perf-lcp-hints` | LCP element should be preloaded |
+| `perf-text-compression` | Responses should use gzip/Brotli compression |
+| `perf-brotli` | Prefer Brotli over gzip for better compression |
+| `perf-cache-policy` | Static assets should have cache headers |
+| `perf-minify-css` | CSS should be minified |
+| `perf-minify-js` | JavaScript should be minified |
+| `perf-response-time` | Response time under 500ms passes; over 1000ms warns |
+| `perf-http2` | Site should serve over HTTP/2 |
+| `perf-page-weight` | HTML document under 100KB passes; over 300KB warns |
+| `perf-js-file-size` | Total inline JavaScript under 50KB passes; over 150KB warns |
+| `perf-video-for-animations` | Use `<video>` instead of animated GIFs |
+| `perf-asset-compression` | Text assets >2KB should be gzip/Brotli compressed (requires render) |
+| `perf-asset-cache-policy` | Static assets should have cache max-age of at least 1 hour (requires render) |
+| `perf-legacy-javascript` | No polyfills modern browsers do not need |
+| `perf-duplicate-js` | A known library is not loaded from more than one script URL |
+| `perf-source-maps` | No sourceMappingURL comment or SourceMap header |
+| `perf-image-encoding` | Images should be <100KB and not legacy BMP/TIFF (requires render) |
+
+### Links (27 rules) - 8% weight
+
+| Rule | Description |
+|------|-------------|
+| `links-broken-internal` | Internal links should return 200 |
+| `links-external-valid` | External links should be reachable |
+| `links-internal-present` | Page should have internal links |
+| `links-nofollow-appropriate` | nofollow used appropriately |
+| `links-anchor-text` | Anchor text should be descriptive |
+| `links-depth` | Click distance from the entry point ≤3 (requires `--crawl`) |
+| `links-dead-end-pages` | Pages should have outgoing internal links |
+| `links-https-downgrade` | HTTPS pages should not link to HTTP |
+| `links-external-count` | Warn if >100 external links |
+| `links-invalid` | No empty, javascript:, or malformed hrefs |
+| `links-tel-mailto` | Valid tel: and mailto: link formats |
+| `links-redirect-chains` | Links should not go through redirects |
+| `links-orphan-pages` | Pages have enough inbound internal links (requires `--crawl`) |
+| `links-localhost` | No localhost/127.0.0.1 URLs in production |
+| `links-local-file` | No file:// protocol links |
+| `links-broken-fragment` | Fragment links should match element IDs |
+| `links-excessive` | Limit internal links per page |
+| `links-onclick` | No onclick-based navigation instead of `<a>` tags |
+| `links-whitespace-href` | No whitespace in href attributes |
+| `links-non-http-protocol` | No anchor links with non-HTTP protocols (ftp:, intent:) |
+| `links-inbound-all-nofollow` | All inbound internal links nofollow, so no link equity (requires `--crawl`) |
+| `links-inbound-mixed-follow` | Mixed followed/nofollowed inbound links (requires `--crawl`) |
+| `links-inbound-low-quality` | No inbound internal link passes link equity (requires `--crawl`) |
+| `links-inbound-anchor-text` | All followed inbound links use generic anchor text (requires `--crawl`) |
+| `links-nofollow-internal` | Same-host links should not carry rel=nofollow |
+| `links-weak-inbound` | A non-entry page has more than one dofollow inbound link (requires `--crawl`) |
+| `links-chrome-inbound` | At least one inbound link sits outside the nav, header, and footer (requires `--crawl`) |
+
+### Images (14 rules) - 8% weight
+
+| Rule | Description |
+|------|-------------|
+| `images-alt-present` | All images should have alt attribute |
+| `images-alt-quality` | Alt text should be descriptive |
+| `images-dimensions` | Images should have width/height |
+| `images-lazy-loading` | Below-fold images should use lazy loading |
+| `images-modern-format` | Use WebP/AVIF formats |
+| `images-size` | Images should be <200KB |
+| `images-responsive` | Use srcset for responsive images |
+| `images-broken` | Images should not return 404 |
+| `images-figure-captions` | Figure elements should have figcaption |
+| `images-filename-quality` | Use descriptive filenames |
+| `images-inline-svg-size` | Inline SVGs should be <5KB |
+| `images-picture-element` | Picture elements must have img fallback |
+| `images-alt-length` | Alt text should be under 125 characters |
+| `images-background-seo` | Content images should use `<img>`, not CSS background |
+
+### Security (26 rules) - 8% weight
+
+| Rule | Description |
+|------|-------------|
+| `security-https` | Site should use HTTPS |
+| `security-https-redirect` | HTTP should redirect to HTTPS |
+| `security-hsts` | Strict-Transport-Security header |
+| `security-csp` | Content-Security-Policy header |
+| `security-x-frame-options` | X-Frame-Options header |
+| `security-x-content-type-options` | X-Content-Type-Options: nosniff |
+| `security-external-links` | External target="_blank" links have noopener/noreferrer |
+| `security-form-https` | Form actions use HTTPS |
+| `security-mixed-content` | No HTTP resources on HTTPS pages |
+| `security-permissions-policy` | Permissions-Policy header present |
+| `security-referrer-policy` | Referrer-Policy header present |
+| `security-leaked-secrets` | No exposed API keys or credentials |
+| `security-password-http` | Login forms served over HTTPS only |
+| `security-protocol-relative` | No protocol-relative URLs (//example.com) |
+| `security-ssl-expiry` | SSL certificate not near expiration |
+| `security-ssl-protocol` | TLS 1.2+ required; no TLS 1.0/1.1 |
+| `security-cookie-flags` | Session cookies set Secure, HttpOnly and SameSite |
+| `security-cookie-lifetime` | Cookies stay within the 400-day browser cap |
+| `security-coop` | Cross-Origin-Opener-Policy header isolates the page |
+| `security-csp-xss` | CSP should actually constrain script execution |
+| `security-info-disclosure` | Headers should not advertise server software/version |
+| `security-paste-blocking` | Input fields should not prevent pasting |
+| `security-trusted-types` | CSP should require Trusted Types for DOM XSS sinks |
+| `security-sri` | Cross-origin scripts and stylesheets set an integrity hash |
+| `security-obfuscated-script` | No long high-entropy inline script calls eval, Function, or atob |
+| `security-brand-impersonation` | Brand sign-in links point at the brand or this host |
+
+### Technical SEO (18 rules) - 7% weight
+
+| Rule | Description |
+|------|-------------|
+| `technical-robots-txt-exists` | robots.txt should return 200 |
+| `technical-robots-txt-valid` | robots.txt should have valid syntax |
+| `technical-sitemap-exists` | sitemap.xml should exist |
+| `technical-sitemap-valid` | Sitemap should have valid XML structure |
+| `technical-url-structure` | URL should use hyphens, lowercase |
+| `technical-trailing-slash` | Consistent trailing slash usage |
+| `technical-www-redirect` | www/non-www should redirect to one version |
+| `technical-404-page` | Custom 404 page should exist |
+| `technical-soft-404` | Soft 404 pages should return proper 404 status |
+| `technical-server-error` | No 5xx server errors |
+| `technical-4xx-non-404` | No 400, 403, 410 client errors |
+| `technical-timeout` | Pages should respond within timeout |
+| `technical-bad-content-type` | Content-Type header matches actual content |
+| `technical-empty-html` | Page should return meaningful, non-empty HTML |
+| `technical-form-get-method` | Forms should not submit with the GET method |
+| `technical-duplicate-gtm` | No multiple Google Tag Manager containers |
+| `technical-duplicate-ga` | No multiple Google Analytics property IDs |
+| `technical-consent-mode` | A Google tag is paired with a consent update |
+
+### Crawlability (38 rules) - 5% weight
+
+| Rule | Description |
+|------|-------------|
+| `crawl-schema-noindex-conflict` | Schema.org and noindex should not conflict |
+| `crawl-pagination-canonical` | Paginated pages should self-canonicalize |
+| `crawl-sitemap-domain` | Sitemap URLs should match host domain |
+| `crawl-noindex-in-sitemap` | Noindexed pages should not be in sitemap |
+| `crawl-indexability-conflict` | robots.txt and noindex should not both block |
+| `crawl-canonical-redirect` | Canonical should not point through redirects |
+| `crawl-sitemap-url-limit` | Sitemap should have <50,000 URLs |
+| `crawl-sitemap-size-limit` | Sitemap should be <50MB |
+| `crawl-sitemap-duplicate-urls` | No duplicate URLs in sitemap |
+| `crawl-sitemap-orphan-urls` | Sitemap URLs should be linked internally |
+| `crawl-blocked-resources` | Critical resources not blocked by robots.txt |
+| `crawl-crawl-delay` | Excessive Crawl-delay slows indexing |
+| `crawl-sitemap-in-robotstxt` | robots.txt should reference sitemap |
+| `crawl-pagination-broken` | Pagination links should not be broken |
+| `crawl-pagination-loop` | No circular pagination chains |
+| `crawl-pagination-sequence` | No gaps in pagination sequence |
+| `crawl-pagination-noindex` | Paginated pages should not be noindexed |
+| `crawl-pagination-orphaned` | Paginated pages should be linked from content |
+| `crawl-sitemap-lastmod` | Sitemap lastmod values are valid, not future-dated, and not bulk-identical |
+| `crawl-blocked-images` | Image URLs should not be disallowed by robots.txt |
+| `crawl-pagination-isolated` | Paginated URLs should have incoming internal links (requires `--crawl`) |
+| `crawl-sitemap-non-200` | Sitemap URLs should return 200 when crawled (requires `--crawl`) |
+| `crawl-sitemap-non-canonical` | Sitemap URLs should not canonicalize to a different URL (requires `--crawl`) |
+| `crawl-sitemap-disallowed` | Sitemap URLs should not be disallowed by robots.txt (requires `--crawl`) |
+| `crawl-sitemap-cross-duplicates` | URLs should not be declared by multiple sitemaps (requires `--crawl`) |
+| `crawl-canonical-to-noindex` | Canonical target should not itself be noindex (requires `--crawl`) |
+| `crawl-canonical-to-disallowed` | Canonical target should not be disallowed by robots.txt (requires `--crawl`) |
+| `crawl-canonical-chain` | Canonical target should not canonicalize elsewhere (requires `--crawl`) |
+| `crawl-canonical-loop` | Canonical targets should not form a loop (requires `--crawl`) |
+| `crawl-hreflang-to-noindex` | Hreflang should not point to noindex URLs (requires `--crawl`) |
+| `crawl-hreflang-to-disallowed` | Hreflang should not point to robots.txt-disallowed URLs (requires `--crawl`) |
+| `crawl-hreflang-disallowed-target` | Disallowed pages should not receive hreflang annotations (requires `--crawl`) |
+| `crawl-hreflang-incoming-conflict` | Incoming hreflang annotations should not conflict (requires `--crawl`) |
+| `crawl-hreflang-reciprocity` | Hreflang targets should annotate this page in return (requires `--crawl`) |
+| `crawl-isolated-url` | Page should be reachable via ordinary internal links (requires `--crawl`) |
+| `crawl-canonical-form-drift` | Canonicals agree on www, scheme, and trailing slash (requires `--crawl`) |
+| `crawl-sitemap-date-drift` | Sitemap lastmod and schema dateModified fall on the same day |
+| `crawl-pdf-size` | Linked PDF files are at most 10 MB |
+
+### Structured Data (19 rules) - 5% weight
+
+| Rule | Description |
+|------|-------------|
+| `schema-present` | JSON-LD or microdata should exist |
+| `schema-valid` | JSON-LD should be valid JSON |
+| `schema-type` | @type field should be present |
+| `schema-required-fields` | Required fields for schema type |
+| `schema-article` | Validates Article schema properties |
+| `schema-breadcrumb` | Checks BreadcrumbList on non-homepage |
+| `schema-faq` | Validates FAQPage schema structure |
+| `schema-local-business` | Validates LocalBusiness for local SEO |
+| `schema-organization` | Validates Organization schema |
+| `schema-product` | Validates Product schema for e-commerce |
+| `schema-review` | Validates Review/AggregateRating schema |
+| `schema-video` | Validates VideoObject schema |
+| `schema-website-search` | Checks WebSite sitelinks searchbox |
+| `schema-entity-id` | Organization, WebSite, Person, and Business entities use an absolute @id |
+| `schema-rating-scope` | AggregateRating stays on the page it describes, and ratingValue is visible |
+| `schema-entity-conflict` | One absolute @id does not carry two logos or two phone numbers (requires `--crawl`) |
+| `schema-entity-dangling` | publisher, author, and isPartOf @ids are declared in the crawl (requires `--crawl`) |
+| `schema-entity-type-drift` | One absolute @id keeps the same @type (requires `--crawl`) |
+| `schema-entity-split` | One organization or person name is not published under two absolute @ids (requires `--crawl`) |
+
+### JavaScript Rendering (16 rules) - 5% weight
+
+| Rule | Description |
+|------|-------------|
+| `js-rendered-title` | Title present in rendered DOM |
+| `js-rendered-description` | Meta description present in rendered DOM |
+| `js-rendered-h1` | H1 present in rendered DOM |
+| `js-rendered-canonical` | Canonical present in rendered DOM |
+| `js-canonical-mismatch` | Canonical matches between raw and rendered HTML |
+| `js-noindex-mismatch` | Noindex consistent between raw and rendered HTML |
+| `js-title-modified` | Title not changed by JavaScript |
+| `js-description-modified` | Description not changed by JavaScript |
+| `js-h1-modified` | H1 not changed by JavaScript |
+| `js-rendered-content` | Main content present without JavaScript dependency |
+| `js-rendered-links` | Navigation links present without JavaScript |
+| `js-blocked-resources` | Critical JS not blocked by robots.txt |
+| `js-ssr-check` | Server-side rendering detected |
+| `js-console-errors` | No uncaught JavaScript exceptions or console errors while rendering |
+| `js-failed-requests` | Scripts, stylesheets and other subresources load successfully |
+| `js-document-write` | Inline scripts should not use `document.write()` |
+
+### Accessibility (36 rules) - 7% weight
+
+| Rule | Description |
+|------|-------------|
+| `a11y-aria-labels` | Interactive elements have accessible names |
+| `a11y-color-contrast` | Color contrast issues detected |
+| `a11y-focus-visible` | Focus indicator styles present |
+| `a11y-form-labels` | Form inputs have associated labels |
+| `a11y-heading-order` | Heading levels don't skip |
+| `a11y-landmark-regions` | Proper landmark regions (main, nav, footer) |
+| `a11y-link-text` | Descriptive link text (no "click here") |
+| `a11y-skip-link` | Skip-to-content link for keyboard navigation |
+| `a11y-table-headers` | Data tables have proper headers |
+| `a11y-touch-targets` | Minimum 44x44px touch target sizing |
+| `a11y-video-captions` | Videos have captions or transcripts |
+| `a11y-zoom-disabled` | Viewport doesn't disable user zoom |
+| `a11y-iframe-title` | Iframes and frames have title attributes |
+| `a11y-object-alt` | `<object>` elements provide a text alternative |
+| `a11y-empty-heading` | No empty or inaccessible headings |
+| `a11y-input-image-alt` | Image inputs have alt text |
+| `a11y-main-landmark` | Exactly one `<main>` landmark |
+| `a11y-list-structure` | Lists contain only list items |
+| `a11y-duplicate-id` | No duplicate element IDs |
+| `a11y-tabindex-positive` | No tabindex greater than 0 |
+| `a11y-accesskey-unique` | No duplicate accesskey values |
+| `a11y-form-multiple-labels` | Form controls have at most one label |
+| `a11y-aria-valid` | ARIA roles and attributes are valid |
+| `a11y-aria-hidden-focusable` | aria-hidden not on body or focusable elements |
+| `a11y-svg-img-alt` | SVGs with img role have accessible names |
+| `a11y-presentation-role-conflict` | role="none"/"presentation" not negated by ARIA |
+| `a11y-valid-lang-element` | Element lang attributes are valid BCP 47 tags |
+| `a11y-redundant-alt` | Alt text doesn't duplicate adjacent text |
+| `a11y-table-caption` | Data tables use `<caption>` |
+| `a11y-identical-links-purpose` | Same link text should point to same destination |
+| `a11y-label-name-mismatch` | aria-label should contain the visible text |
+| `a11y-button-name` | Buttons and role=button controls have an accessible name |
+| `a11y-autocomplete` | Email and tel inputs set the matching autocomplete token |
+| `a11y-xml-lang-mismatch` | lang and xml:lang on html name the same language |
+| `a11y-aria-hidden-body` | html and body are not aria-hidden |
+| `a11y-aria-required` | Explicit ARIA widget roles have their required parent and child roles |
+
+### Content (27 rules) - 5% weight
+
+| Rule | Description |
+|------|-------------|
+| `content-word-count` | Page should have 300+ words |
+| `content-reading-level` | Flesch-Kincaid reading level check |
+| `content-keyword-stuffing` | Detects excessive keyword repetition |
+| `content-article-links` | Checks link-to-content ratio |
+| `content-broken-html` | Detects malformed HTML structure |
+| `content-meta-in-body` | Meta tags should be in head |
+| `content-mime-type` | Validates Content-Type header |
+| `content-duplicate-description` | Descriptions should be unique site-wide |
+| `content-heading-hierarchy` | Proper heading hierarchy (H1>H2>H3) |
+| `content-heading-length` | Headings should be 10-70 characters |
+| `content-heading-unique` | Headings should be unique |
+| `content-text-html-ratio` | Text-to-HTML ratio should be >10% |
+| `content-title-same-as-h1` | Title and H1 should differ |
+| `content-title-same-as-description` | Title and meta description should differ |
+| `content-title-pixel-width` | Title pixel width for SERP display (<580px) |
+| `content-description-pixel-width` | Description pixel width for SERP (<920px) |
+| `content-duplicate-exact` | Detects exact duplicate content across pages |
+| `content-duplicate-near` | Detects near-duplicate content via simhash |
+| `content-duplicate-h1` | H1 text should be unique across crawled pages (requires `--crawl`) |
+| `content-mojibake` | Visible text is not UTF-8 decoded as Latin-1 or Windows-1252 |
+| `content-unrendered-markup` | No literal Markdown such as **bold** outside code |
+| `content-placeholder-text` | No unrendered template syntax or TODO/FIXME notes |
+| `content-stale-copyright` | Footer copyright year is the current year |
+| `content-date-agreement` | datePublished, time datetime, and a URL year agree |
+| `content-hidden-text` | No long text hidden with an inline style |
+| `content-thin-vs-site` | A page is not far shorter than the median page of the same kind (requires `--crawl`) |
+| `content-title-pattern` | The title keeps the suffix most of the site uses (requires `--crawl`) |
+
+### Social (9 rules) - 3% weight
+
+| Rule | Description |
+|------|-------------|
+| `social-og-title` | og:title meta tag |
+| `social-og-description` | og:description meta tag |
+| `social-og-image` | og:image with valid URL |
+| `social-og-image-size` | og:image dimensions (1200x630) |
+| `social-twitter-card` | twitter:card meta tag |
+| `social-og-url` | og:url meta tag |
+| `social-og-url-canonical` | og:url matches canonical |
+| `social-share-buttons` | Social share buttons present |
+| `social-profiles` | Social profile links present |
+
+### E-E-A-T (16 rules) - 3% weight
+
+| Rule | Description |
+|------|-------------|
+| `eeat-about-page` | About page exists |
+| `eeat-affiliate-disclosure` | Affiliate links have disclosure |
+| `eeat-author-byline` | Author attribution present |
+| `eeat-author-expertise` | Author credentials/bio present |
+| `eeat-citations` | Links to authoritative sources |
+| `eeat-contact-page` | Contact page exists |
+| `eeat-content-dates` | Publication/modification dates present |
+| `eeat-disclaimers` | YMYL content has disclaimers |
+| `eeat-editorial-policy` | Editorial policy page exists |
+| `eeat-physical-address` | Business address present |
+| `eeat-privacy-policy` | Privacy policy link present |
+| `eeat-terms-of-service` | Terms of service link present |
+| `eeat-trust-signals` | Trust badges, reviews, certifications |
+| `eeat-ymyl-detection` | YMYL content detection |
+| `eeat-geo-meta` | Pages with local-business schema also set a geo meta tag |
+| `eeat-nap-consistency` | One organization name keeps a single phone and address (requires `--crawl`) |
+
+### URL Structure (14 rules) - 3% weight
+
+| Rule | Description |
+|------|-------------|
+| `url-slug-keywords` | URL slug contains keywords |
+| `url-stop-words` | URL should not have stop words |
+| `url-uppercase` | URLs should be lowercase |
+| `url-underscores` | Use hyphens, not underscores |
+| `url-double-slash` | No consecutive slashes in path |
+| `url-spaces` | No spaces in URL |
+| `url-non-ascii` | No non-ASCII characters in URL |
+| `url-length` | URL should be under 2048 characters |
+| `url-repetitive-path` | No repetitive path segments |
+| `url-parameters` | Excessive query parameters |
+| `url-session-ids` | No session IDs in URL |
+| `url-tracking-params` | Tracking parameters should use canonical |
+| `url-internal-search` | Internal search URLs should be noindexed |
+| `url-http-https-duplicate` | HTTP/HTTPS versions should canonicalize |
+
+### Redirects (11 rules) - 3% weight
+
+| Rule | Description |
+|------|-------------|
+| `redirect-meta-refresh` | No `<meta http-equiv="refresh">` redirects |
+| `redirect-javascript` | No JavaScript-based redirects |
+| `redirect-http-refresh` | No HTTP Refresh header redirects |
+| `redirect-loop` | No circular redirect chains |
+| `redirect-type` | Prefer 301 over 302 for permanent moves |
+| `redirect-broken` | Redirects should not lead to errors |
+| `redirect-resource` | No redirects on CSS/JS/image resources |
+| `redirect-case-normalization` | Redirect uppercase URLs to lowercase |
+| `redirect-resource-broken` | Redirected resources should not resolve to 4xx/5xx (requires render) |
+| `redirect-resource-loop` | Resources should not be caught in redirect loops (requires render) |
+| `redirect-resource-chain` | Resources should not go through multi-hop redirect chains (requires render) |
+
+### Mobile (12 rules) - 2% weight
+
+| Rule | Description |
+|------|-------------|
+| `mobile-font-size` | Minimum 16px body text |
+| `mobile-horizontal-scroll` | No horizontal scrolling |
+| `mobile-interstitials` | No intrusive interstitials |
+| `mobile-viewport-width` | No fixed viewport width |
+| `mobile-multiple-viewports` | Single viewport meta tag |
+| `mobile-image-maps` | No `<map>`/`<area>` image maps |
+| `mobile-viewport-content` | Viewport directives: width, initial-scale, no minimum-scale |
+| `mobile-parity-content` | Mobile render carries as much content as desktop (`--mobile`) |
+| `mobile-parity-title` | Title and meta description match mobile vs desktop (`--mobile`) |
+| `mobile-parity-canonical` | Canonical matches mobile vs desktop (`--mobile`) |
+| `mobile-parity-structured-data` | JSON-LD present on mobile as on desktop (`--mobile`) |
+| `mobile-parity-links` | Comparable internal link count mobile vs desktop (`--mobile`) |
+
+### Internationalization (13 rules) - 2% weight
+
+| Rule | Description |
+|------|-------------|
+| `i18n-lang-attribute` | HTML lang attribute present |
+| `i18n-hreflang` | Hreflang tags for multilingual sites |
+| `i18n-hreflang-return-links` | Hreflang targets link back to source |
+| `i18n-hreflang-to-noindex` | Hreflang should not point to noindexed pages |
+| `i18n-hreflang-to-non-canonical` | Hreflang should point to canonical URLs |
+| `i18n-hreflang-to-broken` | Hreflang should not point to broken URLs |
+| `i18n-hreflang-to-redirect` | Hreflang should not point through redirects |
+| `i18n-hreflang-conflicting` | No duplicate hreflang for same language |
+| `i18n-hreflang-lang-mismatch` | Page language matches hreflang code |
+| `i18n-hreflang-multiple-methods` | Use single hreflang method |
+| `i18n-hreflang-relative-url` | Hreflang annotations should use absolute URLs |
+| `i18n-hreflang-x-default` | Language annotation targets same URL as x-default (insight) |
+| `i18n-hreflang-incoming-invalid` | Incoming hreflang annotations use valid language codes (requires `--crawl`) |
+
+### HTML Validation (11 rules) - 2% weight
+
+| Rule | Description |
+|------|-------------|
+| `htmlval-missing-doctype` | `<!DOCTYPE html>` must be present |
+| `htmlval-missing-charset` | `<meta charset>` must be in head |
+| `htmlval-invalid-head` | Only metadata elements in `<head>` |
+| `htmlval-noscript-in-head` | `<noscript>` in `<head>` contains only link, style, and meta |
+| `htmlval-multiple-heads` | Single `<head>` element only |
+| `htmlval-size-limit` | HTML under 250KB passes; over 500KB fails |
+| `htmlval-lorem-ipsum` | No placeholder lorem ipsum text |
+| `htmlval-multiple-titles` | Single `<title>` tag only |
+| `htmlval-multiple-descriptions` | Single meta description only |
+| `htmlval-title-outside-head` | No `<title>` element outside of `<head>` |
+| `htmlval-base-url` | At most one `<base>` element with a valid href |
+
+### AI/GEO Readiness (13 rules) - 2% weight
+
+| Rule | Description |
+|------|-------------|
+| `geo-semantic-html` | Uses semantic HTML elements |
+| `geo-content-structure` | Proper heading hierarchy and lists |
+| `geo-ai-bot-access` | Citation crawlers stay allowed; training crawlers such as GPTBot are reported and not penalised |
+| `geo-llms-txt` | /llms.txt file for AI discovery |
+| `geo-schema-drift` | JSON-LD matches visible content |
+| `geo-content-signals` | Content-Signal in robots.txt is valid and consistent |
+| `geo-noai-signals` | Reports noai and noimageai without penalising them |
+| `geo-agents-md` | AGENTS.md exists and is not an HTML fallback |
+| `geo-well-known` | An MCP or agent-card manifest exists under .well-known |
+| `geo-rsl-license` | A robots.txt License URL resolves to a license document |
+| `geo-markdown-response` | The origin serves a Markdown representation of / |
+| `geo-markdown-page` | A non-root URL has a Markdown representation |
+| `geo-pay-per-crawl` | An HTTP 402 response includes payment terms |
+
+### Legal Compliance (1 rule) - 1% weight
+
+| Rule | Description |
+|------|-------------|
+| `legal-cookie-consent` | Cookie consent banner present |
+
+## Configuration
+
+Create a `seomator.toml` config file with `seomator init`:
+
+```toml
+[project]
+name = "my-website"
+domains = ["example.com", "www.example.com"]
+
+[crawler]
+max_pages = 100
+concurrency = 3
+timeout_ms = 30000
+respect_robots = true
+delay_ms = 100
+include = []
+exclude = ["/admin/**", "/api/**"]
+drop_query_prefixes = ["utm_", "gclid", "fbclid"]
+
+[rules]
+enable = ["*"]
+disable = ["perf-inp"]  # Supports wildcards: "core-*"
+
+[output]
+format = "console"  # console, json, html, markdown, llm
+```
+
+Config priority (highest to lowest):
+1. CLI arguments
+2. Local `./seomator.toml`
+3. Parent directory configs
+4. Global `~/.seomator/config.toml`
+5. Built-in defaults
+
+## Output Formats
+
+| Format | Flag | Best For |
+|--------|------|----------|
+| Console | `--format console` | Human terminal output (default) |
+| JSON | `--format json` | CI/CD, programmatic processing |
+| HTML | `--format html` | Standalone reports, sharing |
+| Markdown | `--format markdown` | Documentation, GitHub |
+| LLM | `--format llm` | AI agents, piping to Claude |
+
+### Terminal Output
+
+```
+╔══════════════════════════════════════════════════════════════╗
+║  SEOmator Audit Report                                      ║
+╚══════════════════════════════════════════════════════════════╝
+
+URL:       https://example.com
+Score:     88/100  [A]
+
+┌──────────────────────────┬───────┬────────┬──────────┬────────┐
+│ Category                 │ Score │ Passed │ Warnings │ Failed │
+├──────────────────────────┼───────┼────────┼──────────┼────────┤
+│ Core                     │ 97    │ 18     │ 1        │ 0      │
+│ Performance              │ 85    │ 18     │ 3        │ 1      │
+│ JavaScript Rendering     │ 100   │ 13     │ 0        │ 0      │
+│ ...                      │       │        │          │        │
+└──────────────────────────┴───────┴────────┴──────────┴────────┘
+```
+
+### JSON Output
+
+```json
+{
+  "url": "https://example.com",
+  "overallScore": 88,
+  "categoryResults": [
+    {
+      "categoryId": "core",
+      "score": 97,
+      "passCount": 18,
+      "warnCount": 1,
+      "failCount": 0,
+      "results": [...]
+    }
+  ],
+  "timestamp": "2026-01-23T16:00:00.000Z",
+  "crawledPages": 1
+}
+```
+
+## CI/CD Integration
+
+### GitHub Actions
+
+```yaml
+name: SEO Audit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install SEOmator
+        run: npm install -g @seomator/seo-audit
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+
+      - name: Run SEO Audit
+        run: seomator audit https://your-staging-url.com --format json -o seo-report.json
+
+      - name: Upload Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-report
+          path: seo-report.json
+```
+
+### GitLab CI
+
+```yaml
+seo-audit:
+  image: node:20
+  script:
+    - npm install -g @seomator/seo-audit
+    - npx playwright install chromium
+    - seomator audit https://your-staging-url.com --format json -o seo-report.json
+  artifacts:
+    paths:
+      - seo-report.json
+```
+
+## Programmatic Usage
+
+```typescript
+import { Auditor, createAuditor } from '@seomator/seo-audit';
+
+const auditor = createAuditor({
+  categories: ['core', 'security', 'perf'],
+  measureCwv: true,
+  onCategoryComplete: (categoryId, name, result) => {
+    console.log(`${name}: ${result.score}/100`);
+  }
+});
+
+const result = await auditor.audit('https://example.com');
+console.log(`Overall Score: ${result.overallScore}`);
+```
+
+## Claude Code Skill
+
+Use SEOmator directly in [Claude Code](https://claude.ai/claude-code) as an AI skill for automated SEO auditing.
+
+### Setup
+
+```bash
+npx skills add seo-skills/seo-audit-skill
+```
+
+### Usage
+
+```
+"Run an SEO audit on https://example.com"
+"Audit https://mysite.com and tell me what to fix first"
+"Check SEO health of https://example.com with 20-page crawl"
+```
+
+## FAQ
+
+### What is SEOmator?
+
+SEOmator is an SEO audit tool that checks a website against 373 rules across 20 categories — covering technical SEO, Core Web Vitals, structured data, accessibility, security headers, content quality, and AI/GEO search readiness — and returns a scored, prioritized report of what to fix first. It's available as an open-source CLI, an Electron desktop app, and a Claude Code skill.
+
+### How is SEOmator different from Lighthouse or PageSpeed Insights?
+
+Lighthouse and PageSpeed Insights focus on performance and Core Web Vitals for a single page. SEOmator includes CWV measurement but covers far more ground: crawlability, indexability, structured data validation, redirect chains, hreflang, E-E-A-T signals, and AI/GEO readiness (AI crawler access, llms.txt, semantic HTML) — across a full multi-page crawl, not just one URL.
+
+### Does SEOmator check AI search / GEO readiness?
+
+Yes. The AI/GEO Readiness category checks whether AI crawlers like GPTBot and ClaudeBot are allowed in robots.txt, whether an `/llms.txt` file exists, whether heading structure and semantic HTML are AI-extractable, and whether JSON-LD schema matches the page's visible content.
+
+### Is SEOmator free to use?
+
+The CLI (`@seomator/seo-audit`) is MIT-licensed and free to install and run locally or in CI/CD — see [Installation](#installation). A hosted, no-install version is also available at [seomator.com/free-seo-audit-tool](https://seomator.com/free-seo-audit-tool).
+
+### Can I run SEOmator in CI/CD?
+
+Yes. It returns exit code `0` for a passing score (≥70), `1` for a failing score, and `2` on error, plus JSON output for parsing. See the [GitHub Actions and GitLab CI examples](#cicd-integration).
+
+### Can I use SEOmator with Claude or other AI agents?
+
+Yes. The `--format llm` flag outputs token-efficient, injection-hardened XML designed for AI agents, and the [Claude Code skill](#claude-code-skill) lets you run audits directly from a prompt like "Audit https://example.com and tell me what to fix first."
+
+## Requirements
+
+- **Node.js 20.3+** (required by better-sqlite3 and `AbortSignal.any()`; uses native fetch API)
+- **Playwright** (for Core Web Vitals and JS rendering analysis)
+
+After installing, run `npx playwright install chromium` to install the browser for CWV measurement.
+
+For the desktop app, `better-sqlite3` must be compiled for Electron's Node version:
+```bash
+npm run rebuild:electron
+```
+
+## License
+
+MIT

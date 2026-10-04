@@ -40,7 +40,7 @@ codex login
 ```
 
 On a headless server, sign in on a machine with a browser and copy `~/.codex/auth.json` to the server
-(or pass `--auth-json /path/to/auth.json`).
+(or set `CODEX_HOME` to the directory holding it).
 
 Also log in to Docker Hub so base-image resolution uses your authenticated pull quota.
 
@@ -49,27 +49,38 @@ docker login
 ```
 
 
+## How it works
+
+1. **Planner** (one Codex agent per Skill) reads the whole Skill, decomposes the scenario it
+   addresses, researches public artifacts (repositories pinned to commits, datasets, specs), and
+   writes `N` independent problem proposals. Each proposal names the capability it tests, a sketch
+   of the environment with artifact links, the problem direction, the Skill's approach, and good
+   and bad solving behaviors. Proposals never involve the physical world, private data, or
+   authentication.
+2. **Host** samples presentation axes for each proposal: `complexity` (easy 5-10, medium 10-20,
+   hard 20+ turns, stratified across a Skill's tasks), `environment_noise`, and the instruction's
+   `tone`, requester `expertise`, `personality`, and `context_detail`.
+3. **Creator** (one Codex agent per proposal) builds the Harbor task: Docker environment and
+   fixtures, `instruction.md`, a deterministic `tests/test.sh`, `tests/rubric.md`
+   (`## Good Signals` / `## Negative Signals`), and a reference `solution/solve.sh`.
+4. **Acceptance**: static checks, then Harbor Oracle (must score 1) and NOP (must score 0).
+   Only accepted tasks are published.
+
 ## Quick start
 
-Generate up to two tasks from one small sample Skill. Expect 20 to 30 minutes on a 4-CPU host (the
-first run also builds the generator image, which adds a few minutes):
+Generate two tasks from one sample Skill:
 
 ```bash
-uv run skill2env generate \
-  --input-root SkillHub/test_samples/game-developer \
-  --out output/quickstart \
-  --max-tasks-per-skill 2 \
-  --max-parallel-workers 2
+uv run skill2env generate SkillHub/test_samples/game-developer -n 2
 ```
 
-The command prints the private run directory (`.skill2env/runs/<run-id>/`) at startup and a JSON
-summary at the end. A successful run has `retained_tasks >= 1`, and each retained task lands under
-`output/quickstart/`:
+The first run builds the generator image with the latest Codex CLI, which adds a few minutes.
+Accepted tasks land under `output/` (`-o` to change it):
 
 ```text
-output/quickstart/
+output/
 ├── _corpus_manifest.json
-└── task_query_<8-char-id>/
+└── task_<skill>_<8-char-id>/
     ├── instruction.md
     ├── task.toml
     ├── environment/
@@ -84,47 +95,38 @@ output/quickstart/
         └── ... optional solution helpers
 ```
 
+Private run state (planner proposals, creator prompts and transcripts, rejected candidates, and
+acceptance logs) is written to `.skill2env/runs/<run-id>/`.
 
 ## Generate from [SkillHub](./SkillHub/)
 
 `SkillHub/skills/` contains license-friendly Skill folders (see [`SkillHub/README.md`](SkillHub/README.md)).
-`--input-root` is scanned recursively, so it can point at one Skill, one family, or the whole hub:
+The path is scanned recursively, so it can point at one Skill, one family, or the whole hub:
 
 ```bash
-uv run skill2env generate \
-  --input-root SkillHub/skills \
-  --out output/skillhub \
-  --max-tasks-per-skill 2 \
-  --max-parallel-workers 8 \
-  --resume
+uv run skill2env generate SkillHub/skills -n 3 -j 8 -o output/skillhub --resume
 ```
 
-Retained tasks keep the source hierarchy under `--out`. `--resume` skips every Skill that a previous
-run into the same `--out` already finished, so interrupted batches continue where they stopped.
+Retained tasks keep the source hierarchy under the output root. `--resume` skips every Skill that
+a previous run into the same output root already finished.
 
-Start with a small `--max-parallel-workers` (about one per two CPU cores) and raise it only after
-watching CPU, memory, Docker, and Codex rate-limit behavior.
+Start with a small `-j` (about one per two CPU cores) and raise it only after watching CPU, memory,
+Docker, and Codex rate-limit behavior.
 
 ### Options
 
 | Flag | Default | Meaning |
 | --- | --- | --- |
-| `--max-tasks-per-skill N` | planner decides (≤ 8) | Cap on tasks per Skill |
-| `--max-parallel-workers N` | 4 | Concurrent Codex agents (planner + creators) |
-| `--max-task-size-mib N` | 128 | Reject completed tasks larger than this |
-| `--model NAME` | `gpt-5.6-sol` | Codex model for planner and creators |
-| `--reasoning-effort LEVEL` | `xhigh` | `low`, `medium`, `high`, `xhigh`, or `max` |
-| `--creator-timeout-sec N` | 3600 | Wall-clock limit per Codex call |
-| `--codex-max-attempts N` | 5 | Retries per Codex call on transient failures (rate limits, auth refresh races) |
-| `--codex-retry-base-sec N` | 15 | First retry delay; doubles with jitter, capped at 5 minutes |
-| `--auth-json PATH` | `~/.codex/auth.json` | Codex auth file to mount |
-| `--codex-version VER` | pinned | Codex CLI version installed in the generator image |
-| `--generator-image IMAGE` | built locally | Use a prebuilt generator image instead |
-| `--run-dir PATH` | `.skill2env/runs/<run-id>` | Where private run state is written |
-| `--resume` | off | Skip Skills already finished under `--out` |
+| `-n, --tasks N` | 3 | Problem proposals, and therefore tasks, per Skill (max 16) |
+| `-o, --out DIR` | `output` | Output root |
+| `-j, --workers N` | 4 | Concurrent Codex agents; also caps concurrent Oracle/NOP runs |
+| `--model NAME` | `gpt-6.1-sol` | Codex model for planner and creators |
+| `--effort LEVEL` | `high` | `low`, `medium`, `high`, `xhigh`, or `max` |
+| `--resume` | off | Skip Skills already finished under the output root |
 
-
-
+The Codex CLI version is always the latest one on npm (falling back to the newest local generator
+image when offline). The Codex auth file is read from `$CODEX_HOME/auth.json` (default
+`~/.codex/auth.json`).
 
 ## Submit tasks to the Harbor hub
 

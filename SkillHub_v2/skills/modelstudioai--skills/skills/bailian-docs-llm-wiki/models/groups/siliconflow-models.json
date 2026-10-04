@@ -1,0 +1,314 @@
+{
+  "name": "SiliconFlow DeepSeek",
+  "description": "由硅基流动提供的DeepSeek系列模型API服务。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Text"
+        ]
+      },
+      "description": "DeepSeek-V3.2 是一款兼具高计算效率与卓越推理和 Agent 性能的模型。其方法建立在三大关键技术突破之上：DeepSeek 稀疏注意力（DSA），一种高效的注意力机制，在保持模型性能的同时显著降低了计算复杂性，并特别针对长上下文场景进行了优化；可扩展的强化学习框架，通过该框架，模型性能可与 GPT-5 相媲美，其高算力版本在推理能力上可与 Gemini-3.0-Pro 匹敌；以及大规模 Agent 任务合成管线，旨在将推理能力整合到工具使用场景中，从而提高在复杂交互环境中的指令遵循和泛化能力。该模型在 2025 年国际数学奥林匹克（IMO）和国际信息学奥林匹克（IOI）中取得了金牌表现",
+      "features": [
+        "function-calling",
+        "prefix-completion"
+      ],
+      "provider": "deepseek",
+      "model": "siliconflow/deepseek-v3.2",
+      "iconUrl": "https://img.alicdn.com/imgextra/i2/O1CN01zDsrfb1WbCTjLP89d_!!6000000002806-2-tps-56-56.png",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2",
+          "timeBand": "standard",
+          "ntmAmountType": "input_token",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "3",
+          "timeBand": "standard",
+          "ntmAmountType": "output_token",
+          "type": "output_token",
+          "priceName": "输出"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 50000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 50000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "TG",
+        "Reasoning"
+      ],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 65536,
+      "latestOnlineAt": "2026-01-27T16:00:00.000+00:00",
+      "contextWindow": 163840,
+      "maxInputTokens": 163840,
+      "inferenceProvider": "siliconflow",
+      "name": "SiliconFlow DeepSeek-V3.2",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/siliconflow-deepseek-api",
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"siliconflow/deepseek-v3.2\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/siliconflow-deepseek-api"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Text"
+        ]
+      },
+      "description": "DeepSeek-V3.1-Terminus 是由深度求索（DeepSeek）发布的 V3.1 模型的更新版本，定位为混合智能体大语言模型。此次更新在保持模型原有能力的基础上，专注于修复用户反馈的问题并提升稳定性。它显著改善了语言一致性，减少了中英文混用和异常字符的出现。模型集成了“思考模式”（Thinking Mode）和“非思考模式”（Non-thinking Mode），用户可通过聊天模板灵活切换以适应不同任务。作为一个重要的优化，V3.1-Terminus 增强了代码智能体（Code Agent）和搜索智能体（Search Agent）的性能，使其在工具调用和执行多步复杂任务方面更加可靠",
+      "features": [
+        "function-calling",
+        "prefix-completion"
+      ],
+      "provider": "deepseek",
+      "model": "siliconflow/deepseek-v3.1-terminus",
+      "iconUrl": "https://img.alicdn.com/imgextra/i2/O1CN01zDsrfb1WbCTjLP89d_!!6000000002806-2-tps-56-56.png",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "4",
+          "timeBand": "standard",
+          "ntmAmountType": "input_token",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "12",
+          "timeBand": "standard",
+          "ntmAmountType": "output_token",
+          "type": "output_token",
+          "priceName": "输出"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 50000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 50000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "TG",
+        "Reasoning"
+      ],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 65536,
+      "latestOnlineAt": "2026-01-27T16:00:00.000+00:00",
+      "contextWindow": 163840,
+      "maxInputTokens": 163840,
+      "inferenceProvider": "siliconflow",
+      "name": "SiliconFlow DeepSeek-V3.1-Terminus",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/siliconflow-deepseek-api",
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"siliconflow/deepseek-v3.1-terminus\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/siliconflow-deepseek-api"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Text"
+        ]
+      },
+      "description": "新版 DeepSeek-V3 （DeepSeek-V3-0324）与之前的 DeepSeek-V3-1226 使用同样的 base 模型，仅改进了后训练方法。新版 V3 模型借鉴 DeepSeek-R1 模型训练过程中所使用的强化学习技术，大幅提高了在推理类任务上的表现水平，在数学、代码类相关评测集上取得了超过 GPT-4.5 的得分成绩。此外该模型在工具调用、角色扮演、问答闲聊等方面也得到了一定幅度的能力提升。",
+      "features": [
+        "function-calling",
+        "prefix-completion"
+      ],
+      "provider": "deepseek",
+      "model": "siliconflow/deepseek-v3-0324",
+      "iconUrl": "https://img.alicdn.com/imgextra/i2/O1CN01zDsrfb1WbCTjLP89d_!!6000000002806-2-tps-56-56.png",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2",
+          "timeBand": "standard",
+          "ntmAmountType": "input_token",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "8",
+          "timeBand": "standard",
+          "ntmAmountType": "output_token",
+          "type": "output_token",
+          "priceName": "输出"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 50000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 50000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "TG"
+      ],
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 163840,
+      "latestOnlineAt": "2026-01-27T16:00:00.000+00:00",
+      "contextWindow": 163840,
+      "maxInputTokens": 163840,
+      "inferenceProvider": "siliconflow",
+      "name": "SiliconFlow DeepSeek-V3-0324",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/siliconflow-deepseek-api",
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"siliconflow/deepseek-v3-0324\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/siliconflow-deepseek-api"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Text"
+        ]
+      },
+      "description": "DeepSeek-R1-0528 是一款强化学习（RL）驱动的推理模型，解决了模型中的重复性和可读性问题。在 RL 之前，DeepSeek-R1 引入了冷启动数据，进一步优化了推理性能。它在数学、代码和推理任务中与 OpenAI-o1 表现相当，并且通过精心设计的训练方法，提升了整体效果。",
+      "features": [
+        "function-calling",
+        "prefix-completion"
+      ],
+      "provider": "deepseek",
+      "model": "siliconflow/deepseek-r1-0528",
+      "iconUrl": "https://img.alicdn.com/imgextra/i2/O1CN01zDsrfb1WbCTjLP89d_!!6000000002806-2-tps-56-56.png",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "4",
+          "timeBand": "standard",
+          "ntmAmountType": "input_token",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "16",
+          "timeBand": "standard",
+          "ntmAmountType": "output_token",
+          "type": "output_token",
+          "priceName": "输出"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 50000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 50000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "TG",
+        "Reasoning"
+      ],
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 32768,
+      "latestOnlineAt": "2026-01-27T16:00:00.000+00:00",
+      "contextWindow": 163840,
+      "maxInputTokens": 163840,
+      "offlineInfo": {},
+      "inferenceProvider": "siliconflow",
+      "name": "SiliconFlow DeepSeek-R1-0528",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/siliconflow-deepseek-api",
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"siliconflow/deepseek-r1-0528\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/siliconflow-deepseek-api"
+          }
+        }
+      }
+    }
+  ]
+}

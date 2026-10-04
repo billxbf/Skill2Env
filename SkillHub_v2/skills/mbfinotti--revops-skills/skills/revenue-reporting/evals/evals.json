@@ -1,0 +1,481 @@
+{
+  "skill_name": "revenue-reporting",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I run RevOps at Halcyon Grid, B2B SaaS, about $40M ARR, Series C. Our quarterly board deck has 22 metrics in the main body and the board burns the whole hour asking us to explain charts instead of deciding anything. I need to cut it down before the Q3 deck. On pipeline: we take weighted pipeline ($18.2M) and divide it by the Q4 target ($9.6M) to get 1.9x coverage, and we've been telling the board 3x is the industry standard so we're behind. Rep attainment averaged 82% across 14 reps. We have full CRM history, a billing system, and finance closes on the 8th. What should the deck actually carry?",
+      "expected_output": "A proposed spine of five to six metrics selected by decisions changed per unit of production cost, with the weighted-pipeline-over-target double discount corrected, the 3x rule of thumb replaced by a coverage multiple derived from Halcyon Grid's own close rates, attainment reported as a distribution rather than a mean, and the removed metrics moved to the appendix.",
+      "files": [],
+      "expectations": [
+        "Caps the main-body spine at five to six metrics, names eight as the absolute maximum, and proposes no more than eight",
+        "States the selection criterion as decisions changed per unit of production cost, rather than how standard or expected a metric looks on a board deck",
+        "Flags that dividing weighted pipeline by the target discounts risk twice, because the coverage multiple already discounts it",
+        "Specifies unweighted pipeline coverage as the reported line, with weighted pipeline shown as a separate line if it is kept at all",
+        "Rejects the 3x figure as a circulating rule of thumb and derives the required coverage multiple from Halcyon Grid's own close rates",
+        "Replaces the 82% average attainment with a distribution reporting the share at or above 100%, 70-100%, and below 70%",
+        "Includes top-two-rep concentration in the attainment read",
+        "Includes at least one durability metric in the proposed spine: a retention pair, cohort retention curve, consumption net retention, or margin-adjusted payback",
+        "Scopes pipeline coverage to deals with close dates inside the period, with renewals excluded",
+        "States that the same spine repeats every period and that a new metric enters only by replacing one, with the swap footnoted"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Cassava Loop here. We're a B2B SaaS company that grew by rolling up three smaller products, so our billing system and our CRM don't share a customer ID and nobody has ever reconciled them. We have 14 months of revenue history total. Marketing spend sits in one agency invoice line with no segment or campaign breakdown. Sales is still founder-led with no quotas anywhere. Our new CFO wants a monthly executive revenue review starting next month with 'the standard SaaS metrics' - NRR, CAC payback, quota attainment. Draft me the metric set.",
+      "expected_output": "A spine that deletes the retention pair, acquisition payback and attainment distribution outright on data-availability grounds rather than ranking them last, reports the movement bridge instead, and explicitly names the data gap that removed every durability metric.",
+      "files": [],
+      "expectations": [
+        "Deletes the retention pair (NRR/GRR) from the spine rather than ranking or demoting it, because there is no stable customer identity across billing and CRM",
+        "Cites the 14-month history as shorter than the trailing-12 retention window as a second reason retention is not yet measurable",
+        "States plainly in the deliverable that retention is not yet measurable, instead of omitting it silently",
+        "Deletes acquisition payback rather than shipping a blended or estimated payback figure",
+        "Ties the payback deletion to spend not being attributable by period and segment",
+        "Deletes quota attainment distribution because there is no quota-carrying sales team",
+        "Reports the recurring-revenue movement bridge (beginning, additions, losses, ending) as the core of the spine instead",
+        "Satisfies the durability check by naming the data gap that removed every durability metric from the spine",
+        "Warns that a spine left with only velocity metrics reads healthy until the base stops holding",
+        "Produces no NRR, CAC payback, or quota attainment figure for the review despite the CFO's request",
+        "Names customer identity resolution across billing and CRM as the prerequisite that would restore the retention metrics"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Q3 closed at $22.4M ending ARR against a $24.1M plan. New business came in at $1.4M against $2.2M planned, churn was $0.6M against $0.35M planned, and expansion actually beat at $0.9M against $0.7M. Honestly we're not sure yet why new business dropped - sales says deals slipped, marketing says the leads were fine, we're still digging. There's a lot of macro noise in our segment too. Board meeting is in 12 days. Write the revenue section. I'd rather the quarter not read as a disaster, so I was going to show net movement (-$1.7M against plan) as one line and put the churn detail in the appendix.",
+      "expected_output": "A board revenue section that leads with the miss, shows the full movement bridge with the expansion beat and the churn overage reported separately rather than netted, labels the new-business cause as unconfirmed, refuses macro as a cause, and ships as a pre-read with pre-wire calls before the meeting.",
+      "files": [],
+      "expectations": [
+        "Places the miss in the first third of the document rather than in the appendix",
+        "Quantifies the gap against plan explicitly, either as the $1.7M total against the $24.1M plan or as the per-line decomposition",
+        "Refuses the single netted movement line and shows the movement bridge with beginning, new business, expansion, contraction, churn and ending as separate rows",
+        "Reports the expansion beat separately from the churn overage rather than offsetting them into a quieter total",
+        "Labels the new-business cause as unconfirmed or under investigation rather than asserting a cause as fact",
+        "Commits to reporting the confirmed cause at a named later point, such as the next period or next meeting",
+        "Rejects the macro environment as a stated cause unless it is accompanied by data separating market movement from execution",
+        "Names an owner for the fix and a single proof metric that will show the fix worked",
+        "Restates the forward forecast with the miss's cause reflected in it",
+        "Page one states the period verdict, the biggest driver, the response underway, and the decision being asked of the board",
+        "Ships the deck as a pre-read three to four days before the meeting and schedules pre-wire conversations so no board member learns the miss live"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Awkward one. The NRR we showed the board last quarter was 114%. When we rebuilt the model this month we found overage revenue had been left in the recurring base and the real number was 106%. That's the third correction we've had to make this year - the other two were a churn misclassification in Q1 and a double-counted expansion deal in Q2. My instinct is to just show 106% this quarter and move on, nobody is going to pull up last quarter's PDF. Board meeting is in three weeks, and I also want to change how we treat reactivated customers before this deck goes out, because the current rule inflates new business.",
+      "expected_output": "A visible restatement rather than a silent correction, with an 'as restated' column, a footnoted cause and per-line effect, a logged entry, the reactivation rule change resolved in writing as a dated dictionary version, and three corrections in a year escalated as an upstream controls problem.",
+      "files": [],
+      "expectations": [
+        "Rejects silently shipping the corrected 106% figure and requires a visible restatement of the previously published number",
+        "Labels the corrected column 'as restated'",
+        "Footnotes the cause of the restatement and its per-line effect",
+        "Logs the restatement in a restatement log or definitions changelog",
+        "Identifies three corrections in one year as a controls problem to fix upstream, not a formatting or presentation problem",
+        "Names restatement count per year as an ongoing signal to track after shipping",
+        "Treats the reactivation rule change as a footnoted definition change rather than applying it silently mid-cycle",
+        "Requires the metric dictionary to be frozen before the deck is drafted",
+        "Writes the exclusion of overage from the recurring base into the NRR dictionary entry as a resolved inclusions/exclusions rule",
+        "Records the change as a new dictionary version carrying a number, a date, and a one-line changelog",
+        "States that definition changes made mid-cycle are what make numbers move between meetings"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Two problems before Thursday's board meeting. First, our CRM says we booked $6.8M in Q2 but the finance team's number is $4.9M - they say that's what was recognized. Our RevOps dashboard shows $21.9M ARR and the finance dashboard shows $20.4M. A lot of our Q2 deals were three-year contracts. Second, our CEO has already dropped $21.9M into the draft deck and wants to present it. I have two days. Which system do I go with, and how do I get this settled in the meeting?",
+      "expected_output": "A refusal to pick a winning system, the billings-minus-recognized-equals-change-in-deferred-revenue check applied, a written stage-by-stage definition, the RevOps-publishes / finance-certifies / leadership-decides split enforced, and the discrepancy resolved in writing before the deck ships rather than live in the room.",
+      "files": [],
+      "expectations": [
+        "Refuses to settle the CRM-versus-finance discrepancy by picking a winning system",
+        "Explains that a CRM bookings read and a finance recognized read diverge by design and only tie at the contract level over the full term",
+        "Applies the identity that billings minus recognized revenue equals the change in deferred revenue as the reconciliation check",
+        "Requires a written definition of what 'right' means at each stage: sourced, contracted, billed, and recognized",
+        "Requires the discrepancy be resolved in writing before the deck ships, never debated live in the meeting",
+        "States the headline revenue figure must match what finance certifies, or the reconciling item must be named in the deck",
+        "Rejects presenting the $21.9M figure on the grounds that finance has not certified it",
+        "Assigns publishing to RevOps, certification to finance, and the decision to leadership",
+        "States that RevOps holds a publishing deadline rather than a presenting role, and that a report finance cannot reconcile to the ledger does not ship",
+        "Flags the total-contract versus annualized basis of the three-year deals as a stated reconciling item, noting multi-year totals inflate against an annualized basis",
+        "Notes that the numbers freeze when the pre-read ships and any later change is communicated as a restatement"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "We're a data-infrastructure company, all consumption pricing - customers put down an annual commitment and burn it down, plus overage on top. Investors keep asking for ARR, so I've been taking December revenue times 12 and calling it ARR. December was our biggest month ever. Our Q1 number then dropped 18% and everyone panicked about churn, but honestly a lot of our customers just run less in January. We've been billing for about 14 months. Write me the metric spine for the monthly investor update.",
+      "expected_output": "A consumption spine leading with commitment/overage mix and utilization, carrying consumption-based net retention with a written comparison window, deleting the seasonality split for insufficient history, placing run-rate last with its annualization basis stated, and refusing to report the December annualization as ARR unqualified.",
+      "files": [],
+      "expectations": [
+        "States that a contractual recurring base does not exist in a consumption model and that the recurring figure is a behavioral output",
+        "Rejects presenting December revenue times twelve as ARR without stating the annualization basis, or declines to report a recurring-revenue figure at all",
+        "Flags the December peak as a one-time or seasonal month that must not be annualized silently into a run-rate",
+        "Leads the spine with commitment versus overage mix and utilization against committed capacity",
+        "Names commitment/overage mix as the leading indicator that pipeline coverage plays in contract businesses",
+        "Includes consumption-based net retention defined as same-cohort revenue against that cohort's prior-year revenue",
+        "Requires the comparison window for consumption net retention to be written into the metric dictionary",
+        "Deletes the seasonality split for now because 14 months is shorter than two comparable cycles, rather than ranking it last",
+        "Places revenue run-rate last in the spine despite it being the cheapest line to produce",
+        "Requires separating seasonal consumption dips from health degradation before reporting either, so the 18% Q1 drop is not reported as churn",
+        "Warns against seat-based subscription benchmarks for a consumption business and directs benchmarking against the company's own history and matching-model peers"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "I'm the only analyst at Tessellate, Series B, 60 people. The new CRO wants a weekly revenue review, a monthly exec review, and a proper quarterly board deck, all starting next month. I told him I'd build one really good report and just run it at three different frequencies with more detail each time, and he's fine with that. Realistically I know I'm going to drown by month three. How do I set this up?",
+      "expected_output": "Three distinct artifacts rather than one report at three speeds, each with its own audience, depth and forward edge, explicitly not ranked against each other, plus a drop order planned in week one that sacrifices the monthly narrative first and the quarterly board artifact never.",
+      "files": [],
+      "expectations": [
+        "Rejects one report run at three frequencies and specifies three distinct artifacts",
+        "Assigns each artifact a distinct audience: revenue team and ops weekly, functional heads and CFO monthly, executive team and board quarterly",
+        "Specifies the weekly artifact as a live view with no narrative",
+        "Specifies the monthly artifact as a scorecard plus a one-page narrative, gated on the finance close",
+        "Specifies the quarterly artifact as a pre-read deck plus appendix plus pre-wires",
+        "Gives each artifact a distinct forward edge: this period's commit, next month's priorities, and reset targets, capital and hiring",
+        "Declines to rank the three artifacts against each other by efficiency or value, on the grounds that they are layers that do not substitute for one another",
+        "Gives an explicit drop order for when the effort ceiling binds, sacrificing the monthly narrative first and the weekly commentary second",
+        "States the quarterly board artifact is never dropped, because it carries an external obligation the other two do not",
+        "Instructs planning for that collapse in week 1 rather than discovering it in week 12",
+        "States that a topic escalates one layer up only when it needs that layer's audience to decide"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Marketplace for secondhand furniture. Last year we did $54M in GMV and we keep about 9% of that. Our investor deck currently leads with '$54M revenue, up 61%'. We also want an LTV number in there - I've seen the average-order-value times purchase-frequency times margin times three-year-lifespan formula. Most of our buyers check out as guests, we only have accounts for sellers. Gross product margin is 71% before we pay fulfillment, payment processing and returns. What should the revenue section look like?",
+      "expected_output": "Volume, net revenue and take rate reported as three separate lines with roughly $4.9M as the net revenue headline, the LTV constant refused outright, cohort and repeat-purchase metrics deleted for lack of buyer identity, and contribution-margin layers reported at the deepest layer rather than the 71% gross figure.",
+      "files": [],
+      "expectations": [
+        "Refuses to report GMV as revenue and separates gross transaction volume, net revenue, and take rate into three distinct lines",
+        "Carries the roughly $4.9M net revenue implied by the 9% take rate rather than leaving $54M as the headline revenue figure",
+        "Declines to produce a single lifetime-value constant at all, rather than ranking it low or shipping it with caveats",
+        "Gives the reason that LTV inputs are interdependent and churn is behavioral, making the number fragile in exactly the direction that flatters",
+        "Deletes cohort retention curves and repeat purchase rate because guest checkout leaves no stable buyer identity",
+        "Reports contribution-margin layers rather than the 71% gross product margin alone",
+        "Names the margin layer sequence: product margin, then after variable fulfillment, payment and returns, then after acquisition cost",
+        "Requires reporting the deepest margin layer rather than the most flattering one, noting any layer above the acquisition line always flatters",
+        "Names stable buyer identity, such as accounts at checkout, as the prerequisite that would restore the cohort and repeat-purchase metrics",
+        "Warns against benchmarking this business against seat-based subscription retention figures",
+        "States that the movement-bridge shape, the plan-versus-actual-versus-forecast spine and the answer-first narrative carry over unchanged from subscription reporting, and that only the atoms change"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Our board meeting is on the 5th and our finance close doesn't finish until the 11th. It's a one-time thing - we just closed a bridge round and the new investors want a revenue read at the first meeting, after that we go back to no formal reporting for a while. I'm the only person who can build it and I've got maybe six hours. I was planning on CAC payback, Rule of 40, and a bookings/billings/recognized reconciliation since that's what investors ask about. The billing system export is easy to pull and the CRM is clean. What do I actually put in?",
+      "expected_output": "A five-metric single-system spine built from the billing export and CRM, with payback, the growth-plus-margin composite and the three-basis lines all dropped for this cycle because the deadline lands inside the finance close, the waterfall and dictionary build skipped as a one-off, and the re-ranking explained against the stated constraints.",
+      "files": [],
+      "expectations": [
+        "Drops acquisition payback from this cycle because the deadline lands inside the finance close and the metric needs certification",
+        "Drops the growth-plus-margin composite, which the user called Rule of 40, from this cycle for the same certification reason",
+        "Drops the bookings / billings / recognized revenue lines from this cycle for the same certification reason",
+        "Caps the spine at five single-system metrics because the analyst team is one person against a hard effort ceiling",
+        "Treats the report as a one-off artifact and builds the bridge from the billing export rather than standing up the recurring-revenue waterfall",
+        "Skips building the full metric dictionary as a compounding asset, given the one-off mandate",
+        "Selects only metrics reachable from the billing export and the CRM without a finance dependency",
+        "Names which of the user's stated constraints moved which metric, rather than presenting the metric order as fixed",
+        "States that the metric order is a default re-ranked against this situation, not a law",
+        "Either carries one durability metric or names the gap that deleted it, rather than leaving the durability question unaddressed",
+        "Keeps an answer-first page one carrying verdict, driver, response and ask despite the compressed build"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Here's the opening of our monthly exec review as it stands: 'October Revenue Overview. We closed 31 deals this month across four segments. The following slides show MRR by month, pipeline by stage, win rate by region, and lead source performance.' The deck is 34 slides. Also, our weighted pipeline in HubSpot shows $7.1M for next quarter using the deal-stage probabilities that shipped with the portal, and I want to lead with that as proof we'll hit the $5.4M target. Fix the opening for me.",
+      "expected_output": "A rewritten answer-first opening carrying verdict, driver, response and ask, the chart-tour structure rejected, the HubSpot default stage probabilities flagged as editable placeholders that cannot back a weighted-pipeline claim unadjusted, and the 34-slide body split with detail moved to the appendix.",
+      "files": [],
+      "expectations": [
+        "Rewrites the opening to state the period verdict, the single biggest driver, the response underway, and the decision being asked",
+        "Applies the answer-first test: a reader handed page one alone can state the verdict, the biggest driver or risk, and the ask",
+        "Flags that HubSpot's default deal-stage probabilities are editable placeholders rather than measured conversion rates",
+        "Refuses to let a weighted-pipeline figure built on those default probabilities reach the deck unadjusted",
+        "Directs replacing the default probabilities with the company's own measured stage conversion, or reporting unweighted coverage instead",
+        "Flags that dividing the $7.1M weighted pipeline by the $5.4M target would discount risk twice",
+        "States that a 34-slide main body has become the pre-read and must be split with the summary rebuilt",
+        "Names roughly twenty to thirty slides as the point at which a main body has outgrown its role",
+        "Moves the backward-looking detail - MRR by month, pipeline by stage, win rate by region, lead source - into the appendix",
+        "Structures every remaining section as what happened, why, and what we are doing about it, rather than as a tour of charts"
+      ]
+    }
+  ],
+  "trigger_queries": [
+    {
+      "query": "help me cut down our board revenue deck, the board just asks about charts instead of deciding anything",
+      "should_trigger": true
+    },
+    {
+      "query": "what metrics should go in the revenue section of our quarterly board deck",
+      "should_trigger": true
+    },
+    { "query": "how do I present a revenue miss to the board", "should_trigger": true },
+    {
+      "query": "our monthly exec review is 30 slides and nobody reads it",
+      "should_trigger": true
+    },
+    {
+      "query": "the board found out about our churn spike during the meeting and it did not go well",
+      "should_trigger": true
+    },
+    {
+      "query": "need to write the revenue section of our monthly investor update",
+      "should_trigger": true
+    },
+    {
+      "query": "we shipped a wrong ARR number to the board last quarter, what do we do now",
+      "should_trigger": true
+    },
+    {
+      "query": "two dashboards give different ARR and I have a board meeting Thursday",
+      "should_trigger": true
+    },
+    { "query": "how many metrics should a board deck actually carry", "should_trigger": true },
+    {
+      "query": "write the metric dictionary entries for the recurring revenue metrics we report",
+      "should_trigger": true
+    },
+    { "query": "our deck is a data dump, help", "should_trigger": true },
+    {
+      "query": "should I show average quota attainment in the deck or break it out somehow",
+      "should_trigger": true
+    },
+    {
+      "query": "design our weekly, monthly and quarterly revenue reporting cadence",
+      "should_trigger": true
+    },
+    {
+      "query": "finance and revops disagree on the quarter's number and I have to pick one",
+      "should_trigger": true
+    },
+    { "query": "what goes on page one of a board revenue deck", "should_trigger": true },
+    {
+      "query": "I need a QBR revenue section for a consumption-pricing business",
+      "should_trigger": true
+    },
+    { "query": "how far ahead of the meeting should the board pre-read go out", "should_trigger": true },
+    {
+      "query": "we missed plan by 8% and I have no idea how to write it up",
+      "should_trigger": true
+    },
+    {
+      "query": "our numbers keep changing between meetings and people have stopped trusting them",
+      "should_trigger": true
+    },
+    {
+      "query": "how do I structure a monthly revenue review for the exec team",
+      "should_trigger": true
+    },
+    {
+      "query": "put together the revenue story for our first board meeting after the Series B",
+      "should_trigger": true
+    },
+    {
+      "query": "should the deck show net movement or the whole bridge",
+      "should_trigger": true
+    },
+    {
+      "query": "our marketplace investor deck leads with GMV, is that right",
+      "should_trigger": true
+    },
+    {
+      "query": "what's the right way to correct a number we already presented",
+      "should_trigger": true
+    },
+    {
+      "query": "board keeps asking about CAC payback but our spend data is a mess",
+      "should_trigger": true
+    },
+    {
+      "query": "our CEO wants to present a number finance hasn't signed off on",
+      "should_trigger": true
+    },
+    { "query": "reporting cadence for a one-person revops team", "should_trigger": true },
+    {
+      "query": "how do I show retention to the board when we only have a year of history",
+      "should_trigger": true
+    },
+    {
+      "query": "pipeline coverage for the board deck, weighted or unweighted",
+      "should_trigger": true
+    },
+    {
+      "query": "we're a usage-based business and investors keep asking us for ARR",
+      "should_trigger": true
+    },
+    {
+      "query": "what should the exec team see every month that the board doesn't see quarterly",
+      "should_trigger": true
+    },
+    { "query": "need the revenue narrative for the QBR", "should_trigger": true },
+    {
+      "query": "our board spends the whole hour on last quarter and never decides anything",
+      "should_trigger": true
+    },
+    { "query": "who signs off on the numbers before a board deck ships", "should_trigger": true },
+    {
+      "query": "how do I say we don't know the cause yet without looking incompetent",
+      "should_trigger": true
+    },
+    {
+      "query": "we want to attribute the quarter to macro headwinds, is that fine",
+      "should_trigger": true
+    },
+    {
+      "query": "what belongs in the appendix versus the main body of an exec deck",
+      "should_trigger": true
+    },
+    { "query": "help me pick five metrics that actually change decisions", "should_trigger": true },
+    { "query": "how should a PLG company report revenue to its board", "should_trigger": true },
+    {
+      "query": "rewrite the opening of our revenue review, right now it's a tour of charts",
+      "should_trigger": true
+    },
+    {
+      "query": "can I change a metric definition in the middle of a reporting cycle",
+      "should_trigger": true
+    },
+    {
+      "query": "we smoothed the monthly series to cut the noise and the board liked it, keep doing that?",
+      "should_trigger": true
+    },
+    {
+      "query": "the revenue part of our quarterly business review deck",
+      "should_trigger": true
+    },
+    {
+      "query": "prepare the numbers story for the investors before the meeting so nothing surprises them",
+      "should_trigger": true
+    },
+    {
+      "query": "board deck revenue section for a company that just badly missed plan",
+      "should_trigger": true
+    },
+    {
+      "query": "should reactivated customers count as new business in the bridge we show the board",
+      "should_trigger": true
+    },
+    {
+      "query": "how do I stop the board asking how we define NRR every single quarter",
+      "should_trigger": true
+    },
+    {
+      "query": "design our org-wide revenue KPI tree from the board level down to individual contributors",
+      "should_trigger": false
+    },
+    {
+      "query": "which metrics matter at each level of the org and how should they roll up to each other",
+      "should_trigger": false
+    },
+    { "query": "why was our sales forecast wrong last quarter", "should_trigger": false },
+    {
+      "query": "reps are sandbagging and the forecast is useless, diagnose what's going on",
+      "should_trigger": false
+    },
+    { "query": "build me a Grafana dashboard for revenue metrics", "should_trigger": false },
+    { "query": "set up a Power BI report for our finance team", "should_trigger": false },
+    {
+      "query": "what should our executive KPI dashboard look like in Looker",
+      "should_trigger": false
+    },
+    { "query": "build a dashboard that tracks MRR in real time", "should_trigger": false },
+    { "query": "who should own the account owner field in our CRM", "should_trigger": false },
+    { "query": "set field-level freshness SLAs on our CRM records", "should_trigger": false },
+    {
+      "query": "decide which system is the source of truth for subscription objects across our stack",
+      "should_trigger": false
+    },
+    {
+      "query": "we need data contracts binding the product team to revops as a consumer",
+      "should_trigger": false
+    },
+    { "query": "design our funnel stages from lead through closed won", "should_trigger": false },
+    {
+      "query": "what's the right unit of analysis for our funnel, leads or buying groups",
+      "should_trigger": false
+    },
+    {
+      "query": "find where we're losing revenue in the renewal process",
+      "should_trigger": false
+    },
+    {
+      "query": "size how much money we're leaking from unworked inbound leads",
+      "should_trigger": false
+    },
+    {
+      "query": "build a composite customer health score from product usage signals",
+      "should_trigger": false
+    },
+    { "query": "which usage signals predict churn 90 days out", "should_trigger": false },
+    { "query": "design our MQL threshold and lead scoring weights", "should_trigger": false },
+    {
+      "query": "route inbound leads to reps by territory with weighted round robin",
+      "should_trigger": false
+    },
+    {
+      "query": "build the discount approval matrix for non-standard deals",
+      "should_trigger": false
+    },
+    {
+      "query": "our stage exit criteria are all based on rep activity, audit them",
+      "should_trigger": false
+    },
+    {
+      "query": "run a hygiene audit over our open pipeline and flag the stale deals",
+      "should_trigger": false
+    },
+    {
+      "query": "what data should transfer from sales to CS when a deal closes won",
+      "should_trigger": false
+    },
+    {
+      "query": "we have 41 GTM tools, help me decide what to consolidate or cut",
+      "should_trigger": false
+    },
+    {
+      "query": "am I ready to be a revops director, review my resume against the ladder",
+      "should_trigger": false
+    },
+    {
+      "query": "write the job description and interview loop for a revops manager hire",
+      "should_trigger": false
+    },
+    {
+      "query": "which revops newsletters and podcasts should I be following",
+      "should_trigger": false
+    },
+    {
+      "query": "which skill in this collection should I use for my task",
+      "should_trigger": false
+    },
+    { "query": "write up our quarterly expense report", "should_trigger": false },
+    {
+      "query": "generate a performance review report for my direct reports",
+      "should_trigger": false
+    },
+    { "query": "build a daily standup report workflow in Slack", "should_trigger": false },
+    { "query": "write an executive resume for a CFO role", "should_trigger": false },
+    { "query": "summarize how my crypto portfolio performed this month", "should_trigger": false },
+    {
+      "query": "how do I build predictable outbound pipeline with an SDR team",
+      "should_trigger": false
+    },
+    { "query": "optimize the conversion rate of our signup onboarding flow", "should_trigger": false },
+    {
+      "query": "draft the management discussion and analysis section of our 10-Q filing",
+      "should_trigger": false
+    },
+    { "query": "help me close the books faster at month end", "should_trigger": false },
+    {
+      "query": "configure revenue recognition rules in our billing system",
+      "should_trigger": false
+    },
+    {
+      "query": "model our ARR out three years in a spreadsheet for planning",
+      "should_trigger": false
+    },
+    { "query": "write up the minutes from our last board meeting", "should_trigger": false },
+    { "query": "design the agenda for our company all-hands", "should_trigger": false },
+    { "query": "build the pitch deck for our Series C fundraise", "should_trigger": false },
+    { "query": "pick a BI tool for our revenue team to standardize on", "should_trigger": false },
+    {
+      "query": "write me a SQL query that computes NRR from our warehouse tables",
+      "should_trigger": false
+    },
+    { "query": "what commission plan should we pay our AEs next year", "should_trigger": false },
+    {
+      "query": "our CS team needs a QBR template to run with customer accounts",
+      "should_trigger": false
+    }
+  ]
+}

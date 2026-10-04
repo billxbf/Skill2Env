@@ -14,32 +14,29 @@ import subprocess
 import tempfile
 import threading
 import time
+import urllib.request
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 from typing import Callable, Optional, Protocol, TypeVar
 
-from .axes import AxisPreference, valid_axis_label
-from .models import (
-    AssetRecommendation,
-    AssetSource,
-    ContractError,
-    CreatorResult,
-    SkillBundle,
-    Workflow,
-)
-from .prompts import creator_prompt, workflow_analysis_prompt
+from .axes import TaskAxes
+from .models import ContractError, CreatorResult, Plan, Proposal, SkillBundle
+from .prompts import creator_prompt, planner_prompt
 from .tracker import RunTracker
 
 
-DEFAULT_CODEX_VERSION = "0.146.0"
-DEFAULT_MODEL = "gpt-5.6-sol"
-DEFAULT_REASONING_EFFORT = "xhigh"
+DEFAULT_MODEL = "gpt-6.1-sol"
+DEFAULT_REASONING_EFFORT = "high"
 REASONING_EFFORTS = ("low", "medium", "high", "xhigh", "max")
-MAX_WORKFLOWS = 8
+DEFAULT_TASKS_PER_SKILL = 3
+MAX_TASKS_PER_SKILL = 16
+DEFAULT_CODEX_TIMEOUT_SEC = 3600
 DEFAULT_MAX_CODEX_ATTEMPTS = 5
 DEFAULT_RETRY_BASE_DELAY_SEC = 15.0
 RETRY_MAX_DELAY_SEC = 300.0
-GENERATOR_IMAGE_REVISION = "assets1"
+GENERATOR_IMAGE_REPOSITORY = "skill2env-codex"
+GENERATOR_IMAGE_REVISION = "r2"
+CODEX_NPM_LATEST_URL = "https://registry.npmjs.org/@openai/codex/latest"
 
 # CODEX_HOME lives at a fixed container path outside the bind-mounted workspace
 # so the workspace-write sandbox cannot touch shared authentication/config state.
@@ -76,7 +73,39 @@ def retryable_codex_error(exc: "GeneratorError") -> bool:
 
 def default_generator_image(codex_version: str) -> str:
     """Return a cache-busting tag for the bundled generator toolset."""
-    return f"skill2env-codex:{codex_version}-{GENERATOR_IMAGE_REVISION}"
+    return f"{GENERATOR_IMAGE_REPOSITORY}:{codex_version}-{GENERATOR_IMAGE_REVISION}"
+
+
+def latest_codex_version(timeout: float = 15.0) -> Optional[str]:
+    """Latest published Codex CLI version from npm, or None when unreachable."""
+    try:
+        with urllib.request.urlopen(CODEX_NPM_LATEST_URL, timeout=timeout) as response:
+            version = json.load(response).get("version")
+    except (OSError, ValueError, AttributeError):
+        return None
+    return version.strip() if isinstance(version, str) and version.strip() else None
+
+
+def newest_local_codex_version() -> Optional[str]:
+    """Newest Codex version among locally built generator images (offline fallback)."""
+    try:
+        listing = _host_command(
+            ["docker", "image", "ls", "--format", "{{.Tag}}", GENERATOR_IMAGE_REPOSITORY],
+            timeout=60,
+        )
+    except GeneratorError:
+        return None
+    suffix = f"-{GENERATOR_IMAGE_REVISION}"
+    versions = [
+        tag[: -len(suffix)]
+        for tag in (listing.stdout or "").split()
+        if tag.endswith(suffix)
+    ]
+
+    def key(version: str) -> tuple:
+        return tuple(int(part) if part.isdigit() else -1 for part in re.split(r"[.-]", version))
+
+    return max(versions, key=key) if versions else None
 
 
 class GeneratorError(RuntimeError):
@@ -88,27 +117,14 @@ class GeneratorError(RuntimeError):
 @dataclass(frozen=True)
 class CreationRun:
     workspace: Path
-    task_dir: Optional[Path]
+    task_dir: Path
     result: CreatorResult
     transcript: str
     prompt: str
 
 
 class AgentRunner(Protocol):
-    model: str
-    reasoning_effort: str
-    codex_version: str
-    image: str
-
-    def prepare(self) -> None: ...
-
-    def analyze(
-        self,
-        bundle: SkillBundle,
-        *,
-        state_dir: Path,
-        max_workflows: int = MAX_WORKFLOWS,
-    ) -> list[Workflow]: ...
+    def plan(self, bundle: SkillBundle, *, count: int, state_dir: Path) -> Plan: ...
 
     def create(
         self,
@@ -117,8 +133,8 @@ class AgentRunner(Protocol):
         task_name: str,
         variant_index: int,
         state_dir: Path,
-        axes: AxisPreference,
-        workflow: Workflow | None = None,
+        proposal: Proposal,
+        axes: TaskAxes,
     ) -> CreationRun: ...
 
 
@@ -131,9 +147,9 @@ class ContainerizedCodexRunner:
         auth_json: Optional[Path] = None,
         model: str = DEFAULT_MODEL,
         reasoning_effort: str = DEFAULT_REASONING_EFFORT,
-        codex_version: str = DEFAULT_CODEX_VERSION,
+        codex_version: Optional[str] = None,
         image: Optional[str] = None,
-        creator_timeout_sec: int = 3600,
+        creator_timeout_sec: int = DEFAULT_CODEX_TIMEOUT_SEC,
         tracker: Optional[RunTracker] = None,
         max_parallel_workers: Optional[int] = None,
         max_codex_attempts: int = DEFAULT_MAX_CODEX_ATTEMPTS,
@@ -143,8 +159,6 @@ class ContainerizedCodexRunner:
             raise ValueError("a pinned Codex model is required")
         if reasoning_effort not in REASONING_EFFORTS:
             raise ValueError(f"reasoning effort must be one of {REASONING_EFFORTS!r}")
-        if not codex_version.strip():
-            raise ValueError("a pinned Codex CLI version is required")
         if max_parallel_workers is not None and max_parallel_workers < 1:
             raise ValueError("max_parallel_workers must be positive")
         if max_codex_attempts < 1:
@@ -156,8 +170,11 @@ class ContainerizedCodexRunner:
         self.model = model.strip()
         self.reasoning_effort = reasoning_effort
         self.auth_json = auth_json.expanduser().resolve()
-        self.codex_version = codex_version.strip()
-        self.image = image or default_generator_image(self.codex_version)
+        # None means "latest published Codex", resolved in prepare().
+        self.codex_version = codex_version.strip() if codex_version else None
+        self.image = image or (
+            default_generator_image(self.codex_version) if self.codex_version else None
+        )
         self._external_image = image is not None
         self.creator_timeout_sec = creator_timeout_sec
         self.tracker = tracker
@@ -190,6 +207,15 @@ class ContainerizedCodexRunner:
             raise GeneratorError("docker_unavailable", "docker is not on PATH")
         if not self.auth_json.is_file():
             raise GeneratorError("auth_missing", f"Codex auth file not found: {self.auth_json}")
+        if self.image is None:
+            self.codex_version = latest_codex_version() or newest_local_codex_version()
+            if self.codex_version is None:
+                raise GeneratorError(
+                    "codex_version_unresolved",
+                    "cannot reach npm to resolve the latest Codex CLI and no local "
+                    f"{GENERATOR_IMAGE_REPOSITORY} image exists",
+                )
+            self.image = default_generator_image(self.codex_version)
 
         inspect = _host_command(["docker", "image", "inspect", self.image], timeout=60)
         if inspect.returncode != 0:
@@ -256,51 +282,48 @@ class ContainerizedCodexRunner:
                 self._shared_codex_home = shared_home
             return self._shared_codex_home
 
-    def analyze(
-        self,
-        bundle: SkillBundle,
-        *,
-        state_dir: Path,
-        max_workflows: int = MAX_WORKFLOWS,
-    ) -> list[Workflow]:
-        """Identify the distinct instructed workflows in a Skill (host-owned pre-pass)."""
+    def plan(self, bundle: SkillBundle, *, count: int, state_dir: Path) -> Plan:
+        """Decompose a Skill into up to ``count`` independent problem proposals."""
         self.prepare()
         return self._retry_codex(
-            lambda: self._analyze_once(
-                bundle, state_dir=state_dir, max_workflows=max_workflows
-            ),
+            lambda: self._plan_once(bundle, count=count, state_dir=state_dir),
             state_dir=state_dir,
-            phase="analyst",
+            phase="planner",
             variant_index=0,
         )
 
-    def _analyze_once(
-        self,
-        bundle: SkillBundle,
-        *,
-        state_dir: Path,
-        max_workflows: int,
-    ) -> list[Workflow]:
-        workspace = _new_workspace(state_dir, f"analyze-{_safe_name(bundle.id)}-")
+    def _plan_once(self, bundle: SkillBundle, *, count: int, state_dir: Path) -> Plan:
+        workspace = _new_workspace(state_dir, f"plan-{_safe_name(bundle.id)}-")
+        private_dir = state_dir / "planner"
+        private_dir.mkdir(parents=True, exist_ok=True)
         try:
             _stage_bundle(bundle, workspace / "source")
-            prompt = workflow_analysis_prompt(bundle=bundle, max_workflows=max_workflows)
-            result_path = workspace / "workflows.json"
-            self._run_codex(
-                workspace=workspace,
-                prompt=prompt,
-                transcript_path=workspace / "analyst-transcript.jsonl",
-                output_path=workspace / "analyst-last-message.txt",
-                timeout=self.creator_timeout_sec,
-                state_dir=state_dir,
-                variant_index=0,
-                phase="analyst",
-            )
+            prompt = planner_prompt(bundle=bundle, count=count)
+            (private_dir / "planner-prompt.md").write_text(prompt + "\n", encoding="utf-8")
+            result_path = workspace / "proposals.json"
+            try:
+                self._run_codex(
+                    workspace=workspace,
+                    prompt=prompt,
+                    transcript_path=private_dir / "planner-transcript.jsonl",
+                    output_path=workspace / "planner-last-message.txt",
+                    timeout=self.creator_timeout_sec,
+                    state_dir=state_dir,
+                    variant_index=0,
+                    phase="planner",
+                )
+            finally:
+                for name in ("proposals.json", "planner-last-message.txt"):
+                    if (workspace / name).is_file():
+                        shutil.copy2(workspace / name, private_dir / name)
             try:
                 data = json.loads(result_path.read_text(encoding="utf-8"))
             except (OSError, json.JSONDecodeError) as exc:
-                raise GeneratorError("workflow_contract_failed", str(exc)) from exc
-            return _parse_workflows(data, limit=max_workflows)
+                raise GeneratorError("planner_contract_failed", str(exc)) from exc
+            try:
+                return Plan.from_dict(data, limit=count)
+            except ContractError as exc:
+                raise GeneratorError("planner_contract_failed", str(exc)) from exc
         finally:
             shutil.rmtree(workspace, ignore_errors=True)
 
@@ -311,8 +334,8 @@ class ContainerizedCodexRunner:
         task_name: str,
         variant_index: int,
         state_dir: Path,
-        axes: AxisPreference,
-        workflow: Workflow | None = None,
+        proposal: Proposal,
+        axes: TaskAxes,
     ) -> CreationRun:
         self.prepare()
         return self._retry_codex(
@@ -321,8 +344,8 @@ class ContainerizedCodexRunner:
                 task_name=task_name,
                 variant_index=variant_index,
                 state_dir=state_dir,
+                proposal=proposal,
                 axes=axes,
-                workflow=workflow,
             ),
             state_dir=state_dir,
             phase="creator",
@@ -416,8 +439,8 @@ class ContainerizedCodexRunner:
         task_name: str,
         variant_index: int,
         state_dir: Path,
-        axes: AxisPreference,
-        workflow: Workflow | None = None,
+        proposal: Proposal,
+        axes: TaskAxes,
     ) -> CreationRun:
         workspace = _new_workspace(state_dir, f"create-{_safe_name(bundle.id)}-")
         _stage_bundle(bundle, workspace / "source")
@@ -427,9 +450,8 @@ class ContainerizedCodexRunner:
         prompt = creator_prompt(
             bundle=bundle,
             task_name=task_name,
-            variant_index=variant_index,
+            proposal=proposal,
             axes=axes,
-            workflow=workflow,
         )
         transcript_path = workspace / "creator-transcript.jsonl"
         output_path = workspace / "creator-last-message.txt"
@@ -451,19 +473,13 @@ class ContainerizedCodexRunner:
             except (OSError, json.JSONDecodeError, ContractError, TypeError) as exc:
                 raise GeneratorError("creator_contract_failed", str(exc)) from exc
 
-            if result.status == "created" and not task_dir.is_dir():
+            if not task_dir.is_dir():
                 raise GeneratorError(
                     "task_missing", f"creator did not create expected directory {task_name!r}"
                 )
-            if result.status == "skipped":
-                if any(path.is_file() or path.is_symlink() for path in task_dir.rglob("*")):
-                    raise GeneratorError(
-                        "skip_left_task", "skipped creator result left task files"
-                    )
-                shutil.rmtree(task_dir, ignore_errors=True)
             return CreationRun(
                 workspace=workspace,
-                task_dir=task_dir if result.status == "created" else None,
+                task_dir=task_dir,
                 result=result,
                 transcript=transcript,
                 prompt=prompt,
@@ -668,118 +684,6 @@ class ContainerizedCodexRunner:
         if not output_path.is_file():
             raise GeneratorError("codex_output_missing", "Codex produced no final response file")
         return transcript
-
-
-MAX_AXIS_POOL_COMBOS = 5
-
-
-def _parse_workflows(data: object, *, limit: int) -> list[Workflow]:
-    """Leniently parse the planner's workflows.json into a bounded Workflow list.
-
-    ``name``/``summary`` are required; ``plan``, ``asset_recommendations``, and
-    ``axis_pool`` are optional planner enrichments that degrade to empty values,
-    never to a failed run.
-    """
-    raw = data.get("workflows", []) if isinstance(data, dict) else data
-    if not isinstance(raw, list):
-        return []
-    workflows: list[Workflow] = []
-    for item in raw:
-        if not isinstance(item, dict):
-            continue
-        name = str(item.get("name", "")).strip()
-        summary = str(item.get("summary", "")).strip()
-        if name and summary:
-            workflows.append(
-                Workflow(
-                    name=name,
-                    summary=summary,
-                    plan=_parse_plan(item.get("plan")),
-                    asset_recommendations=_parse_asset_recommendations(
-                        item.get("asset_recommendations")
-                    ),
-                    axis_pool=_parse_axis_pool(item.get("axis_pool")),
-                )
-            )
-        if len(workflows) >= limit:
-            break
-    return workflows
-
-
-def _parse_plan(value: object) -> dict:
-    if not isinstance(value, dict):
-        return {}
-    return {str(key): item for key, item in value.items() if str(key).strip()}
-
-
-def _parse_asset_recommendations(value: object) -> tuple[AssetRecommendation, ...]:
-    """Keep well-shaped planner guidance without validating remote availability."""
-    if not isinstance(value, list):
-        return ()
-    recommendations: list[AssetRecommendation] = []
-    for item in value:
-        if not isinstance(item, dict):
-            continue
-        purpose = _nonempty_text(item.get("purpose"))
-        kind = _nonempty_text(item.get("kind"))
-        composition = _nonempty_text(item.get("composition"))
-        fallback = _nonempty_text(item.get("fallback"))
-        if not all((purpose, kind, composition, fallback)):
-            continue
-        recommendations.append(
-            AssetRecommendation(
-                purpose=purpose,
-                kind=kind,
-                sources=_parse_asset_sources(item.get("sources")),
-                composition=composition,
-                fallback=fallback,
-            )
-        )
-    return tuple(recommendations)
-
-
-def _parse_asset_sources(value: object) -> tuple[AssetSource, ...]:
-    if not isinstance(value, list):
-        return ()
-    sources: list[AssetSource] = []
-    for item in value:
-        if not isinstance(item, dict):
-            continue
-        description = _nonempty_text(item.get("description"))
-        url = _nonempty_text(item.get("url"))
-        path = _nonempty_text(item.get("path"))
-        revision = _nonempty_text(item.get("revision"))
-        if description and (url or path):
-            sources.append(
-                AssetSource(
-                    description=description,
-                    url=url or None,
-                    path=path or None,
-                    revision=revision or None,
-                )
-            )
-    return tuple(sources)
-
-
-def _nonempty_text(value: object) -> str:
-    return value.strip() if isinstance(value, str) and value.strip() else ""
-
-
-def _parse_axis_pool(value: object) -> tuple:
-    if not isinstance(value, list):
-        return ()
-    combos: list[dict[str, str]] = []
-    for item in value:
-        if not isinstance(item, dict) or not valid_axis_label(item.get("archetype")):
-            continue
-        combo = {"archetype": item["archetype"]}
-        for key in ("primary_verifier_pattern", "persona"):
-            if valid_axis_label(item.get(key)):
-                combo[key] = item[key]
-        combos.append(combo)
-        if len(combos) >= MAX_AXIS_POOL_COMBOS:
-            break
-    return tuple(combos)
 
 
 def _drain_stream(

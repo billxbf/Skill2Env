@@ -3,10 +3,7 @@
 
 FROM node:22-bookworm-slim
 
-ARG CODEX_VERSION
-
-RUN test -n "$CODEX_VERSION" \
-    && apt-get update \
+RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         bash \
         ca-certificates \
@@ -19,9 +16,14 @@ RUN test -n "$CODEX_VERSION" \
         tar \
         unzip \
         wget \
+    && rm -rf /var/lib/apt/lists/*
+
+# Kept in its own layer so a new Codex release reuses the cached toolset above.
+ARG CODEX_VERSION
+RUN test -n "$CODEX_VERSION" \
     && npm install --global "@openai/codex@${CODEX_VERSION}" \
     && mkdir -p /root/.codex \
-    && rm -rf /var/lib/apt/lists/* /root/.npm
+    && rm -rf /root/.npm
 
 WORKDIR /workspace
 

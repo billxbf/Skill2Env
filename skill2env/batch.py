@@ -6,13 +6,14 @@
 from __future__ import annotations
 
 import json
+import threading
 from concurrent.futures import Future, ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from .buildaudit import BuildAuditor
-from .generator import MAX_WORKFLOWS, ContainerizedCodexRunner
+from .generator import DEFAULT_TASKS_PER_SKILL, ContainerizedCodexRunner
 from .output import safe_name, write_corpus_manifest
 from .pipeline import PipelineConfig, SkillPipeline
 from .tracker import RunTracker, make_job_id, utc_now
@@ -32,16 +33,10 @@ class BatchConfig:
     reasoning_effort: str
     codex_version: str
     generator_image: str
-    max_tasks_per_skill: Optional[int] = None
+    tasks_per_skill: int = DEFAULT_TASKS_PER_SKILL
     max_parallel_workers: int = 4
     max_task_size_mib: int = DEFAULT_MAX_TASK_SIZE_MIB
     resume: bool = False
-
-    def task_slots(self) -> int:
-        """Tracker slots pre-registered per skill (planner decides actual count)."""
-        if self.max_tasks_per_skill is None:
-            return MAX_WORKFLOWS
-        return min(MAX_WORKFLOWS, self.max_tasks_per_skill)
 
 
 @dataclass(frozen=True)
@@ -54,7 +49,10 @@ class SkillSpec:
 
 
 def discover_skills(input_root: Path, output_root: Path, run_dir: Path) -> List[SkillSpec]:
+    """Find every SKILL.md below ``input_root`` (a SKILL.md file path works too)."""
     input_root = input_root.expanduser().resolve()
+    if input_root.is_file():
+        input_root = input_root.parent
     output_root = output_root.expanduser().resolve()
     run_dir = run_dir.expanduser().resolve()
     skill_files = sorted(input_root.rglob("SKILL.md"), key=lambda path: path.as_posix())
@@ -79,7 +77,6 @@ def discover_skills(input_root: Path, output_root: Path, run_dir: Path) -> List[
 
 
 def create_batch_tracker(config: BatchConfig, specs: List[SkillSpec]) -> RunTracker:
-    slots = config.task_slots()
     jobs = []
     for spec in specs:
         common = {
@@ -89,7 +86,10 @@ def create_batch_tracker(config: BatchConfig, specs: List[SkillSpec]) -> RunTrac
             "relative_path": spec.relative,
             "state_dir": str(spec.state),
         }
-        for variant in range(slots):
+        jobs.append(
+            {**common, "id": make_job_id(spec.key, "planner", 0), "phase": "planner", "variant": 0}
+        )
+        for variant in range(config.tasks_per_skill):
             jobs.append(
                 {
                     **common,
@@ -109,7 +109,7 @@ def create_batch_tracker(config: BatchConfig, specs: List[SkillSpec]) -> RunTrac
             "reasoning_effort": config.reasoning_effort,
             "codex_version": config.codex_version,
             "generator_image": config.generator_image,
-            "max_tasks_per_skill": config.max_tasks_per_skill,
+            "tasks_per_skill": config.tasks_per_skill,
             "max_parallel_workers": config.max_parallel_workers,
             "max_task_size_mib": config.max_task_size_mib,
             "resume": config.resume,
@@ -131,6 +131,8 @@ class BatchRunner:
         self.runner = runner
         self.tracker = tracker
         self.auditor = BuildAuditor()
+        # Oracle/NOP builds run outside the Codex worker cap; bound them separately.
+        self.audit_slots = threading.BoundedSemaphore(config.max_parallel_workers)
 
     def run(self) -> Dict[str, object]:
         summaries: Dict[str, Dict[str, object]] = {}
@@ -162,7 +164,7 @@ class BatchRunner:
                     summaries[spec.key] = future.result()
                 except Exception as exc:  # Last-resort isolation between skills.
                     self._mark_skill_failed(spec, str(exc))
-                    summaries[spec.key] = _failed_summary()
+                    summaries[spec.key] = _failed_summary(spec, str(exc))
         except KeyboardInterrupt:
             interrupted = True
             self.runner.cancel_all()
@@ -204,11 +206,7 @@ class BatchRunner:
             skill_path=spec.source,
             output_dir=spec.output,
             state_dir=spec.state,
-            model=self.runner.model,
-            reasoning_effort=self.runner.reasoning_effort,
-            codex_version=self.runner.codex_version,
-            generator_image=self.runner.image,
-            max_tasks_per_skill=self.config.max_tasks_per_skill,
+            tasks_per_skill=self.config.tasks_per_skill,
             max_parallel_workers=self.config.max_parallel_workers,
             max_task_size_mib=self.config.max_task_size_mib,
             write_manifest=False,
@@ -219,7 +217,7 @@ class BatchRunner:
             auditor=self.auditor,
             post_checker=TaskPostChecker(),
             tracker=self.tracker,
-            show_progress=False,
+            audit_slots=self.audit_slots,
         ).run()
         self._write_done_marker(spec, summary)
         return summary
@@ -245,8 +243,7 @@ class BatchRunner:
 
     def _mark_skill_resumed(self, spec: SkillSpec, finished: Dict[str, Any]) -> None:
         status = finished.get("status", "retained")
-        for variant in range(self.config.task_slots()):
-            job_id = make_job_id(spec.key, "creator", variant)
+        for job_id in self._job_ids(spec):
             self.tracker.update_job(
                 job_id,
                 status="skipped",
@@ -254,12 +251,14 @@ class BatchRunner:
                 message=f"Finished in a previous run ({status})",
             )
 
-    def _mark_skill_failed(self, spec: SkillSpec, message: str) -> None:
-        job_ids = [
+    def _job_ids(self, spec: SkillSpec) -> List[str]:
+        return [make_job_id(spec.key, "planner", 0)] + [
             make_job_id(spec.key, "creator", variant)
-            for variant in range(self.config.task_slots())
+            for variant in range(self.config.tasks_per_skill)
         ]
-        for job_id in job_ids:
+
+    def _mark_skill_failed(self, spec: SkillSpec, message: str) -> None:
+        for job_id in self._job_ids(spec):
             self.tracker.update_job(
                 job_id,
                 status="failed",
@@ -277,7 +276,9 @@ def _aggregate_summaries(
     terminal = 0
     failed = False
     attempts: list[dict[str, object]] = []
+    failures: list[object] = []
     for summary in summaries.values():
+        failures.extend(list(summary.get("failures", [])))
         terminal += int(summary.get("terminal_records", 0))
         retained += int(summary.get("retained_tasks", 0))
         invocations += int(summary.get("generator_invocations", 0))
@@ -291,12 +292,13 @@ def _aggregate_summaries(
         failed = True
     passed = retained > 0 and not failed
     return {
-        "schema_version": "3.0",
+        "schema_version": "4.0",
         "requested_skills": requested,
         "terminal_records": terminal,
         "status_counts": counts,
         "retained_tasks": retained,
         "generator_invocations": invocations,
+        "failures": failures,
         "attempts": attempts,
         "acceptance_gate": {
             "all_retained_tasks_host_accepted": retained > 0,
@@ -329,7 +331,7 @@ def _load_finished_state(spec: SkillSpec) -> Optional[Dict[str, Any]]:
 def _resumed_summary(finished: Dict[str, Any]) -> Dict[str, object]:
     retained = int(finished.get("retained_tasks", 0) or 0)
     return {
-        "schema_version": "3.0",
+        "schema_version": "4.0",
         "requested_skills": 1,
         "terminal_records": 1,
         "status_counts": {"resumed": 1},
@@ -376,9 +378,10 @@ def _merge_prior_manifest(
     return merged
 
 
-def _failed_summary() -> Dict[str, object]:
+def _failed_summary(spec: SkillSpec, message: str) -> Dict[str, object]:
     return {
-        "schema_version": "3.0",
+        "failures": [{"skill": spec.relative, "reason_code": "internal_error", "reason": message}],
+        "schema_version": "4.0",
         "requested_skills": 1,
         "terminal_records": 1,
         "status_counts": {"failed": 1},
