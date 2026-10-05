@@ -18,8 +18,7 @@ ACCEPTANCE_BAR = """
   result. Grading is never subjective and never relies on an LLM judge.
 - Well specified: the instruction completely describes what the verifier looks for; nothing is
   left to guessing. Two reasonable people reading it would write verifiers that accept exactly the
-  same solutions. The best tasks state everything essential in 2-3 short paragraphs without hints
-  on how to solve them. A task that is hard mainly because of how many corner cases it must handle
+  same solutions. A task that is hard mainly because of how many corner cases it must handle
   (each of which would then need documenting) is not well specified.
 - Solvable: a working reference solution exists, and an expert who already knows the idea could
   implement it in a few hours at most. Not an unsolved research problem, and not days of work.
@@ -311,8 +310,8 @@ The host writes task.toml. Add files only under environment/, tests/, or solutio
 
 ## instruction.md
 
-Write it in the requester's voice: the goal first, then everything the verifier checks, in 2-3
-short paragraphs and at most about 250 words. If a requirement needs a list of cases to state
+Write it in the requester's voice: the goal first, then everything the verifier checks.
+If a requirement needs a list of cases to state
 precisely, drop it from the verifier rather than lengthen the instruction.
 
 - Complete: every requirement the verifier enforces is stated explicitly in instruction.md:
