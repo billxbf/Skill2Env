@@ -12,6 +12,7 @@ dist/
 build/
 *.egg-info/
 tmp/
+keys.txt
 
 # OS
 .DS_Store

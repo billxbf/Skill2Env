@@ -587,10 +587,9 @@ class ContainerizedCodexRunner:
             self.model,
             "--config",
             f'model_reasoning_effort="{self.reasoning_effort}"',
+            # Standard service tier: the Fast tier bills every token at 2x.
             "--config",
-            'service_tier="fast"',
-            "--config",
-            "features.fast_mode=true",
+            "features.fast_mode=false",
             "--config",
             "sandbox_workspace_write.network_access=true",
             "--ephemeral",
