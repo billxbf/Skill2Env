@@ -61,8 +61,10 @@ docker login
    `personality`. These never change what is required or verified.
 3. **Creator** (one Codex agent per proposal) realizes the whole proposal as a Harbor task: Docker
    environment, `instruction.md` stating every verified requirement, a deterministic
-   `tests/test.sh`, `tests/rubric.md` (`## Good Signals` / `## Negative Signals`), and a reference
-   `solution/solve.sh`. It also maps every reward metric to the instruction sentence requiring it.
+   `tests/test.sh`, `tests/rubric.md` (`## Good Signals` / `## Negative Signals`), a reference
+   `solution/solve.sh`, and `tests/hint.md`, a one-paragraph heuristic summary of the reference
+   solution's approach that does not give the answer away. It also maps every reward metric to the
+   instruction sentence requiring it.
 4. **Acceptance**: static checks (including that every mapped quote appears verbatim in
    `instruction.md`), then Harbor Oracle (must score 1) and NOP (must score 0), and every reward
    metric must be mapped. Only accepted tasks are published.
@@ -90,6 +92,7 @@ output/
     ├── tests/
     │   ├── test.sh
     │   ├── rubric.md
+    │   ├── hint.md
     │   └── ... optional verifier helpers
     └── solution/
         ├── solve.sh

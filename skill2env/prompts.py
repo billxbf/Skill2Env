@@ -266,6 +266,7 @@ Building tasks is expensive; spend effort on the task, not on rereading or rerun
    different correct solution passes, and that fake output earns nothing; fix the verifier now.
 4. Write tests/rubric.md, then freeze the instruction, verifier, and rubric.
 5. Only then write solution/solve.sh and solution helpers.
+6. Write tests/hint.md from the finished reference solution.
 
 The solution adapts to the frozen grading contract; a failing reference solution is not evidence
 that the verifier is wrong. Reopen grading only for an independent factual error (invalid syntax,
@@ -278,6 +279,7 @@ a broken path, an impossible expectation, a contradiction with the instruction o
   {task_name}/environment/...   fixtures and setup files
   {task_name}/tests/test.sh
   {task_name}/tests/rubric.md
+  {task_name}/tests/hint.md
   {task_name}/tests/...         verifier helpers
   {task_name}/solution/solve.sh
   {task_name}/solution/...      solution helpers
@@ -300,7 +302,8 @@ The host writes task.toml. Add files only under environment/, tests/, or solutio
   Dockerfile; do not hide substantial content in heredocs. Install every tool the solver and the
   verifier need.
 - environment/ is the Docker build context. It must not contain or ingest instruction.md, tests/,
-  solution/, the rubric, or creator-result.json, and must not reference credentials or host paths.
+  solution/, the rubric, the hint, or creator-result.json, and must not reference credentials or
+  host paths.
 - Base images: tagged (never :latest) public images from Docker Hub, ghcr.io, quay.io,
   public.ecr.aws, or mcr.microsoft.com. Pick the smallest that fits (for example
   python:3.12-slim-bookworm, node:22-bookworm-slim, buildpack-deps:bookworm, or
@@ -314,6 +317,8 @@ Write it in the requester's voice: the goal first, then everything the verifier 
 If a requirement needs a list of cases to state
 precisely, drop it from the verifier rather than lengthen the instruction.
 
+- Natural: it reads like a real person asking an agent for help: concise, plain, and direct, at
+  most three short paragraphs. If the contract does not fit, shrink the verifier, not the voice.
 - Complete: every requirement the verifier enforces is stated explicitly in instruction.md:
   required outcomes, output paths and formats, interfaces that must keep working, thresholds,
   tolerances, and any boundary behavior that is checked. The environment may supply facts (code,
@@ -371,6 +376,15 @@ scenario: name the files, components, or decisions involved. Mix outcome signals
 deterministic tests with trajectory signals an expert reviewer would use to tell a methodical,
 Skill-faithful solve from a lucky one. Rephrase the Skill's guidance; do not quote it. The rubric
 is advisory and never adds requirements beyond instruction.md.
+
+## tests/hint.md
+
+One plain paragraph (no headings, lists, or code) that distills the reference solution into a
+heuristic: what the tests check overall, where the real difficulty lies, and the core line of
+attack that earns full reward. Write it as guidance from someone who solved the task, so a solver
+who reads it with instruction.md knows which direction to take. It must not give the task away:
+no answers, expected values, exact fix locations, patches, code, commands, or verifier internals
+such as held-out cases. Like the rubric, it never adds requirements beyond instruction.md.
 
 ## Reference solution
 
