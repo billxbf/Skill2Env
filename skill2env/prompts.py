@@ -324,8 +324,8 @@ The host writes task.toml. Add files only under environment/, tests/, or solutio
 
 Write it in the requester's voice: the goal first, then everything the verifier checks.
 
-- Natural: it reads like a real person asking an agent for help: concise, plain, and direct, at
-  most three short paragraphs.
+- Natural: it reads like a real person asking an agent for help: concise, plain, and direct, 
+  A good instruction should have core ask under three short paragraphs.
 - Complete: every requirement the verifier enforces is stated explicitly in instruction.md:
   required outcomes, output paths and formats, interfaces that must keep working, thresholds,
   tolerances, and any boundary behavior that is checked. The environment may supply facts (code,
