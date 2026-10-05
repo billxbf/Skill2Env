@@ -30,12 +30,12 @@ DEFAULT_REASONING_EFFORT = "high"
 REASONING_EFFORTS = ("low", "medium", "high", "xhigh", "max")
 DEFAULT_TASKS_PER_SKILL = 3
 MAX_TASKS_PER_SKILL = 16
-DEFAULT_CODEX_TIMEOUT_SEC = 3600
+DEFAULT_CODEX_TIMEOUT_SEC = 7200
 DEFAULT_MAX_CODEX_ATTEMPTS = 5
 DEFAULT_RETRY_BASE_DELAY_SEC = 15.0
 RETRY_MAX_DELAY_SEC = 300.0
 GENERATOR_IMAGE_REPOSITORY = "skill2env-codex"
-GENERATOR_IMAGE_REVISION = "r2"
+GENERATOR_IMAGE_REVISION = "r3"
 CODEX_NPM_LATEST_URL = "https://registry.npmjs.org/@openai/codex/latest"
 
 # CODEX_HOME lives at a fixed container path outside the bind-mounted workspace
@@ -63,6 +63,7 @@ _RETRYABLE_OUTPUT = re.compile(
     re.IGNORECASE,
 )
 _RETRYABLE_CODES = {"codex_failed"}
+_CONTENT_FLAGGED = re.compile(r"flagged for possible|content was flagged", re.IGNORECASE)
 
 _T = TypeVar("_T")
 
@@ -678,12 +679,37 @@ class ContainerizedCodexRunner:
         transcript = "".join(transcript_parts)
         stderr = "".join(stderr_parts)
         if returncode != 0:
+            reported = _codex_error_message(transcript)
+            if reported and _CONTENT_FLAGGED.search(reported):
+                # Provider policy refusal: retrying the same brief cannot succeed.
+                raise GeneratorError("content_flagged", reported)
             completed = subprocess.CompletedProcess(command, returncode, transcript, stderr)
-            failure = _bounded_output(completed, 12000)
-            raise GeneratorError("codex_failed", failure)
+            failure = _bounded_output(completed, 6000)
+            raise GeneratorError(
+                "codex_failed", f"{reported}\n{failure}" if reported else failure
+            )
         if not output_path.is_file():
             raise GeneratorError("codex_output_missing", "Codex produced no final response file")
         return transcript
+
+
+def _codex_error_message(transcript: str) -> str:
+    """Last error message Codex reported in its JSON event stream, if any."""
+    message = ""
+    for line in transcript.splitlines():
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(event, dict):
+            continue
+        if event.get("type") == "error":
+            message = str(event.get("message") or message)
+        elif event.get("type") == "turn.failed":
+            error = event.get("error")
+            if isinstance(error, dict) and error.get("message"):
+                message = str(error["message"])
+    return message.strip()
 
 
 def _drain_stream(

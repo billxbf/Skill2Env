@@ -7,12 +7,11 @@ from __future__ import annotations
 
 import json
 import random
-import shutil
 from pathlib import Path
 
 import pytest
 
-from skill2env.axes import COMPLEXITY_TURNS, sample_axes
+from skill2env.axes import EXPERTISE, sample_axes
 from skill2env.batch import BatchConfig, BatchRunner, create_batch_tracker, discover_skills
 from skill2env.buildaudit import BuildAuditReport
 from skill2env.generator import CreationRun, GeneratorError
@@ -22,6 +21,14 @@ from skill2env.task_config import validate_harbor_task_toml, write_authoritative
 from skill2env.validation import TaskPostChecker
 from skill2env.bundle import load_skill_bundle
 
+
+INSTRUCTION = "Fix the flaky test. The suite must pass in any order.\n"
+CREATOR_RESULT = {
+    "description": "Fix a flaky test",
+    "verification_map": [
+        {"metric": "reward", "checks": "suite passes", "instruction_quote": "The suite must pass in any order."}
+    ],
+}
 
 RUBRIC = """## Good Signals
 - Reproduces the failure before changing code.
@@ -42,6 +49,8 @@ def proposal_dict(index: int) -> dict:
             {"description": "malformed lead without url or path"},
         ],
         "problem": "find the polluting test",
+        "difficulty": "the failure surfaces far from its cause",
+        "success_criteria": ["the suite passes in any order"],
         "skill_approach": "bisect the test order",
         "good_behaviors": ["reproduces first"],
         "bad_behaviors": ["adds sleeps"],
@@ -61,17 +70,17 @@ class FakeRunner:
     def create(self, bundle, *, task_name, variant_index, state_dir, proposal, axes):
         if variant_index == self.fail_variant:
             raise GeneratorError("codex_failed", "boom")
-        self.created.append((proposal.id, axes.complexity))
+        self.created.append((proposal.id, axes.expertise))
         workspace = Path(state_dir) / "workspaces" / task_name
         task = workspace / task_name
         for sub in ("environment", "tests", "solution"):
             (task / sub).mkdir(parents=True, exist_ok=True)
-        (task / "instruction.md").write_text("Fix the flaky test.\n")
+        (task / "instruction.md").write_text(INSTRUCTION)
         (task / "environment" / "Dockerfile").write_text("FROM python:3.12-slim-bookworm\n")
         (task / "tests" / "test.sh").write_text("#!/bin/bash\necho 1 > /logs/verifier/reward.txt\n")
         (task / "tests" / "rubric.md").write_text(RUBRIC)
         (task / "solution" / "solve.sh").write_text("#!/bin/bash\ntrue\n")
-        result = CreatorResult.from_dict({"description": "Fix a flaky test"})
+        result = CreatorResult.from_dict(CREATOR_RESULT)
         return CreationRun(workspace, task, result, transcript="", prompt="prompt")
 
 
@@ -115,13 +124,13 @@ def test_end_to_end_retains_every_proposal(tmp_path):
     assert summary["acceptance_gate"]["passed"]
     # Duplicate planner ids are made unique.
     assert sorted(pid for pid, _ in runner.created) == ["problem-0", "problem-0-2", "problem-1"]
-    # Complexity is stratified: three tasks cover all three levels.
-    assert sorted(level for _, level in runner.created) == sorted(COMPLEXITY_TURNS)
+    assert all(level in EXPERTISE for _, level in runner.created)
     task_dirs = sorted(out.glob("debugging/task_*"))
     assert len(task_dirs) == 3
     config = validate_harbor_task_toml((task_dirs[0] / "task.toml").read_text())
     assert config.metadata["proposal_id"].startswith("problem-")
-    assert config.metadata["complexity"].endswith("turns)")
+    assert set(config.metadata) >= {"tone", "expertise", "personality", "capability"}
+    assert "complexity" not in config.metadata
     status = json.loads((tracker.root / "status.json").read_text())
     assert status["counts"] == {"succeeded": 4}  # planner + 3 creators
 
@@ -162,9 +171,10 @@ def test_plan_parsing():
         Plan.from_dict({"workflows": []}, limit=5)
 
 
-def test_sample_axes_stratifies_complexity():
+def test_sample_axes_only_instruction_dimensions():
     axes = sample_axes(6, rng=random.Random(0))
-    assert sorted(a.complexity for a in axes) == sorted(list(COMPLEXITY_TURNS) * 2)
+    assert len(axes) == 6
+    assert set(axes[0].to_dict()) == {"tone", "expertise", "personality"}
 
 
 def test_rubric_check(tmp_path):
@@ -191,6 +201,35 @@ def test_rubric_check(tmp_path):
     assert any("no bullet" in e for e in checker.check(run.task_dir, bundle=bundle).errors)
 
 
+def test_verification_map_traces_to_instruction(tmp_path):
+    from skill2env.validation import unmapped_reward_metrics
+
+    runner = FakeRunner(proposals=1)
+    bundle = load_skill_bundle(make_skill(tmp_path) / "debugging")
+    proposal = Plan.from_dict({"proposals": [proposal_dict(0)]}, limit=1).proposals[0]
+    run = runner.create(
+        bundle, task_name="task_x", variant_index=0, state_dir=tmp_path,
+        proposal=proposal, axes=sample_axes(1)[0],
+    )
+    write_authoritative_task_toml(
+        run.task_dir, task_name="task_x", bundle=bundle,
+        creator_result=run.result, proposal=proposal, axes=sample_axes(1)[0],
+    )
+    checker = TaskPostChecker()
+    assert checker.check(run.task_dir, bundle=bundle, creator_result=run.result).ok
+    (run.task_dir / "instruction.md").write_text("Fix the flaky test.\n")
+    report = checker.check(run.task_dir, bundle=bundle, creator_result=run.result)
+    assert not report.checks["verification_map"]
+
+    result = CreatorResult.from_dict({**CREATOR_RESULT, "verification_map": [
+        {"metric": "order", "checks": "x", "instruction_quote": "The suite must pass in any order."}
+    ]})
+    assert unmapped_reward_metrics({"order": 1, "speed": 1}, result) == ["speed"]
+    assert unmapped_reward_metrics({"reward": 1}, result) == []
+    with pytest.raises(ContractError):
+        CreatorResult.from_dict({"description": "x"})
+
+
 def test_prompts_render(tmp_path):
     bundle = load_skill_bundle(make_skill(tmp_path) / "debugging")
     assert "exactly 4 proposals" in planner_prompt(bundle=bundle, count=4)
@@ -200,3 +239,17 @@ def test_prompts_render(tmp_path):
     )
     assert "## Good Signals" in text and '"capability": "root-cause tracing"' in text
     assert "{" not in text.split("## Problem proposal")[0]  # no unformatted placeholders
+
+
+def test_codex_error_message_extraction():
+    from skill2env.generator import _CONTENT_FLAGGED, _codex_error_message
+
+    transcript = "\n".join([
+        '{"type":"turn.started"}',
+        '{"type":"error","message":"stream hiccup"}',
+        '{"type":"turn.failed","error":{"message":"This content was flagged for possible cybersecurity risk."}}',
+    ])
+    message = _codex_error_message(transcript)
+    assert message.startswith("This content was flagged")
+    assert _CONTENT_FLAGGED.search(message)
+    assert _codex_error_message("not json") == ""

@@ -27,7 +27,7 @@ TASK_SCHEMA_VERSION = "1.3"
 TASK_PACKAGE_ORG = "skill2env"
 TASK_AUTHOR_NAME = "skill2env"
 
-AGENT_TIMEOUT_SEC = 1800.0
+AGENT_TIMEOUT_SEC = 3600.0
 VERIFIER_TIMEOUT_SEC = 600.0
 ENVIRONMENT_BUILD_TIMEOUT_SEC = 1200.0
 ENVIRONMENT_CPUS = 2
@@ -72,7 +72,7 @@ def build_authoritative_task_config(
             name=authoritative_task_name(task_name),
             description=creator_result.description,
             keywords=_unique_nonempty(
-                [bundle.id, proposal.id, axes.complexity, *creator_result.required_tools]
+                [bundle.id, proposal.id, *creator_result.required_tools]
             ),
             authors=[Author(name=TASK_AUTHOR_NAME)],
         ),

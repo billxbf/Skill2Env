@@ -51,20 +51,21 @@ docker login
 
 ## How it works
 
-1. **Planner** (one Codex agent per Skill) reads the whole Skill, decomposes the scenario it
-   addresses, researches public artifacts (repositories pinned to commits, datasets, specs), and
-   writes `N` independent problem proposals. Each proposal names the capability it tests, a sketch
-   of the environment with artifact links, the problem direction, the Skill's approach, and good
-   and bad solving behaviors. Proposals never involve the physical world, private data, or
-   authentication.
-2. **Host** samples presentation axes for each proposal: `complexity` (easy 5-10, medium 10-20,
-   hard 20+ turns, stratified across a Skill's tasks), `environment_noise`, and the instruction's
-   `tone`, requester `expertise`, `personality`, and `context_detail`.
-3. **Creator** (one Codex agent per proposal) builds the Harbor task: Docker environment and
-   fixtures, `instruction.md`, a deterministic `tests/test.sh`, `tests/rubric.md`
-   (`## Good Signals` / `## Negative Signals`), and a reference `solution/solve.sh`.
-4. **Acceptance**: static checks, then Harbor Oracle (must score 1) and NOP (must score 0).
-   Only accepted tasks are published.
+1. **Planner** (one Codex agent per Skill) reads the whole Skill, researches public artifacts
+   (repositories pinned to commits, datasets, specs), and writes `N` independent, end-to-end
+   problem proposals at Terminal-Bench 3 difficulty that together cover the Skill's breadth. Each
+   names the capabilities it tests, the environment with artifact links, the problem, why it is
+   hard, its success criteria, the Skill's approach, and good and bad solving behaviors.
+   Proposals never involve the physical world, private data, or authentication.
+2. **Host** samples only the requester's voice for each instruction: `tone`, `expertise`, and
+   `personality`. These never change what is required or verified.
+3. **Creator** (one Codex agent per proposal) realizes the whole proposal as a Harbor task: Docker
+   environment, `instruction.md` stating every verified requirement, a deterministic
+   `tests/test.sh`, `tests/rubric.md` (`## Good Signals` / `## Negative Signals`), and a reference
+   `solution/solve.sh`. It also maps every reward metric to the instruction sentence requiring it.
+4. **Acceptance**: static checks (including that every mapped quote appears verbatim in
+   `instruction.md`), then Harbor Oracle (must score 1) and NOP (must score 0), and every reward
+   metric must be mapped. Only accepted tasks are published.
 
 ## Quick start
 
@@ -104,7 +105,7 @@ acceptance logs) is written to `.skill2env/runs/<run-id>/`.
 The path is scanned recursively, so it can point at one Skill, one family, or the whole hub:
 
 ```bash
-uv run skill2env generate SkillHub/skills -n 3 -j 8 -o output/skillhub --resume
+uv run skill2env generate SkillHub_v2/skills -n 3 -j 8 -o output/skillhub2 --resume
 ```
 
 Retained tasks keep the source hierarchy under the output root. `--resume` skips every Skill that

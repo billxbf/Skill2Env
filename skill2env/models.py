@@ -87,6 +87,8 @@ class Proposal:
     capability: str
     environment: str
     problem: str
+    difficulty: str
+    success_criteria: tuple[str, ...]
     skill_approach: str
     good_behaviors: tuple[str, ...]
     bad_behaviors: tuple[str, ...]
@@ -98,12 +100,23 @@ class Proposal:
             raise ContractError("proposal must be an object")
         values = {
             key: _required_string(data, key)
-            for key in ("id", "title", "capability", "environment", "problem", "skill_approach")
+            for key in (
+                "id",
+                "title",
+                "capability",
+                "environment",
+                "problem",
+                "difficulty",
+                "skill_approach",
+            )
         }
+        criteria = _text_tuple(data.get("success_criteria"))
         good = _text_tuple(data.get("good_behaviors"))
         bad = _text_tuple(data.get("bad_behaviors"))
-        if not good or not bad:
-            raise ContractError("proposal requires good_behaviors and bad_behaviors")
+        if not criteria or not good or not bad:
+            raise ContractError(
+                "proposal requires success_criteria, good_behaviors, and bad_behaviors"
+            )
         artifacts = []
         for item in data.get("artifacts") or ():
             try:
@@ -112,6 +125,7 @@ class Proposal:
                 continue  # A malformed lead is dropped, not fatal.
         return cls(
             **values,
+            success_criteria=criteria,
             good_behaviors=good,
             bad_behaviors=bad,
             artifacts=tuple(artifacts),
@@ -125,6 +139,8 @@ class Proposal:
             "environment": self.environment,
             "artifacts": [artifact.to_dict() for artifact in self.artifacts],
             "problem": self.problem,
+            "difficulty": self.difficulty,
+            "success_criteria": list(self.success_criteria),
             "skill_approach": self.skill_approach,
             "good_behaviors": list(self.good_behaviors),
             "bad_behaviors": list(self.bad_behaviors),
@@ -178,10 +194,30 @@ class Plan:
 
 
 @dataclass(frozen=True)
+class VerificationEntry:
+    """One reward metric traced to the instruction sentence that requires it."""
+
+    metric: str
+    checks: str
+    instruction_quote: str
+
+    @classmethod
+    def from_dict(cls, data: Any) -> "VerificationEntry":
+        if not isinstance(data, dict):
+            raise ContractError("verification_map entries must be objects")
+        return cls(
+            metric=_required_string(data, "metric"),
+            checks=_required_string(data, "checks"),
+            instruction_quote=_required_string(data, "instruction_quote"),
+        )
+
+
+@dataclass(frozen=True)
 class CreatorResult:
     """Private metadata written by the creator next to the task it built."""
 
     description: str
+    verification_map: List[VerificationEntry]
     required_tools: List[str] = field(default_factory=list)
     expected_artifacts: List[str] = field(default_factory=list)
 
@@ -189,10 +225,15 @@ class CreatorResult:
     def from_dict(cls, data: Dict[str, Any]) -> "CreatorResult":
         if not isinstance(data, dict):
             raise ContractError("creator result must be an object")
-        unknown = set(data) - {"description", "required_tools", "expected_artifacts"}
+        known = {"description", "verification_map", "required_tools", "expected_artifacts"}
+        unknown = set(data) - known
         if unknown:
             raise ContractError(f"creator result has unknown fields: {sorted(unknown)!r}")
         description = _required_string(data, "description")
+        raw_map = data.get("verification_map")
+        if not isinstance(raw_map, list) or not raw_map:
+            raise ContractError("verification_map must be a non-empty list")
+        verification_map = [VerificationEntry.from_dict(item) for item in raw_map]
         required_tools = _string_list(data, "required_tools")
         expected_artifacts = _string_list(data, "expected_artifacts")
         if any(
@@ -202,6 +243,7 @@ class CreatorResult:
             raise ContractError("expected artifacts must be absolute environment paths")
         return cls(
             description=description,
+            verification_map=verification_map,
             required_tools=required_tools,
             expected_artifacts=expected_artifacts,
         )

@@ -21,7 +21,7 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Sequence
 
-from .models import ContractError, SkillBundle
+from .models import ContractError, CreatorResult, SkillBundle
 from .task_config import HarborTaskConfigError, validate_harbor_task_toml
 
 
@@ -35,6 +35,7 @@ REQUIRED_FILES = (
 )
 REQUIRED_DIRECTORIES = ("environment", "tests", "solution")
 RUBRIC_SECTIONS = ("## Good Signals", "## Negative Signals")
+MIN_INSTRUCTION_QUOTE_CHARS = 20
 MIB_BYTES = 1024 * 1024
 DEFAULT_MAX_TASK_SIZE_MIB = 128
 
@@ -77,7 +78,13 @@ class PostCheckReport:
 class TaskPostChecker:
     """Check structure, shell syntax, rubric shape, Harbor schema validity, and privacy."""
 
-    def check(self, task_dir: Path, *, bundle: SkillBundle) -> PostCheckReport:
+    def check(
+        self,
+        task_dir: Path,
+        *,
+        bundle: SkillBundle,
+        creator_result: CreatorResult | None = None,
+    ) -> PostCheckReport:
         task_dir = task_dir.resolve()
         report = PostCheckReport(ok=False)
         errors: List[str] = []
@@ -102,6 +109,11 @@ class TaskPostChecker:
         before = len(errors)
         self._check_rubric(task_dir / "tests" / "rubric.md", errors)
         report.checks["rubric"] = len(errors) == before
+
+        if creator_result is not None:
+            before = len(errors)
+            self._check_verification_map(task_dir / "instruction.md", creator_result, errors)
+            report.checks["verification_map"] = len(errors) == before
 
         before = len(errors)
         self._check_privacy(task_dir, dockerfile, bundle, errors)
@@ -189,6 +201,22 @@ class TaskPostChecker:
                 errors.append(f"tests/rubric.md section {heading!r} has no bullet entries")
 
     @staticmethod
+    def _check_verification_map(
+        path: Path, creator_result: CreatorResult, errors: List[str]
+    ) -> None:
+        """Every verified metric must cite a verbatim instruction.md sentence."""
+        instruction = _normalize_prose(_read_text(path, errors))
+        for entry in creator_result.verification_map:
+            quote = _normalize_prose(entry.instruction_quote)
+            if len(quote) < MIN_INSTRUCTION_QUOTE_CHARS:
+                errors.append(f"verification_map[{entry.metric}] quote is too short to trace")
+            elif quote not in instruction:
+                errors.append(
+                    f"verification_map[{entry.metric}] quote is not in instruction.md: "
+                    f"{entry.instruction_quote[:120]!r}"
+                )
+
+    @staticmethod
     def _check_privacy(
         task_dir: Path,
         dockerfile: str,
@@ -272,6 +300,21 @@ def _numeric_leaves(value: Any) -> Iterable[float]:
     elif isinstance(value, list):
         for item in value:
             yield from _numeric_leaves(item)
+
+
+def unmapped_reward_metrics(reward: Any, creator_result: CreatorResult) -> List[str]:
+    """Reward keys the creator did not trace to the instruction (reward.txt is one metric)."""
+    keys = list(reward) if isinstance(reward, dict) else []
+    if keys == ["reward"]:
+        return []
+    mapped = {entry.metric for entry in creator_result.verification_map}
+    return sorted(key for key in keys if key not in mapped)
+
+
+def _normalize_prose(value: str) -> str:
+    """Casefold and collapse whitespace and Markdown emphasis so quotes match prose."""
+    value = re.sub(r"[`*_]", "", value)
+    return " ".join(value.split()).casefold()
 
 
 def _read_text(path: Path, errors: List[str]) -> str:
