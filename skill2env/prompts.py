@@ -157,7 +157,7 @@ Write ./proposals.json and nothing else, with exactly this shape:
   ]
 }}
 
-success_criteria lists the 3-5 core outcomes that define success; each is one sentence, checkable
+success_criteria lists the core outcomes that define success; each is one sentence, checkable
 by a deterministic program, and statable plainly to the solver. Give 2-5 entries in each
 of good_behaviors and bad_behaviors, specific to the problem rather than generic hygiene. Values
 are prose; concrete beats complete.
