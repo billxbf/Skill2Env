@@ -194,30 +194,10 @@ class Plan:
 
 
 @dataclass(frozen=True)
-class VerificationEntry:
-    """One reward metric traced to the instruction sentence that requires it."""
-
-    metric: str
-    checks: str
-    instruction_quote: str
-
-    @classmethod
-    def from_dict(cls, data: Any) -> "VerificationEntry":
-        if not isinstance(data, dict):
-            raise ContractError("verification_map entries must be objects")
-        return cls(
-            metric=_required_string(data, "metric"),
-            checks=_required_string(data, "checks"),
-            instruction_quote=_required_string(data, "instruction_quote"),
-        )
-
-
-@dataclass(frozen=True)
 class CreatorResult:
     """Private metadata written by the creator next to the task it built."""
 
     description: str
-    verification_map: List[VerificationEntry]
     required_tools: List[str] = field(default_factory=list)
     expected_artifacts: List[str] = field(default_factory=list)
 
@@ -225,15 +205,11 @@ class CreatorResult:
     def from_dict(cls, data: Dict[str, Any]) -> "CreatorResult":
         if not isinstance(data, dict):
             raise ContractError("creator result must be an object")
-        known = {"description", "verification_map", "required_tools", "expected_artifacts"}
+        known = {"description", "required_tools", "expected_artifacts"}
         unknown = set(data) - known
         if unknown:
             raise ContractError(f"creator result has unknown fields: {sorted(unknown)!r}")
         description = _required_string(data, "description")
-        raw_map = data.get("verification_map")
-        if not isinstance(raw_map, list) or not raw_map:
-            raise ContractError("verification_map must be a non-empty list")
-        verification_map = [VerificationEntry.from_dict(item) for item in raw_map]
         required_tools = _string_list(data, "required_tools")
         expected_artifacts = _string_list(data, "expected_artifacts")
         if any(
@@ -243,7 +219,6 @@ class CreatorResult:
             raise ContractError("expected artifacts must be absolute environment paths")
         return cls(
             description=description,
-            verification_map=verification_map,
             required_tools=required_tools,
             expected_artifacts=expected_artifacts,
         )

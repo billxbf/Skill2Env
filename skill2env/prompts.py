@@ -16,7 +16,7 @@ ACCEPTANCE_BAR = """
 - Verifiable: a program can check the outcome and is all-but-guaranteed to catch wrong solutions
   and to accept correct ones. Rerunning it hundreds of times on the same state never flips the
   result. Grading is never subjective and never relies on an LLM judge.
-- Well specified: the instruction completely describes what the verifier looks for; nothing is
+- Well specified: the instruction clearly describes what the verifier looks for; nothing is
   left to guessing. Two reasonable people reading it would write verifiers that accept exactly the
   same solutions. A task that is hard mainly because of how many corner cases it must handle
   (each of which would then need documenting) is not well specified.
@@ -270,9 +270,9 @@ Building tasks is expensive; spend effort on the task, not on rereading or rerun
 
 1. Build the initial world under environment/.
 2. Write instruction.md.
-3. Write tests/test.sh and verifier helpers, and fill creator-result.json's verification_map.
-   Before moving on, check that every assertion traces to instruction.md, that a materially
-   different correct solution passes, and that fake output earns nothing; fix the verifier now.
+3. Write tests/test.sh and verifier helpers. Before moving on, check that every assertion traces
+   to instruction.md (or a document it points to), that a materially different correct solution
+   passes, and that fake output earns nothing; fix the verifier now.
 4. Write tests/rubric.md, then freeze the instruction, verifier, and rubric.
 5. Only then write solution/solve.sh and solution helpers.
 
@@ -319,21 +319,17 @@ The host writes task.toml. Add files only under environment/, tests/, or solutio
 
 ## instruction.md
 
-Write it in the requester's voice: the goal first, then everything the verifier checks.
+Write it in the requester's voice: the goal-oriented and straightforward, in 2-3 short paragraphs.
 
 - Natural: it reads like a real person asking an agent for help, written naturally in the
   requester voice above (its tone, expertise, and personality), not as a spec or contract.
-- Complete: every requirement the verifier enforces is stated explicitly in instruction.md:
-  required outcomes, output paths and formats, interfaces that must keep working, thresholds,
-  tolerances, and any boundary behavior that is checked. The environment may supply facts (code,
-  data, existing interfaces, documentation) but never additional requirements; a requirement that
-  appears only in an environment file does not count as stated.
+- Complete: every requirement the verifier enforces is stated, either in instruction.md or in an
+  environment document that instruction.md explicitly points to. instruction.md names the outcomes, 
+  output paths, and the thresholds a requester would naturally state; detailed rules, formulas, 
+  and output schemas belong in such a document, not in the instruction. 
 - Unambiguous: two reasonable readers would accept exactly the same solutions.
 - No hints: never reveal the root cause, the location of the fix, the key insight, or the steps.
   Describe what is wrong as a requester would observe it, not why it is wrong.
-- Lean: no step lists, no restated points, and no long schemas. Keep any output format
-  straightforward. Name the outcome, not the tool, language, or procedure. Announce mechanistic
-  anti-cheat constraints (for example "do not modify the seeded tests") because they are checked.
 - Never reveal the solution or the rubric.
 
 ## Verifier: tests/test.sh
@@ -342,7 +338,7 @@ tests/test.sh is the authoritative reward and must always write exactly one of
 /logs/verifier/reward.json or /logs/verifier/reward.txt; put diagnostics elsewhere under
 /logs/verifier/.
 
-- Unbiased: every assertion verifies a requirement stated in instruction.md, or a direct,
+- Unbiased: every assertion verifies a requirement stated in the instruction, or a direct,
   unavoidable consequence of one. Never check unstated details: exact wording of messages, field
   order, formatting, file layout, internal structure, or a particular algorithm. Never derive
   checks from the reference implementation.
@@ -391,30 +387,23 @@ tests/test.sh executable.
 
 {{
   "description": "One-sentence task-specific description",
-  "verification_map": [
-    {{
-      "metric": "reward.json key (or \\"reward\\" for reward.txt)",
-      "checks": "what this metric's assertions verify",
-      "instruction_quote": "the exact instruction.md sentence that requires it, copied verbatim"
-    }}
-  ],
   "required_tools": ["python3"],
   "expected_artifacts": ["/app/output/result.json"]
 }}
 
-verification_map has one entry per reward metric, and an entry may repeat a metric to cite
-several sentences. The host rejects the task when a quote is not found verbatim in instruction.md
-or a reward metric has no entry. required_tools lists the main tools the task exercises;
+required_tools lists the main tools the task exercises;
 expected_artifacts lists absolute container paths the solver produces (empty when the result is
 in-place state).
 
 ## Final review
 
 Re-read instruction.md as a solver who sees only it and the environment. Confirm that every
-assertion in tests/ is required there, that nothing in it hints at the fix, that the whole
-proposal is realized, and that the task still clears the acceptance bar: would an average
-undergraduate solve it in under a few days, or is the remaining difficulty only volume, corner
-cases, or trivia? If so, deepen or fix it now.
+assertion in tests/ is required there or in a document it points to, that nothing in it hints at
+the fix, that the whole proposal is realized, and that the task still clears the acceptance bar:
+would an average undergraduate solve it in under a few days, or is the remaining difficulty only
+volume, corner cases, or trivia? If so, deepen or fix it now. If instruction.md has grown past 2-3
+short paragraphs into a step list or schema dump, move the detail into an environment document or
+trim it.
 
 Do not create task.toml, cheat scripts, reward copies, build or validation logs, prompts,
 transcripts, or private Skill provenance inside ./{task_name}. Preserve legitimate third-party

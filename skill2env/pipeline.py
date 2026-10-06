@@ -35,7 +35,6 @@ from .validation import (
     MIB_BYTES,
     TaskPostChecker,
     completed_task_size_bytes,
-    unmapped_reward_metrics,
 )
 
 
@@ -269,9 +268,7 @@ class SkillPipeline:
                     f"completed task size {size_bytes} bytes exceeds "
                     f"{self.config.max_task_size_mib} MiB",
                 )
-            post_check = self.post_checker.check(
-                run.task_dir, bundle=bundle, creator_result=run.result
-            )
+            post_check = self.post_checker.check(run.task_dir, bundle=bundle)
             _write_json(private_dir / "post-check.json", post_check.to_dict())
             if not post_check.ok:
                 self._retain_rejected_candidate(run.task_dir, private_dir)
@@ -288,14 +285,6 @@ class SkillPipeline:
                     audit.reason_code or audit.status,
                     "; ".join(audit.errors),
                     status="infra_failed" if audit.status == "infra_failed" else "failed",
-                    digest=audit.task_digest,
-                )
-            unmapped = unmapped_reward_metrics(audit.oracle_reward, run.result)
-            if unmapped:
-                self._retain_rejected_candidate(run.task_dir, private_dir)
-                return fail(
-                    "verification_unmapped",
-                    f"reward metrics not traced to instruction.md: {', '.join(unmapped)}",
                     digest=audit.task_digest,
                 )
 

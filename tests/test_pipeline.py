@@ -25,9 +25,6 @@ from skill2env.bundle import load_skill_bundle
 INSTRUCTION = "Fix the flaky test. The suite must pass in any order.\n"
 CREATOR_RESULT = {
     "description": "Fix a flaky test",
-    "verification_map": [
-        {"metric": "reward", "checks": "suite passes", "instruction_quote": "The suite must pass in any order."}
-    ],
 }
 
 RUBRIC = """## Good Signals
@@ -201,33 +198,9 @@ def test_rubric_check(tmp_path):
     assert any("no bullet" in e for e in checker.check(run.task_dir, bundle=bundle).errors)
 
 
-def test_verification_map_traces_to_instruction(tmp_path):
-    from skill2env.validation import unmapped_reward_metrics
-
-    runner = FakeRunner(proposals=1)
-    bundle = load_skill_bundle(make_skill(tmp_path) / "debugging")
-    proposal = Plan.from_dict({"proposals": [proposal_dict(0)]}, limit=1).proposals[0]
-    run = runner.create(
-        bundle, task_name="task_x", variant_index=0, state_dir=tmp_path,
-        proposal=proposal, axes=sample_axes(1)[0],
-    )
-    write_authoritative_task_toml(
-        run.task_dir, task_name="task_x", bundle=bundle,
-        creator_result=run.result, proposal=proposal, axes=sample_axes(1)[0],
-    )
-    checker = TaskPostChecker()
-    assert checker.check(run.task_dir, bundle=bundle, creator_result=run.result).ok
-    (run.task_dir / "instruction.md").write_text("Fix the flaky test.\n")
-    report = checker.check(run.task_dir, bundle=bundle, creator_result=run.result)
-    assert not report.checks["verification_map"]
-
-    result = CreatorResult.from_dict({**CREATOR_RESULT, "verification_map": [
-        {"metric": "order", "checks": "x", "instruction_quote": "The suite must pass in any order."}
-    ]})
-    assert unmapped_reward_metrics({"order": 1, "speed": 1}, result) == ["speed"]
-    assert unmapped_reward_metrics({"reward": 1}, result) == []
+def test_creator_result_requires_description():
     with pytest.raises(ContractError):
-        CreatorResult.from_dict({"description": "x"})
+        CreatorResult.from_dict({"required_tools": ["python3"]})
 
 
 def test_prompts_render(tmp_path):
