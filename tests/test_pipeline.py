@@ -36,10 +36,6 @@ RUBRIC = """## Good Signals
 ## Negative Signals
 - Patches the symptom in the test instead of the cause.
 """
-HINT = (
-    "The tests exercise the public behavior on inputs you have not seen, so reproduce the failure "
-    "first and fix its cause rather than the visible symptom.\n"
-)
 
 
 def proposal_dict(index: int) -> dict:
@@ -83,7 +79,6 @@ class FakeRunner:
         (task / "environment" / "Dockerfile").write_text("FROM python:3.12-slim-bookworm\n")
         (task / "tests" / "test.sh").write_text("#!/bin/bash\necho 1 > /logs/verifier/reward.txt\n")
         (task / "tests" / "rubric.md").write_text(RUBRIC)
-        (task / "tests" / "hint.md").write_text(HINT)
         (task / "solution" / "solve.sh").write_text("#!/bin/bash\ntrue\n")
         result = CreatorResult.from_dict(CREATOR_RESULT)
         return CreationRun(workspace, task, result, transcript="", prompt="prompt")
@@ -204,13 +199,6 @@ def test_rubric_check(tmp_path):
     assert not report.checks["rubric"]
     rubric.write_text("## Good Signals\n\n## Negative Signals\n- y\n")
     assert any("no bullet" in e for e in checker.check(run.task_dir, bundle=bundle).errors)
-    rubric.write_text(RUBRIC)
-    hint = run.task_dir / "tests" / "hint.md"
-    for bad in ("", "First idea.\n\nSecond idea.\n", "- a bullet instead of prose\n"):
-        hint.write_text(bad)
-        assert not checker.check(run.task_dir, bundle=bundle).checks["hint"]
-    hint.unlink()
-    assert any("tests/hint.md" in e for e in checker.check(run.task_dir, bundle=bundle).errors)
 
 
 def test_verification_map_traces_to_instruction(tmp_path):

@@ -30,7 +30,6 @@ REQUIRED_FILES = (
     "task.toml",
     "environment/Dockerfile",
     "tests/rubric.md",
-    "tests/hint.md",
     "tests/test.sh",
     "solution/solve.sh",
 )
@@ -45,7 +44,6 @@ DEFAULT_MAX_TASK_SIZE_MIB = 128
 PRIVILEGED_NAMES = {
     "instruction.md",
     "rubric.md",
-    "hint.md",
     "task.toml",
     "tests",
     "solution",
@@ -78,7 +76,7 @@ class PostCheckReport:
 
 
 class TaskPostChecker:
-    """Check structure, shell syntax, rubric and hint shape, Harbor schema validity, and privacy."""
+    """Check structure, shell syntax, rubric shape, Harbor schema validity, and privacy."""
 
     def check(
         self,
@@ -111,10 +109,6 @@ class TaskPostChecker:
         before = len(errors)
         self._check_rubric(task_dir / "tests" / "rubric.md", errors)
         report.checks["rubric"] = len(errors) == before
-
-        before = len(errors)
-        self._check_hint(task_dir / "tests" / "hint.md", errors)
-        report.checks["hint"] = len(errors) == before
 
         if creator_result is not None:
             before = len(errors)
@@ -205,17 +199,6 @@ class TaskPostChecker:
         for (start, heading), end in zip(headings, bounds[1:]):
             if not any(line.lstrip().startswith(("- ", "* ")) for line in lines[start + 1 : end]):
                 errors.append(f"tests/rubric.md section {heading!r} has no bullet entries")
-
-    @staticmethod
-    def _check_hint(path: Path, errors: List[str]) -> None:
-        """Require one plain prose paragraph."""
-        text = _read_text(path, errors).strip()
-        if not text:
-            errors.append("tests/hint.md is empty")
-        elif re.search(r"\n\s*\n", text):
-            errors.append("tests/hint.md must be a single paragraph")
-        elif re.search(r"^\s*(#|[-*] |\d+[.)] |```)", text, re.M):
-            errors.append("tests/hint.md must be plain prose without headings, lists, or code")
 
     @staticmethod
     def _check_verification_map(
