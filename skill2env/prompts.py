@@ -79,7 +79,11 @@ rubric). You set the direction and find the material; the creator owns the concr
 - Real scale: the environment is a real repository, dataset, or multi-component system that must
   be explored, not a toy grasped at a glance. Scale comes from the real system the problem lives
   in, not from bulk data the task never uses.
-- success_criteria has up to 5 entries, each one plain sentence naming one observable outcome.
+- success_criteria lists the core observable outcomes the problem genuinely has, often one or two,
+  each as one plain sentence.
+- When the Skill's core judgment (for example writing quality) cannot be checked by a program,
+  keep it central anyway: the deterministic tests cover what is mechanically checkable, and the
+  rubric completes the assessment on the produced artifacts.
 
 ## Research artifacts
 
@@ -274,11 +278,6 @@ Exactly these two sections, in this order, each with up to five bullets:
 - A shortcut, mistake, or failure mode that marks a weak solve of this task.
 ```
 
-Start from the proposal's good_behaviors and bad_behaviors and make each bullet concrete for this
-scenario: name the files, components, or decisions involved. Mix outcome signals that mirror the
-deterministic tests with trajectory signals an expert reviewer would use to tell a methodical,
-Skill-faithful solve from a lucky one. Rephrase the Skill's guidance; do not quote it. The rubric
-is advisory and never adds requirements beyond instruction.md.
 
 ## Reference solution
 
