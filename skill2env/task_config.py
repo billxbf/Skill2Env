@@ -20,7 +20,7 @@ from harbor.models.task.config import (
 from pydantic import ValidationError
 
 from .axes import TaskAxes
-from .models import ContractError, CreatorResult, Proposal, SkillBundle
+from .models import ContractError, Proposal, SkillBundle
 
 
 TASK_SCHEMA_VERSION = "1.3"
@@ -49,12 +49,11 @@ def build_authoritative_task_config(
     *,
     task_name: str,
     bundle: SkillBundle,
-    creator_result: CreatorResult,
     proposal: Proposal,
     axes: TaskAxes,
     base_image_pins: Mapping[str, str] | None = None,
 ) -> TaskConfig:
-    """Build task.toml from the bundle, proposal, axes, and creator metadata."""
+    """Build task.toml from the bundle, proposal, and axes."""
     metadata = {
         "source_skill": f"{bundle.provider}/{bundle.id}",
         "source_bundle_digest": bundle.digest,
@@ -70,10 +69,8 @@ def build_authoritative_task_config(
         schema_version=TASK_SCHEMA_VERSION,
         task=PackageInfo(
             name=authoritative_task_name(task_name),
-            description=creator_result.description,
-            keywords=_unique_nonempty(
-                [bundle.id, proposal.id, *creator_result.required_tools]
-            ),
+            description=proposal.title,
+            keywords=_unique_nonempty([bundle.id, proposal.id]),
             authors=[Author(name=TASK_AUTHOR_NAME)],
         ),
         metadata=metadata,
@@ -96,7 +93,6 @@ def build_authoritative_task_config(
             allowed_hosts=[],
         ),
         solution=SolutionConfig(),
-        artifacts=list(creator_result.expected_artifacts),
     )
     # Validate the serialized representation too; this is the exact form written to disk.
     validate_harbor_task_toml(config.model_dump_toml())
@@ -108,7 +104,6 @@ def write_authoritative_task_toml(
     *,
     task_name: str,
     bundle: SkillBundle,
-    creator_result: CreatorResult,
     proposal: Proposal,
     axes: TaskAxes,
     base_image_pins: Mapping[str, str] | None = None,
@@ -117,7 +112,6 @@ def write_authoritative_task_toml(
     config = build_authoritative_task_config(
         task_name=task_name,
         bundle=bundle,
-        creator_result=creator_result,
         proposal=proposal,
         axes=axes,
         base_image_pins=base_image_pins,

@@ -15,7 +15,7 @@ from skill2env.axes import EXPERTISE, sample_axes
 from skill2env.batch import BatchConfig, BatchRunner, create_batch_tracker, discover_skills
 from skill2env.buildaudit import BuildAuditReport
 from skill2env.generator import CreationRun, GeneratorError
-from skill2env.models import ContractError, CreatorResult, Plan, Proposal
+from skill2env.models import ContractError, Plan, Proposal
 from skill2env.prompts import creator_prompt, planner_prompt
 from skill2env.task_config import validate_harbor_task_toml, write_authoritative_task_toml
 from skill2env.validation import TaskPostChecker
@@ -23,10 +23,6 @@ from skill2env.bundle import load_skill_bundle
 
 
 INSTRUCTION = "Fix the flaky test. The suite must pass in any order.\n"
-CREATOR_RESULT = {
-    "description": "Fix a flaky test",
-}
-
 RUBRIC = """## Good Signals
 - Reproduces the failure before changing code.
 
@@ -77,8 +73,7 @@ class FakeRunner:
         (task / "tests" / "test.sh").write_text("#!/bin/bash\necho 1 > /logs/verifier/reward.txt\n")
         (task / "tests" / "rubric.md").write_text(RUBRIC)
         (task / "solution" / "solve.sh").write_text("#!/bin/bash\ntrue\n")
-        result = CreatorResult.from_dict(CREATOR_RESULT)
-        return CreationRun(workspace, task, result, transcript="", prompt="prompt")
+        return CreationRun(workspace, task, transcript="", prompt="prompt")
 
 
 class FakeAuditor:
@@ -185,8 +180,7 @@ def test_rubric_check(tmp_path):
     )
     axes = sample_axes(1)[0]
     write_authoritative_task_toml(
-        run.task_dir, task_name="task_x", bundle=bundle,
-        creator_result=run.result, proposal=proposal, axes=axes,
+        run.task_dir, task_name="task_x", bundle=bundle, proposal=proposal, axes=axes,
     )
     checker = TaskPostChecker()
     assert checker.check(run.task_dir, bundle=bundle).ok
@@ -198,14 +192,9 @@ def test_rubric_check(tmp_path):
     assert any("no bullet" in e for e in checker.check(run.task_dir, bundle=bundle).errors)
 
 
-def test_creator_result_requires_description():
-    with pytest.raises(ContractError):
-        CreatorResult.from_dict({"required_tools": ["python3"]})
-
-
 def test_prompts_render(tmp_path):
     bundle = load_skill_bundle(make_skill(tmp_path) / "debugging")
-    assert "exactly 4 proposals" in planner_prompt(bundle=bundle, count=4)
+    assert "up to 4 proposals" in planner_prompt(bundle=bundle, count=4)
     proposal = Proposal.from_dict(proposal_dict(0))
     text = creator_prompt(
         bundle=bundle, task_name="task_x", proposal=proposal, axes=sample_axes(1)[0]

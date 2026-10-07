@@ -14,14 +14,13 @@ from pathlib import Path
 from typing import Any, Dict, Iterable
 
 from .axes import TaskAxes
-from .models import CreatorResult, Proposal
+from .models import Proposal
 
 
 def write_creator_state(
     state_dir: Path,
     *,
     task_name: str,
-    result: CreatorResult,
     transcript: str,
     prompt: str,
     proposal: Proposal,
@@ -30,7 +29,6 @@ def write_creator_state(
     """Persist private creator outputs outside the publishable task tree."""
     attempt = state_dir / "attempts" / task_name
     attempt.mkdir(parents=True, exist_ok=True)
-    _write_json(attempt / "creator-result.json", result.to_dict())
     _write_json(attempt / "proposal.json", proposal.to_dict())
     _write_json(attempt / "axes.json", axes.to_dict())
     (attempt / "creator-transcript.jsonl").write_text(transcript, encoding="utf-8")

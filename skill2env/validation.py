@@ -46,13 +46,11 @@ PRIVILEGED_NAMES = {
     "task.toml",
     "tests",
     "solution",
-    "creator-result.json",
 }
 
-# Public names that would corrupt grading or leak private creator state.
+# Public names that would corrupt grading.
 # Everything else (stray logs, extra helper dirs) is tolerated.
 FORBIDDEN_PUBLIC_NAMES = {
-    "creator-result.json",
     "reward.txt",
     "reward.json",
 }

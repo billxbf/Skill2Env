@@ -243,7 +243,6 @@ class SkillPipeline:
         private_dir = write_creator_state(
             self.config.state_dir,
             task_name=task_name,
-            result=run.result,
             transcript=run.transcript,
             prompt=run.prompt,
             proposal=proposal,
@@ -255,7 +254,6 @@ class SkillPipeline:
                 run.task_dir,
                 task_name=task_name,
                 bundle=bundle,
-                creator_result=run.result,
                 proposal=proposal,
                 axes=axes,
             )

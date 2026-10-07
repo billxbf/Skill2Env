@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import asdict, dataclass, field, replace
-from pathlib import Path, PurePosixPath
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 
@@ -193,40 +193,6 @@ class Plan:
         }
 
 
-@dataclass(frozen=True)
-class CreatorResult:
-    """Private metadata written by the creator next to the task it built."""
-
-    description: str
-    required_tools: List[str] = field(default_factory=list)
-    expected_artifacts: List[str] = field(default_factory=list)
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "CreatorResult":
-        if not isinstance(data, dict):
-            raise ContractError("creator result must be an object")
-        known = {"description", "required_tools", "expected_artifacts"}
-        unknown = set(data) - known
-        if unknown:
-            raise ContractError(f"creator result has unknown fields: {sorted(unknown)!r}")
-        description = _required_string(data, "description")
-        required_tools = _string_list(data, "required_tools")
-        expected_artifacts = _string_list(data, "expected_artifacts")
-        if any(
-            not PurePosixPath(artifact).is_absolute() or ".." in PurePosixPath(artifact).parts
-            for artifact in expected_artifacts
-        ):
-            raise ContractError("expected artifacts must be absolute environment paths")
-        return cls(
-            description=description,
-            required_tools=required_tools,
-            expected_artifacts=expected_artifacts,
-        )
-
-    def to_dict(self) -> Dict[str, Any]:
-        return asdict(self)
-
-
 @dataclass
 class GenerationRecord:
     skill_id: str
@@ -271,16 +237,3 @@ def _text_tuple(value: Any) -> tuple[str, ...]:
     if not isinstance(value, list):
         return ()
     return tuple(item.strip() for item in value if isinstance(item, str) and item.strip())
-
-
-def _string_list(data: Dict[str, Any], key: str) -> List[str]:
-    """Optional list of unique non-empty strings; a missing key means empty."""
-    value = data.get(key, [])
-    if not isinstance(value, list):
-        raise ContractError(f"{key} must be a list")
-    if any(not isinstance(item, str) or not item.strip() for item in value):
-        raise ContractError(f"{key} must contain only non-empty strings")
-    result = [item.strip() for item in value]
-    if len(result) != len(set(result)):
-        raise ContractError(f"{key} must not contain duplicates")
-    return result

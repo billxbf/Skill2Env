@@ -3,7 +3,7 @@
 
 """Agentic synthesis of Harbor-native environments from Agent Skills."""
 
-from .models import CreatorResult, GenerationRecord, Plan, Proposal, SkillBundle
+from .models import GenerationRecord, Plan, Proposal, SkillBundle
 
-__all__ = ["CreatorResult", "GenerationRecord", "Plan", "Proposal", "SkillBundle"]
+__all__ = ["GenerationRecord", "Plan", "Proposal", "SkillBundle"]
 __version__ = "0.4.0"

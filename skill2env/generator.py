@@ -20,7 +20,7 @@ from pathlib import Path, PurePosixPath
 from typing import Callable, Optional, Protocol, TypeVar
 
 from .axes import TaskAxes
-from .models import ContractError, CreatorResult, Plan, Proposal, SkillBundle
+from .models import ContractError, Plan, Proposal, SkillBundle
 from .prompts import creator_prompt, planner_prompt
 from .tracker import RunTracker
 
@@ -119,7 +119,6 @@ class GeneratorError(RuntimeError):
 class CreationRun:
     workspace: Path
     task_dir: Path
-    result: CreatorResult
     transcript: str
     prompt: str
 
@@ -456,7 +455,6 @@ class ContainerizedCodexRunner:
         )
         transcript_path = workspace / "creator-transcript.jsonl"
         output_path = workspace / "creator-last-message.txt"
-        result_path = workspace / "creator-result.json"
         try:
             transcript = self._run_codex(
                 workspace=workspace,
@@ -467,13 +465,6 @@ class ContainerizedCodexRunner:
                 state_dir=state_dir,
                 variant_index=variant_index,
             )
-            try:
-                result = CreatorResult.from_dict(
-                    json.loads(result_path.read_text(encoding="utf-8"))
-                )
-            except (OSError, json.JSONDecodeError, ContractError, TypeError) as exc:
-                raise GeneratorError("creator_contract_failed", str(exc)) from exc
-
             if not task_dir.is_dir():
                 raise GeneratorError(
                     "task_missing", f"creator did not create expected directory {task_name!r}"
@@ -481,7 +472,6 @@ class ContainerizedCodexRunner:
             return CreationRun(
                 workspace=workspace,
                 task_dir=task_dir,
-                result=result,
                 transcript=transcript,
                 prompt=prompt,
             )
