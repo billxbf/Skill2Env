@@ -252,7 +252,9 @@ tests/test.sh is the authoritative reward and must always write exactly one of
 
 - Check only stated requirements: never exact message wording, field order, formatting, file
   layout, internal structure, or a particular algorithm, and never derive checks from the
-  reference implementation.
+  reference implementation. Avoid over-specification of a "correct" answer beyond the core results.
+  Where several answers are defensible (another valid citation, quote, reason, or rendering),
+  accept any of them instead of matching a single gold answer or a hash of the reference output.
 - Core over corners: verify the success criteria with a few decisive checks (run the result,
   exercise interfaces on held-out inputs, inspect persisted state, check cross-file invariants);
   reuse upstream tests where they exist and keep your own verifier code compact.
