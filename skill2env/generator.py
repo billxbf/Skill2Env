@@ -542,6 +542,9 @@ class ContainerizedCodexRunner:
             "run",
             "--rm",
             "--interactive",
+            # Codex (node) is PID 1 otherwise and never reaps orphaned children
+            # such as headless Chrome, leaving hundreds of zombies per job.
+            "--init",
             # Codex's managed workspace-write sandbox uses a nested user
             # namespace on Linux. Docker's default seccomp profile blocks the
             # required unshare syscall, so allow the inner bwrap sandbox to

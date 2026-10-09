@@ -311,6 +311,21 @@ class BuildAuditor:
                 if result.returncode == 0 and digest is not None:
                     return digest
                 last_error = _tail(result)
+                # `docker manifest inspect` rejects tag@digest references that pin a
+                # single-platform manifest; buildx resolves them, and the pin is the digest.
+                if "manifest verification failed" in last_error and "@sha256:" in base:
+                    try:
+                        check = _docker(
+                            ["buildx", "imagetools", "inspect", base],
+                            timeout=self.registry_timeout_sec,
+                        )
+                    except RegistryResolutionError as exc:
+                        last_error = str(exc)
+                    else:
+                        pinned = base.rsplit("@", 1)[1]
+                        if check.returncode == 0 and _DIGEST.fullmatch(pinned):
+                            return pinned
+                        last_error = _tail(check)
             if attempt < self.registry_attempts:
                 # Exponential backoff: Docker Hub's unauthenticated pull
                 # limit needs far longer pauses than a linear ramp gives.
